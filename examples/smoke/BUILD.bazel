@@ -1,0 +1,25 @@
+load("@rules_cloudformation//cloudformation:defs.bzl", "cloudformation_aws_s3_bucket")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+
+package(default_visibility = ["//visibility:public"])
+
+# Declare an S3 bucket via the schema-derived typed rule. The rule
+# enforces every property's JSON Schema type at Bazel-loading time
+# — pass an integer to BucketName and the load fails with a clear
+# error. The output is a JSON shard the consumer's stack-aggregator
+# rule would pick up.
+cloudformation_aws_s3_bucket(
+    name = "smoke_bucket",
+    bucket_name = "smoke-bucket",
+    BucketName = "smoke-bucket",
+    VersioningConfiguration = '{"Status": "Enabled"}',
+)
+
+# Lock down the shard's bytes so a regression in the schema codegen
+# (e.g. an attr renamed, dropped, or stringified differently) shows
+# up as a Bazel test failure.
+diff_test(
+    name = "smoke_bucket_shard_stable",
+    file1 = "expected_smoke_bucket.json",
+    file2 = ":smoke_bucket",
+)

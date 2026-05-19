@@ -1,24 +1,31 @@
-# Bazel rules for AWS CloudFormation templates — schema-derived typed Bazel rules via rules_jsonschema, Java-based linter via rules_java + the official cloudformation-template-schema.
+# Bazel rules for AWS CloudFormation templates — schema-derived
+# typed Bazel rules via rules_jsonschema, Java-based linter via
+# rules_java + the official cloudformation-template-schema.
 module(
     name = "rules_cloudformation",
-    version = "0.0.1",
+    version = "0.1.0",
 )
 
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "bazel_skylib", version = "1.8.2")
 
-# rules_jsonschema will generate typed Bazel rules (one per AWS::*
-# resource type) from the upstream CloudFormation template schema at
-# build time. See docs/SCHEMA_SOURCE.md for which artifact is pinned
-# and why; see docs/ROADMAP.md for the v0.1 codegen pipeline.
+# rules_jsonschema generates typed Bazel rules (one per AWS::*
+# resource type) from the upstream CloudFormation JSON Schemas at
+# build time. See docs/SCHEMA_SOURCE.md.
 bazel_dep(name = "rules_jsonschema", version = "0.2.0")
 
-# rules_java will host the cfn-lint–style Java linter (v0.3) and may
-# host the upstream Maven schema-assembly tool itself if we move from
-# consuming the pre-assembled Schema.template to rebuilding it from
-# upstream sources. See docs/SCHEMA_SOURCE.md for the option (1) vs
-# option (2) tradeoff.
+# rules_java will host the cfn-lint-style linter (v0.3+). Not used
+# in v0.1 but reserved here so consumers can `java_binary` against
+# it without re-pinning.
 bazel_dep(name = "rules_java", version = "8.6.1")
+
+# Fetch the AWS-published per-resource-type CFN schemas. v0.1
+# fetches only AWS::S3::Bucket as the codegen smoke target.
+cfn_schemas = use_extension(
+    "//cloudformation/private:extensions.bzl",
+    "cfn_schemas_extension",
+)
+use_repo(cfn_schemas, "aws_cfn_aws_s3_bucket")
 
 # Dev-only.
 bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)

@@ -36,13 +36,47 @@ see that repo's
 [`plugin_contract.md`](https://github.com/fastverk/rules_jsonschema/blob/main/jsonschema/plugin_contract.md)
 if you want to swap a plugin for one of your own.
 
-## Status: v0.0.1 — scaffold
+## Status: v0.1.0
 
-No public surface yet — the eight scaffold files, the planned design
-in this README and in [docs/ROADMAP.md](docs/ROADMAP.md), and the
-schema-source design note in
-[docs/SCHEMA_SOURCE.md](docs/SCHEMA_SOURCE.md). See `CHANGELOG.md`
-for what has shipped.
+What ships:
+
+- **Schema fetch** — `cfn_schemas_extension` (in
+  `cloudformation/private/extensions.bzl`) `http_file`s
+  per-resource AWS CFN schemas, sha256-pinned. v0.1 pins one
+  resource type (`AWS::S3::Bucket`); v0.2 fans out the list via a
+  `cfn_schemas.bundle(resources = [...])` tag class so consumers
+  opt into the resource set they care about.
+- **Codegen pipeline** — `rules_jsonschema`'s
+  `jsonschema_starlark_codegen` produces
+  `cloudformation/aws_s3_bucket.bzl` from the upstream schema.
+  Committed + gated by a `diff_test` so CI fails on drift between
+  the upstream schema and the committed `.bzl`.
+- **`cloudformation_aws_s3_bucket`** — typed Bazel rule, one
+  `attr.*` per JSON-Schema property (30 attrs), emits a JSON
+  shard ready for a future `cloudformation_stack` aggregator.
+  Re-exported from `//cloudformation:defs.bzl`.
+- **End-to-end smoke** (`examples/smoke/`) — declares an S3 bucket
+  + a byte-stability diff_test on the emitted shard. Green.
+
+> Note on the schema source: the original design pinned
+> `aws-cloudformation/cloudformation-template-schema`, but
+> `Schema.template` there is a Mustache template, not literal
+> JSON. v0.1 pivots to the AWS per-resource endpoint at
+> `https://schema.cloudformation.us-east-1.amazonaws.com/`. See
+> [`docs/SCHEMA_SOURCE.md`](docs/SCHEMA_SOURCE.md).
+
+Deferred to v0.2 / v0.3 (see [docs/ROADMAP.md](docs/ROADMAP.md)):
+
+- Bundle tag class — opt into N resource types in one
+  MODULE.bazel call.
+- `cloudformation_stack` aggregator (collects shards into one
+  `template.yaml` via a Rust `cfn-gen` binary).
+- `cloudformation_resource_ref` for cross-stack refs (resolves
+  stack outputs at build time, like
+  `docker_compose_oci_image_ref`).
+- `cloudformation_up` / `_down` `bazel run` wrappers around
+  `aws cloudformation deploy` / `delete-stack`.
+- Java linter port of cfn-lint patterns.
 
 ## Planned architecture
 
@@ -113,7 +147,7 @@ common --registry=https://bcr.bazel.build/
 `MODULE.bazel`:
 
 ```python
-bazel_dep(name = "rules_cloudformation", version = "0.0.1")
+bazel_dep(name = "rules_cloudformation", version = "0.1.0")
 ```
 
 `rules_jsonschema`, `rules_java`, and (transitively) a Rust toolchain

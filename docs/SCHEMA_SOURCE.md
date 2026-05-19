@@ -1,136 +1,87 @@
 # Schema source
 
-Design note explaining where `rules_cloudformation`'s typed rules
-ultimately come from. Same role as
-[`rules_docker_compose`'s compose-spec pin](https://github.com/compose-spec/compose-spec) —
-one upstream artifact, content-addressed, no vendoring.
+Where `rules_cloudformation`'s typed rules ultimately come from.
 
-## Choice
+## Choice (v0.1)
 
-We pin
-[`aws-cloudformation/cloudformation-template-schema`](https://github.com/aws-cloudformation/cloudformation-template-schema)
-at a specific commit, fetched via Bazel's `http_archive`. That repo
-is AWS's official source for the master CloudFormation template
-schema — the same artifact that powers the IDE syntax-validation and
-autocompletion extensions in the CloudFormation team's tooling.
+We fetch the per-resource-type JSON Schemas AWS publishes at
+`https://schema.cloudformation.us-east-1.amazonaws.com/<filename>.json`
+via `http_file`, pinning each by its sha256. One Bazel repo per
+resource type (`@aws_cfn_aws_s3_bucket` and so on), one
+`jsonschema_starlark_codegen` invocation per repo, one committed
+`.bzl` per resource type. Same diff_test + write_source_files
+cascade as `rules_docker_compose`.
+
+### Why not `aws-cloudformation/cloudformation-template-schema`?
+
+The design doc this file replaces pinned that repo. It turns out
+`Schema.template` in there is a Mustache template with
+`{{{draft}}}` / `{{{intrinsics}}}` / `{{{resources}}}` placeholders —
+not a literal JSON Schema. Assembling it into a consumable artifact
+requires running the upstream Java assembler (`pom.xml` builds a
+shaded jar). Doable but a lot of moving parts for v0.1; pivoted
+to the per-resource AWS endpoint which already publishes the
+expanded JSON Schemas.
+
+Re-evaluate in v0.3 when the linter pulls in `rules_java` anyway —
+at that point running the assembler in-Bazel is one more
+java_binary target away.
 
 ### Alternatives considered
 
 | Source | Why not chosen |
 |---|---|
-| `https://schema.cloudformation.us-east-1.amazonaws.com/` per-region per-resource schemas | Live endpoint, no content-addressing, no SLA on URL stability. Reproducibility would require vendoring or a mirror anyway. |
-| `aws-cloudformation/cloudformation-cli` registry schemas (one JSON per resource type) | Per-resource schemas exist but the canonical *combined* template schema isn't published as a single artifact there — assembling it would reimplement what the `cloudformation-template-schema` repo already produces. |
-| Hand-curated subset of resource types | The whole point of `rules_jsonschema` is to avoid drift between hand-curated rules and upstream. Hard-no. |
+| `aws-cloudformation/cloudformation-template-schema` (Mustache `Schema.template`) | Needs upstream Java assembler. Revisit in v0.3 when rules_java enters the deps anyway. |
+| `aws-cloudformation/cloudformation-cli` registry schemas | Individual JSON schemas exist but the canonical *combined* schema isn't published. Same end result as the AWS endpoint, more indirection. |
+| Hand-curated subset | rules_jsonschema's whole point is avoiding drift between hand-written rules and upstream. Hard-no. |
 
 ## Pin
 
-Pinned via `cloudformation/private/extensions.bzl` with two
-single-line constants, same pattern as
-`rules_docker_compose`'s `compose_spec_extension`:
+Pins live in
+[`cloudformation/private/extensions.bzl`](../cloudformation/private/extensions.bzl)
+as a `_PINNED_SCHEMAS` dict mapping filename → sha256:
 
 ```python
-# https://github.com/aws-cloudformation/cloudformation-template-schema
-_CFN_SCHEMA_COMMIT = "<commit sha>"
-_CFN_SCHEMA_SHA256 = "<sha256 of the .tar.gz from GitHub's tarball endpoint>"
+_PINNED_SCHEMAS = {
+    "aws-s3-bucket.json": "306c17eac19e62159bdeaa872af1fe85b28e0cfd43d955d35765182b3904f4ab",
+    # v0.2 fans out via the cfn_schemas.bundle tag class
+}
 ```
 
-Refreshing the schema is two lines: bump the commit, bump the
-sha256, re-run codegen, commit the regenerated
-`cloudformation_rules.bzl`.
+Adding a resource type is four lines:
 
-## Upstream layout
-
-As of the most recent inspection, the upstream repo's relevant
-contents are:
-
-```
-cloudformation-template-schema/
-├── pom.xml                          # Maven build (Java) that assembles the master schema
-├── src/main/resources/
-│   ├── Schema.template              # The master JSON Schema describing every AWS::* resource type
-│   ├── Intrinsics.json              # Intrinsic functions (Ref, Fn::GetAtt, …) reference data
-│   └── config.yml                   # Build config for the assembly step
-└── src/main/java/aws/cfn/           # The assembly tool — combines per-resource schemas into Schema.template
+```sh
+curl -fsSL -o aws-foo-bar.json https://schema.cloudformation.us-east-1.amazonaws.com/aws-foo-bar.json
+shasum -a 256 aws-foo-bar.json                      # drop into _PINNED_SCHEMAS
+# Add a use_repo() entry in MODULE.bazel for @aws_cfn_aws_foo_bar
+# Add a jsonschema_starlark_codegen + write_source_files entry in //cloudformation:BUILD.bazel
+bazel run //cloudformation:update                   # regenerate the .bzl
 ```
 
-The canonical artifact `rules_jsonschema` consumes is
-`src/main/resources/Schema.template`. It's a JSON Schema document
-whose top-level `definitions` map contains one entry per `AWS::*`
-resource type (and supporting type definitions for property shapes
-shared across resources).
+## Upstream stability
 
-The fact that this is upstream-built (Maven assembles the final
-`Schema.template` from inputs in the repo) means we have two
-options:
+The AWS endpoint is a live URL, not a content-addressable artifact.
+`sha256` pinning gives us reproducibility regardless: a re-fetch
+either succeeds with the same bytes or fails the build with a hash
+mismatch. The `_PINNED_SCHEMAS` dict is the source of truth for
+which schemas this repo claims to track at a given version.
 
-1. **Consume the pre-assembled `Schema.template`** committed at the
-   pinned commit. Simpler — same data path as compose-spec, just a
-   single JSON Schema file.
-2. **Re-run the upstream Maven build** under Bazel via `rules_java`
-   to assemble `Schema.template` ourselves at build time. More
-   reproducible (the assembly tool is itself pinned), but adds a
-   build-time Java dep to the schema-fetch path.
+## Path to ~1200 resource types
 
-v0.1 starts with option (1). v0.3 — when `rules_java` is wired up
-for the linter anyway — may switch to option (2) for full
-reproducibility from upstream sources.
+v0.1 covers `AWS::S3::Bucket` as a codegen smoke. v0.2 lifts the
+hard-coded list into a tag class:
 
-## Codegen consumption
-
-`rules_jsonschema`'s `jsonschema_starlark_codegen` reads the
-master schema and emits one `.bzl` per resource type plus a
-top-level loader. The committed layout:
-
-```
-cloudformation/
-├── cloudformation_rules.bzl        # Top-level loader — re-exports every cloudformation_<resource_type>
-└── private/
-    └── rules/
-        ├── aws_s3_bucket.bzl       # One file per AWS::* resource type
-        ├── aws_lambda_function.bzl
-        ├── aws_ec2_instance.bzl
-        └── …                        # ~1000+ files
+```python
+cfn_schemas = use_extension(
+    "@rules_cloudformation//cloudformation/private:extensions.bzl",
+    "cfn_schemas_extension",
+)
+cfn_schemas.bundle(
+    resources = ["AWS::S3::Bucket", "AWS::Lambda::Function", ...],
+)
 ```
 
-User code only ever loads from `cloudformation/defs.bzl` (hand-written,
-re-exports the loader). The per-resource `.bzl` files are codegen
-output, committed for IDE-friendliness and PR-reviewability.
-
-### Why one file per resource type
-
-Two reasons:
-
-- **PR diffs stay small** when a single resource type gains a
-  property. A monolithic `cloudformation_rules.bzl` listing
-  ~1000 rules + ~10000 attrs would make any schema bump unreviewable.
-- **Bazel loading is lazy at the `load()` granularity.** Users
-  importing only `cloudformation_aws_s3_bucket` shouldn't pay the
-  Starlark-evaluation cost for the Lambda or EC2 rule definitions.
-
-The top-level `cloudformation_rules.bzl` aggregates them so the
-`defs.bzl` user-facing surface is still a single load statement.
-
-## Committed-vs-regenerated tradeoff
-
-Identical to how `rules_docker_compose` handles `compose_rules.bzl`:
-
-- **Codegen output is committed to source.** Reviewers see the typed
-  attrs in the diff. IDE jump-to-definition works without running
-  Bazel. No "did codegen run?" mystery in failures.
-- **`diff_test` gates the commit.** A
-  `//cloudformation:cloudformation_rules_up_to_date` target re-runs
-  codegen on every CI build and diffs against the committed file.
-  CI fails if they diverge.
-- **`write_source_files` updates it.** A
-  `bazel run //cloudformation:update_cloudformation_rules` target
-  (pure Starlark, no hand-written shell) writes fresh codegen back
-  to the source tree. Bumping the schema pin is:
-  1. Edit `_CFN_SCHEMA_COMMIT` + `_CFN_SCHEMA_SHA256` in
-     `cloudformation/private/extensions.bzl`.
-  2. `bazel run //cloudformation:update_cloudformation_rules`.
-  3. `bazel test //...` — the diff_test now passes, and any tests
-     keyed off removed/renamed attrs fail loudly.
-
-The schema itself is never copied into this repo: Bazel fetches it
-from GitHub on first build and caches it like any other external
-dep, same as the compose-spec.
+so consumers opt into the resource set they care about — declaring
+1200 typed Bazel rules per consumer when they use 10 is wasted
+analysis time. Bundling lands in v0.2 (see
+[`ROADMAP.md`](ROADMAP.md)).

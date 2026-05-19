@@ -1,0 +1,59 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+load("@rules_jsonschema//starlark:defs.bzl", "jsonschema_starlark_codegen")
+load("@rules_jsonschema//util:write_source_files.bzl", "write_source_files")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files([
+    "defs.bzl",
+    "aws_s3_bucket.bzl",
+])
+
+bzl_library(
+    name = "defs_bzl",
+    srcs = ["defs.bzl"],
+    deps = [":aws_s3_bucket_lib"],
+)
+
+# Schema-derived typed Bazel rule for AWS::S3::Bucket. Committed at
+# cloudformation/aws_s3_bucket.bzl; the codegen + diff_test below
+# re-derive it on every build to catch drift between the committed
+# file and the upstream schema.
+bzl_library(
+    name = "aws_s3_bucket_lib",
+    srcs = ["aws_s3_bucket.bzl"],
+    deps = ["@rules_jsonschema//runtime:helpers"],
+)
+
+# v0.1 covers one resource type as the codegen-pipeline smoke. v0.2
+# expands the `kinds = [...]` list to the full ~1200 AWS::* types
+# (each row maps to one schema repo + one entry here).
+jsonschema_starlark_codegen(
+    name = "aws_s3_bucket_gen",
+    schema = "@aws_cfn_aws_s3_bucket//file:aws-s3-bucket.json",
+    kinds = [
+        (
+            "bucket",
+            "#",
+            "cloudformation_aws_s3_bucket",
+            "CloudformationAwsS3BucketInfo",
+        ),
+    ],
+)
+
+diff_test(
+    name = "aws_s3_bucket_up_to_date",
+    file1 = "aws_s3_bucket.bzl",
+    file2 = ":aws_s3_bucket_gen",
+)
+
+# `bazel run //cloudformation:update` regenerates every codegen
+# output. Adding a new resource type? Add it to the `kinds` list
+# above + an extra entry here, then re-run.
+write_source_files(
+    name = "update",
+    files = {
+        "aws_s3_bucket.bzl": ":aws_s3_bucket_gen",
+    },
+)
