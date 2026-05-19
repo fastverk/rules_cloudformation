@@ -1,6 +1,10 @@
 # Bazel rules for AWS CloudFormation templates — schema-derived
-# typed Bazel rules via rules_jsonschema, Java-based linter via
-# rules_java + the official cloudformation-template-schema.
+# typed Bazel rules via rules_jsonschema. The schema source is the
+# upstream Java assembler from `aws-cloudformation/cloudformation-
+# template-schema`, run at build time against a sha-pinned snapshot
+# of the AWS CloudFormation Resource Specification. The assembler
+# sources are vendored (delomboked) under `cloudformation/private/
+# assembler_src/`; see docs/SCHEMA_SOURCE.md for the trade-off.
 module(
     name = "rules_cloudformation",
     version = "0.1.0",
@@ -10,22 +14,52 @@ bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "bazel_skylib", version = "1.8.2")
 
 # rules_jsonschema generates typed Bazel rules (one per AWS::*
-# resource type) from the upstream CloudFormation JSON Schemas at
+# resource type) from the assembled CloudFormation JSON Schemas at
 # build time. See docs/SCHEMA_SOURCE.md.
 bazel_dep(name = "rules_jsonschema", version = "0.2.0")
 
-# rules_java will host the cfn-lint-style linter (v0.3+). Not used
-# in v0.1 but reserved here so consumers can `java_binary` against
-# it without re-pinning.
-bazel_dep(name = "rules_java", version = "8.6.1")
+# rules_java compiles the vendored assembler sources. The
+# linter (cfn-lint port) planned for v0.3+ will reuse this dep.
+bazel_dep(name = "rules_java", version = "9.1.0")
 
-# Fetch the AWS-published per-resource-type CFN schemas. v0.1
-# fetches only AWS::S3::Bucket as the codegen smoke target.
-cfn_schemas = use_extension(
-    "//cloudformation/private:extensions.bzl",
-    "cfn_schemas_extension",
+# rules_jvm_external pins the assembler's Maven dependencies.
+bazel_dep(name = "rules_jvm_external", version = "6.7")
+
+# The assembler's Maven coordinates. Versions match the upstream
+# pom.xml at the pinned commit (5d7815b1...), modulo the log4j-api
+# co-pin (the upstream pom only lists log4j-core but log4j-api is
+# the actual import). Lombok is not pinned because we vendor a
+# delomboked copy of the sources.
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+maven.install(
+    name = "cfn_assembler_maven",
+    artifacts = [
+        "org.apache.logging.log4j:log4j-core:2.17.1",
+        "org.apache.logging.log4j:log4j-api:2.17.1",
+        "com.fasterxml.jackson.core:jackson-databind:2.14.1",
+        "com.fasterxml.jackson.core:jackson-core:2.14.1",
+        "com.fasterxml.jackson.core:jackson-annotations:2.14.1",
+        "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.1",
+        "com.github.spullara.mustache.java:compiler:0.9.5",
+        "args4j:args4j:2.33",
+        "com.google.guava:guava:32.1.3-jre",
+    ],
+    lock_file = "//:maven_install.json",
+    repositories = [
+        "https://repo1.maven.org/maven2",
+    ],
 )
-use_repo(cfn_schemas, "aws_cfn_aws_s3_bucket")
+use_repo(maven, "cfn_assembler_maven")
+
+# Fetch the pinned AWS CloudFormation Resource Specification
+# snapshot. The assembler source tarball is also fetched (for
+# reference / cross-checking the vendored copy) but isn't on the
+# compile path.
+cfn_sources = use_extension(
+    "//cloudformation/private:extensions.bzl",
+    "cfn_sources_extension",
+)
+use_repo(cfn_sources, "cfn_resource_spec", "cfn_template_schema_src")
 
 # Dev-only.
 bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)

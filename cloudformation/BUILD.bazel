@@ -2,6 +2,7 @@ load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 load("@rules_jsonschema//starlark:defs.bzl", "jsonschema_starlark_codegen")
 load("@rules_jsonschema//util:write_source_files.bzl", "write_source_files")
+load("//cloudformation/private:assemble.bzl", "cfn_assemble")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -19,23 +20,41 @@ bzl_library(
 # Schema-derived typed Bazel rule for AWS::S3::Bucket. Committed at
 # cloudformation/aws_s3_bucket.bzl; the codegen + diff_test below
 # re-derive it on every build to catch drift between the committed
-# file and the upstream schema.
+# file and the upstream-assembled schema.
 bzl_library(
     name = "aws_s3_bucket_lib",
     srcs = ["aws_s3_bucket.bzl"],
     deps = ["@rules_jsonschema//runtime:helpers"],
 )
 
+# Run the upstream Java assembler against the pinned CFN Resource
+# Specification, scoping output to the `storage` group — a custom
+# group that pulls AWS::S3::Bucket (and the rest of AWS::S3.*) out
+# of the spec without dragging in the full ~1200-resource catalog.
+# Resource definitions land at #/definitions/AWS_<Service>_<Resource>.
+cfn_assemble(
+    name = "assembled_storage",
+    spec = "@cfn_resource_spec//file:CloudFormationResourceSpecification.json",
+    group_name = "storage",
+    includes = ["AWS::S3.*"],
+)
+
 # v0.1 covers one resource type as the codegen-pipeline smoke. v0.2
-# expands the `kinds = [...]` list to the full ~1200 AWS::* types
-# (each row maps to one schema repo + one entry here).
+# expands the `kinds = [...]` list to the full set of AWS::S3::* (and
+# beyond) resources. The pointer below is the assembler's namespacing:
+# it rewrites `AWS::S3::Bucket` → `AWS_S3_Bucket` for JSON-pointer
+# safety.
 jsonschema_starlark_codegen(
     name = "aws_s3_bucket_gen",
-    schema = "@aws_cfn_aws_s3_bucket//file:aws-s3-bucket.json",
+    schema = ":assembled_storage",
     kinds = [
+        # The assembler wraps each resource in a CloudFormation
+        # resource envelope (Type/Properties/DeletionPolicy/...).
+        # We want one rule attr per Property field, so we point the
+        # codegen at the inner Properties object.
         (
             "bucket",
-            "#",
+            "#/definitions/AWS_S3_Bucket/properties/Properties",
             "cloudformation_aws_s3_bucket",
             "CloudformationAwsS3BucketInfo",
         ),
@@ -49,8 +68,9 @@ diff_test(
 )
 
 # `bazel run //cloudformation:update` regenerates every codegen
-# output. Adding a new resource type? Add it to the `kinds` list
-# above + an extra entry here, then re-run.
+# output. Adding a new resource type? Extend the `includes` on
+# :assembled_storage (or add a new cfn_assemble target for a
+# different group), extend the `kinds` list above, then re-run.
 write_source_files(
     name = "update",
     files = {

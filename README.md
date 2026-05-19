@@ -40,30 +40,39 @@ if you want to swap a plugin for one of your own.
 
 What ships:
 
-- **Schema fetch** — `cfn_schemas_extension` (in
-  `cloudformation/private/extensions.bzl`) `http_file`s
-  per-resource AWS CFN schemas, sha256-pinned. v0.1 pins one
-  resource type (`AWS::S3::Bucket`); v0.2 fans out the list via a
-  `cfn_schemas.bundle(resources = [...])` tag class so consumers
-  opt into the resource set they care about.
+- **Schema source** — the upstream Java assembler
+  (`aws.cfn.codegen.json.Main` from
+  `aws-cloudformation/cloudformation-template-schema`) is built and
+  run at build time against a sha-pinned snapshot of the AWS
+  CloudFormation Resource Specification. The assembler sources are
+  vendored (delomboked, see `docs/SCHEMA_SOURCE.md` for the Lombok
+  trade-off); the spec is fetched by `http_file` at a sha256 pinned
+  in `cloudformation/private/extensions.bzl`.
+- **`cfn_assemble`** custom rule (in
+  `cloudformation/private/assemble.bzl`) runs the assembler with a
+  synthesized YAML config — one region (us-east-1), one custom
+  resource group (any `AWS::*` regex pattern), one emitted
+  `<group>-spec.json` per invocation. The output is a
+  consumer-ready JSON Schema.
 - **Codegen pipeline** — `rules_jsonschema`'s
   `jsonschema_starlark_codegen` produces
-  `cloudformation/aws_s3_bucket.bzl` from the upstream schema.
-  Committed + gated by a `diff_test` so CI fails on drift between
-  the upstream schema and the committed `.bzl`.
+  `cloudformation/aws_s3_bucket.bzl` from the assembled `storage`
+  group's schema. Committed + gated by a `diff_test` so CI fails
+  on drift between the upstream schema source and the committed
+  `.bzl`.
 - **`cloudformation_aws_s3_bucket`** — typed Bazel rule, one
-  `attr.*` per JSON-Schema property (30 attrs), emits a JSON
+  `attr.*` per CFN Resource Specification property, emits a JSON
   shard ready for a future `cloudformation_stack` aggregator.
   Re-exported from `//cloudformation:defs.bzl`.
 - **End-to-end smoke** (`examples/smoke/`) — declares an S3 bucket
   + a byte-stability diff_test on the emitted shard. Green.
 
-> Note on the schema source: the original design pinned
-> `aws-cloudformation/cloudformation-template-schema`, but
-> `Schema.template` there is a Mustache template, not literal
-> JSON. v0.1 pivots to the AWS per-resource endpoint at
-> `https://schema.cloudformation.us-east-1.amazonaws.com/`. See
-> [`docs/SCHEMA_SOURCE.md`](docs/SCHEMA_SOURCE.md).
+> Note on the schema source: v0.1.0 was retagged to swap an early
+> per-resource AWS-endpoint approach for the upstream Java
+> assembler. This keeps the source-of-truth aligned with cfn-lint
+> and the CFN documentation, at the cost of a build-time Java
+> compile. See [`docs/SCHEMA_SOURCE.md`](docs/SCHEMA_SOURCE.md) for
+> the trade-offs and the Lombok wrinkle.
 
 Deferred to v0.2 / v0.3 (see [docs/ROADMAP.md](docs/ROADMAP.md)):
 
@@ -120,20 +129,16 @@ Mirrors [`rules_docker_compose`](https://github.com/fastverk/rules_docker_compos
   every `Ref` resolves inside the stack (or is satisfied by a
   `cloudformation_resource_ref` shard).
 
-## Planned schema source
+## Schema source (current)
 
-The canonical schema will be fetched via `http_archive` from
-[aws-cloudformation/cloudformation-template-schema](https://github.com/aws-cloudformation/cloudformation-template-schema)
-at a pinned commit + sha256. That repo builds a single
-`Schema.template` master schema describing every `AWS::*` resource
-type with full property typing.
-
-An alternative source — the per-region service endpoint
-`https://schema.cloudformation.us-east-1.amazonaws.com/` — exposes
-per-resource-type schemas but isn't a stable, content-addressable
-artifact. The curated GitHub repo is more reproducible. See
-[docs/SCHEMA_SOURCE.md](docs/SCHEMA_SOURCE.md) for the full tradeoff
-discussion.
+The schema is sourced via the upstream Java assembler from
+[aws-cloudformation/cloudformation-template-schema](https://github.com/aws-cloudformation/cloudformation-template-schema),
+run at build time against a sha-pinned snapshot of the AWS
+CloudFormation Resource Specification (us-east-1). The assembler
+sources are vendored under
+`cloudformation/private/assembler_src/` in delomboked form (see
+[docs/SCHEMA_SOURCE.md](docs/SCHEMA_SOURCE.md) for the Lombok-vs-JDK
+context).
 
 ## Install
 
@@ -150,8 +155,10 @@ common --registry=https://bcr.bazel.build/
 bazel_dep(name = "rules_cloudformation", version = "0.1.0")
 ```
 
-`rules_jsonschema`, `rules_java`, and (transitively) a Rust toolchain
-will be pulled in once the v0.1 codegen pipeline lands.
+`rules_jsonschema`, `rules_java`, `rules_jvm_external`, and
+(transitively) a Rust toolchain are pulled in once the v0.1
+codegen pipeline lands. The Maven artifacts for the assembler are
+pinned by `maven_install.json`; consumers don't need to repin.
 
 ## License
 
