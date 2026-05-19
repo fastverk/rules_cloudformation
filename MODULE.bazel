@@ -7,6 +7,19 @@ module(
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "bazel_skylib", version = "1.8.2")
 
+# rules_jsonschema will generate typed Bazel rules (one per AWS::*
+# resource type) from the upstream CloudFormation template schema at
+# build time. See docs/SCHEMA_SOURCE.md for which artifact is pinned
+# and why; see docs/ROADMAP.md for the v0.1 codegen pipeline.
+bazel_dep(name = "rules_jsonschema", version = "0.2.0")
+
+# rules_java will host the cfn-lint–style Java linter (v0.3) and may
+# host the upstream Maven schema-assembly tool itself if we move from
+# consuming the pre-assembled Schema.template to rebuilding it from
+# upstream sources. See docs/SCHEMA_SOURCE.md for the option (1) vs
+# option (2) tradeoff.
+bazel_dep(name = "rules_java", version = "8.6.1")
+
 # Dev-only.
 bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
 bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)
