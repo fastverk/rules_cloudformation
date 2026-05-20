@@ -10,6 +10,8 @@ package(default_visibility = ["//visibility:public"])
 exports_files([
     "defs.bzl",
     "intrinsics.bzl",
+    "cfn_types.bzl",
+    "stack.bzl",
 ])
 
 bzl_library(
@@ -25,6 +27,22 @@ bzl_library(
     name = "intrinsics_bzl",
     srcs = ["intrinsics.bzl"],
     deps = ["@rules_jsonschema//runtime:helpers"],
+)
+
+bzl_library(
+    name = "cfn_types_bzl",
+    srcs = ["cfn_types.bzl"],
+)
+
+# `cloudformation_stack` — aggregates typed-rule shards into one
+# CFN template. See stack.bzl docstring.
+bzl_library(
+    name = "stack_bzl",
+    srcs = ["stack.bzl"],
+    deps = [
+        ":cfn_types_bzl",
+        ":intrinsics_bzl",
+    ],
 )
 
 # ---- Spec assembly + codegen -----------------------------------------------
@@ -73,14 +91,31 @@ jsonschema_starlark_codegen(
     ],
 )
 
-# ---- diff_test gate --------------------------------------------------------
+# Snake-id → CFN-Type map (kind_id like `aws_s3_bucket` →
+# `AWS::S3::Bucket`). Lives next to defs.bzl and committed via the
+# same `update` target — the stack aggregator loads it at analysis
+# time to translate the kind id encoded in each shard filename into
+# the `Type:` string for the rendered template.
+genrule(
+    name = "cfn_types_gen",
+    srcs = [":assembled_all"],
+    outs = ["cfn_types_gen.bzl"],
+    cmd = "$(execpath //cloudformation/private:extract_cfn_types) " +
+          "--schema=$(execpath :assembled_all) " +
+          "--output=$@",
+    tools = ["//cloudformation/private:extract_cfn_types"],
+)
+
+# ---- diff_test gates -------------------------------------------------------
 
 diff_test(name = "defs_up_to_date", file1 = "defs.bzl", file2 = ":defs_gen")
+diff_test(name = "cfn_types_up_to_date", file1 = "cfn_types.bzl", file2 = ":cfn_types_gen")
 
-# `bazel run //cloudformation:update` regenerates defs.bzl.
+# `bazel run //cloudformation:update` regenerates defs.bzl + cfn_types.bzl.
 write_source_files(
     name = "update",
     files = {
         "defs.bzl": ":defs_gen",
+        "cfn_types.bzl": ":cfn_types_gen",
     },
 )

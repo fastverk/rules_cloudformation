@@ -36,7 +36,35 @@ see that repo's
 [`plugin_contract.md`](https://github.com/fastverk/rules_jsonschema/blob/main/jsonschema/plugin_contract.md)
 if you want to swap a plugin for one of your own.
 
-## Status: v0.3.1
+## Status: v0.4.0
+
+What v0.4 adds on top of v0.3.1:
+
+- **`cloudformation_stack` aggregator** (`cloudformation/stack.bzl`)
+  — collects typed-rule shards into a complete CFN template.
+  Intrinsics splice into per-resource (`Init`) or template-level
+  (`Interface`) `Metadata`. Phase-1 limitation: CFN logical ids =
+  contributing rule's `label.name` (name targets PascalCase). Cross-
+  resource refs + deploy wrappers are deferred to later phases.
+
+Example:
+
+```python
+load("@rules_cloudformation//cloudformation:defs.bzl",
+     "cloudformation_aws_s3_bucket")
+load("@rules_cloudformation//cloudformation:stack.bzl",
+     "cloudformation_stack")
+
+cloudformation_aws_s3_bucket(name = "AppAssets", BucketName = "my-app-assets")
+cloudformation_stack(
+    name = "app_stack",
+    description = "App backing services.",
+    resources = [":AppAssets"],
+)
+# Output: `app_stack.json` — a deployable CFN template.
+```
+
+## Status: v0.3.1 (prior)
 
 What v0.3.1 adds on top of v0.3.0:
 

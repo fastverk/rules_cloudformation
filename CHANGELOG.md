@@ -4,6 +4,32 @@ All notable changes to rules_cloudformation. The format is loosely
 [Keep a Changelog](https://keepachangelog.com/) — version headers
 mirror the published bazel-registry entries.
 
+## 0.4.0 — cloudformation_stack aggregator
+
+- New `cloudformation_stack` rule (`cloudformation/stack.bzl`) —
+  takes typed-rule shards (from `defs.bzl`) and intrinsic shards
+  (from `intrinsics.bzl`) and renders one CFN template:
+  `Resources.X = {Type, Properties}` per resource, Init shards
+  spliced under `Resources.<target>.Metadata.AWS::CloudFormation::Init`,
+  Interface shards spliced under template-level
+  `Metadata.AWS::CloudFormation::Interface`. Optional
+  `description` attr fills the template's `Description` field.
+- New generated `cfn_types.bzl` (snake-id → `AWS::Service::Resource`
+  map for all 1582 spec rules) — needed because snake-case loses
+  the segment boundaries that distinguish e.g.
+  `ApplicationAutoScaling::ScalableTarget` from
+  `Application::AutoScalingScalableTarget`. Regenerated alongside
+  `defs.bzl` via `bazel run //cloudformation:update`.
+- Smoke stack in `examples/smoke` aggregates an S3 bucket + EC2
+  instance + Init metadata + Interface block into one template,
+  byte-stable `diff_test` against committed expected JSON.
+- **Phase-1 limitations** — the aggregator uses each contributing
+  rule's `label.name` as the CFN logical id (so Bazel targets must
+  be PascalCase and alphanumeric). The `<kind_id>_name` custom-name
+  attr on the typed rules is unused for now. Cross-resource
+  refs (`Ref` / `Fn::GetAtt`) and deploy wrappers
+  (`cloudformation_up` / `_down`) are deferred to later phases.
+
 ## 0.3.1 — CFN intrinsics (Init, Interface)
 
 - New `cloudformation/intrinsics.bzl` with two hand-authored rules

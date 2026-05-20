@@ -19,6 +19,25 @@ bzl_library(
     srcs = ["overlay.bzl"],
 )
 
+# Generates `cloudformation/cfn_types.bzl` (the snake-id → CFN-Type
+# map) from the assembled schema. Re-runs whenever the spec pin
+# moves.
+py_binary(
+    name = "extract_cfn_types",
+    srcs = ["extract_cfn_types.py"],
+    main = "extract_cfn_types.py",
+    visibility = ["//visibility:public"],
+)
+
+# Drives `cloudformation_stack` — reads typed-rule shards + intrinsic
+# shards and writes the merged CFN template.
+py_binary(
+    name = "stack_aggregator",
+    srcs = ["stack_aggregator.py"],
+    main = "stack_aggregator.py",
+    visibility = ["//visibility:public"],
+)
+
 # Layers AWS-endpoint per-resource property descriptions onto the
 # assembler-derived JSON Schemas. Invoked by `cfn_overlay_descriptions`.
 py_binary(

@@ -1,9 +1,14 @@
-load("@rules_cloudformation//cloudformation:defs.bzl", "cloudformation_aws_s3_bucket")
+load(
+    "@rules_cloudformation//cloudformation:defs.bzl",
+    "cloudformation_aws_ec2_instance",
+    "cloudformation_aws_s3_bucket",
+)
 load(
     "@rules_cloudformation//cloudformation:intrinsics.bzl",
     "cloudformation_aws_cloudformation_init",
     "cloudformation_aws_cloudformation_interface",
 )
+load("@rules_cloudformation//cloudformation:stack.bzl", "cloudformation_stack")
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
 package(default_visibility = ["//visibility:public"])
@@ -77,4 +82,59 @@ diff_test(
     name = "smoke_interface_shard_stable",
     file1 = "expected_smoke_interface.json",
     file2 = ":smoke_interface",
+)
+
+# ---- cloudformation_stack: aggregate shards into a CFN template ----
+# PascalCase target names because the v0.4 aggregator uses
+# label.name as the CFN logical id (which must be alphanumeric).
+
+cloudformation_aws_s3_bucket(
+    name = "SmokeBucket",
+    aws_s3_bucket_name = "smoke-bucket",
+    BucketName = "smoke-bucket",
+)
+
+cloudformation_aws_ec2_instance(
+    name = "WebServer",
+    aws_ec2_instance_name = "web-server",
+    ImageId = "ami-0abcdef1234567890",
+    InstanceType = "t3.micro",
+)
+
+cloudformation_aws_cloudformation_init(
+    name = "WebServerInit",
+    target_resource_name = "WebServer",
+    config_sets = '{"default": ["install"]}',
+    configs = json.encode({
+        "install": {"packages": {"yum": {"httpd": []}}},
+    }),
+)
+
+cloudformation_aws_cloudformation_interface(
+    name = "StackInterface",
+    parameter_groups = json.encode([
+        {
+            "Label": {"default": "Compute"},
+            "Parameters": ["InstanceType"],
+        },
+    ]),
+)
+
+cloudformation_stack(
+    name = "smoke_stack",
+    description = "Smoke stack: one bucket + one EC2 with cfn-init metadata + a parameter-group block.",
+    resources = [
+        ":SmokeBucket",
+        ":WebServer",
+    ],
+    intrinsics = [
+        ":WebServerInit",
+        ":StackInterface",
+    ],
+)
+
+diff_test(
+    name = "smoke_stack_template_stable",
+    file1 = "expected_smoke_stack.json",
+    file2 = ":smoke_stack",
 )
