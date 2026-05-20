@@ -1,0 +1,1 @@
+{"config":{"files":{"/etc/httpd/conf.d/site.conf":{"content":"ServerName localhost\n","mode":"000644"}}},"configSets":{"default":["install","config"]},"install":{"packages":{"yum":{"httpd":[]}}}}

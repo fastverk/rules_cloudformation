@@ -36,7 +36,18 @@ see that repo's
 [`plugin_contract.md`](https://github.com/fastverk/rules_jsonschema/blob/main/jsonschema/plugin_contract.md)
 if you want to swap a plugin for one of your own.
 
-## Status: v0.3.0
+## Status: v0.3.1
+
+What v0.3.1 adds on top of v0.3.0:
+
+- **Hand-authored CFN metadata intrinsics** in
+  `cloudformation/intrinsics.bzl`:
+  `cloudformation_aws_cloudformation_init` (cfn-init config-set
+  tree) and `cloudformation_aws_cloudformation_interface`
+  (template Metadata parameter-group block). These live outside
+  the Resource Spec so they're not covered by the auto-kinds
+  pipeline; loaded separately:
+  `load("@rules_cloudformation//cloudformation:intrinsics.bzl", ...)`.
 
 What v0.3 adds on top of v0.2.0:
 

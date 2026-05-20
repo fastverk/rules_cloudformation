@@ -7,11 +7,23 @@ load("//cloudformation/private:overlay.bzl", "cfn_overlay_descriptions")
 
 package(default_visibility = ["//visibility:public"])
 
-exports_files(["defs.bzl"])
+exports_files([
+    "defs.bzl",
+    "intrinsics.bzl",
+])
 
 bzl_library(
     name = "defs_bzl",
     srcs = ["defs.bzl"],
+    deps = ["@rules_jsonschema//runtime:helpers"],
+)
+
+# Hand-authored rules for the two CFN metadata directives that
+# don't fit the spec-derived codegen pipeline. See intrinsics.bzl
+# header for the rationale.
+bzl_library(
+    name = "intrinsics_bzl",
+    srcs = ["intrinsics.bzl"],
     deps = ["@rules_jsonschema//runtime:helpers"],
 )
 

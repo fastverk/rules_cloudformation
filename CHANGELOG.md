@@ -4,6 +4,29 @@ All notable changes to rules_cloudformation. The format is loosely
 [Keep a Changelog](https://keepachangelog.com/) — version headers
 mirror the published bazel-registry entries.
 
+## 0.3.1 — CFN intrinsics (Init, Interface)
+
+- New `cloudformation/intrinsics.bzl` with two hand-authored rules
+  for the CFN metadata directives that live outside the Resource
+  Spec:
+  - `cloudformation_aws_cloudformation_init` — emits the
+    `AWS::CloudFormation::Init` config-set tree (configSets +
+    named config blocks) that `cfn-init` interprets at instance
+    boot. Carries a `target_resource_name` for the future stack
+    aggregator to attach the shard under the right resource's
+    `Metadata`.
+  - `cloudformation_aws_cloudformation_interface` — emits the
+    `AWS::CloudFormation::Interface` template-level metadata
+    that groups Parameters into labelled sections for the AWS
+    console UI.
+- Smoke tests in `examples/smoke` cover both with byte-stable
+  `diff_test` gates.
+
+Purely additive — no changes to the spec-derived rules in
+`defs.bzl`. Consumers wanting the intrinsics
+`load("@rules_cloudformation//cloudformation:intrinsics.bzl", ...)`
+alongside the existing `defs.bzl` load.
+
 ## 0.3.0 — exhaustive coverage via rules_jsonschema auto-kinds
 
 - Switched from 6 hand-curated service groups to a **single

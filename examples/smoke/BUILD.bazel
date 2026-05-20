@@ -1,4 +1,9 @@
 load("@rules_cloudformation//cloudformation:defs.bzl", "cloudformation_aws_s3_bucket")
+load(
+    "@rules_cloudformation//cloudformation:intrinsics.bzl",
+    "cloudformation_aws_cloudformation_init",
+    "cloudformation_aws_cloudformation_interface",
+)
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
 package(default_visibility = ["//visibility:public"])
@@ -25,4 +30,51 @@ diff_test(
     name = "smoke_bucket_shard_stable",
     file1 = "expected_smoke_bucket.json",
     file2 = ":smoke_bucket",
+)
+
+# AWS::CloudFormation::Init — a config-set tree attached to an
+# EC2-like resource's `Metadata`. Hand-authored rule (lives outside
+# the Resource Spec).
+cloudformation_aws_cloudformation_init(
+    name = "smoke_init",
+    target_resource_name = "WebServer",
+    config_sets = '{"default": ["install", "config"]}',
+    configs = json.encode({
+        "install": {
+            "packages": {"yum": {"httpd": []}},
+        },
+        "config": {
+            "files": {
+                "/etc/httpd/conf.d/site.conf": {
+                    "content": "ServerName localhost\n",
+                    "mode": "000644",
+                },
+            },
+        },
+    }),
+)
+
+diff_test(
+    name = "smoke_init_shard_stable",
+    file1 = "expected_smoke_init.json",
+    file2 = ":smoke_init",
+)
+
+# AWS::CloudFormation::Interface — top-level template metadata that
+# groups Parameters for the AWS console UI.
+cloudformation_aws_cloudformation_interface(
+    name = "smoke_interface",
+    parameter_groups = json.encode([
+        {
+            "Label": {"default": "Network"},
+            "Parameters": ["VpcId", "SubnetIds"],
+        },
+    ]),
+    parameter_labels = '{"VpcId": {"default": "Which VPC?"}}',
+)
+
+diff_test(
+    name = "smoke_interface_shard_stable",
+    file1 = "expected_smoke_interface.json",
+    file2 = ":smoke_interface",
 )
