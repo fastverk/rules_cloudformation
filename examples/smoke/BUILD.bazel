@@ -10,7 +10,10 @@ package(default_visibility = ["//visibility:public"])
 # rule would pick up.
 cloudformation_aws_s3_bucket(
     name = "smoke_bucket",
-    bucket_name = "smoke-bucket",
+    # Per-kind item-name attr. v0.3 namespaces this with the full
+    # AWS_Service_Resource id (was `bucket_name` in v0.2 when kinds
+    # were hand-enumerated with a short tag).
+    aws_s3_bucket_name = "smoke-bucket",
     BucketName = "smoke-bucket",
     VersioningConfiguration = '{"Status": "Enabled"}',
 )

@@ -36,7 +36,31 @@ see that repo's
 [`plugin_contract.md`](https://github.com/fastverk/rules_jsonschema/blob/main/jsonschema/plugin_contract.md)
 if you want to swap a plugin for one of your own.
 
-## Status: v0.2.0
+## Status: v0.3.0
+
+What v0.3 adds on top of v0.2.0:
+
+- **Exhaustive coverage — 1582 typed rules** across the entire
+  pinned CFN Resource Specification (was 26 in v0.2 / one in v0.1).
+  Powered by `rules_jsonschema` v0.3's new auto-kinds flags
+  (`--kinds-pointer-base`, `--kinds-key-filter`, the template
+  flags) instead of hand-enumerating each `--kind=` mapping.
+- **Adding a new resource type is a no-op** — bump the upstream
+  spec pin (`cfn_sources_extension`) and the new resources show up
+  in the regenerated `defs.bzl`.
+- **Single `defs.bzl`** — the per-group files (`storage.bzl`,
+  `compute.bzl`, …) collapsed into one generated artifact.
+  Consumers `load("//cloudformation:defs.bzl", ...)` exactly like
+  they did in v0.2; the loaded surface is a strict superset.
+- **Breaking**: the per-kind item-name attr is namespaced
+  (`aws_s3_bucket_name` rather than the v0.2 short tag
+  `bucket_name`) to prevent collisions in the 1500+ rule set. The
+  CFN property attrs (`BucketName`, `VersioningConfiguration`, …)
+  are unchanged.
+
+---
+
+## v0.2.0 status (still shipped):
 
 What v0.2 adds on top of v0.1.0:
 

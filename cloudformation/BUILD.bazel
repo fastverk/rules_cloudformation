@@ -7,272 +7,68 @@ load("//cloudformation/private:overlay.bzl", "cfn_overlay_descriptions")
 
 package(default_visibility = ["//visibility:public"])
 
-exports_files([
-    "defs.bzl",
-    "storage.bzl",
-    "compute.bzl",
-    "identity.bzl",
-    "messaging.bzl",
-    "observability.bzl",
-    "database.bzl",
-])
+exports_files(["defs.bzl"])
 
 bzl_library(
     name = "defs_bzl",
     srcs = ["defs.bzl"],
-    deps = [
-        ":storage_lib",
-        ":compute_lib",
-        ":identity_lib",
-        ":messaging_lib",
-        ":observability_lib",
-        ":database_lib",
-    ],
-)
-
-# Per-group bzl_library entries — each .bzl carries typed rules for
-# every top-level AWS::* resource in its group. Sub-property shapes
-# (e.g. AWS::S3::Bucket_VersioningConfiguration) are present in the
-# assembled schema but consumed via JSON pointers, not exposed as
-# Bazel rules.
-bzl_library(
-    name = "storage_lib",
-    srcs = ["storage.bzl"],
     deps = ["@rules_jsonschema//runtime:helpers"],
 )
 
-bzl_library(
-    name = "compute_lib",
-    srcs = ["compute.bzl"],
-    deps = ["@rules_jsonschema//runtime:helpers"],
-)
-
-bzl_library(
-    name = "identity_lib",
-    srcs = ["identity.bzl"],
-    deps = ["@rules_jsonschema//runtime:helpers"],
-)
-
-bzl_library(
-    name = "messaging_lib",
-    srcs = ["messaging.bzl"],
-    deps = ["@rules_jsonschema//runtime:helpers"],
-)
-
-bzl_library(
-    name = "observability_lib",
-    srcs = ["observability.bzl"],
-    deps = ["@rules_jsonschema//runtime:helpers"],
-)
-
-bzl_library(
-    name = "database_lib",
-    srcs = ["database.bzl"],
-    deps = ["@rules_jsonschema//runtime:helpers"],
-)
-
-# ---- Group assembly + codegen ----------------------------------------------
-# Each cfn_assemble + jsonschema_starlark_codegen pair derives one
-# .bzl per AWS service group, pinned against the same upstream CFN
-# Resource Specification. Adding a resource type to an existing
-# group: extend the group's `includes` regex AND its kinds list.
-# Adding a new group: copy the pattern below.
+# ---- Spec assembly + codegen -----------------------------------------------
+# One assembler invocation across the whole CFN Resource Specification
+# yields one mega-schema; one jsonschema_starlark_codegen invocation
+# with rules_jsonschema v0.3's auto-kinds emits a typed rule for every
+# top-level AWS::Service::Resource definition (~1500). Bumping the
+# upstream spec pin (cfn_sources_extension) is now the only knob —
+# adding a resource type no longer needs a per-resource code change.
 
 cfn_assemble(
-    name = "assembled_storage",
+    name = "assembled_all",
     spec = "@cfn_resource_spec//file:CloudFormationResourceSpecification.json",
-    group_name = "storage",
-    includes = ["AWS::S3.*"],
+    group_name = "all",
+    includes = ["AWS::.*"],
 )
 
-# Layer the AWS-endpoint schema's rich descriptions on top of the
-# assembler's URL-only ones for resources we've pinned endpoint
-# coverage for (today: AWS::S3::Bucket). Endpoints for resources
-# not yet pinned are no-ops — the assembler's docs come through
-# unmodified. v0.3+ expands endpoint coverage to the full set.
+# Layer the AWS-endpoint schemas' rich descriptions on top of the
+# assembler's URL-only ones, for resources we've pinned endpoint
+# coverage for. Resources without a pinned endpoint pass through
+# unmodified.
 cfn_overlay_descriptions(
-    name = "assembled_storage_overlaid",
-    assembled = ":assembled_storage",
+    name = "assembled_all_overlaid",
+    assembled = ":assembled_all",
     endpoints = [
         "@cfn_endpoint_aws_s3_bucket//file:aws-s3-bucket.json",
     ],
 )
 
 jsonschema_starlark_codegen(
-    name = "storage_gen",
-    schema = ":assembled_storage_overlaid",
-    kinds = [
-        ("bucket", "#/definitions/AWS_S3_Bucket/properties/Properties",
-         "cloudformation_aws_s3_bucket", "CloudformationAwsS3BucketInfo"),
-        ("bucket_policy", "#/definitions/AWS_S3_BucketPolicy/properties/Properties",
-         "cloudformation_aws_s3_bucket_policy", "CloudformationAwsS3BucketPolicyInfo"),
-        ("access_point", "#/definitions/AWS_S3_AccessPoint/properties/Properties",
-         "cloudformation_aws_s3_access_point", "CloudformationAwsS3AccessPointInfo"),
+    name = "defs_gen",
+    schema = ":assembled_all_overlaid",
+    extra_args = [
+        "--kinds-pointer-base=#/definitions",
+        "--kinds-pointer-suffix=/properties/Properties",
+        # Top-level resources only. The assembler emits both
+        # `AWS_Service_Resource` (the resource itself) and
+        # `AWS_Service_Resource_SubShape` (nested property types) as
+        # siblings under `#/definitions`. Two-underscore form matches
+        # the former; sub-shapes are reachable via JSON-pointer refs
+        # inside the parent's `properties`, not as standalone rules.
+        "--kinds-key-filter=^AWS_[^_]+_[^_]+$",
+        "--id-template={snake}",
+        "--rule-name-template=cloudformation_{snake}",
+        "--provider-name-template=Cloudformation{camel}Info",
     ],
 )
 
-cfn_assemble(
-    name = "assembled_compute",
-    spec = "@cfn_resource_spec//file:CloudFormationResourceSpecification.json",
-    group_name = "compute",
-    includes = [
-        "AWS::Lambda::Function",
-        "AWS::Lambda::Permission",
-        "AWS::ECS::Service",
-        "AWS::ECS::Cluster",
-        "AWS::ECS::TaskDefinition",
-        "AWS::ECR::Repository",
-    ],
-)
+# ---- diff_test gate --------------------------------------------------------
 
-jsonschema_starlark_codegen(
-    name = "compute_gen",
-    schema = ":assembled_compute",
-    kinds = [
-        ("lambda_function", "#/definitions/AWS_Lambda_Function/properties/Properties",
-         "cloudformation_aws_lambda_function", "CloudformationAwsLambdaFunctionInfo"),
-        ("lambda_permission", "#/definitions/AWS_Lambda_Permission/properties/Properties",
-         "cloudformation_aws_lambda_permission", "CloudformationAwsLambdaPermissionInfo"),
-        ("ecs_service", "#/definitions/AWS_ECS_Service/properties/Properties",
-         "cloudformation_aws_ecs_service", "CloudformationAwsEcsServiceInfo"),
-        ("ecs_cluster", "#/definitions/AWS_ECS_Cluster/properties/Properties",
-         "cloudformation_aws_ecs_cluster", "CloudformationAwsEcsClusterInfo"),
-        ("ecs_task_definition", "#/definitions/AWS_ECS_TaskDefinition/properties/Properties",
-         "cloudformation_aws_ecs_task_definition", "CloudformationAwsEcsTaskDefinitionInfo"),
-        ("ecr_repository", "#/definitions/AWS_ECR_Repository/properties/Properties",
-         "cloudformation_aws_ecr_repository", "CloudformationAwsEcrRepositoryInfo"),
-    ],
-)
+diff_test(name = "defs_up_to_date", file1 = "defs.bzl", file2 = ":defs_gen")
 
-cfn_assemble(
-    name = "assembled_identity",
-    spec = "@cfn_resource_spec//file:CloudFormationResourceSpecification.json",
-    group_name = "identity",
-    includes = [
-        "AWS::IAM::Role",
-        "AWS::IAM::Policy",
-        "AWS::IAM::ManagedPolicy",
-        "AWS::IAM::User",
-        "AWS::IAM::Group",
-    ],
-)
-
-jsonschema_starlark_codegen(
-    name = "identity_gen",
-    schema = ":assembled_identity",
-    kinds = [
-        ("iam_role", "#/definitions/AWS_IAM_Role/properties/Properties",
-         "cloudformation_aws_iam_role", "CloudformationAwsIamRoleInfo"),
-        ("iam_policy", "#/definitions/AWS_IAM_Policy/properties/Properties",
-         "cloudformation_aws_iam_policy", "CloudformationAwsIamPolicyInfo"),
-        ("iam_managed_policy", "#/definitions/AWS_IAM_ManagedPolicy/properties/Properties",
-         "cloudformation_aws_iam_managed_policy", "CloudformationAwsIamManagedPolicyInfo"),
-        ("iam_user", "#/definitions/AWS_IAM_User/properties/Properties",
-         "cloudformation_aws_iam_user", "CloudformationAwsIamUserInfo"),
-        ("iam_group", "#/definitions/AWS_IAM_Group/properties/Properties",
-         "cloudformation_aws_iam_group", "CloudformationAwsIamGroupInfo"),
-    ],
-)
-
-cfn_assemble(
-    name = "assembled_messaging",
-    spec = "@cfn_resource_spec//file:CloudFormationResourceSpecification.json",
-    group_name = "messaging",
-    includes = [
-        "AWS::SQS::Queue",
-        "AWS::SQS::QueuePolicy",
-        "AWS::SNS::Topic",
-        "AWS::SNS::Subscription",
-        "AWS::SNS::TopicPolicy",
-        "AWS::Events::EventBus",
-        "AWS::Events::Rule",
-    ],
-)
-
-jsonschema_starlark_codegen(
-    name = "messaging_gen",
-    schema = ":assembled_messaging",
-    kinds = [
-        ("sqs_queue", "#/definitions/AWS_SQS_Queue/properties/Properties",
-         "cloudformation_aws_sqs_queue", "CloudformationAwsSqsQueueInfo"),
-        ("sqs_queue_policy", "#/definitions/AWS_SQS_QueuePolicy/properties/Properties",
-         "cloudformation_aws_sqs_queue_policy", "CloudformationAwsSqsQueuePolicyInfo"),
-        ("sns_topic", "#/definitions/AWS_SNS_Topic/properties/Properties",
-         "cloudformation_aws_sns_topic", "CloudformationAwsSnsTopicInfo"),
-        ("sns_subscription", "#/definitions/AWS_SNS_Subscription/properties/Properties",
-         "cloudformation_aws_sns_subscription", "CloudformationAwsSnsSubscriptionInfo"),
-        ("sns_topic_policy", "#/definitions/AWS_SNS_TopicPolicy/properties/Properties",
-         "cloudformation_aws_sns_topic_policy", "CloudformationAwsSnsTopicPolicyInfo"),
-        ("events_event_bus", "#/definitions/AWS_Events_EventBus/properties/Properties",
-         "cloudformation_aws_events_event_bus", "CloudformationAwsEventsEventBusInfo"),
-        ("events_rule", "#/definitions/AWS_Events_Rule/properties/Properties",
-         "cloudformation_aws_events_rule", "CloudformationAwsEventsRuleInfo"),
-    ],
-)
-
-cfn_assemble(
-    name = "assembled_observability",
-    spec = "@cfn_resource_spec//file:CloudFormationResourceSpecification.json",
-    group_name = "observability",
-    includes = [
-        "AWS::Logs::LogGroup",
-        "AWS::Logs::LogStream",
-        "AWS::CloudWatch::Alarm",
-    ],
-)
-
-jsonschema_starlark_codegen(
-    name = "observability_gen",
-    schema = ":assembled_observability",
-    kinds = [
-        ("logs_log_group", "#/definitions/AWS_Logs_LogGroup/properties/Properties",
-         "cloudformation_aws_logs_log_group", "CloudformationAwsLogsLogGroupInfo"),
-        ("logs_log_stream", "#/definitions/AWS_Logs_LogStream/properties/Properties",
-         "cloudformation_aws_logs_log_stream", "CloudformationAwsLogsLogStreamInfo"),
-        ("cloudwatch_alarm", "#/definitions/AWS_CloudWatch_Alarm/properties/Properties",
-         "cloudformation_aws_cloudwatch_alarm", "CloudformationAwsCloudwatchAlarmInfo"),
-    ],
-)
-
-cfn_assemble(
-    name = "assembled_database",
-    spec = "@cfn_resource_spec//file:CloudFormationResourceSpecification.json",
-    group_name = "database",
-    includes = [
-        "AWS::DynamoDB::Table",
-        "AWS::DynamoDB::GlobalTable",
-    ],
-)
-
-jsonschema_starlark_codegen(
-    name = "database_gen",
-    schema = ":assembled_database",
-    kinds = [
-        ("dynamodb_table", "#/definitions/AWS_DynamoDB_Table/properties/Properties",
-         "cloudformation_aws_dynamodb_table", "CloudformationAwsDynamodbTableInfo"),
-        ("dynamodb_global_table", "#/definitions/AWS_DynamoDB_GlobalTable/properties/Properties",
-         "cloudformation_aws_dynamodb_global_table", "CloudformationAwsDynamodbGlobalTableInfo"),
-    ],
-)
-
-# ---- diff_test gates -------------------------------------------------------
-
-diff_test(name = "storage_up_to_date", file1 = "storage.bzl", file2 = ":storage_gen")
-diff_test(name = "compute_up_to_date", file1 = "compute.bzl", file2 = ":compute_gen")
-diff_test(name = "identity_up_to_date", file1 = "identity.bzl", file2 = ":identity_gen")
-diff_test(name = "messaging_up_to_date", file1 = "messaging.bzl", file2 = ":messaging_gen")
-diff_test(name = "observability_up_to_date", file1 = "observability.bzl", file2 = ":observability_gen")
-diff_test(name = "database_up_to_date", file1 = "database.bzl", file2 = ":database_gen")
-
-# `bazel run //cloudformation:update` regenerates every group's .bzl.
+# `bazel run //cloudformation:update` regenerates defs.bzl.
 write_source_files(
     name = "update",
     files = {
-        "storage.bzl": ":storage_gen",
-        "compute.bzl": ":compute_gen",
-        "identity.bzl": ":identity_gen",
-        "messaging.bzl": ":messaging_gen",
-        "observability.bzl": ":observability_gen",
-        "database.bzl": ":database_gen",
+        "defs.bzl": ":defs_gen",
     },
 )

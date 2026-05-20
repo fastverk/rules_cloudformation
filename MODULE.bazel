@@ -7,7 +7,7 @@
 # assembler_src/`; see docs/SCHEMA_SOURCE.md for the trade-off.
 module(
     name = "rules_cloudformation",
-    version = "0.2.0",
+    version = "0.3.0",
 )
 
 bazel_dep(name = "platforms", version = "1.0.0")
@@ -15,8 +15,10 @@ bazel_dep(name = "bazel_skylib", version = "1.8.2")
 
 # rules_jsonschema generates typed Bazel rules (one per AWS::*
 # resource type) from the assembled CloudFormation JSON Schemas at
-# build time. See docs/SCHEMA_SOURCE.md.
-bazel_dep(name = "rules_jsonschema", version = "0.2.0")
+# build time. v0.3 added auto-kinds (--kinds-pointer-base + template
+# flags) which we use to cover the whole spec instead of hand-
+# enumerating service groups. See docs/SCHEMA_SOURCE.md.
+bazel_dep(name = "rules_jsonschema", version = "0.3.0")
 
 # rules_java compiles the vendored assembler sources. The
 # linter (cfn-lint port) planned for v0.3+ will reuse this dep.

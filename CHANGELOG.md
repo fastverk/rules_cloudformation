@@ -4,6 +4,33 @@ All notable changes to rules_cloudformation. The format is loosely
 [Keep a Changelog](https://keepachangelog.com/) — version headers
 mirror the published bazel-registry entries.
 
+## 0.3.0 — exhaustive coverage via rules_jsonschema auto-kinds
+
+- Switched from 6 hand-curated service groups to a **single
+  assembler invocation covering the entire CFN Resource Spec**,
+  driven by rules_jsonschema v0.3's new auto-kinds flags
+  (`--kinds-pointer-base`, `--kinds-key-filter`, the template
+  flags). Result: **1582 typed Bazel rules** across every
+  `AWS::Service::Resource` in the pinned spec (was 26).
+- Adding a new resource type is now a no-op — bump the upstream
+  spec pin in `cfn_sources_extension` and the new resources show
+  up in the regenerated `defs.bzl`.
+- `defs.bzl` is now the generated artifact (was a hand-written
+  re-export shim over 6 per-group `.bzl` files). The per-group
+  files (`storage.bzl`, `compute.bzl`, …) are removed.
+- **Breaking**: the per-kind item-name attr is now namespaced with
+  the full `aws_service_resource` id (e.g. `aws_s3_bucket_name`)
+  rather than the v0.2 short tag (`bucket_name`). The change
+  prevents collisions across the 1500+ resource set; the v0.2
+  short-tag form wasn't unique once coverage expanded past one
+  service per "kind concept" (S3, EC2, and S3Outposts all have
+  "bucket"-ish resources, etc.).
+- Endpoint-description overlay (`cfn_overlay_descriptions`)
+  preserved against the new single `assembled_all` target;
+  `AWS::S3::Bucket` retains its rich property docs. Endpoint
+  coverage for additional resources is still pin-per-resource in
+  `cloudformation/private/extensions.bzl`.
+
 ## 0.2.0 — 6 groups, 26 typed rules, docstring overlay
 
 - Scaled the codegen pipeline from one S3 Bucket rule to **26
