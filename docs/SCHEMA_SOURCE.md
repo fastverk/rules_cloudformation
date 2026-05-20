@@ -81,6 +81,21 @@ fix: newer CFN spec entries can have `Type: Json` with no
 but then NPEs on. The patch in `Codegen.addPrimitiveType` falls back
 to "Json" when the primitive name is null.
 
+### Known gap: registry-only resources
+
+The legacy Resource Specification we pin covers ~1582 of the
+~1600+ types AWS publishes. A handful of newer types
+(post-2023 additions — e.g. `AWS::EC2::Image`,
+`AWS::EC2::SnapshotBlockPublicAccess`) only ship via the newer
+CloudFormation Registry schema source (per-resource JSON files at
+`schema.cloudformation.us-east-1.amazonaws.com/`) and never
+landed in the legacy spec. Surfacing them would mean pulling
+from the Registry endpoint as a second source — same per-resource-
+file shape as the v0.0.1 source, but only for the resources the
+legacy spec is missing. v0.7+ work item; not on the current
+roadmap because demand is low (savvi-ops, the design's stress
+test, hits ~1 of 87 in-use AWS types as a registry-only).
+
 ### Alternatives considered
 
 | Source | Why not chosen |
