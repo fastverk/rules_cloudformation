@@ -7,7 +7,7 @@
 # assembler_src/`; see docs/SCHEMA_SOURCE.md for the trade-off.
 module(
     name = "rules_cloudformation",
-    version = "0.5.0",
+    version = "0.6.0",
 )
 
 bazel_dep(name = "platforms", version = "1.0.0")
@@ -77,6 +77,14 @@ python = use_extension(
 )
 python.toolchain(python_version = "3.12", is_default = True)
 
+# rules_shell underpins the default aws CLI toolchain (a thin sh_binary
+# around system `aws`) used by cloudformation_up / cloudformation_down.
+bazel_dep(name = "rules_shell", version = "0.6.1")
+
+# Default aws CLI toolchain — PATH-based sh wrapper. Consumers who
+# need hermeticity can register their own toolchain (multitool,
+# http_file, etc.) and Bazel's toolchain resolution will prefer it.
+register_toolchains("//cloudformation/aws_cli:default_aws_cli_toolchain")
+
 # Dev-only.
-bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
 bazel_dep(name = "stardoc", version = "0.7.2", dev_dependency = True)

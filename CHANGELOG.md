@@ -4,6 +4,29 @@ All notable changes to rules_cloudformation. The format is loosely
 [Keep a Changelog](https://keepachangelog.com/) — version headers
 mirror the published bazel-registry entries.
 
+## 0.6.0 — deploy wrappers (cloudformation_up / cloudformation_down)
+
+- New `cloudformation_up` and `cloudformation_down` executable
+  rules in `cloudformation/deploy.bzl`. `bazel run :foo_up` deploys
+  the stack via the aws CLI's `cloudformation deploy`;
+  `bazel run :foo_down` calls `delete-stack`. Extra argv after
+  `--` flows through to the aws CLI.
+- New aws CLI toolchain abstraction
+  (`cloudformation/aws_cli/toolchain_type.bzl`). The default
+  toolchain (`@rules_cloudformation//cloudformation/aws_cli:default_aws_cli_toolchain`,
+  auto-registered) is a thin `sh_binary` around system `aws` on
+  PATH — friendliest for dev + CI runners that already have aws
+  CLI installed. Consumers can register their own toolchain (e.g.
+  multitool-fetched, http_file, sidecar Docker) and Bazel's
+  toolchain resolution will prefer it without any changes to the
+  deploy rules.
+- Deploy rule attrs: `stack` (the cloudformation_stack target;
+  mandatory), `stack_name` (defaults to label.name), `region`,
+  `capabilities` (list — e.g. `["CAPABILITY_IAM"]`),
+  `parameter_overrides` (string_dict).
+- Smoke targets exercise the launcher generation end-to-end
+  (build-only — no real AWS calls in CI).
+
 ## 0.5.0 — cross-resource refs (cfn_ref / cfn_getatt)
 
 - New `cfn_ref(resource_name)` and `cfn_getatt(resource_name,

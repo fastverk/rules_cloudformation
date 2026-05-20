@@ -12,6 +12,7 @@ exports_files([
     "intrinsics.bzl",
     "cfn_types.bzl",
     "stack.bzl",
+    "deploy.bzl",
 ])
 
 bzl_library(
@@ -43,6 +44,12 @@ bzl_library(
         ":cfn_types_bzl",
         ":intrinsics_bzl",
     ],
+)
+
+bzl_library(
+    name = "deploy_bzl",
+    srcs = ["deploy.bzl"],
+    deps = ["//cloudformation/aws_cli:toolchain_type_bzl"],
 )
 
 # ---- Spec assembly + codegen -----------------------------------------------

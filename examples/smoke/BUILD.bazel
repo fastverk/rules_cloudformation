@@ -15,6 +15,11 @@ load(
     "cfn_ref",
     "cloudformation_stack",
 )
+load(
+    "@rules_cloudformation//cloudformation:deploy.bzl",
+    "cloudformation_down",
+    "cloudformation_up",
+)
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
 package(default_visibility = ["//visibility:public"])
@@ -158,4 +163,23 @@ diff_test(
     name = "smoke_stack_template_stable",
     file1 = "expected_smoke_stack.json",
     file2 = ":smoke_stack",
+)
+
+# Deploy wrappers — `bazel run` ready. We don't invoke them in CI
+# (no real AWS calls), but `bazel build` exercises the toolchain
+# resolution + launcher-script generation, which is the surface
+# the rules own.
+
+cloudformation_up(
+    name = "smoke_stack_up",
+    stack = ":smoke_stack",
+    stack_name = "rules-cloudformation-smoke",
+    region = "us-east-1",
+    capabilities = ["CAPABILITY_IAM"],
+)
+
+cloudformation_down(
+    name = "smoke_stack_down",
+    stack_name = "rules-cloudformation-smoke",
+    region = "us-east-1",
 )

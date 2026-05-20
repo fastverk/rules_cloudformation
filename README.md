@@ -36,7 +36,40 @@ see that repo's
 [`plugin_contract.md`](https://github.com/fastverk/rules_jsonschema/blob/main/jsonschema/plugin_contract.md)
 if you want to swap a plugin for one of your own.
 
-## Status: v0.5.0
+## Status: v0.6.0
+
+What v0.6 adds on top of v0.5.0:
+
+- **Deploy wrappers** — `cloudformation_up` and `cloudformation_down`
+  in `cloudformation/deploy.bzl`. `bazel run :stack_up` deploys via
+  `aws cloudformation deploy`; `bazel run :stack_down` deletes via
+  `delete-stack`.
+- **AWS CLI toolchain abstraction** — default toolchain auto-uses
+  system `aws` on PATH. Consumers wanting hermeticity register an
+  alternate toolchain (rules_multitool, `http_file`, sidecar
+  container) for
+  `@rules_cloudformation//cloudformation/aws_cli:toolchain_type`.
+
+```python
+load("@rules_cloudformation//cloudformation:stack.bzl", "cloudformation_stack")
+load("@rules_cloudformation//cloudformation:deploy.bzl",
+     "cloudformation_up", "cloudformation_down")
+
+cloudformation_stack(name = "app_stack", resources = [":Assets"])
+cloudformation_up(
+    name = "app_up",
+    stack = ":app_stack",
+    stack_name = "prod-app",
+    region = "us-east-1",
+    capabilities = ["CAPABILITY_IAM"],
+)
+cloudformation_down(name = "app_down", stack_name = "prod-app", region = "us-east-1")
+
+# bazel run //path:app_up
+# bazel run //path:app_down
+```
+
+## Status: v0.5.0 (prior)
 
 What v0.5 adds on top of v0.4.0:
 

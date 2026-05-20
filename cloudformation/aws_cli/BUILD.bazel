@@ -1,0 +1,44 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+load(":defs.bzl", "aws_cli_toolchain")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files([
+    "defs.bzl",
+    "toolchain_type.bzl",
+])
+
+bzl_library(
+    name = "toolchain_type_bzl",
+    srcs = ["toolchain_type.bzl"],
+)
+
+bzl_library(
+    name = "defs_bzl",
+    srcs = ["defs.bzl"],
+    deps = [":toolchain_type_bzl"],
+)
+
+# Standard Bazel toolchain_type — consumers register a toolchain
+# implementation for this type to override the default.
+toolchain_type(name = "toolchain_type")
+
+# Default toolchain: thin shell wrapper around system `aws`. Used
+# automatically when no other toolchain is registered. The wrapper
+# exits 127 with a clear install hint if `aws` isn't on PATH.
+sh_binary(
+    name = "system_aws",
+    srcs = ["system_aws.sh"],
+)
+
+aws_cli_toolchain(
+    name = "default_aws_cli",
+    aws = ":system_aws",
+)
+
+toolchain(
+    name = "default_aws_cli_toolchain",
+    toolchain = ":default_aws_cli",
+    toolchain_type = ":toolchain_type",
+)
