@@ -11,6 +11,18 @@ Driven by `cloudformation_stack` (see stack.bzl). Reads:
     spliced under the template's top-level
     `Metadata.AWS::CloudFormation::Interface`).
 
+After merging, the aggregator deep-walks every value in the merged
+template and rewrites the cross-resource reference sentinels
+emitted by `cfn_ref` / `cfn_getatt` (see stack.bzl) into the
+corresponding CFN intrinsic dicts:
+
+  `@@cfn:ref:Name`        →  `{"Ref": "Name"}`
+  `@@cfn:getatt:Name.Att` →  `{"Fn::GetAtt": ["Name", "Att"]}`
+
+Any sentinel pointing at a name not in the stack's resource set
+fails the build — typos are caught at Bazel-build time rather than
+at AWS deploy time.
+
 Writes one canonical JSON template. The output is deterministic:
 keys are emitted in sort order, intrinsic shards are merged in
 input order, indentation is 2 spaces. That way the
@@ -35,6 +47,51 @@ import argparse
 import json
 import sys
 from pathlib import Path
+
+
+_REF_SENTINEL = "@@cfn:ref:"
+_GETATT_SENTINEL = "@@cfn:getatt:"
+
+
+def _rewrite_sentinels(value, valid_names: set[str], path: str):
+    """Deep-walk `value`, replacing ref/getatt sentinel strings with
+    CFN intrinsic dicts. Yields validation errors via SystemExit
+    when a sentinel points at a name not in `valid_names`.
+
+    `path` is a human-readable JSON-path-ish breadcrumb used in
+    error messages (e.g. `Resources.MyPolicy.Properties.Bucket`).
+    """
+    if isinstance(value, str):
+        if value.startswith(_REF_SENTINEL):
+            ref_name = value[len(_REF_SENTINEL):]
+            if ref_name not in valid_names:
+                raise SystemExit(
+                    f"stack_aggregator: cfn_ref({ref_name!r}) at {path} "
+                    f"points at a resource that isn't in the stack "
+                    f"(known: {sorted(valid_names)!r})"
+                )
+            return {"Ref": ref_name}
+        if value.startswith(_GETATT_SENTINEL):
+            body = value[len(_GETATT_SENTINEL):]
+            ref_name, _, attribute = body.partition(".")
+            if not ref_name or not attribute:
+                raise SystemExit(
+                    f"stack_aggregator: malformed cfn_getatt sentinel at "
+                    f"{path}: {value!r}"
+                )
+            if ref_name not in valid_names:
+                raise SystemExit(
+                    f"stack_aggregator: cfn_getatt({ref_name!r}, ...) at "
+                    f"{path} points at a resource that isn't in the stack "
+                    f"(known: {sorted(valid_names)!r})"
+                )
+            return {"Fn::GetAtt": [ref_name, attribute]}
+        return value
+    if isinstance(value, dict):
+        return {k: _rewrite_sentinels(v, valid_names, f"{path}.{k}") for k, v in value.items()}
+    if isinstance(value, list):
+        return [_rewrite_sentinels(v, valid_names, f"{path}[{i}]") for i, v in enumerate(value)]
+    return value
 
 
 def _parse_resource(spec: str) -> tuple[str, str, Path]:
@@ -112,6 +169,12 @@ def main(argv: list[str]) -> int:
 
     if resources:
         template["Resources"] = dict(sorted(resources.items()))
+
+    # Sentinel rewrite happens AFTER all shards are merged so the
+    # validator can see the full resource-name set. Walk the whole
+    # template (not just Resources) — Interface ParameterLabels and
+    # Init configs can also carry refs.
+    template = _rewrite_sentinels(template, set(resources.keys()), "$")
 
     args.output.write_text(json.dumps(template, indent=2, sort_keys=True) + "\n")
     return 0

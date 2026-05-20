@@ -2,13 +2,19 @@ load(
     "@rules_cloudformation//cloudformation:defs.bzl",
     "cloudformation_aws_ec2_instance",
     "cloudformation_aws_s3_bucket",
+    "cloudformation_aws_s3_bucket_policy",
 )
 load(
     "@rules_cloudformation//cloudformation:intrinsics.bzl",
     "cloudformation_aws_cloudformation_init",
     "cloudformation_aws_cloudformation_interface",
 )
-load("@rules_cloudformation//cloudformation:stack.bzl", "cloudformation_stack")
+load(
+    "@rules_cloudformation//cloudformation:stack.bzl",
+    "cfn_getatt",
+    "cfn_ref",
+    "cloudformation_stack",
+)
 load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
 package(default_visibility = ["//visibility:public"])
@@ -120,11 +126,26 @@ cloudformation_aws_cloudformation_interface(
     ]),
 )
 
+cloudformation_aws_s3_bucket_policy(
+    name = "SmokeBucketPolicy",
+    Bucket = cfn_ref("SmokeBucket"),
+    PolicyDocument = json.encode({
+        "Version": "2012-10-17",
+        "Statement": [{
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": cfn_getatt("SmokeBucket", "Arn"),
+        }],
+    }),
+)
+
 cloudformation_stack(
     name = "smoke_stack",
-    description = "Smoke stack: one bucket + one EC2 with cfn-init metadata + a parameter-group block.",
+    description = "Smoke stack: one bucket + bucket policy with refs + one EC2 with cfn-init metadata + a parameter-group block.",
     resources = [
         ":SmokeBucket",
+        ":SmokeBucketPolicy",
         ":WebServer",
     ],
     intrinsics = [

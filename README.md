@@ -36,7 +36,40 @@ see that repo's
 [`plugin_contract.md`](https://github.com/fastverk/rules_jsonschema/blob/main/jsonschema/plugin_contract.md)
 if you want to swap a plugin for one of your own.
 
-## Status: v0.4.0
+## Status: v0.5.0
+
+What v0.5 adds on top of v0.4.0:
+
+- **Cross-resource refs** — `cfn_ref(name)` and `cfn_getatt(name,
+  attr)` Starlark helpers in `cloudformation/stack.bzl` produce
+  sentinel strings the aggregator rewrites into `{"Ref": ...}` /
+  `{"Fn::GetAtt": [...]}`. The aggregator validates that every
+  ref points at a real resource in the stack — typos surface at
+  Bazel-build time, not at AWS-deploy time.
+
+```python
+load("@rules_cloudformation//cloudformation:defs.bzl",
+     "cloudformation_aws_s3_bucket",
+     "cloudformation_aws_s3_bucket_policy")
+load("@rules_cloudformation//cloudformation:stack.bzl",
+     "cfn_ref", "cfn_getatt", "cloudformation_stack")
+
+cloudformation_aws_s3_bucket(name = "Assets", BucketName = "app-assets")
+cloudformation_aws_s3_bucket_policy(
+    name = "AssetsPolicy",
+    Bucket = cfn_ref("Assets"),
+    PolicyDocument = json.encode({
+        "Statement": [{
+            "Effect": "Allow",
+            "Action": "s3:GetObject",
+            "Resource": cfn_getatt("Assets", "Arn"),
+        }],
+    }),
+)
+cloudformation_stack(name = "stack", resources = [":Assets", ":AssetsPolicy"])
+```
+
+## Status: v0.4.0 (prior)
 
 What v0.4 adds on top of v0.3.1:
 

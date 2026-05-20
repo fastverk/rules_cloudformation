@@ -13,9 +13,16 @@ aggregator via the `intrinsics` attr. Init shards splice under
 their declared `target_resource_name`; Interface shards splice
 under the template-level `Metadata`.
 
-Cross-resource references (`Ref` / `Fn::GetAtt`) and deploy
-wrappers (`bazel run` driving `aws cloudformation deploy`) ride on
-later phases.
+Cross-resource references use the `cfn_ref` / `cfn_getatt`
+Starlark helpers below — they return sentinel strings the
+aggregator rewrites into `{"Ref": ...}` / `{"Fn::GetAtt": [...]}`
+intrinsic dicts at shard-merge time. The aggregator also validates
+that every referenced name is in the stack's resource set, so a
+typo fails the build with a clear pointer instead of producing a
+broken template that AWS rejects later.
+
+Deploy wrappers (`bazel run` driving `aws cloudformation deploy`)
+ride on a later phase.
 """
 
 load(
@@ -24,6 +31,80 @@ load(
     "CloudformationAwsCloudformationInterfaceInfo",
 )
 load("//cloudformation:cfn_types.bzl", "CFN_TYPES")
+
+# Sentinel prefixes for cross-resource references. The aggregator
+# (cloudformation/private/stack_aggregator.py) deep-walks each
+# shard's JSON values and rewrites these into the corresponding
+# CFN intrinsic dicts. Picked `@@cfn:` because `@@` doesn't collide
+# with any AWS string convention and stays grep-able in templates.
+_REF_SENTINEL = "@@cfn:ref:"
+_GETATT_SENTINEL = "@@cfn:getatt:"
+
+def cfn_ref(resource_name):
+    """Sentinel string the aggregator rewrites to `{"Ref": resource_name}`.
+
+    Use in any spec-derived rule attr that takes a string CFN
+    property. Example:
+
+    ```python
+    cloudformation_aws_s3_bucket_policy(
+        name = "MyPolicy",
+        Bucket = cfn_ref("MyBucket"),
+        PolicyDocument = "...",
+    )
+    ```
+
+    The aggregator fails the build if `resource_name` isn't one of
+    the stack's resources — typos are caught at Bazel-build time
+    rather than at AWS deploy time.
+
+    Args:
+      resource_name: the contributing rule's `label.name` (== the
+        CFN logical id under `Resources` in the rendered template).
+
+    Returns:
+      A sentinel string that round-trips through JSON encoding into
+      the shard the aggregator reads.
+    """
+    if not resource_name:
+        fail("cfn_ref: resource_name must be non-empty")
+    return _REF_SENTINEL + resource_name
+
+def cfn_getatt(resource_name, attribute):
+    """Sentinel string the aggregator rewrites to `{"Fn::GetAtt": [resource_name, attribute]}`.
+
+    Use in any spec-derived rule attr that takes a string CFN
+    property. Example:
+
+    ```python
+    cloudformation_aws_iam_policy(
+        name = "ReadBucketPolicy",
+        PolicyDocument = json.encode({
+            "Statement": [{
+                "Effect": "Allow",
+                "Action": "s3:GetObject",
+                "Resource": cfn_getatt("MyBucket", "Arn"),
+            }],
+        }),
+    )
+    ```
+
+    Args:
+      resource_name: the contributing rule's `label.name`.
+      attribute: the CFN attribute exposed by that resource type
+        (per the AWS docs — e.g. `Arn`, `DomainName`, `WebsiteURL`).
+
+    Returns:
+      A sentinel string the aggregator rewrites at template-render
+      time.
+    """
+    if not resource_name:
+        fail("cfn_getatt: resource_name must be non-empty")
+    if not attribute:
+        fail("cfn_getatt: attribute must be non-empty")
+    if "." in resource_name or "." in attribute:
+        fail("cfn_getatt: resource_name + attribute may not contain '.' (sentinel separator)")
+    return _GETATT_SENTINEL + resource_name + "." + attribute
 
 def _kind_id_from_shard(shard_basename, label_name):
     # Spec-derived rules name their shard
@@ -107,7 +188,7 @@ def _cloudformation_stack_impl(ctx):
 
 cloudformation_stack = rule(
     implementation = _cloudformation_stack_impl,
-    doc = "Aggregate typed-rule shards into one CFN template. Phase-1 limitations: resource names = each contributing rule's `label.name` (so name targets PascalCase to satisfy CFN logical-id rules); no `Parameters` / `Outputs` / cross-resource refs yet.",
+    doc = "Aggregate typed-rule shards into one CFN template. Resource names = each contributing rule's `label.name` (so name targets PascalCase to satisfy CFN logical-id rules). Cross-resource refs work via `cfn_ref` / `cfn_getatt` Starlark helpers (above). `Parameters` / `Outputs` template sections are deferred.",
     attrs = {
         "description": attr.string(
             doc = "CFN template `Description` field. Optional.",

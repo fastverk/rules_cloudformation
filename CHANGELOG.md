@@ -4,6 +4,23 @@ All notable changes to rules_cloudformation. The format is loosely
 [Keep a Changelog](https://keepachangelog.com/) — version headers
 mirror the published bazel-registry entries.
 
+## 0.5.0 — cross-resource refs (cfn_ref / cfn_getatt)
+
+- New `cfn_ref(resource_name)` and `cfn_getatt(resource_name,
+  attribute)` Starlark helpers in `cloudformation/stack.bzl`. They
+  return sentinel strings (`@@cfn:ref:Name`,
+  `@@cfn:getatt:Name.Attr`) that the aggregator rewrites into
+  `{"Ref": ...}` / `{"Fn::GetAtt": [...]}` CFN intrinsic dicts at
+  template-render time.
+- Aggregator validates that every sentinel points at a name in the
+  stack's resource set — typos fail the Bazel build with a
+  `$.Resources.X.Properties.Y` breadcrumb instead of a deferred
+  AWS-side template rejection.
+- Smoke stack now exercises both helpers: a `BucketPolicy` whose
+  `Bucket` is `cfn_ref("SmokeBucket")` and whose policy statement
+  references `cfn_getatt("SmokeBucket", "Arn")`. Expected JSON
+  updated.
+
 ## 0.4.0 — cloudformation_stack aggregator
 
 - New `cloudformation_stack` rule (`cloudformation/stack.bzl`) —
