@@ -36,7 +36,30 @@ see that repo's
 [`plugin_contract.md`](https://github.com/fastverk/rules_jsonschema/blob/main/jsonschema/plugin_contract.md)
 if you want to swap a plugin for one of your own.
 
-## Status: v0.1.0
+## Status: v0.2.0
+
+What v0.2 adds on top of v0.1.0:
+
+- **6 resource-type groups, 26 typed rules** — every common AWS
+  resource type for storage / compute / identity / messaging /
+  observability / database. Each group is a separate
+  `cfn_assemble` + `jsonschema_starlark_codegen` pair; consumers
+  pick which group(s) to load. Re-exported from
+  `//cloudformation:defs.bzl`. Adding a new resource is two
+  edits in `cloudformation/BUILD.bazel`.
+- **Docstring overlay** — `cfn_overlay_descriptions` layers
+  AWS-endpoint per-resource property `description` fields onto
+  the assembler-derived schemas before codegen. Trades URL-only
+  attr docs for rich prose. v0.2 ships endpoint coverage for
+  `AWS::S3::Bucket`; expanding coverage is a one-line pin per
+  resource. Endpoints not yet pinned pass through unchanged.
+- **Internal cleanup** — dropped the unused
+  `cfn_template_schema_src` use_repo from MODULE.bazel; trimmed
+  the stale `.bazelrc` Java language-version pin.
+
+---
+
+## v0.1.0 status (still shipped):
 
 What ships:
 
@@ -152,7 +175,7 @@ common --registry=https://bcr.bazel.build/
 `MODULE.bazel`:
 
 ```python
-bazel_dep(name = "rules_cloudformation", version = "0.1.0")
+bazel_dep(name = "rules_cloudformation", version = "0.2.0")
 ```
 
 `rules_jsonschema`, `rules_java`, `rules_jvm_external`, and

@@ -1,34 +1,27 @@
-"""Module extension that fetches the CloudFormation assembler source
-+ the CloudFormation Resource Specification snapshot.
+"""Module extension that fetches the CloudFormation Resource
+Specification snapshot.
 
 v0.1 builds the upstream Java assembler
-(`aws.cfn.codegen.json.Main`) from
-`aws-cloudformation/cloudformation-template-schema` at a pinned
-commit, and runs it at build time against a sha-pinned snapshot of
-the AWS CloudFormation Resource Specification (the us-east-1
-non-gzip endpoint). The assembler emits per-group JSON Schemas;
-one group is then fed through `jsonschema_starlark_codegen` to
-produce the typed Bazel rules.
+(`aws.cfn.codegen.json.Main`) from sources vendored under
+`cloudformation/private/assembler_src/` — delomboked once, then
+patched, then committed (see `docs/SCHEMA_SOURCE.md` for the
+trade-off). The assembler is fed a sha-pinned snapshot of the AWS
+CloudFormation Resource Specification (the us-east-1 non-gzip
+endpoint) and emits per-group JSON Schemas. One group is then fed
+through `jsonschema_starlark_codegen` to produce the typed Bazel
+rules.
 
-Two repos:
-  - `@cfn_template_schema_src`: tarball of the assembler source,
-    with a stub BUILD.bazel that exposes the Java sources + bundled
-    config.yml / Schema.template / Intrinsics.json resources as
-    filegroups.
+One repo today:
   - `@cfn_resource_spec`: the sha-pinned
     CloudFormationResourceSpecification.json (~15MB). The endpoint
     is documented as non-gzip; the assembler's SpecificationLoader
     auto-detects the encoding by magic bytes.
 
-Refreshing the spec is a 3-line change: bump the URL, bump the
-sha256 (`curl -fsSL <url> | shasum -a 256`), re-pin Maven.
+Refreshing the spec is a 2-line change: bump the URL (if AWS
+restructures), bump the sha256 (`curl -fsSL <url> | shasum -a 256`).
 """
 
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive", "http_file")
-
-# Pinned commit on aws-cloudformation/cloudformation-template-schema.
-_TEMPLATE_SCHEMA_COMMIT = "5d7815b14fd533c15c30f9046a76cdcb89afd32a"
-_TEMPLATE_SCHEMA_SHA256 = "7f40b919bbea6109244903744262074f6afa32fdd780a6dca0540ef1b57bd774"
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 # AWS CloudFormation Resource Specification, us-east-1 non-gzip
 # endpoint. Computed by `curl -fsSL <url> | shasum -a 256` at pin
@@ -36,56 +29,37 @@ _TEMPLATE_SCHEMA_SHA256 = "7f40b919bbea6109244903744262074f6afa32fdd780a6dca0540
 _RESOURCE_SPEC_URL = "https://d1uauaxba7bl26.cloudfront.net/latest/CloudFormationResourceSpecification.json"
 _RESOURCE_SPEC_SHA256 = "3bf0f8b5034b51c622da82f7cec9499112a40719f28fff5c6d2050a0c3a24459"
 
-# Stub BUILD file inserted into the upstream source tarball. Exports
-# the Java sources + bundled resources as filegroups under labels
-# that //cloudformation/private:BUILD.bazel consumes.
-_TEMPLATE_SCHEMA_BUILD = """
-load("@rules_java//java:defs.bzl", "java_library")
+# AWS per-resource endpoint schemas. The assembler-derived JSON
+# Schemas only carry URL-only `description` fields on attrs; the
+# per-resource AWS endpoint schemas at
+# https://schema.cloudformation.us-east-1.amazonaws.com/ ship rich
+# prose descriptions for every property. v0.2 overlays them on top
+# of the assembler's output before feeding the codegen.
+#
+# Each entry: filename → sha256. Refresh by re-downloading
+# (`curl -fsSL .../<filename>.json | shasum -a 256`).
+_PINNED_ENDPOINT_SCHEMAS = {
+    "aws-s3-bucket.json": "306c17eac19e62159bdeaa872af1fe85b28e0cfd43d955d35765182b3904f4ab",
+}
 
-package(default_visibility = ["//visibility:public"])
-
-filegroup(
-    name = "java_srcs",
-    srcs = glob(["src/main/java/**/*.java"]),
-)
-
-# Bundled assembler resources, wrapped in a java_library so the
-# strip-prefix is interpreted relative to this external repo's
-# package — `Mustache#compile("Schema.template")` resolves to the
-# classpath root.
-java_library(
-    name = "resources",
-    resources = [
-        "src/main/resources/config.yml",
-        "src/main/resources/Schema.template",
-        "src/main/resources/Intrinsics.json",
-    ],
-    resource_strip_prefix = "src/main/resources",
-)
-
-exports_files([
-    "src/main/resources/config.yml",
-    "src/main/resources/Schema.template",
-    "src/main/resources/Intrinsics.json",
-])
-"""
+_AWS_SCHEMA_BASE = "https://schema.cloudformation.us-east-1.amazonaws.com"
 
 def _impl(_mctx):
-    http_archive(
-        name = "cfn_template_schema_src",
-        urls = [
-            "https://github.com/aws-cloudformation/cloudformation-template-schema/archive/{}.tar.gz".format(_TEMPLATE_SCHEMA_COMMIT),
-        ],
-        sha256 = _TEMPLATE_SCHEMA_SHA256,
-        strip_prefix = "cloudformation-template-schema-{}".format(_TEMPLATE_SCHEMA_COMMIT),
-        build_file_content = _TEMPLATE_SCHEMA_BUILD,
-    )
-
     http_file(
         name = "cfn_resource_spec",
         urls = [_RESOURCE_SPEC_URL],
         sha256 = _RESOURCE_SPEC_SHA256,
         downloaded_file_path = "CloudFormationResourceSpecification.json",
     )
+    for filename, sha256 in _PINNED_ENDPOINT_SCHEMAS.items():
+        # Repo name strips `.json` and rewrites `-` to `_` so the
+        # @cfn_endpoint_<resource> label is Bazel-canonical.
+        repo_name = "cfn_endpoint_" + filename.removesuffix(".json").replace("-", "_")
+        http_file(
+            name = repo_name,
+            urls = ["{}/{}".format(_AWS_SCHEMA_BASE, filename)],
+            sha256 = sha256,
+            downloaded_file_path = filename,
+        )
 
 cfn_sources_extension = module_extension(implementation = _impl)

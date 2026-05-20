@@ -7,7 +7,7 @@
 # assembler_src/`; see docs/SCHEMA_SOURCE.md for the trade-off.
 module(
     name = "rules_cloudformation",
-    version = "0.1.0",
+    version = "0.2.0",
 )
 
 bazel_dep(name = "platforms", version = "1.0.0")
@@ -52,14 +52,28 @@ maven.install(
 use_repo(maven, "cfn_assembler_maven")
 
 # Fetch the pinned AWS CloudFormation Resource Specification
-# snapshot. The assembler source tarball is also fetched (for
-# reference / cross-checking the vendored copy) but isn't on the
-# compile path.
+# snapshot.
 cfn_sources = use_extension(
     "//cloudformation/private:extensions.bzl",
     "cfn_sources_extension",
 )
-use_repo(cfn_sources, "cfn_resource_spec", "cfn_template_schema_src")
+use_repo(
+    cfn_sources,
+    "cfn_resource_spec",
+    "cfn_endpoint_aws_s3_bucket",
+)
+
+# rules_python drives the docstring-overlay Python script
+# (cloudformation/private/overlay_descriptions.py). Not a dev_dep
+# because the codegen pipeline depends on it transitively.
+bazel_dep(name = "rules_python", version = "1.7.0")
+
+python = use_extension(
+    "@rules_python//python/extensions:python.bzl",
+    "python",
+    dev_dependency = True,
+)
+python.toolchain(python_version = "3.12", is_default = True)
 
 # Dev-only.
 bazel_dep(name = "rules_shell", version = "0.6.1", dev_dependency = True)
