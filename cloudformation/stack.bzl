@@ -30,6 +30,8 @@ load(
     "CloudformationAwsCloudformationInitInfo",
     "CloudformationAwsCloudformationInterfaceInfo",
 )
+load("//cloudformation:parameter.bzl", "CloudformationParameterInfo")
+load("//cloudformation:output.bzl", "CloudformationOutputInfo")
 load("//cloudformation:cfn_types.bzl", "CFN_TYPES")
 
 # Sentinel prefixes for cross-resource references. The aggregator
@@ -39,6 +41,8 @@ load("//cloudformation:cfn_types.bzl", "CFN_TYPES")
 # with any AWS string convention and stays grep-able in templates.
 _REF_SENTINEL = "@@cfn:ref:"
 _GETATT_SENTINEL = "@@cfn:getatt:"
+_IMPORTVALUE_SENTINEL = "@@cfn:importvalue:"
+_SUB_SENTINEL = "@@cfn:sub:"
 
 def cfn_ref(resource_name):
     """Sentinel string the aggregator rewrites to `{"Ref": resource_name}`.
@@ -105,6 +109,51 @@ def cfn_getatt(resource_name, attribute):
     if "." in resource_name or "." in attribute:
         fail("cfn_getatt: resource_name + attribute may not contain '.' (sentinel separator)")
     return _GETATT_SENTINEL + resource_name + "." + attribute
+
+def cfn_import_value(export_name):
+    """Sentinel string the aggregator rewrites to `{"Fn::ImportValue": export_name}`.
+
+    Pulls a value exported by a sibling stack's
+    `cloudformation_output(... Export = "<name>")`. The aggregator
+    can't validate that the export exists at Bazel-build time
+    (it lives in a different stack, possibly not yet deployed); a
+    typo surfaces at CFN deploy time as `No export named X found`.
+
+    Args:
+      export_name: the `Export` name set on the producing stack's
+        output (region-globally unique, set by the operator).
+
+    Returns:
+      A sentinel string that round-trips through JSON encoding into
+      the shard the aggregator reads.
+    """
+    if not export_name:
+        fail("cfn_import_value: export_name must be non-empty")
+    return _IMPORTVALUE_SENTINEL + export_name
+
+def cfn_sub(template):
+    """Sentinel string the aggregator rewrites to `{"Fn::Sub": template}`.
+
+    Use `${ResourceName.Attribute}` / `${ParameterName}` /
+    `${AWS::AccountId}` / etc. inside the template string; AWS
+    substitutes them at deploy time. The aggregator does NOT
+    validate the embedded names — CFN does, at deploy time.
+
+    Currently the string-only form. The two-arg form
+    `{"Fn::Sub": ["template", {var: val, ...}]}` is not yet
+    surfaced; emit it as a literal dict in `json.encode(...)` if
+    you need it.
+
+    Args:
+      template: the substitution template string (with `${...}`
+        placeholders).
+
+    Returns:
+      A sentinel string that round-trips through JSON encoding.
+    """
+    if not template:
+        fail("cfn_sub: template must be non-empty")
+    return _SUB_SENTINEL + template
 
 def _kind_id_from_shard(shard_basename, label_name):
     # Spec-derived rules name their shard
@@ -176,6 +225,38 @@ def _cloudformation_stack_impl(ctx):
         else:
             fail("cloudformation_stack: intrinsics entry {} doesn't carry a known intrinsic provider".format(dep.label))
 
+    parameter_names_seen = {}
+    for dep in ctx.attr.parameters:
+        if CloudformationParameterInfo not in dep:
+            fail("cloudformation_stack: parameters entry {} is not a cloudformation_parameter".format(dep.label))
+        info = dep[CloudformationParameterInfo]
+        if info.name in parameter_names_seen:
+            fail("cloudformation_stack: duplicate parameter name {} (from {} and {})".format(
+                info.name,
+                parameter_names_seen[info.name],
+                dep.label,
+            ))
+        if info.name in resource_names_seen:
+            fail("cloudformation_stack: name collision: {} declared as both a resource and a parameter".format(info.name))
+        parameter_names_seen[info.name] = dep.label
+        args.add("--parameter={}={}".format(info.name, info.json.path))
+        inputs.append(info.json)
+
+    output_names_seen = {}
+    for dep in ctx.attr.outputs:
+        if CloudformationOutputInfo not in dep:
+            fail("cloudformation_stack: outputs entry {} is not a cloudformation_output".format(dep.label))
+        info = dep[CloudformationOutputInfo]
+        if info.name in output_names_seen:
+            fail("cloudformation_stack: duplicate output name {} (from {} and {})".format(
+                info.name,
+                output_names_seen[info.name],
+                dep.label,
+            ))
+        output_names_seen[info.name] = dep.label
+        args.add("--output_decl={}={}".format(info.name, info.json.path))
+        inputs.append(info.json)
+
     ctx.actions.run(
         executable = ctx.executable._aggregator,
         arguments = [args],
@@ -188,7 +269,7 @@ def _cloudformation_stack_impl(ctx):
 
 cloudformation_stack = rule(
     implementation = _cloudformation_stack_impl,
-    doc = "Aggregate typed-rule shards into one CFN template. Resource names = each contributing rule's `label.name` (so name targets PascalCase to satisfy CFN logical-id rules). Cross-resource refs work via `cfn_ref` / `cfn_getatt` Starlark helpers (above). `Parameters` / `Outputs` template sections are deferred.",
+    doc = "Aggregate typed-rule shards into one CFN template. Resource names = each contributing rule's `label.name` (so name targets PascalCase to satisfy CFN logical-id rules). Cross-resource refs work via `cfn_ref` / `cfn_getatt` Starlark helpers (above). Top-level Parameters / Outputs blocks are populated from the `parameters` / `outputs` attrs (see //cloudformation:parameter.bzl, //cloudformation:output.bzl). Cross-stack imports use `cfn_import_value`; `Fn::Sub` template strings use `cfn_sub`.",
     attrs = {
         "description": attr.string(
             doc = "CFN template `Description` field. Optional.",
@@ -200,6 +281,16 @@ cloudformation_stack = rule(
         "intrinsics": attr.label_list(
             doc = "`cloudformation_aws_cloudformation_init` / `_interface` targets from `intrinsics.bzl`. Init shards splice under their declared `target_resource_name`; Interface shards splice under the template-level `Metadata`.",
             allow_files = False,
+        ),
+        "parameters": attr.label_list(
+            doc = "`cloudformation_parameter` targets from `parameter.bzl`. Each contributes one entry under the template's top-level `Parameters` block, keyed by the target's `label.name`. Reference from resource shards with `cfn_ref(\"<name>\")`.",
+            allow_files = False,
+            providers = [CloudformationParameterInfo],
+        ),
+        "outputs": attr.label_list(
+            doc = "`cloudformation_output` targets from `output.bzl`. Each contributes one entry under the template's top-level `Outputs` block, keyed by the target's `label.name`. Set `Export` on an output to make it importable by sibling stacks via `cfn_import_value(\"<export-name>\")`.",
+            allow_files = False,
+            providers = [CloudformationOutputInfo],
         ),
         "_aggregator": attr.label(
             default = "//cloudformation/private:stack_aggregator",

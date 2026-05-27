@@ -12,8 +12,21 @@ exports_files([
     "intrinsics.bzl",
     "cfn_types.bzl",
     "stack.bzl",
+    "parameter.bzl",
+    "output.bzl",
     "deploy.bzl",
 ])
+
+bzl_library(
+    name = "parameter_bzl",
+    srcs = ["parameter.bzl"],
+    deps = ["@rules_jsonschema//runtime:helpers"],
+)
+
+bzl_library(
+    name = "output_bzl",
+    srcs = ["output.bzl"],
+)
 
 bzl_library(
     name = "defs_bzl",
@@ -43,6 +56,8 @@ bzl_library(
     deps = [
         ":cfn_types_bzl",
         ":intrinsics_bzl",
+        ":parameter_bzl",
+        ":output_bzl",
     ],
 )
 

@@ -51,12 +51,16 @@ from pathlib import Path
 
 _REF_SENTINEL = "@@cfn:ref:"
 _GETATT_SENTINEL = "@@cfn:getatt:"
+_IMPORTVALUE_SENTINEL = "@@cfn:importvalue:"
+_SUB_SENTINEL = "@@cfn:sub:"
 
 
 def _rewrite_sentinels(value, valid_names: set[str], path: str):
-    """Deep-walk `value`, replacing ref/getatt sentinel strings with
-    CFN intrinsic dicts. Yields validation errors via SystemExit
-    when a sentinel points at a name not in `valid_names`.
+    """Deep-walk `value`, replacing sentinel strings with CFN
+    intrinsic dicts. Yields validation errors via SystemExit when
+    a sentinel points at a name not in `valid_names` (only Ref /
+    GetAtt are validated; ImportValue references a sibling stack
+    we can't introspect; Sub embeds CFN-deploy-time names).
 
     `path` is a human-readable JSON-path-ish breadcrumb used in
     error messages (e.g. `Resources.MyPolicy.Properties.Bucket`).
@@ -67,8 +71,8 @@ def _rewrite_sentinels(value, valid_names: set[str], path: str):
             if ref_name not in valid_names:
                 raise SystemExit(
                     f"stack_aggregator: cfn_ref({ref_name!r}) at {path} "
-                    f"points at a resource that isn't in the stack "
-                    f"(known: {sorted(valid_names)!r})"
+                    f"points at a name that isn't in the stack "
+                    f"(known resources + parameters: {sorted(valid_names)!r})"
                 )
             return {"Ref": ref_name}
         if value.startswith(_GETATT_SENTINEL):
@@ -82,10 +86,24 @@ def _rewrite_sentinels(value, valid_names: set[str], path: str):
             if ref_name not in valid_names:
                 raise SystemExit(
                     f"stack_aggregator: cfn_getatt({ref_name!r}, ...) at "
-                    f"{path} points at a resource that isn't in the stack "
-                    f"(known: {sorted(valid_names)!r})"
+                    f"{path} points at a name that isn't in the stack "
+                    f"(known resources + parameters: {sorted(valid_names)!r})"
                 )
             return {"Fn::GetAtt": [ref_name, attribute]}
+        if value.startswith(_IMPORTVALUE_SENTINEL):
+            export_name = value[len(_IMPORTVALUE_SENTINEL):]
+            if not export_name:
+                raise SystemExit(
+                    f"stack_aggregator: empty cfn_import_value sentinel at {path}"
+                )
+            return {"Fn::ImportValue": export_name}
+        if value.startswith(_SUB_SENTINEL):
+            template = value[len(_SUB_SENTINEL):]
+            if not template:
+                raise SystemExit(
+                    f"stack_aggregator: empty cfn_sub sentinel at {path}"
+                )
+            return {"Fn::Sub": template}
         return value
     if isinstance(value, dict):
         return {k: _rewrite_sentinels(v, valid_names, f"{path}.{k}") for k, v in value.items()}
@@ -115,6 +133,17 @@ def _parse_init(spec: str) -> tuple[str, Path]:
     return parts[0], Path(parts[1])
 
 
+def _parse_named_shard(spec: str, flag: str) -> tuple[str, Path]:
+    parts = spec.split("=", 1)
+    if len(parts) != 2:
+        raise SystemExit(
+            f"{flag} expects NAME=PATH, got {spec!r}"
+        )
+    if not parts[0] or not parts[1]:
+        raise SystemExit(f"{flag} has empty field: {spec!r}")
+    return parts[0], Path(parts[1])
+
+
 def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--output", required=True, type=Path)
@@ -122,6 +151,8 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--resource", action="append", default=[])
     ap.add_argument("--init", action="append", default=[])
     ap.add_argument("--interface", action="append", default=[])
+    ap.add_argument("--parameter", action="append", default=[])
+    ap.add_argument("--output_decl", action="append", default=[])
     args = ap.parse_args(argv)
 
     resources: dict[str, dict] = {}
@@ -155,6 +186,28 @@ def main(argv: list[str]) -> int:
         resources[target].setdefault("Metadata", {})
         resources[target]["Metadata"]["AWS::CloudFormation::Init"] = json.loads(path.read_text())
 
+    parameters: dict[str, dict] = {}
+    for raw in args.parameter:
+        name, path = _parse_named_shard(raw, "--parameter")
+        if name in parameters:
+            raise SystemExit(
+                f"duplicate parameter name in stack: {name!r}"
+            )
+        if name in resources:
+            raise SystemExit(
+                f"name collision: {name!r} declared as both a resource and a parameter"
+            )
+        parameters[name] = json.loads(path.read_text())
+
+    outputs: dict[str, dict] = {}
+    for raw in args.output_decl:
+        name, path = _parse_named_shard(raw, "--output_decl")
+        if name in outputs:
+            raise SystemExit(
+                f"duplicate output name in stack: {name!r}"
+            )
+        outputs[name] = json.loads(path.read_text())
+
     template: dict = {"AWSTemplateFormatVersion": "2010-09-09"}
     if args.description:
         template["Description"] = args.description
@@ -167,14 +220,21 @@ def main(argv: list[str]) -> int:
                 merged[k] = v
         template["Metadata"] = {"AWS::CloudFormation::Interface": merged}
 
+    if parameters:
+        template["Parameters"] = dict(sorted(parameters.items()))
+
     if resources:
         template["Resources"] = dict(sorted(resources.items()))
 
+    if outputs:
+        template["Outputs"] = dict(sorted(outputs.items()))
+
     # Sentinel rewrite happens AFTER all shards are merged so the
-    # validator can see the full resource-name set. Walk the whole
-    # template (not just Resources) — Interface ParameterLabels and
-    # Init configs can also carry refs.
-    template = _rewrite_sentinels(template, set(resources.keys()), "$")
+    # validator can see the full {resource,parameter}-name set.
+    # Walk the whole template — Interface ParameterLabels, Init
+    # configs, Outputs.Value, etc. can all carry sentinels.
+    valid_names = set(resources.keys()) | set(parameters.keys())
+    template = _rewrite_sentinels(template, valid_names, "$")
 
     args.output.write_text(json.dumps(template, indent=2, sort_keys=True) + "\n")
     return 0
