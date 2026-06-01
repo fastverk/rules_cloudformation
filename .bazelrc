@@ -1,12 +1,4 @@
-common --enable_bzlmod
-
-common --registry=https://raw.githubusercontent.com/fastverk/bazel-registry/main/
-common --registry=https://bcr.bazel.build/
-
 # Use a remote-fetched JDK for the assembler java_binary so the
 # build doesn't depend on host JAVA_HOME.
 build --java_runtime_version=remotejdk_21
 build --tool_java_runtime_version=remotejdk_21
-
-test --test_output=errors
-test --test_summary=terse
