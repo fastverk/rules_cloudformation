@@ -43,6 +43,7 @@ _REF_SENTINEL = "@@cfn:ref:"
 _GETATT_SENTINEL = "@@cfn:getatt:"
 _IMPORTVALUE_SENTINEL = "@@cfn:importvalue:"
 _SUB_SENTINEL = "@@cfn:sub:"
+_BASE64_SENTINEL = "@@cfn:base64:"
 
 def cfn_ref(resource_name):
     """Sentinel string the aggregator rewrites to `{"Ref": resource_name}`.
@@ -109,6 +110,31 @@ def cfn_getatt(resource_name, attribute):
     if "." in resource_name or "." in attribute:
         fail("cfn_getatt: resource_name + attribute may not contain '.' (sentinel separator)")
     return _GETATT_SENTINEL + resource_name + "." + attribute
+
+def cfn_base64(value):
+    """Sentinel string the aggregator rewrites to `{"Fn::Base64": <value>}`.
+
+    Wraps a plain string or another intrinsic (commonly `cfn_sub`) — e.g.
+    EC2 `UserData`, which CloudFormation requires base64-encoded:
+
+    ```python
+    # LaunchTemplateData.UserData
+    cfn_base64(cfn_sub("#!/bin/bash\\necho ${SomeParam}\\n"))
+    ```
+
+    The aggregator recurses into `value`, so a nested `cfn_sub` / `cfn_ref`
+    rewrites correctly under the `Fn::Base64`.
+
+    Args:
+      value: the string to base64-encode at deploy time — a literal, or a
+        `cfn_sub` / `cfn_ref` sentinel.
+
+    Returns:
+      A sentinel string the aggregator rewrites at template-render time.
+    """
+    if not value:
+        fail("cfn_base64: value must be non-empty")
+    return _BASE64_SENTINEL + value
 
 def cfn_import_value(export_name):
     """Sentinel string the aggregator rewrites to `{"Fn::ImportValue": export_name}`.

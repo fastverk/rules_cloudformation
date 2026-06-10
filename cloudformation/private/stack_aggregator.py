@@ -53,6 +53,7 @@ _REF_SENTINEL = "@@cfn:ref:"
 _GETATT_SENTINEL = "@@cfn:getatt:"
 _IMPORTVALUE_SENTINEL = "@@cfn:importvalue:"
 _SUB_SENTINEL = "@@cfn:sub:"
+_BASE64_SENTINEL = "@@cfn:base64:"
 
 
 def _rewrite_sentinels(value, valid_names: set[str], path: str):
@@ -104,6 +105,14 @@ def _rewrite_sentinels(value, valid_names: set[str], path: str):
                     f"stack_aggregator: empty cfn_sub sentinel at {path}"
                 )
             return {"Fn::Sub": template}
+        if value.startswith(_BASE64_SENTINEL):
+            inner = value[len(_BASE64_SENTINEL):]
+            if not inner:
+                raise SystemExit(
+                    f"stack_aggregator: empty cfn_base64 sentinel at {path}"
+                )
+            # Recurse so a nested cfn_sub / cfn_ref under the base64 rewrites too.
+            return {"Fn::Base64": _rewrite_sentinels(inner, valid_names, path)}
         return value
     if isinstance(value, dict):
         return {k: _rewrite_sentinels(v, valid_names, f"{path}.{k}") for k, v in value.items()}
