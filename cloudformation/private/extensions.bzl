@@ -24,10 +24,17 @@ restructures), bump the sha256 (`curl -fsSL <url> | shasum -a 256`).
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
 # AWS CloudFormation Resource Specification, us-east-1 non-gzip
-# endpoint. Computed by `curl -fsSL <url> | shasum -a 256` at pin
-# time. Refresh whenever AWS updates the underlying spec.
-_RESOURCE_SPEC_URL = "https://d1uauaxba7bl26.cloudfront.net/latest/CloudFormationResourceSpecification.json"
-_RESOURCE_SPEC_SHA256 = "3bf0f8b5034b51c622da82f7cec9499112a40719f28fff5c6d2050a0c3a24459"
+# endpoint. Pinned to an IMMUTABLE per-version path, never `/latest/`:
+# `/latest/` is a moving ref that AWS rewrites in place on every spec
+# release, which silently breaks the sha256 pin and fails the
+# @cfn_resource_spec fetch. AWS also serves the same artifact at
+# `/<ResourceSpecificationVersion>/…` (the spec's own embedded version);
+# pin that. Bump _RESOURCE_SPEC_VERSION + _RESOURCE_SPEC_SHA256 together
+# to adopt a newer spec:
+#   curl -fsSL "https://d1uauaxba7bl26.cloudfront.net/<ver>/CloudFormationResourceSpecification.json" | shasum -a 256
+_RESOURCE_SPEC_VERSION = "251.0.0"
+_RESOURCE_SPEC_URL = "https://d1uauaxba7bl26.cloudfront.net/{}/CloudFormationResourceSpecification.json".format(_RESOURCE_SPEC_VERSION)
+_RESOURCE_SPEC_SHA256 = "ddf56d31cf1f2d3c1767b8b68c21557ce22904f5296e5086603598eb27737e0f"
 
 # AWS per-resource endpoint schemas. The assembler-derived JSON
 # Schemas only carry URL-only `description` fields on attrs; the
@@ -35,6 +42,13 @@ _RESOURCE_SPEC_SHA256 = "3bf0f8b5034b51c622da82f7cec9499112a40719f28fff5c6d2050a
 # https://schema.cloudformation.us-east-1.amazonaws.com/ ship rich
 # prose descriptions for every property. v0.2 overlays them on top
 # of the assembler's output before feeding the codegen.
+#
+# CAVEAT — moving ref: unlike the resource spec above, AWS serves this
+# registry endpoint only as a live "current" file (no /<version>/ path
+# exists; the /latest/ variant 403s), so the URL is inherently moving.
+# The sha256 pin therefore fails loudly the day AWS edits a schema; when
+# that happens, re-pin (or vendor the file) — there is no immutable
+# upstream URL to switch to.
 #
 # Each entry: filename → sha256. Refresh by re-downloading
 # (`curl -fsSL .../<filename>.json | shasum -a 256`).
