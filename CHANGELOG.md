@@ -4,6 +4,31 @@ All notable changes to rules_cloudformation. The format is loosely
 [Keep a Changelog](https://keepachangelog.com/) — version headers
 mirror the published bazel-registry entries.
 
+## 0.8.0 — cloudformation_up: in-place `--use-previous-template`
+
+- `cloudformation_up`: add a `use_previous_template` attribute. When
+  set, `stack` is omitted and the launcher deploys with
+  `--use-previous-template` instead of `--template-file` — an in-place
+  update of an already-deployed stack that reuses its live template and
+  leaves every unspecified parameter at its previous value. Pass the
+  values to change via `parameter_overrides` (or `bazel run … --
+  --parameter-overrides Key=Value`). `stack` and `use_previous_template`
+  are mutually exclusive; exactly one is required.
+- This lets a repo flip a single parameter (e.g. a container image tag)
+  on a stack whose template another repo owns, without vendoring the
+  whole template.
+- `cloudformation_stack`: Conditions + Mappings support. New
+  `cloudformation_condition` and `cloudformation_mapping` rules emit
+  top-level `Conditions` / `Mappings` blocks; new `conditions` /
+  `mappings` / `resource_conditions` attrs on `cloudformation_stack`
+  (the last attaches a `Condition:` to a resource, validated against the
+  declared conditions). New `cfn_find_in_map(...)` sentinel (rewrites to
+  `Fn::FindInMap`, accepts nested `cfn_ref`) and `cfn_equals` / `cfn_and`
+  / `cfn_or` / `cfn_not` / `cfn_if` condition-function helpers. `cfn_ref`
+  now also accepts CFN pseudo-parameters (`AWS::Region`, …) without
+  failing name validation. This closes the gap that forced hand-authored
+  YAML for templates using Conditions/Mappings.
+
 ## 0.6.0 — deploy wrappers (cloudformation_up / cloudformation_down)
 
 - New `cloudformation_up` and `cloudformation_down` executable

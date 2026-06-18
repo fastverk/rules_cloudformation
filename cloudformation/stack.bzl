@@ -32,6 +32,8 @@ load(
 )
 load("//cloudformation:parameter.bzl", "CloudformationParameterInfo")
 load("//cloudformation:output.bzl", "CloudformationOutputInfo")
+load("//cloudformation:condition.bzl", "CloudformationConditionInfo")
+load("//cloudformation:mapping.bzl", "CloudformationMappingInfo")
 load("//cloudformation:cfn_types.bzl", "CFN_TYPES")
 
 # Sentinel prefixes for cross-resource references. The aggregator
@@ -44,6 +46,12 @@ _GETATT_SENTINEL = "@@cfn:getatt:"
 _IMPORTVALUE_SENTINEL = "@@cfn:importvalue:"
 _SUB_SENTINEL = "@@cfn:sub:"
 _BASE64_SENTINEL = "@@cfn:base64:"
+_FINDINMAP_SENTINEL = "@@cfn:findinmap:"
+
+# Unit Separator (0x1f, octal \037 — Starlark has no \x escape) joins the three
+# FindInMap args in the flat sentinel string (can't appear in a CFN map/key
+# name). Kept in sync with stack_aggregator.py's _FINDINMAP_SEP.
+_FINDINMAP_SEP = "\037"
 
 def cfn_ref(resource_name):
     """Sentinel string the aggregator rewrites to `{"Ref": resource_name}`.
@@ -181,6 +189,70 @@ def cfn_sub(template):
         fail("cfn_sub: template must be non-empty")
     return _SUB_SENTINEL + template
 
+def cfn_find_in_map(map_name, top_level_key, second_level_key):
+    """Sentinel string the aggregator rewrites to `{"Fn::FindInMap": [map_name, top_level_key, second_level_key]}`.
+
+    Reads a value from a `cloudformation_mapping`. Because it's a string,
+    it fits both scalar property attrs and `json.encode(...)` values.
+    The keys may themselves be `cfn_ref(...)` sentinels (commonly
+    `cfn_ref("Environment")` or `cfn_ref("AWS::Region")`) — the aggregator
+    rewrites them. The aggregator fails the build if `map_name` isn't a
+    mapping declared on the stack.
+
+    ```python
+    cfn_find_in_map("EnvironmentConfig", cfn_ref("Environment"), "RootDomain")
+    ```
+
+    Args:
+      map_name: the `cloudformation_mapping` target's `label.name`.
+      top_level_key: first-level key (literal or a `cfn_ref(...)`).
+      second_level_key: second-level key (literal or a `cfn_ref(...)`).
+
+    Returns:
+      A sentinel string the aggregator rewrites at template-render time.
+    """
+    if not map_name or not top_level_key or not second_level_key:
+        fail("cfn_find_in_map: map_name, top_level_key, and second_level_key must all be non-empty")
+    for part in [map_name, top_level_key, second_level_key]:
+        if _FINDINMAP_SEP in part:
+            fail("cfn_find_in_map: args may not contain the sentinel separator")
+    return _FINDINMAP_SENTINEL + map_name + _FINDINMAP_SEP + top_level_key + _FINDINMAP_SEP + second_level_key
+
+# ─── Condition-function helpers ──────────────────────────────────────────────
+#
+# Unlike the `cfn_*` sentinels above, these return plain dicts — CFN condition
+# functions take lists of operands, which don't fit a flat sentinel string.
+# Use them inside `json.encode(...)` to build a `cloudformation_condition`'s
+# `expression` (or an `Fn::If` in a property). Operands may be literals,
+# `cfn_ref(...)` / `cfn_find_in_map(...)` sentinels, or nested helpers; the
+# aggregator deep-walks and rewrites any sentinels.
+
+def cfn_equals(a, b):
+    """`{"Fn::Equals": [a, b]}` — true when `a` and `b` are equal."""
+    return {"Fn::Equals": [a, b]}
+
+def cfn_and(*conditions):
+    """`{"Fn::And": [...]}` — true when all operand conditions are true (2–10)."""
+    return {"Fn::And": list(conditions)}
+
+def cfn_or(*conditions):
+    """`{"Fn::Or": [...]}` — true when any operand condition is true (2–10)."""
+    return {"Fn::Or": list(conditions)}
+
+def cfn_not(condition):
+    """`{"Fn::Not": [condition]}` — negation."""
+    return {"Fn::Not": [condition]}
+
+def cfn_if(condition_name, value_if_true, value_if_false):
+    """`{"Fn::If": [condition_name, value_if_true, value_if_false]}`.
+
+    `condition_name` is a `cloudformation_condition` target's `label.name`
+    (a bare string — condition references aren't `Ref`s).
+    """
+    if not condition_name:
+        fail("cfn_if: condition_name must be non-empty")
+    return {"Fn::If": [condition_name, value_if_true, value_if_false]}
+
 def _kind_id_from_shard(shard_basename, label_name):
     # Spec-derived rules name their shard
     # `<label.name>.<kind_id>.json`. Stripping the prefix +
@@ -283,6 +355,42 @@ def _cloudformation_stack_impl(ctx):
         args.add("--output_decl={}={}".format(info.name, info.json.path))
         inputs.append(info.json)
 
+    condition_names_seen = {}
+    for dep in ctx.attr.conditions:
+        if CloudformationConditionInfo not in dep:
+            fail("cloudformation_stack: conditions entry {} is not a cloudformation_condition".format(dep.label))
+        info = dep[CloudformationConditionInfo]
+        if info.name in condition_names_seen:
+            fail("cloudformation_stack: duplicate condition name {} (from {} and {})".format(
+                info.name,
+                condition_names_seen[info.name],
+                dep.label,
+            ))
+        condition_names_seen[info.name] = dep.label
+        args.add("--condition={}={}".format(info.name, info.json.path))
+        inputs.append(info.json)
+
+    mapping_names_seen = {}
+    for dep in ctx.attr.mappings:
+        if CloudformationMappingInfo not in dep:
+            fail("cloudformation_stack: mappings entry {} is not a cloudformation_mapping".format(dep.label))
+        info = dep[CloudformationMappingInfo]
+        if info.name in mapping_names_seen:
+            fail("cloudformation_stack: duplicate mapping name {} (from {} and {})".format(
+                info.name,
+                mapping_names_seen[info.name],
+                dep.label,
+            ))
+        mapping_names_seen[info.name] = dep.label
+        args.add("--mapping={}={}".format(info.name, info.json.path))
+        inputs.append(info.json)
+
+    # Attach `Condition:` to resources (aggregator validates the name against
+    # the declared conditions). The keys are CFN logical ids (resource
+    # `label.name`s); the values are condition `label.name`s.
+    for res_name, cond_name in ctx.attr.resource_conditions.items():
+        args.add("--resource_condition={}={}".format(res_name, cond_name))
+
     ctx.actions.run(
         executable = ctx.executable._aggregator,
         arguments = [args],
@@ -295,7 +403,7 @@ def _cloudformation_stack_impl(ctx):
 
 cloudformation_stack = rule(
     implementation = _cloudformation_stack_impl,
-    doc = "Aggregate typed-rule shards into one CFN template. Resource names = each contributing rule's `label.name` (so name targets PascalCase to satisfy CFN logical-id rules). Cross-resource refs work via `cfn_ref` / `cfn_getatt` Starlark helpers (above). Top-level Parameters / Outputs blocks are populated from the `parameters` / `outputs` attrs (see //cloudformation:parameter.bzl, //cloudformation:output.bzl). Cross-stack imports use `cfn_import_value`; `Fn::Sub` template strings use `cfn_sub`.",
+    doc = "Aggregate typed-rule shards into one CFN template. Resource names = each contributing rule's `label.name` (so name targets PascalCase to satisfy CFN logical-id rules). Cross-resource refs work via `cfn_ref` / `cfn_getatt` Starlark helpers (above). Top-level Parameters / Outputs / Conditions / Mappings blocks are populated from the `parameters` / `outputs` / `conditions` / `mappings` attrs (see the sibling `.bzl` files). Gate a resource on a condition via `resource_conditions`. Cross-stack imports use `cfn_import_value`; `Fn::Sub` via `cfn_sub`; `Fn::FindInMap` via `cfn_find_in_map`; conditions via `cfn_equals` / `cfn_and` / `cfn_or` / `cfn_not` / `cfn_if`.",
     attrs = {
         "description": attr.string(
             doc = "CFN template `Description` field. Optional.",
@@ -317,6 +425,19 @@ cloudformation_stack = rule(
             doc = "`cloudformation_output` targets from `output.bzl`. Each contributes one entry under the template's top-level `Outputs` block, keyed by the target's `label.name`. Set `Export` on an output to make it importable by sibling stacks via `cfn_import_value(\"<export-name>\")`.",
             allow_files = False,
             providers = [CloudformationOutputInfo],
+        ),
+        "conditions": attr.label_list(
+            doc = "`cloudformation_condition` targets from `condition.bzl`. Each contributes one entry under the template's top-level `Conditions` block, keyed by the target's `label.name`. Reference from `resource_conditions`, a `cloudformation_output(Condition=...)`, or an `Fn::If` first arg.",
+            allow_files = False,
+            providers = [CloudformationConditionInfo],
+        ),
+        "mappings": attr.label_list(
+            doc = "`cloudformation_mapping` targets from `mapping.bzl`. Each contributes one entry under the template's top-level `Mappings` block, keyed by the target's `label.name`. Read with `cfn_find_in_map(\"<name>\", <top_key>, <second_key>)`.",
+            allow_files = False,
+            providers = [CloudformationMappingInfo],
+        ),
+        "resource_conditions": attr.string_dict(
+            doc = "Map of resource `label.name` -> condition `label.name`. Attaches a `Condition:` to that resource so it's created only when the condition holds. The condition must be declared in `conditions` (validated at build time).",
         ),
         "_aggregator": attr.label(
             default = "//cloudformation/private:stack_aggregator",

@@ -11,10 +11,16 @@ load(
 )
 load(
     "@rules_cloudformation//cloudformation:stack.bzl",
+    "cfn_equals",
+    "cfn_find_in_map",
     "cfn_getatt",
+    "cfn_if",
     "cfn_ref",
     "cloudformation_stack",
 )
+load("@rules_cloudformation//cloudformation:parameter.bzl", "cloudformation_parameter")
+load("@rules_cloudformation//cloudformation:condition.bzl", "cloudformation_condition")
+load("@rules_cloudformation//cloudformation:mapping.bzl", "cloudformation_mapping")
 load(
     "@rules_cloudformation//cloudformation:deploy.bzl",
     "cloudformation_down",
@@ -182,4 +188,85 @@ cloudformation_down(
     name = "smoke_stack_down",
     stack_name = "rules-cloudformation-smoke",
     region = "us-east-1",
+)
+
+# In-place update of an already-deployed stack (no template). Flips just the
+# passed parameters via `--use-previous-template`; the rest stay at their live
+# values. This is the lane studio/web's image deploy rides: bump a container
+# image tag on a stack whose template another repo owns.
+cloudformation_up(
+    name = "image_update_up",
+    use_previous_template = True,
+    stack_name = "rules-cloudformation-smoke",
+    region = "us-east-1",
+    capabilities = ["CAPABILITY_NAMED_IAM"],
+    parameter_overrides = {"ContainerImage": "example.dkr.ecr.us-east-1.amazonaws.com/app:abc1234"},
+)
+
+# Golden test: normalize the generated launcher to just its template-mode flag
+# tokens (stable across runfile paths) and lock the value. Asserts the
+# use-previous-template lane emits `--use-previous-template` and NOT
+# `--template-file`; building the genrule also exercises launcher generation
+# for the templateless code path.
+genrule(
+    name = "image_update_up_flags",
+    srcs = [":image_update_up"],
+    outs = ["image_update_up_flags.txt"],
+    cmd = "grep -oE -- '--(use-previous-template|template-file)' $(location :image_update_up) | sort -u > $@",
+)
+
+diff_test(
+    name = "image_update_up_uses_previous_template",
+    file1 = "expected_image_update_up_flags.txt",
+    file2 = ":image_update_up_flags",
+)
+
+# ---- Conditions + Mappings (0.8.0) ----
+# A parameter-driven Mapping lookup + a Condition gating a resource, plus an
+# `Fn::If` and an `Fn::FindInMap` in properties — exercising the full
+# conditions/mappings/resource_conditions surface end to end.
+
+cloudformation_parameter(
+    name = "Environment",
+    Type = "String",
+    Default = "development",
+)
+
+cloudformation_mapping(
+    name = "EnvConfig",
+    mapping = json.encode({
+        "development": {"RootDomain": "savvifi.dev"},
+        "production": {"RootDomain": "savvifi.com"},
+    }),
+)
+
+cloudformation_condition(
+    name = "IsProd",
+    expression = json.encode(cfn_equals(cfn_ref("Environment"), "production")),
+)
+
+cloudformation_aws_s3_bucket(
+    name = "EnvBucket",
+    aws_s3_bucket_name = "env-bucket",
+    # FindInMap reads the per-environment domain; Fn::If picks versioning by env.
+    BucketName = cfn_find_in_map("EnvConfig", cfn_ref("Environment"), "RootDomain"),
+    VersioningConfiguration = json.encode(
+        cfn_if("IsProd", {"Status": "Enabled"}, {"Status": "Suspended"}),
+    ),
+)
+
+cloudformation_stack(
+    name = "conditioned_stack",
+    description = "Conditions + Mappings: a per-env bucket gated by IsProd.",
+    parameters = [":Environment"],
+    mappings = [":EnvConfig"],
+    conditions = [":IsProd"],
+    resources = [":EnvBucket"],
+    resource_conditions = {"EnvBucket": "IsProd"},
+)
+
+diff_test(
+    name = "conditioned_stack_template_stable",
+    file1 = "expected_conditioned_stack.json",
+    file2 = ":conditioned_stack",
 )

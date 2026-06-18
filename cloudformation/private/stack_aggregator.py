@@ -18,10 +18,15 @@ corresponding CFN intrinsic dicts:
 
   `@@cfn:ref:Name`        →  `{"Ref": "Name"}`
   `@@cfn:getatt:Name.Att` →  `{"Fn::GetAtt": ["Name", "Att"]}`
+  `@@cfn:findinmap:M<US>K1<US>K2` → `{"Fn::FindInMap": ["M","K1","K2"]}`
+        (US = the unit-separator `_FINDINMAP_SEP`; each arg is rewritten
+         recursively so a nested `cfn_ref` resolves)
 
-Any sentinel pointing at a name not in the stack's resource set
-fails the build — typos are caught at Bazel-build time rather than
-at AWS deploy time.
+Any Ref/GetAtt sentinel pointing at a name not in the stack's
+resource+parameter set fails the build (pseudo-parameters like
+`AWS::Region` are exempt); FindInMap validates the map name against
+the stack's declared mappings. Typos are caught at Bazel-build time
+rather than at AWS deploy time.
 
 Writes one canonical JSON template. The output is deterministic:
 keys are emitted in sort order, intrinsic shards are merged in
@@ -54,9 +59,13 @@ _GETATT_SENTINEL = "@@cfn:getatt:"
 _IMPORTVALUE_SENTINEL = "@@cfn:importvalue:"
 _SUB_SENTINEL = "@@cfn:sub:"
 _BASE64_SENTINEL = "@@cfn:base64:"
+_FINDINMAP_SENTINEL = "@@cfn:findinmap:"
+# Unit Separator — joins the three FindInMap args inside the flat sentinel
+# string. It can't appear in a CFN map/key name, so the split is unambiguous.
+_FINDINMAP_SEP = "\x1f"
 
 
-def _rewrite_sentinels(value, valid_names: set[str], path: str):
+def _rewrite_sentinels(value, valid_names: set[str], valid_mappings: set[str], path: str):
     """Deep-walk `value`, replacing sentinel strings with CFN
     intrinsic dicts. Yields validation errors via SystemExit when
     a sentinel points at a name not in `valid_names` (only Ref /
@@ -69,6 +78,10 @@ def _rewrite_sentinels(value, valid_names: set[str], path: str):
     if isinstance(value, str):
         if value.startswith(_REF_SENTINEL):
             ref_name = value[len(_REF_SENTINEL):]
+            # CFN pseudo-parameters (AWS::Region, AWS::AccountId, …) are always
+            # valid and never declared in the stack — don't validate them.
+            if ref_name.startswith("AWS::"):
+                return {"Ref": ref_name}
             if ref_name not in valid_names:
                 raise SystemExit(
                     f"stack_aggregator: cfn_ref({ref_name!r}) at {path} "
@@ -76,6 +89,26 @@ def _rewrite_sentinels(value, valid_names: set[str], path: str):
                     f"(known resources + parameters: {sorted(valid_names)!r})"
                 )
             return {"Ref": ref_name}
+        if value.startswith(_FINDINMAP_SENTINEL):
+            body = value[len(_FINDINMAP_SENTINEL):]
+            parts = body.split(_FINDINMAP_SEP)
+            if len(parts) != 3:
+                raise SystemExit(
+                    f"stack_aggregator: malformed cfn_find_in_map sentinel at "
+                    f"{path}: expected 3 parts, got {len(parts)}"
+                )
+            map_name = parts[0]
+            if map_name not in valid_mappings:
+                raise SystemExit(
+                    f"stack_aggregator: cfn_find_in_map({map_name!r}, ...) at "
+                    f"{path} points at a map that isn't in the stack "
+                    f"(known mappings: {sorted(valid_mappings)!r})"
+                )
+            # Recurse each arg so nested cfn_ref (e.g. the top-level key) rewrites.
+            return {"Fn::FindInMap": [
+                _rewrite_sentinels(p, valid_names, valid_mappings, f"{path}[{i}]")
+                for i, p in enumerate(parts)
+            ]}
         if value.startswith(_GETATT_SENTINEL):
             body = value[len(_GETATT_SENTINEL):]
             ref_name, _, attribute = body.partition(".")
@@ -112,12 +145,12 @@ def _rewrite_sentinels(value, valid_names: set[str], path: str):
                     f"stack_aggregator: empty cfn_base64 sentinel at {path}"
                 )
             # Recurse so a nested cfn_sub / cfn_ref under the base64 rewrites too.
-            return {"Fn::Base64": _rewrite_sentinels(inner, valid_names, path)}
+            return {"Fn::Base64": _rewrite_sentinels(inner, valid_names, valid_mappings, path)}
         return value
     if isinstance(value, dict):
-        return {k: _rewrite_sentinels(v, valid_names, f"{path}.{k}") for k, v in value.items()}
+        return {k: _rewrite_sentinels(v, valid_names, valid_mappings, f"{path}.{k}") for k, v in value.items()}
     if isinstance(value, list):
-        return [_rewrite_sentinels(v, valid_names, f"{path}[{i}]") for i, v in enumerate(value)]
+        return [_rewrite_sentinels(v, valid_names, valid_mappings, f"{path}[{i}]") for i, v in enumerate(value)]
     return value
 
 
@@ -162,6 +195,9 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--interface", action="append", default=[])
     ap.add_argument("--parameter", action="append", default=[])
     ap.add_argument("--output_decl", action="append", default=[])
+    ap.add_argument("--condition", action="append", default=[])
+    ap.add_argument("--mapping", action="append", default=[])
+    ap.add_argument("--resource_condition", action="append", default=[])
     args = ap.parse_args(argv)
 
     resources: dict[str, dict] = {}
@@ -217,6 +253,45 @@ def main(argv: list[str]) -> int:
             )
         outputs[name] = json.loads(path.read_text())
 
+    conditions: dict[str, object] = {}
+    for raw in args.condition:
+        name, path = _parse_named_shard(raw, "--condition")
+        if name in conditions:
+            raise SystemExit(
+                f"duplicate condition name in stack: {name!r}"
+            )
+        conditions[name] = json.loads(path.read_text())
+
+    mappings: dict[str, dict] = {}
+    for raw in args.mapping:
+        name, path = _parse_named_shard(raw, "--mapping")
+        if name in mappings:
+            raise SystemExit(
+                f"duplicate mapping name in stack: {name!r}"
+            )
+        mappings[name] = json.loads(path.read_text())
+
+    # Attach `Condition:` to resources. Validated against declared conditions so
+    # a typo fails at build time, not at AWS deploy. (Both fields are plain
+    # names — not a shard path — so this doesn't use _parse_named_shard.)
+    for raw in args.resource_condition:
+        rc_parts = raw.split("=", 1)
+        if len(rc_parts) != 2 or not rc_parts[0] or not rc_parts[1]:
+            raise SystemExit(f"--resource_condition expects RESOURCE=CONDITION, got {raw!r}")
+        res_name, cond_name = rc_parts[0], rc_parts[1]
+        if res_name not in resources:
+            raise SystemExit(
+                f"--resource_condition targets {res_name!r}, which is not in "
+                f"the stack's resources ({sorted(resources.keys())!r})"
+            )
+        if cond_name not in conditions:
+            raise SystemExit(
+                f"--resource_condition for {res_name!r} names condition "
+                f"{cond_name!r}, which is not declared in the stack "
+                f"(known conditions: {sorted(conditions.keys())!r})"
+            )
+        resources[res_name]["Condition"] = cond_name
+
     template: dict = {"AWSTemplateFormatVersion": "2010-09-09"}
     if args.description:
         template["Description"] = args.description
@@ -232,6 +307,12 @@ def main(argv: list[str]) -> int:
     if parameters:
         template["Parameters"] = dict(sorted(parameters.items()))
 
+    if mappings:
+        template["Mappings"] = dict(sorted(mappings.items()))
+
+    if conditions:
+        template["Conditions"] = dict(sorted(conditions.items()))
+
     if resources:
         template["Resources"] = dict(sorted(resources.items()))
 
@@ -241,9 +322,11 @@ def main(argv: list[str]) -> int:
     # Sentinel rewrite happens AFTER all shards are merged so the
     # validator can see the full {resource,parameter}-name set.
     # Walk the whole template — Interface ParameterLabels, Init
-    # configs, Outputs.Value, etc. can all carry sentinels.
+    # configs, Outputs.Value, Conditions, Mappings, etc. can all
+    # carry sentinels.
     valid_names = set(resources.keys()) | set(parameters.keys())
-    template = _rewrite_sentinels(template, valid_names, "$")
+    valid_mappings = set(mappings.keys())
+    template = _rewrite_sentinels(template, valid_names, valid_mappings, "$")
 
     args.output.write_text(json.dumps(template, indent=2, sort_keys=True) + "\n")
     return 0

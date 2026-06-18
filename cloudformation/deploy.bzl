@@ -44,22 +44,17 @@ set -euo pipefail
 {runfiles_prelude}
 
 AWS_BIN="$RUNFILES_DIR/{aws_runfile}"
-TEMPLATE="$RUNFILES_DIR/{template_runfile}"
-
+{template_setup}
 if [[ ! -x "$AWS_BIN" ]]; then
     echo "cloudformation_up: aws CLI toolchain binary not found at $AWS_BIN" >&2
     exit 1
 fi
-if [[ ! -f "$TEMPLATE" ]]; then
-    echo "cloudformation_up: rendered template not found at $TEMPLATE" >&2
-    exit 1
-fi
-
-echo "cloudformation_up: deploying stack '{stack_name}' from $TEMPLATE" >&2
+{template_check}
+echo "cloudformation_up: deploying stack '{stack_name}'{from_msg}" >&2
 
 exec "$AWS_BIN" cloudformation deploy \\
   --stack-name {stack_name} \\
-  --template-file "$TEMPLATE" \\
+  {template_arg} \\
 {region_arg}{capabilities_arg}{parameter_overrides_arg}  "$@"
 """
 
@@ -111,10 +106,10 @@ def _cloudformation_up_impl(ctx):
     aws_info = ctx.toolchains[AWS_CLI_TOOLCHAIN_TYPE].aws_cli_info
     aws_exec = aws_info.aws.executable
 
-    template_files = ctx.attr.stack[DefaultInfo].files.to_list()
-    if len(template_files) != 1:
-        fail("cloudformation_up: stack dep produced {} files (expected 1)".format(len(template_files)))
-    template = template_files[0]
+    if ctx.attr.use_previous_template and ctx.attr.stack:
+        fail("cloudformation_up: set either `stack` or `use_previous_template`, not both.")
+    if not ctx.attr.use_previous_template and not ctx.attr.stack:
+        fail("cloudformation_up: one of `stack` or `use_previous_template = True` is required.")
 
     launcher = ctx.actions.declare_file(ctx.label.name + ".sh")
     stack_name = ctx.attr.stack_name or ctx.label.name
@@ -122,12 +117,45 @@ def _cloudformation_up_impl(ctx):
     capabilities_arg = _format_capabilities(ctx.attr.capabilities)
     parameter_overrides_arg = _format_parameter_overrides(ctx.attr.parameter_overrides)
 
+    runfiles = aws_info.default_runfiles.merge(ctx.runfiles(files = [aws_exec]))
+
+    if ctx.attr.use_previous_template:
+        # In-place parameter/image update against an already-deployed stack —
+        # `cloudformation deploy --use-previous-template` reuses the live
+        # template and keeps every unspecified parameter at its previous value,
+        # so callers flip just what they pass via `parameter_overrides` (or
+        # `bazel run … -- --parameter-overrides Key=Value`). No template runfile.
+        template_setup = ""
+        template_check = ""
+        from_msg = " (reusing the currently-deployed template)"
+        template_arg = "--use-previous-template"
+    else:
+        template_files = ctx.attr.stack[DefaultInfo].files.to_list()
+        if len(template_files) != 1:
+            fail("cloudformation_up: stack dep produced {} files (expected 1)".format(len(template_files)))
+        template = template_files[0]
+        template_setup = "TEMPLATE=\"$RUNFILES_DIR/{}\"\n".format(_runfile_path(ctx, template))
+        template_check = (
+            "if [[ ! -f \"$TEMPLATE\" ]]; then\n" +
+            "    echo \"cloudformation_up: rendered template not found at $TEMPLATE\" >&2\n" +
+            "    exit 1\n" +
+            "fi\n"
+        )
+        from_msg = " from $TEMPLATE"
+        template_arg = "--template-file \"$TEMPLATE\""
+        runfiles = runfiles.merge(ctx.runfiles(files = [template])).merge(
+            ctx.attr.stack[DefaultInfo].default_runfiles,
+        )
+
     ctx.actions.write(
         launcher,
         _UP_TEMPLATE.format(
             runfiles_prelude = _RUNFILES_PRELUDE.format(rule = "cloudformation_up"),
             aws_runfile = _runfile_path(ctx, aws_exec),
-            template_runfile = _runfile_path(ctx, template),
+            template_setup = template_setup,
+            template_check = template_check,
+            from_msg = from_msg,
+            template_arg = template_arg,
             stack_name = stack_name,
             region_arg = region_arg,
             capabilities_arg = capabilities_arg,
@@ -136,22 +164,26 @@ def _cloudformation_up_impl(ctx):
         is_executable = True,
     )
 
-    runfiles = ctx.runfiles(
-        files = [template],
-    ).merge(ctx.attr.stack[DefaultInfo].default_runfiles).merge(
-        aws_info.default_runfiles,
-    ).merge(ctx.runfiles(files = [aws_exec]))
-
     return [DefaultInfo(executable = launcher, runfiles = runfiles)]
 
 cloudformation_up = rule(
     implementation = _cloudformation_up_impl,
     executable = True,
-    doc = "`bazel run`-able stack-deploy. Wraps `aws cloudformation deploy --stack-name ... --template-file <generated>`. Extra argv after `--` passes through to the aws CLI.",
+    doc = "`bazel run`-able stack-deploy. Wraps `aws cloudformation deploy --stack-name ... --template-file <generated>` (or `--use-previous-template` for an in-place parameter update of an already-deployed stack). Extra argv after `--` passes through to the aws CLI.",
     attrs = {
         "stack": attr.label(
-            mandatory = True,
-            doc = "A `cloudformation_stack` target. Its rendered JSON template is passed to `aws cloudformation deploy`.",
+            doc = "A `cloudformation_stack` target. Its rendered JSON template is passed to `aws cloudformation deploy`. Required unless `use_previous_template = True`.",
+        ),
+        "use_previous_template": attr.bool(
+            default = False,
+            doc = "Deploy with `--use-previous-template` instead of a rendered " +
+                  "template: an in-place update of an already-deployed stack that " +
+                  "reuses its live template and keeps unspecified parameters at " +
+                  "their previous values. Use it to flip a single parameter (e.g. " +
+                  "a container image tag) on a stack this repo doesn't own the " +
+                  "template for. Mutually exclusive with `stack`; pass the new " +
+                  "values via `parameter_overrides` or `bazel run … -- " +
+                  "--parameter-overrides Key=Value`.",
         ),
         "stack_name": attr.string(
             doc = "AWS CloudFormation stack name. Defaults to the rule's label name.",
