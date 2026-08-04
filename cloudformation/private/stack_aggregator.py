@@ -198,6 +198,7 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--condition", action="append", default=[])
     ap.add_argument("--mapping", action="append", default=[])
     ap.add_argument("--resource_condition", action="append", default=[])
+    ap.add_argument("--resource_depends_on", action="append", default=[])
     args = ap.parse_args(argv)
 
     resources: dict[str, dict] = {}
@@ -291,6 +292,56 @@ def main(argv: list[str]) -> int:
                 f"(known conditions: {sorted(conditions.keys())!r})"
             )
         resources[res_name]["Condition"] = cond_name
+
+    # Attach `DependsOn:` to resources, for the ordering CFN cannot infer.
+    #
+    # CFN derives its dependency graph from Ref / Fn::GetAtt edges, which `cfn_ref` and
+    # `cfn_getatt` already produce — so this is only for the cases where the ordering is
+    # real but no value flows between the two resources. The canonical one, which every
+    # VPC hits:
+    #
+    #     IgwAttachment      Ref -> Igw
+    #     PublicDefaultRoute Ref -> Igw   (GatewayId)
+    #
+    # Both depend on the IGW; neither depends on the other. CFN is free to create the
+    # route first, and it then fails with "The gateway ID 'igw-…' does not exist or is
+    # not attached". AWS documents the DependsOn as REQUIRED for AWS::EC2::Route with a
+    # GatewayId. Being a race, it can pass once and fail on the next rebuild.
+    #
+    # Same validation stance as --resource_condition: an unknown name is fatal at build
+    # time. A typo'd DependsOn is otherwise silent and reinstates the exact race this
+    # exists to remove.
+    for raw in args.resource_depends_on:
+        rd_parts = raw.split("=", 1)
+        if len(rd_parts) != 2 or not rd_parts[0] or not rd_parts[1]:
+            raise SystemExit(
+                f"--resource_depends_on expects RESOURCE=DEP[,DEP...], got {raw!r}"
+            )
+        res_name = rd_parts[0]
+        if res_name not in resources:
+            raise SystemExit(
+                f"--resource_depends_on targets {res_name!r}, which is not in "
+                f"the stack's resources ({sorted(resources.keys())!r})"
+            )
+        deps = [d.strip() for d in rd_parts[1].split(",") if d.strip()]
+        if not deps:
+            raise SystemExit(
+                f"--resource_depends_on for {res_name!r} names no dependencies"
+            )
+        for dep in deps:
+            if dep not in resources:
+                raise SystemExit(
+                    f"--resource_depends_on for {res_name!r} names {dep!r}, which is "
+                    f"not in the stack's resources ({sorted(resources.keys())!r})"
+                )
+            if dep == res_name:
+                raise SystemExit(
+                    f"--resource_depends_on for {res_name!r} depends on itself"
+                )
+        # A single dependency renders as a bare string rather than a one-element list.
+        # Both are valid CFN; the string form is what hand-authored templates use, and
+        # matching it keeps a generated template diffable against the one it replaced.
+        resources[res_name]["DependsOn"] = deps[0] if len(deps) == 1 else sorted(deps)
 
     template: dict = {"AWSTemplateFormatVersion": "2010-09-09"}
     if args.description:
