@@ -391,6 +391,12 @@ def _cloudformation_stack_impl(ctx):
     for res_name, cond_name in ctx.attr.resource_conditions.items():
         args.add("--resource_condition={}={}".format(res_name, cond_name))
 
+    # Attach `DependsOn:` for ordering CFN cannot infer from a Ref/GetAtt edge. The
+    # aggregator validates every name against the stack's resources — see its comment for
+    # the IGW-attachment race this exists to remove.
+    for res_name, deps in ctx.attr.resource_depends_on.items():
+        args.add("--resource_depends_on={}={}".format(res_name, deps))
+
     ctx.actions.run(
         executable = ctx.executable._aggregator,
         arguments = [args],
@@ -438,6 +444,9 @@ cloudformation_stack = rule(
         ),
         "resource_conditions": attr.string_dict(
             doc = "Map of resource `label.name` -> condition `label.name`. Attaches a `Condition:` to that resource so it's created only when the condition holds. The condition must be declared in `conditions` (validated at build time).",
+        ),
+        "resource_depends_on": attr.string_dict(
+            doc = "Map of resource `label.name` -> comma-separated resource `label.name`s it must be created after. Emits `DependsOn:`. Only needed where the ordering is real but no value flows between the resources, so CFN cannot infer it from a `cfn_ref`/`cfn_getatt` edge — canonically `AWS::EC2::Route` with a `GatewayId`, which AWS documents as REQUIRING a dependency on the `AWS::EC2::VPCGatewayAttachment` (both merely Ref the gateway, so neither depends on the other, and the route can be created first and fail). Every name is validated against the stack's resources at build time. A single dependency renders as a bare string, several as a sorted list.",
         ),
         "_aggregator": attr.label(
             default = "//cloudformation/private:stack_aggregator",

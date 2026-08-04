@@ -1,6 +1,11 @@
 load(
     "@rules_cloudformation//cloudformation:defs.bzl",
     "cloudformation_aws_ec2_instance",
+    "cloudformation_aws_ec2_internet_gateway",
+    "cloudformation_aws_ec2_route",
+    "cloudformation_aws_ec2_route_table",
+    "cloudformation_aws_ec2_vpc",
+    "cloudformation_aws_ec2_vpcgateway_attachment",
     "cloudformation_aws_s3_bucket",
     "cloudformation_aws_s3_bucket_policy",
 )
@@ -269,4 +274,65 @@ diff_test(
     name = "conditioned_stack_template_stable",
     file1 = "expected_conditioned_stack.json",
     file2 = ":conditioned_stack",
+)
+
+# ── DependsOn ────────────────────────────────────────────────────────────────
+# The canonical case CFN cannot infer, reproduced exactly: an internet-gateway
+# route. `IgwAttachment` and `PublicDefaultRoute` both merely `Ref` the gateway,
+# so both depend on IT and neither on the OTHER — leaving CFN free to create the
+# route first, which then fails with "The gateway ID 'igw-…' does not exist or is
+# not attached". AWS documents the DependsOn as required here.
+#
+# Being a race, it can pass once and fail on the next rebuild, so the guard is a
+# byte-stable template rather than a deploy that happened to work.
+cloudformation_aws_ec2_vpc(
+    name = "SmokeVpc",
+    aws_ec2_vpc_name = "SmokeVpc",
+    CidrBlock = "10.9.0.0/16",
+)
+
+cloudformation_aws_ec2_internet_gateway(
+    name = "SmokeIgw",
+    aws_ec2_internet_gateway_name = "SmokeIgw",
+)
+
+cloudformation_aws_ec2_vpcgateway_attachment(
+    name = "SmokeIgwAttachment",
+    aws_ec2_vpcgateway_attachment_name = "SmokeIgwAttachment",
+    InternetGatewayId = cfn_ref("SmokeIgw"),
+    VpcId = cfn_ref("SmokeVpc"),
+)
+
+cloudformation_aws_ec2_route_table(
+    name = "SmokeRt",
+    aws_ec2_route_table_name = "SmokeRt",
+    VpcId = cfn_ref("SmokeVpc"),
+)
+
+cloudformation_aws_ec2_route(
+    name = "SmokeDefaultRoute",
+    aws_ec2_route_name = "SmokeDefaultRoute",
+    DestinationCidrBlock = "0.0.0.0/0",
+    GatewayId = cfn_ref("SmokeIgw"),
+    RouteTableId = cfn_ref("SmokeRt"),
+)
+
+cloudformation_stack(
+    name = "depends_on_stack",
+    description = "DependsOn: an IGW route ordered after the gateway attachment.",
+    resources = [
+        ":SmokeVpc",
+        ":SmokeIgw",
+        ":SmokeIgwAttachment",
+        ":SmokeRt",
+        ":SmokeDefaultRoute",
+    ],
+    # One dependency renders as a bare string; several as a sorted list.
+    resource_depends_on = {"SmokeDefaultRoute": "SmokeIgwAttachment"},
+)
+
+diff_test(
+    name = "depends_on_stack_template_stable",
+    file1 = "expected_depends_on_stack.json",
+    file2 = ":depends_on_stack",
 )

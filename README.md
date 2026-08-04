@@ -19,10 +19,11 @@ fields. Drift is impossible by construction:
   `cloudformation/cloudformation_rules.bzl` — one `rule()` per
   `AWS::*` resource type definition in the schema, typed `attr.*` per
   property.
-- A small Rust `cfn-gen` binary decodes per-target JSON shards into
-  the typed resource model (`#[serde(deny_unknown_fields)]` rejects
-  anything the schema doesn't declare) and emits a canonical
-  `template.yaml`.
+- `cloudformation/private/stack_aggregator.py` merges the per-target
+  JSON shards into one canonical template, rewriting the `cfn_ref` /
+  `cfn_getatt` / `cfn_sub` / `cfn_import_value` sentinels and
+  validating cross-resource names (conditions, `DependsOn`) so a typo
+  fails at build time rather than at deploy.
 - The Java linter (port of cfn-lint patterns, built with `rules_java`)
   runs after rendering and reports semantic issues the schema alone
   cannot express (e.g. cross-property constraints, recommended-name
@@ -36,9 +37,30 @@ see that repo's
 [`plugin_contract.md`](https://github.com/fastverk/rules_jsonschema/blob/main/jsonschema/plugin_contract.md)
 if you want to swap a plugin for one of your own.
 
-## Status: v0.6.0
+## Status: v0.9.0
 
-What v0.6 adds on top of v0.5.0:
+What v0.9 adds on top of v0.8.0:
+
+- **`resource_depends_on`** — explicit `DependsOn`, for the ordering
+  CFN cannot infer. `cfn_ref`/`cfn_getatt` already give CFN a
+  dependency edge wherever a value flows between two resources, which
+  covers most cases; this is for the ones where the ordering is real
+  and no value flows. The canonical example, which every VPC hits:
+
+  ```python
+  cloudformation_stack(
+      name = "vpc",
+      resources = [":Igw", ":IgwAttachment", ":PublicRt", ":PublicDefaultRoute"],
+      # Both the route and the attachment merely Ref the gateway, so neither
+      # depends on the other. Without this the route can be created first and
+      # fails: "The gateway ID 'igw-…' does not exist or is not attached".
+      resource_depends_on = {"PublicDefaultRoute": "IgwAttachment"},
+  )
+  ```
+
+  Names are validated against the stack's resources at build time.
+
+What v0.6 added on top of v0.5.0:
 
 - **Deploy wrappers** — `cloudformation_up` and `cloudformation_down`
   in `cloudformation/deploy.bzl`. `bazel run :stack_up` deploys via

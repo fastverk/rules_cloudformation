@@ -4,6 +4,31 @@ All notable changes to rules_cloudformation. The format is loosely
 [Keep a Changelog](https://keepachangelog.com/) — version headers
 mirror the published bazel-registry entries.
 
+## 0.9.0 — `resource_depends_on`: explicit DependsOn
+
+- `cloudformation_stack`: new `resource_depends_on` attr, a `string_dict` of
+  resource `label.name` -> comma-separated resource names it must be
+  created after. Emits `DependsOn:`. A single dependency renders as a
+  bare string, several as a sorted list — both valid CFN, with the
+  string form matching what hand-authored templates use so a generated
+  template stays diffable against the one it replaces.
+- Only needed where the ordering is real but no value flows between the
+  two resources, so CFN cannot infer it from a `cfn_ref`/`cfn_getatt`
+  edge. The canonical case, which every VPC hits, is `AWS::EC2::Route`
+  with a `GatewayId`: it and the `AWS::EC2::VPCGatewayAttachment` both
+  merely `Ref` the gateway, so both depend on IT and neither on the
+  OTHER. CFN is then free to create the route first, which fails with
+  *"The gateway ID 'igw-…' does not exist or is not attached"*. AWS
+  documents the dependency as required. Being a race, it can pass once
+  and fail on the next rebuild — which is why the new smoke test locks a
+  byte-stable template rather than relying on a deploy that worked.
+- Every name is validated against the stack's resources at build time,
+  matching `resource_conditions`. Unknown target, unknown dependency,
+  self-dependency and malformed input are each a hard failure — a
+  typo'd `DependsOn` is otherwise silent and reinstates the exact race
+  it was added to remove.
+- Closes #1.
+
 ## 0.8.0 — cloudformation_up: in-place `--use-previous-template`
 
 - `cloudformation_up`: add a `use_previous_template` attribute. When
