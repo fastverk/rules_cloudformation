@@ -27,6 +27,27 @@ The other stack consumes via:
 ```python
 cfn_import_value("shared-data-bucket-arn")
 ```
+
+⛔ AN OUTPUT'S `Value` MUST BE A STRING, AND PLENTY OF `Fn::GetAtt` ATTRIBUTES
+ARE LISTS — `AWS::Route53::HostedZone.NameServers`,
+`AWS::EC2::VPC.CidrBlockAssociations`, `AWS::ElasticLoadBalancingV2::*`
+subnet lists, and so on. A list-valued `cfn_getatt` passed straight to `Value`
+gets through every gate this repo has (the typed rules check property types,
+not output values; the aggregator checks that the resource NAME exists, not the
+attribute's type), renders as well-formed JSON, and then rolls the stack back
+at deploy time with
+
+    Template format error: Every Value member must be a string.
+
+which names neither the output nor the attribute. Wrap list-valued attributes
+in `cfn_join`:
+
+```python
+cloudformation_output(
+    name = "ZoneNameServers",
+    Value = cfn_join(",", cfn_getatt("Zone", "NameServers")),
+)
+```
 """
 
 CloudformationOutputInfo = provider(
@@ -62,7 +83,7 @@ cloudformation_output = rule(
     provides = [CloudformationOutputInfo],
     attrs = {
         "Value": attr.string(
-            doc = "The value to expose. Plain strings, `cfn_ref(...)`, `cfn_getatt(...)`, `cfn_sub(...)`, and `cfn_import_value(...)` all work — the aggregator rewrites sentinels at template-render time. Required.",
+            doc = "The value to expose. Plain strings, `cfn_ref(...)`, `cfn_getatt(...)`, `cfn_sub(...)`, `cfn_join(...)`, and `cfn_import_value(...)` all work — the aggregator rewrites sentinels at template-render time. Required. ⛔ The rendered value must be a STRING, and several `Fn::GetAtt` attributes are LISTS (`AWS::Route53::HostedZone.NameServers`, `AWS::EC2::VPC.CidrBlockAssociations`, …). A list-valued `cfn_getatt` here builds and deploys, then rolls the stack back with `Template format error: Every Value member must be a string.` — which names neither the output nor the attribute. Wrap it: `cfn_join(\",\", cfn_getatt(\"Zone\", \"NameServers\"))`.",
             mandatory = True,
         ),
         "Description": attr.string(

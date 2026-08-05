@@ -6,6 +6,7 @@ load(
     "cloudformation_aws_ec2_route_table",
     "cloudformation_aws_ec2_vpc",
     "cloudformation_aws_ec2_vpcgateway_attachment",
+    "cloudformation_aws_route53_hosted_zone",
     "cloudformation_aws_s3_bucket",
     "cloudformation_aws_s3_bucket_policy",
 )
@@ -20,9 +21,11 @@ load(
     "cfn_find_in_map",
     "cfn_getatt",
     "cfn_if",
+    "cfn_join",
     "cfn_ref",
     "cloudformation_stack",
 )
+load("@rules_cloudformation//cloudformation:output.bzl", "cloudformation_output")
 load("@rules_cloudformation//cloudformation:parameter.bzl", "cloudformation_parameter")
 load("@rules_cloudformation//cloudformation:condition.bzl", "cloudformation_condition")
 load("@rules_cloudformation//cloudformation:mapping.bzl", "cloudformation_mapping")
@@ -335,4 +338,90 @@ diff_test(
     name = "depends_on_stack_template_stable",
     file1 = "expected_depends_on_stack.json",
     file2 = ":depends_on_stack",
+)
+
+# ── Fn::Join ─────────────────────────────────────────────────────────────────
+# The motivating case reproduced exactly: `AWS::Route53::HostedZone.NameServers`
+# is a LIST, and a CFN Output `Value` must be a STRING. Emitted bare it builds
+# clean, deploys, and then rolls the stack back with "Template format error:
+# Every Value member must be a string." — naming neither the output nor the
+# attribute. Nothing between here and AWS can catch it, so the guard is a
+# byte-stable rendered template.
+#
+# One stack covering all three shapes:
+#   * form 2 — a single list-valued sentinel, NOT wrapped in a list
+#     (`JoinZoneNameServers`);
+#   * form 1 — an explicit list carrying a nested `cfn_ref` AND a nested
+#     `cfn_find_in_map`, the latter proving Join's record separator does not
+#     shred FindInMap's unit separator (`JoinBucket.BucketName`);
+#   * form 1 with an EMPTY delimiter, the usual shape for assembling an ARN
+#     (`JoinBucketArn`).
+
+cloudformation_parameter(
+    name = "JoinEnvironment",
+    Type = "String",
+    Default = "development",
+)
+
+cloudformation_mapping(
+    name = "JoinEnvConfig",
+    mapping = json.encode({
+        "development": {"RootDomain": "savvifi-dev"},
+        "production": {"RootDomain": "savvifi-com"},
+    }),
+)
+
+cloudformation_aws_route53_hosted_zone(
+    name = "JoinZone",
+    aws_route53_hosted_zone_name = "JoinZone",
+    Name = "smoke.example.com",
+)
+
+cloudformation_aws_s3_bucket(
+    name = "JoinBucket",
+    aws_s3_bucket_name = "JoinBucket",
+    # Form 1: a list whose members are a Ref, a literal, and a FindInMap that
+    # is itself a nested sentinel.
+    BucketName = cfn_join("-", [
+        cfn_ref("JoinEnvironment"),
+        "smoke",
+        cfn_find_in_map("JoinEnvConfig", cfn_ref("JoinEnvironment"), "RootDomain"),
+    ]),
+)
+
+# Form 2. The whole point: `cfn_getatt(...)` passed as a bare sentinel, not as
+# `[cfn_getatt(...)]` — which would render a one-element list containing a
+# list, and fail exactly as the unjoined GetAtt does.
+cloudformation_output(
+    name = "JoinZoneNameServers",
+    Value = cfn_join(",", cfn_getatt("JoinZone", "NameServers")),
+    Description = "Nameservers to delegate to from the parent zone.",
+)
+
+# Form 1 with an empty delimiter — a literal prefix glued to a Ref.
+cloudformation_output(
+    name = "JoinBucketArn",
+    Value = cfn_join("", ["arn:aws:s3:::", cfn_ref("JoinBucket")]),
+    Description = "Bucket ARN assembled from a literal prefix and a Ref.",
+)
+
+cloudformation_stack(
+    name = "join_stack",
+    description = "Fn::Join: a list-valued GetAtt in an Output, plus list-form joins with nested sentinels.",
+    parameters = [":JoinEnvironment"],
+    mappings = [":JoinEnvConfig"],
+    resources = [
+        ":JoinBucket",
+        ":JoinZone",
+    ],
+    outputs = [
+        ":JoinBucketArn",
+        ":JoinZoneNameServers",
+    ],
+)
+
+diff_test(
+    name = "join_stack_template_stable",
+    file1 = "expected_join_stack.json",
+    file2 = ":join_stack",
 )

@@ -21,6 +21,15 @@ corresponding CFN intrinsic dicts:
   `@@cfn:findinmap:M<US>K1<US>K2` → `{"Fn::FindInMap": ["M","K1","K2"]}`
         (US = the unit-separator `_FINDINMAP_SEP`; each arg is rewritten
          recursively so a nested `cfn_ref` resolves)
+  `@@cfn:join:D<RS>V1<RS>V2`      → `{"Fn::Join": ["D", ["V1","V2"]]}`
+  `@@cfn:joinlistref:D<RS>S`      → `{"Fn::Join": ["D", <S rewritten>]}`
+        (RS = the record-separator `_JOIN_SEP` — a DIFFERENT control
+         character to `_FINDINMAP_SEP`, so a FindInMap nested inside a
+         Join survives the split with its own separators intact. The two
+         Join sentinels are separate prefixes because CFN's second
+         argument is either a list of values or a single list-VALUED
+         reference, and nothing in the flat string distinguishes them
+         after encoding — see `cfn_join` in stack.bzl.)
 
 Any Ref/GetAtt sentinel pointing at a name not in the stack's
 resource+parameter set fails the build (pseudo-parameters like
@@ -60,9 +69,21 @@ _IMPORTVALUE_SENTINEL = "@@cfn:importvalue:"
 _SUB_SENTINEL = "@@cfn:sub:"
 _BASE64_SENTINEL = "@@cfn:base64:"
 _FINDINMAP_SENTINEL = "@@cfn:findinmap:"
+# Two Join sentinels: an explicit list of values, and a single list-VALUED
+# reference. Kept in sync with stack.bzl, which decides which one to emit from
+# the Starlark type of `values` — by the time it reaches here both are flat
+# strings and the distinction is unrecoverable.
+_JOIN_SENTINEL = "@@cfn:join:"
+_JOIN_LISTREF_SENTINEL = "@@cfn:joinlistref:"
 # Unit Separator — joins the three FindInMap args inside the flat sentinel
 # string. It can't appear in a CFN map/key name, so the split is unambiguous.
 _FINDINMAP_SEP = "\x1f"
+# Record Separator — joins the delimiter + values inside a Join sentinel.
+# Deliberately a different character to _FINDINMAP_SEP: a cfn_find_in_map
+# nested in a join's value list arrives carrying \x1f inside its own sentinel,
+# and splitting the join on \x1f would shred it into fragments that match no
+# prefix and render as literal strings — a silently-vanished map lookup.
+_JOIN_SEP = "\x1e"
 
 
 def _rewrite_sentinels(value, valid_names: set[str], valid_mappings: set[str], path: str):
@@ -146,6 +167,54 @@ def _rewrite_sentinels(value, valid_names: set[str], valid_mappings: set[str], p
                 )
             # Recurse so a nested cfn_sub / cfn_ref under the base64 rewrites too.
             return {"Fn::Base64": _rewrite_sentinels(inner, valid_names, valid_mappings, path)}
+        # ⛔ The listref form MUST be tested before the plain join form. The two
+        # prefixes don't actually collide (`@@cfn:joinlistref:` diverges from
+        # `@@cfn:join:` at the character after "join"), but that is one edit away
+        # from being untrue, and getting it wrong is not a crash — a listref
+        # matched as a plain join renders `[delim, ["listref-tail"]]`, a
+        # one-element list of garbage, which is valid JSON and deploys.
+        if value.startswith(_JOIN_LISTREF_SENTINEL):
+            body = value[len(_JOIN_LISTREF_SENTINEL):]
+            delimiter, sep, inner = body.partition(_JOIN_SEP)
+            if not sep or not inner:
+                raise SystemExit(
+                    f"stack_aggregator: malformed cfn_join (list-ref form) "
+                    f"sentinel at {path}: expected DELIM<RS>SENTINEL, got {value!r}"
+                )
+            rewritten = _rewrite_sentinels(inner, valid_names, valid_mappings, path)
+            # The whole point of this form is that the second argument is a
+            # single intrinsic, NOT a list containing one. If it didn't rewrite
+            # to an intrinsic dict it was a literal, and `{"Fn::Join": [",",
+            # "text"]}` is rejected by CFN at deploy with a template format
+            # error that names nothing useful. stack.bzl already refuses this,
+            # so reaching here means a hand-built sentinel.
+            if not isinstance(rewritten, dict):
+                raise SystemExit(
+                    f"stack_aggregator: cfn_join at {path} was given a single "
+                    f"value that is not an intrinsic ({inner!r}); Fn::Join's "
+                    f"second argument must be a list or something that yields "
+                    f"one. Pass a list instead: cfn_join(delim, [value])."
+                )
+            return {"Fn::Join": [delimiter, rewritten]}
+        if value.startswith(_JOIN_SENTINEL):
+            body = value[len(_JOIN_SENTINEL):]
+            # Split, not partition: everything after the delimiter is a value.
+            # The delimiter itself is NOT recursed — CFN requires a literal
+            # there, and stack.bzl rejects a sentinel for it.
+            parts = body.split(_JOIN_SEP)
+            delimiter, items = parts[0], parts[1:]
+            if not items:
+                raise SystemExit(
+                    f"stack_aggregator: cfn_join at {path} has no values "
+                    f"(an empty join yields the empty string, which is almost "
+                    f"never what the caller meant)"
+                )
+            # Recurse each value so nested cfn_ref / cfn_getatt / cfn_find_in_map
+            # resolve — and so their names are validated like anywhere else.
+            return {"Fn::Join": [delimiter, [
+                _rewrite_sentinels(item, valid_names, valid_mappings, f"{path}[{i}]")
+                for i, item in enumerate(items)
+            ]]}
         return value
     if isinstance(value, dict):
         return {k: _rewrite_sentinels(v, valid_names, valid_mappings, f"{path}.{k}") for k, v in value.items()}

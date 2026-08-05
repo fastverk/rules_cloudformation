@@ -48,10 +48,46 @@ _SUB_SENTINEL = "@@cfn:sub:"
 _BASE64_SENTINEL = "@@cfn:base64:"
 _FINDINMAP_SENTINEL = "@@cfn:findinmap:"
 
+# Fn::Join has TWO sentinels, not one, because its second argument is either a
+# list of values or a single thing that IS a list — and the two render
+# differently. See `cfn_join` for the full story; the short version is that both
+# forms reach the aggregator as a flat string, so nothing distinguishes them
+# once encoded. Encoding the form in the prefix is the only place the
+# information survives.
+_JOIN_SENTINEL = "@@cfn:join:"
+_JOIN_LISTREF_SENTINEL = "@@cfn:joinlistref:"
+
 # Unit Separator (0x1f, octal \037 — Starlark has no \x escape) joins the three
 # FindInMap args in the flat sentinel string (can't appear in a CFN map/key
 # name). Kept in sync with stack_aggregator.py's _FINDINMAP_SEP.
 _FINDINMAP_SEP = "\037"
+
+# Record Separator (0x1e, octal \036) joins the delimiter + values inside a Join
+# sentinel. Kept in sync with stack_aggregator.py's _JOIN_SEP.
+#
+# ⛔ DELIBERATELY NOT `_FINDINMAP_SEP`, and this is not a style choice. A
+# `cfn_find_in_map(...)` nested in a join's value list is entirely legal, and it
+# arrives carrying \037 INSIDE its own sentinel. If Join split on \037 too, that
+# nested sentinel would be shredded into fragments — each of which then fails to
+# match any prefix and renders as a literal string, so the template builds and
+# the map lookup silently disappears. Two separate control characters keep the
+# two encoding layers independent.
+#
+# Join-inside-Join is the case this does NOT rescue (both layers would use
+# \036), so `cfn_join` rejects it outright rather than mis-splitting it.
+_JOIN_SEP = "\036"
+
+# The sentinels that can legitimately stand where `cfn_join`'s second argument
+# is a single list-valued reference. Everything else in the sentinel set yields
+# a STRING — `Fn::Sub`, `Fn::Base64` and `Fn::Join` itself always do — and CFN
+# rejects `{"Fn::Join": [",", {"Fn::Sub": "..."}]}` at deploy with a template
+# format error that names nothing useful. Cheaper to refuse it here.
+_JOIN_LISTREF_ALLOWED = [
+    _REF_SENTINEL,
+    _GETATT_SENTINEL,
+    _IMPORTVALUE_SENTINEL,
+    _FINDINMAP_SENTINEL,
+]
 
 def cfn_ref(resource_name):
     """Sentinel string the aggregator rewrites to `{"Ref": resource_name}`.
@@ -217,6 +253,116 @@ def cfn_find_in_map(map_name, top_level_key, second_level_key):
         if _FINDINMAP_SEP in part:
             fail("cfn_find_in_map: args may not contain the sentinel separator")
     return _FINDINMAP_SENTINEL + map_name + _FINDINMAP_SEP + top_level_key + _FINDINMAP_SEP + second_level_key
+
+def cfn_join(delimiter, values):
+    """Sentinel string the aggregator rewrites to `{"Fn::Join": [delimiter, <values>]}`.
+
+    Concatenates values into ONE string at deploy time. Being a string, it fits
+    anywhere the other sentinels do — a scalar property attr, a
+    `cloudformation_output(Value = ...)`, a `json.encode(...)` payload.
+
+    ⛔ THE REASON THIS EXISTS is that a CFN `Outputs.*.Value` must be a STRING,
+    and several `Fn::GetAtt` attributes are LISTS. The canonical one is a
+    delegated Route53 zone's nameservers:
+
+    ```python
+    cloudformation_output(
+        name = "ZoneNameServers",
+        Value = cfn_join(",", cfn_getatt("Zone", "NameServers")),
+    )
+    ```
+
+    Without the join, that output renders as a bare `{"Fn::GetAtt": [...]}`,
+    which builds cleanly, deploys, and then rolls the stack back with
+
+        Template format error: Every Value member must be a string.
+
+    — an error naming neither the output nor the attribute. Nothing upstream
+    catches it: the typed rules check PROPERTY types, not output values, and
+    the aggregator validates that a `cfn_getatt` names a real resource but has
+    no notion of that attribute's type.
+
+    ⭐ TWO FORMS, AND THE DIFFERENCE IS LOAD-BEARING. CFN's second argument is
+    either a list of values, or a single thing that IS a list:
+
+    ```python
+    # Form 1 — an explicit list. Elements may be literals or sentinels.
+    cfn_join("-", [cfn_ref("Environment"), "assets"])
+    #  ->  {"Fn::Join": ["-", [{"Ref": "Environment"}, "assets"]]}
+
+    # Form 2 — ONE sentinel that itself yields a list.
+    cfn_join(",", cfn_getatt("Zone", "NameServers"))
+    #  ->  {"Fn::Join": [",", {"Fn::GetAtt": ["Zone", "NameServers"]}]}
+    ```
+
+    ⚠ Passing form 2's argument as a one-element list is the mistake to avoid.
+    `cfn_join(",", [cfn_getatt("Zone", "NameServers")])` renders
+    `[",", [{"Fn::GetAtt": ...}]]`, which CFN reads as a list of ONE element
+    that happens to be a list — not as a list-valued reference. It does not
+    join the nameservers; it fails the same template format error the join was
+    added to fix, and it looks correct in review.
+
+    The form is decided HERE, by the type of `values`, and encoded in the
+    sentinel prefix. It cannot be recovered later: both forms reach the
+    aggregator as a flat string, with nothing left to infer from.
+
+    Nested sentinels in form 1 are rewritten normally, so `cfn_ref`,
+    `cfn_getatt`, `cfn_import_value` and `cfn_find_in_map` all compose. Two
+    things do not, and fail here rather than silently:
+
+    * A nested `cfn_join` — both layers would use the same separator, so the
+      split would shred the inner one into fragments that render as literals.
+      Build the inner string in Starlark instead, or emit a literal
+      `{"Fn::Join": ...}` dict inside `json.encode(...)`.
+    * A form-2 argument that is a literal or a string-valued sentinel
+      (`cfn_sub` / `cfn_base64` / another join). Those are not lists, and CFN
+      rejects them at deploy.
+
+    Args:
+      delimiter: literal string placed between values. May be `""` (the common
+        case for building an ARN or a URL) — CFN requires a literal here, so a
+        sentinel is not accepted.
+      values: EITHER a list of strings (literals and/or sentinels, at least
+        one), OR a single `cfn_ref` / `cfn_getatt` / `cfn_import_value` /
+        `cfn_find_in_map` sentinel whose value is list-valued.
+
+    Returns:
+      A sentinel string the aggregator rewrites at template-render time.
+    """
+    if type(delimiter) != "string":
+        fail("cfn_join: delimiter must be a string, got {}".format(type(delimiter)))
+    if _JOIN_SEP in delimiter:
+        fail("cfn_join: delimiter may not contain the sentinel separator")
+
+    if type(values) == "list":
+        # An empty list renders `{"Fn::Join": [d, []]}`, which evaluates to the
+        # empty string — so a list comprehension that matched nothing produces
+        # an empty property rather than an error. Refuse it; an intentional
+        # empty string is `""`.
+        if not values:
+            fail("cfn_join: values list is empty (an empty join yields \"\" — pass \"\" directly if that is what you mean)")
+        for i, v in enumerate(values):
+            if type(v) != "string":
+                fail("cfn_join: values[{}] must be a string, got {} (a dict — e.g. cfn_if(...) — can't ride a flat sentinel; emit a literal {{\"Fn::Join\": ...}} inside json.encode(...) instead)".format(i, type(v)))
+            if _JOIN_SEP in v:
+                fail("cfn_join: values[{}] may not contain the sentinel separator (a nested cfn_join is not supported — see the docstring)".format(i))
+        return _JOIN_SENTINEL + delimiter + _JOIN_SEP + _JOIN_SEP.join(values)
+
+    if type(values) == "string":
+        if not values:
+            fail("cfn_join: values must be non-empty")
+        for prefix in _JOIN_LISTREF_ALLOWED:
+            if values.startswith(prefix):
+                return _JOIN_LISTREF_SENTINEL + delimiter + _JOIN_SEP + values
+        fail(
+            "cfn_join: a single (non-list) values argument must be a cfn_ref / cfn_getatt / " +
+            "cfn_import_value / cfn_find_in_map sentinel whose value is list-valued, got {}. ".format(repr(values)) +
+            "A literal string is not a list, and cfn_sub / cfn_base64 / cfn_join yield strings — " +
+            "CFN rejects all of them as Fn::Join's second argument. Did you mean a one-element " +
+            "list, i.e. cfn_join(delim, [value])?",
+        )
+
+    fail("cfn_join: values must be a list of strings or a single list-valued sentinel string, got {}".format(type(values)))
 
 # ─── Condition-function helpers ──────────────────────────────────────────────
 #
@@ -409,7 +555,7 @@ def _cloudformation_stack_impl(ctx):
 
 cloudformation_stack = rule(
     implementation = _cloudformation_stack_impl,
-    doc = "Aggregate typed-rule shards into one CFN template. Resource names = each contributing rule's `label.name` (so name targets PascalCase to satisfy CFN logical-id rules). Cross-resource refs work via `cfn_ref` / `cfn_getatt` Starlark helpers (above). Top-level Parameters / Outputs / Conditions / Mappings blocks are populated from the `parameters` / `outputs` / `conditions` / `mappings` attrs (see the sibling `.bzl` files). Gate a resource on a condition via `resource_conditions`. Cross-stack imports use `cfn_import_value`; `Fn::Sub` via `cfn_sub`; `Fn::FindInMap` via `cfn_find_in_map`; conditions via `cfn_equals` / `cfn_and` / `cfn_or` / `cfn_not` / `cfn_if`.",
+    doc = "Aggregate typed-rule shards into one CFN template. Resource names = each contributing rule's `label.name` (so name targets PascalCase to satisfy CFN logical-id rules). Cross-resource refs work via `cfn_ref` / `cfn_getatt` Starlark helpers (above). Top-level Parameters / Outputs / Conditions / Mappings blocks are populated from the `parameters` / `outputs` / `conditions` / `mappings` attrs (see the sibling `.bzl` files). Gate a resource on a condition via `resource_conditions`. Cross-stack imports use `cfn_import_value`; `Fn::Sub` via `cfn_sub`; `Fn::FindInMap` via `cfn_find_in_map`; `Fn::Join` via `cfn_join` (which is what turns a list-valued `cfn_getatt` into something a string-typed slot such as an Output `Value` will accept); conditions via `cfn_equals` / `cfn_and` / `cfn_or` / `cfn_not` / `cfn_if`.",
     attrs = {
         "description": attr.string(
             doc = "CFN template `Description` field. Optional.",
