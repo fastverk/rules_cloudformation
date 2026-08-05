@@ -4,6 +4,55 @@ All notable changes to rules_cloudformation. The format is loosely
 [Keep a Changelog](https://keepachangelog.com/) — version headers
 mirror the published bazel-registry entries.
 
+## 0.10.0 — `cfn_join`: Fn::Join, and list-valued GetAtt in an Output
+
+- New `cfn_join(delimiter, values)` Starlark helper in
+  `cloudformation/stack.bzl`, rewritten by the aggregator into
+  `{"Fn::Join": [delimiter, <values>]}`.
+- The gap it closes: a CFN `Outputs.*.Value` must be a **string**, and
+  several `Fn::GetAtt` attributes are **lists** —
+  `AWS::Route53::HostedZone.NameServers` most visibly. Emitted bare, such
+  an output builds clean, deploys, and then rolls the stack back with
+  *"Template format error: Every Value member must be a string."*, which
+  names neither the output nor the attribute. Nothing upstream catches
+  it: the typed rules check property types rather than output values,
+  and the aggregator validates that a `cfn_getatt` names a real resource
+  but has no notion of that attribute's type.
+- **Two forms**, distinguished by the Starlark type of `values` and
+  encoded in two separate sentinels (`@@cfn:join:` /
+  `@@cfn:joinlistref:`), because both reach the aggregator as a flat
+  string with nothing left to infer from:
+  - a **list** of literals and/or sentinels →
+    `{"Fn::Join": [d, [v1, v2, …]]}`;
+  - a **single** `cfn_ref` / `cfn_getatt` / `cfn_import_value` /
+    `cfn_find_in_map` sentinel that is itself list-valued →
+    `{"Fn::Join": [d, {"Fn::GetAtt": […]}]}`.
+
+  Wrapping the second form's argument in a one-element list renders
+  `[d, [{"Fn::GetAtt": …}]]` — a list of one element that happens to be
+  a list, not a list-valued reference — which fails the same template
+  format error the join was added to fix, and reads as correct.
+- Nested sentinels inside a list are rewritten normally, so `cfn_ref`,
+  `cfn_getatt`, `cfn_import_value` and `cfn_find_in_map` all compose, and
+  their names are validated as anywhere else (`… BucketName[1] points at
+  a name that isn't in the stack`).
+- The Join separator is the **Record** Separator (`\036`), deliberately
+  not `cfn_find_in_map`'s Unit Separator (`\037`): a `cfn_find_in_map`
+  nested in a join's value list arrives carrying `\037` inside its own
+  sentinel, and sharing the character would shred it into fragments that
+  match no prefix and render as literal strings — a silently vanished map
+  lookup. Join-inside-Join is the case two characters cannot rescue, so
+  `cfn_join` rejects it outright rather than mis-splitting it.
+- Rejected at Bazel-load time, each with a message naming the fix: an
+  empty `values` list (an empty join evaluates to `""`, so a list
+  comprehension that matched nothing would render an empty property
+  rather than an error), a single value that is a literal or a
+  string-valued sentinel (`cfn_sub` / `cfn_base64` / `cfn_join` — CFN
+  rejects all three as `Fn::Join`'s second argument), a nested
+  `cfn_join`, a dict element such as `cfn_if(...)`, and a delimiter or
+  value containing the separator.
+- Closes #6.
+
 ## 0.9.0 — `resource_depends_on`: explicit DependsOn
 
 - `cloudformation_stack`: new `resource_depends_on` attr, a `string_dict` of

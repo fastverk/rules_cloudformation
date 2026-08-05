@@ -21,7 +21,7 @@ fields. Drift is impossible by construction:
   property.
 - `cloudformation/private/stack_aggregator.py` merges the per-target
   JSON shards into one canonical template, rewriting the `cfn_ref` /
-  `cfn_getatt` / `cfn_sub` / `cfn_import_value` sentinels and
+  `cfn_getatt` / `cfn_sub` / `cfn_join` / `cfn_import_value` sentinels and
   validating cross-resource names (conditions, `DependsOn`) so a typo
   fails at build time rather than at deploy.
 - The Java linter (port of cfn-lint patterns, built with `rules_java`)
@@ -37,7 +37,40 @@ see that repo's
 [`plugin_contract.md`](https://github.com/fastverk/rules_jsonschema/blob/main/jsonschema/plugin_contract.md)
 if you want to swap a plugin for one of your own.
 
-## Status: v0.9.0
+## Status: v0.10.0
+
+What v0.10 adds on top of v0.9.0:
+
+- **`cfn_join`** — `Fn::Join`, which is what makes a **list-valued**
+  `Fn::GetAtt` usable in a **string** slot. The slot that matters is a
+  template Output's `Value`:
+
+  ```python
+  cloudformation_output(
+      name = "ZoneNameServers",
+      # AWS::Route53::HostedZone.NameServers is a List of String, and an
+      # Output Value must be a string. Bare, this builds, deploys, and then
+      # rolls the stack back with "Template format error: Every Value member
+      # must be a string." — naming neither the output nor the attribute.
+      Value = cfn_join(",", cfn_getatt("Zone", "NameServers")),
+  )
+  ```
+
+  Two forms, and the difference is load-bearing. `values` may be a **list**
+  of literals and/or sentinels, or a **single** sentinel that is itself
+  list-valued:
+
+  ```python
+  cfn_join("-", [cfn_ref("Environment"), "assets"])      # ["-", [{"Ref": …}, "assets"]]
+  cfn_join(",", cfn_getatt("Zone", "NameServers"))       # [",", {"Fn::GetAtt": […]}]
+  ```
+
+  Passing the second form's argument as a one-element list renders
+  `[",", [{"Fn::GetAtt": …}]]` — a list of one element that happens to be a
+  list, not a list-valued reference — and fails the same way the unjoined
+  GetAtt does. Nested `cfn_ref` / `cfn_getatt` / `cfn_import_value` /
+  `cfn_find_in_map` inside a list compose and are name-validated as usual;
+  a nested `cfn_join` is rejected at load time.
 
 What v0.9 adds on top of v0.8.0:
 
