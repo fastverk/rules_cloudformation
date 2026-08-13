@@ -14,6 +14,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # TEMPORARY PROBE — delete before merge. Discriminates between "this repo cannot run
+  # any workflow" and "the cross-org reusable call is rejected". If this job produces a
+  # job record and `ci` does not, the call is the problem.
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "inline job materialized"
+
   ci:
     # ⛔ NO `secrets: inherit` HERE, AND THAT LINE IS WHY CI NEVER RAN.
     #
