@@ -2,3 +2,19 @@
 # build doesn't depend on host JAVA_HOME.
 build --java_runtime_version=remotejdk_21
 build --tool_java_runtime_version=remotejdk_21
+
+# ⛔ WITHOUT THESE, CI CANNOT RESOLVE THIS MODULE'S OWN DEPENDENCY.
+#
+# `rules_jsonschema` — which generates every typed rule in this repo — is published ONLY
+# to registry.tbzl.dev; the public BCR 404s on it. It resolved on developer machines
+# purely because ~/.bazelrc supplies the registry, so the dependency was satisfied by
+# personal config that no CI runner has. That was invisible while CI could not start at
+# all (#5); the first run after fixing that failed with
+#
+#   module rules_jsonschema@0.3.0 not found in registries
+#
+# ⚠ `--registry` ACCUMULATES rather than replaces, and FIRST MATCH WINS — so bcr must be
+# listed explicitly and must come second, or every public module resolves from the
+# private registry too.
+common --registry=https://registry.tbzl.dev/
+common --registry=https://bcr.bazel.build/
