@@ -425,6 +425,8 @@ diff_test(
     name = "join_stack_template_stable",
     file1 = "expected_join_stack.json",
     file2 = ":join_stack",
+)
+
 # ─── DeletionPolicy / UpdateReplacePolicy ────────────────────────────────────
 #
 # ⛔ THE GOLDEN FILE IS THE ASSERTION THAT MATTERS, and what it asserts is the NESTING.
