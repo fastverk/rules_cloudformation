@@ -268,6 +268,8 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--mapping", action="append", default=[])
     ap.add_argument("--resource_condition", action="append", default=[])
     ap.add_argument("--resource_depends_on", action="append", default=[])
+    ap.add_argument("--resource_deletion_policy", action="append", default=[])
+    ap.add_argument("--resource_update_replace_policy", action="append", default=[])
     args = ap.parse_args(argv)
 
     resources: dict[str, dict] = {}
@@ -411,6 +413,48 @@ def main(argv: list[str]) -> int:
         # Both are valid CFN; the string form is what hand-authored templates use, and
         # matching it keeps a generated template diffable against the one it replaced.
         resources[res_name]["DependsOn"] = deps[0] if len(deps) == 1 else sorted(deps)
+
+    # Attach `DeletionPolicy:` / `UpdateReplacePolicy:`. Like Condition and DependsOn
+    # above these are SIBLINGS of `Properties` — the typed shards carry only the
+    # Properties payload, so resource-level attributes have always belonged here.
+    #
+    # ⛔ NESTING THESE INSIDE `Properties` PRODUCES A TEMPLATE THAT VALIDATES AND THEN
+    # FAILS AT DEPLOY with an unrecognised property. The nesting is the thing to test,
+    # not merely that the key is present somewhere.
+    #
+    # ⚠ `Snapshot` is accepted for every resource type here, though CFN only honours it on
+    # types that support snapshots. Restricting per type would need this script to carry a
+    # table of which types qualify; the mismatch fails at create, loudly and immediately,
+    # which is a better trade than a table that goes stale.
+    _DELETION_POLICIES = ("Delete", "Retain", "Snapshot", "RetainExceptOnCreate")
+    # ⚠ UpdateReplacePolicy has NO RetainExceptOnCreate — it is meaningless there, since
+    # the resource by definition already existed. Kept as separate tuples rather than one
+    # shared list so the difference is visible instead of assumed.
+    _UPDATE_REPLACE_POLICIES = ("Delete", "Retain", "Snapshot")
+
+    for flag, key, allowed in (
+        ("resource_deletion_policy", "DeletionPolicy", _DELETION_POLICIES),
+        ("resource_update_replace_policy", "UpdateReplacePolicy", _UPDATE_REPLACE_POLICIES),
+    ):
+        for raw in getattr(args, flag):
+            rp_parts = raw.split("=", 1)
+            if len(rp_parts) != 2 or not rp_parts[0] or not rp_parts[1]:
+                raise SystemExit(f"--{flag} expects RESOURCE=POLICY, got {raw!r}")
+            res_name, policy = rp_parts[0], rp_parts[1]
+            # Same validation stance as --resource_condition: an unknown resource name is
+            # fatal at build time. A typo'd policy name is otherwise silent, and silently
+            # means Delete — the exact outcome this attribute exists to prevent.
+            if res_name not in resources:
+                raise SystemExit(
+                    f"--{flag} targets {res_name!r}, which is not in "
+                    f"the stack's resources ({sorted(resources.keys())!r})"
+                )
+            if policy not in allowed:
+                raise SystemExit(
+                    f"--{flag} for {res_name!r} is {policy!r}, which is not one of "
+                    f"{list(allowed)!r}"
+                )
+            resources[res_name][key] = policy
 
     template: dict = {"AWSTemplateFormatVersion": "2010-09-09"}
     if args.description:
