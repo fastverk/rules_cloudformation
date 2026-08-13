@@ -13,11 +13,59 @@ concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# ⛔ INLINED FROM fastverk/.github, NOT CALLED. This repo's CI had NEVER run — every
+# workflow run since the repo was created failed in 0.0s with `{"jobs": [], "total": 0}`,
+# no steps and no annotations to read. See #5.
+#
+# ⭐ The cause is the CROSS-ORG REUSABLE-WORKFLOW REFERENCE ITSELF:
+#
+#     uses: fastverk/.github/.github/workflows/reusable-rules-ci.yml@main
+#
+# caller `tomato-bazel`, callee `fastverk`. Proven by bisection, not by argument — with
+# that job present the ENTIRE workflow is rejected before any job is materialized, and a
+# trivial inline job in the SAME file never ran either. Delete that one job and the same
+# file goes green. A separate minimal workflow in this repo also ran fine, so the repo,
+# the org, and GitHub-hosted runners were never the problem.
+#
+# ⚠ THE FAILURE POISONS SIBLING JOBS, which is what makes it so hard to read: an inline
+# job failing alongside it looks like "this repo cannot run CI at all" and sends you to
+# billing. It is not billing — this repo is public, and bazel-registry runs the same
+# `ubuntu-latest` on the same org.
+#
+# ⚠ ROOT CAUSE NOT ESTABLISHED. Ruled out by measurement: `secrets: inherit` (removed,
+# still failed), repo/org Actions policy (`allowed_actions: all`), visibility (both repos
+# public), the ref (the file IS present at @main), callee YAML validity, and a
+# permissions mismatch (both declare exactly `contents: read`). Something about the
+# cross-org reference is rejected without ever surfacing a message.
+#
+# Inlining removes the dependency rather than explaining it. If the reusable workflow is
+# ever wanted again, host it in the tomato-bazel org — do not re-point across orgs
+# without first proving on a scratch branch that jobs materialize.
 jobs:
-  # TEMPORARY PROBE — delete before merge. Discriminates between "this repo cannot run
-  # any workflow" and "the cross-org reusable call is rejected". If this job produces a
-  # job record and `ci` does not, the call is the problem.
-  probe:
+  test:
+    name: bazel test //...
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bazel-contrib/setup-bazel@0.10.0
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}-${{ matrix.os }}
+          repository-cache: true
+      - run: bazel test //... --test_output=errors
+
+  buildifier:
+    name: buildifier lint
     runs-on: ubuntu-latest
     steps:
-      - run: echo "inline job materialized"
+      - uses: actions/checkout@v4
+      - name: install buildifier
+        run: |
+          curl -fsSL -o /usr/local/bin/buildifier \
+            https://github.com/bazelbuild/buildtools/releases/download/v7.3.1/buildifier-linux-amd64
+          chmod +x /usr/local/bin/buildifier
+      - run: buildifier --mode=check --lint=warn -r .
