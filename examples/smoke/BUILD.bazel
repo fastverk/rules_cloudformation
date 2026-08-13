@@ -6,6 +6,7 @@ load(
     "cloudformation_aws_ec2_route_table",
     "cloudformation_aws_ec2_vpc",
     "cloudformation_aws_ec2_vpcgateway_attachment",
+    "cloudformation_aws_ecr_repository",
     "cloudformation_aws_route53_hosted_zone",
     "cloudformation_aws_s3_bucket",
     "cloudformation_aws_s3_bucket_policy",
@@ -424,4 +425,47 @@ diff_test(
     name = "join_stack_template_stable",
     file1 = "expected_join_stack.json",
     file2 = ":join_stack",
+# ─── DeletionPolicy / UpdateReplacePolicy ────────────────────────────────────
+#
+# ⛔ THE GOLDEN FILE IS THE ASSERTION THAT MATTERS, and what it asserts is the NESTING.
+# Both keys must be SIBLINGS of `Properties`, never inside it. Nested one level too deep
+# a template still passes `validate-template` and then fails at deploy with an
+# unrecognised property — so a test that only checked "the key is present somewhere"
+# would pass while shipping a broken template.
+#
+# Two reasons this attribute exists, both real:
+#   1. CloudFormation REQUIRES DeletionPolicy on every resource in a
+#      `--change-set-type IMPORT`. Without it a stack can never adopt existing resources.
+#   2. Retain is what stops a stack delete taking a registry or data store with it.
+#      Measured on a live stack in this estate: 0 of 14 ECR repositories had one.
+cloudformation_aws_ecr_repository(
+    name = "SmokeKeptRepo",
+    aws_ecr_repository_name = "SmokeKeptRepo",
+    RepositoryName = "smoke/kept",
+)
+
+cloudformation_aws_ecr_repository(
+    name = "SmokeDefaultRepo",
+    aws_ecr_repository_name = "SmokeDefaultRepo",
+    RepositoryName = "smoke/default",
+)
+
+cloudformation_stack(
+    name = "retention_stack",
+    description = "DeletionPolicy/UpdateReplacePolicy render beside Properties, and only where asked.",
+    resources = [
+        ":SmokeKeptRepo",
+        ":SmokeDefaultRepo",
+    ],
+    # ⚠ SmokeDefaultRepo is deliberately absent from both dicts. Unset must mean ABSENT
+    # from the rendered resource — matching CFN's own default (Delete) rather than this
+    # rule's opinion — so existing stacks that do not opt in render byte-identically.
+    resource_deletion_policies = {"SmokeKeptRepo": "Retain"},
+    resource_update_replace_policies = {"SmokeKeptRepo": "Retain"},
+)
+
+diff_test(
+    name = "retention_stack_template_stable",
+    file1 = "expected_retention_stack.json",
+    file2 = ":retention_stack",
 )
