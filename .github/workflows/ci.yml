@@ -15,5 +15,18 @@ concurrency:
 
 jobs:
   ci:
+    # ⛔ NO `secrets: inherit` HERE, AND THAT LINE IS WHY CI NEVER RAN.
+    #
+    # This calls ACROSS ORGANIZATIONS — caller `tomato-bazel`, callee `fastverk` — and
+    # GitHub restricts inherited secrets to the same org or enterprise. The call is
+    # rejected before any job is materialized, which is why every run failed in 0.0s with
+    # `{"jobs": [], "total_count": 0}` and no annotations to read. See #5.
+    #
+    # ⚠ That shape is indistinguishable from an Actions billing block, which is how it
+    # went unexplained for so long. It is repo-specific, not org-wide: bazel-registry runs
+    # its own workflows on this org fine.
+    #
+    # Dropping the line is safe rather than a workaround: reusable-rules-ci.yml declares
+    # `workflow_call` with `inputs` ONLY — no `secrets:` block — and references no
+    # `secrets.*` anywhere. It was inheriting secrets it had no way to use.
     uses: fastverk/.github/.github/workflows/reusable-rules-ci.yml@main
-    secrets: inherit
