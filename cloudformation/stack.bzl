@@ -543,6 +543,26 @@ def _cloudformation_stack_impl(ctx):
     for res_name, deps in ctx.attr.resource_depends_on.items():
         args.add("--resource_depends_on={}={}".format(res_name, deps))
 
+    # Attach `DeletionPolicy:` / `UpdateReplacePolicy:`. Like Condition and DependsOn
+    # above, these are SIBLINGS of `Properties`, not properties — the typed shards carry
+    # only the Properties payload, so resource-level attributes have always been the
+    # aggregator's job.
+    #
+    # ⛔ WITHOUT DeletionPolicy A STACK CAN NEVER ADOPT AN EXISTING RESOURCE. CloudFormation
+    # REQUIRES it on every resource in a `--change-set-type IMPORT`, so `resource import` is
+    # simply unavailable to stacks built with these rules — which is what blocked bringing
+    # three hand-created ECR mirror repositories under management.
+    #
+    # ⚠ AND THE SECOND CONSEQUENCE IS LIVE, NOT HYPOTHETICAL: measured on the deployed
+    # `tbzl-build-plane-ecr`, 0 of 14 resources carried a DeletionPolicy, so a stack delete
+    # or a failed create-replace would have destroyed the container registry the whole build
+    # plane pulls from. The hand-authored YAML stack next door had `Retain` on 32 of 32 —
+    # same estate, same intent, opposite outcome, purely because one author could express it.
+    for res_name, policy in ctx.attr.resource_deletion_policies.items():
+        args.add("--resource_deletion_policy={}={}".format(res_name, policy))
+    for res_name, policy in ctx.attr.resource_update_replace_policies.items():
+        args.add("--resource_update_replace_policy={}={}".format(res_name, policy))
+
     ctx.actions.run(
         executable = ctx.executable._aggregator,
         arguments = [args],
@@ -593,6 +613,12 @@ cloudformation_stack = rule(
         ),
         "resource_depends_on": attr.string_dict(
             doc = "Map of resource `label.name` -> comma-separated resource `label.name`s it must be created after. Emits `DependsOn:`. Only needed where the ordering is real but no value flows between the resources, so CFN cannot infer it from a `cfn_ref`/`cfn_getatt` edge — canonically `AWS::EC2::Route` with a `GatewayId`, which AWS documents as REQUIRING a dependency on the `AWS::EC2::VPCGatewayAttachment` (both merely Ref the gateway, so neither depends on the other, and the route can be created first and fail). Every name is validated against the stack's resources at build time. A single dependency renders as a bare string, several as a sorted list.",
+        ),
+        "resource_deletion_policies": attr.string_dict(
+            doc = "Map of resource `label.name` -> `Retain` | `Delete` | `Snapshot` | `RetainExceptOnCreate`. Emits `DeletionPolicy:` as a sibling of `Properties`. Two reasons to reach for it: CloudFormation REQUIRES a DeletionPolicy on every resource in a `resource import`, so without this a stack can never adopt existing infrastructure; and `Retain` is what stops a stack delete taking a data store, registry or hosted zone with it. Unset means absent from the template, which is CFN's own default (`Delete`) — deliberately NOT defaulted to `Retain` here, so rendered output is byte-identical for stacks that do not opt in and the semantics match the platform rather than this rule's opinion. ⚠ `Snapshot` is only valid on resource types that support snapshots; it is accepted here for any type and CloudFormation rejects the mismatch at create, loudly and immediately. Restricting per type would need the generator to know which types qualify.",
+        ),
+        "resource_update_replace_policies": attr.string_dict(
+            doc = "Map of resource `label.name` -> `Retain` | `Delete` | `Snapshot`. Emits `UpdateReplacePolicy:`. Governs the OTHER way a resource disappears: an update that REPLACES it (a create-replace deletes the old one), which `DeletionPolicy` alone does not cover and which stack-level termination protection does not cover either. Same unset semantics and same `Snapshot` caveat as `resource_deletion_policies`.",
         ),
         "_aggregator": attr.label(
             default = "//cloudformation/private:stack_aggregator",
