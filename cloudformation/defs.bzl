@@ -5,7 +5,7 @@
 # Refresh via the generating rule's `update` script;
 # the diff_test will fail until you do.
 
-load("@rules_jsonschema//runtime:helpers.bzl", "parse_json_or_none", "strip_empty")
+load("@rules_jsonschema//runtime:helpers.bzl", "parse_json_or_none", "strip_unset")
 
 CloudformationAwsAccessAnalyzerAnalyzerInfo = provider(
     doc = "A aws_access_analyzer_analyzer contributed by a target. Shard JSON matches the aws_access_analyzer_analyzer schema.",
@@ -24,7 +24,7 @@ def _cloudformation_aws_access_analyzer_analyzer_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_access_analyzer_analyzer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73,7 +73,7 @@ def _cloudformation_aws_access_analyzer_archive_rule_impl(ctx):
         "Filter": parse_json_or_none(ctx.attr.Filter),
         "RuleName": ctx.attr.RuleName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_access_analyzer_archive_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -115,7 +115,7 @@ def _cloudformation_aws_account_access_application_impl(ctx):
         "IdentitySource": parse_json_or_none(ctx.attr.IdentitySource),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_account_access_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -154,7 +154,7 @@ def _cloudformation_aws_account_access_entitlement_impl(ctx):
         "ApplicationArn": ctx.attr.ApplicationArn,
         "Entitlement": parse_json_or_none(ctx.attr.Entitlement),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_account_access_entitlement.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -198,7 +198,7 @@ def _cloudformation_aws_acmpca_certificate_impl(ctx):
         "Validity": parse_json_or_none(ctx.attr.Validity),
         "ValidityNotBefore": parse_json_or_none(ctx.attr.ValidityNotBefore),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_acmpca_certificate.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -259,7 +259,7 @@ def _cloudformation_aws_acmpca_certificate_authority_impl(ctx):
         "Type": ctx.attr.Type,
         "UsageMode": ctx.attr.UsageMode,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_acmpca_certificate_authority.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -321,7 +321,7 @@ def _cloudformation_aws_acmpca_certificate_authority_activation_impl(ctx):
         "CertificateChain": ctx.attr.CertificateChain,
         "Status": ctx.attr.Status,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_acmpca_certificate_authority_activation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -368,7 +368,7 @@ def _cloudformation_aws_acmpca_permission_impl(ctx):
         "Principal": ctx.attr.Principal,
         "SourceAccount": ctx.attr.SourceAccount,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_acmpca_permission.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -421,7 +421,7 @@ def _cloudformation_aws_aiops_investigation_group_impl(ctx):
         "TagKeyBoundaries": parse_json_or_none(ctx.attr.TagKeyBoundaries),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_aiops_investigation_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -504,7 +504,7 @@ def _cloudformation_aws_amazon_mq_broker_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Users": parse_json_or_none(ctx.attr.Users),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_amazon_mq_broker.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -608,7 +608,7 @@ def _cloudformation_aws_amazon_mq_configuration_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_amazon_mq_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -662,7 +662,7 @@ def _cloudformation_aws_amazon_mq_configuration_association_impl(ctx):
         "Broker": ctx.attr.Broker,
         "Configuration": parse_json_or_none(ctx.attr.Configuration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_amazon_mq_configuration_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -717,7 +717,7 @@ def _cloudformation_aws_amplify_app_impl(ctx):
         "Repository": ctx.attr.Repository,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_amplify_app.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -818,7 +818,7 @@ def _cloudformation_aws_amplify_branch_impl(ctx):
         "Stage": ctx.attr.Stage,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_amplify_branch.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -904,7 +904,7 @@ def _cloudformation_aws_amplify_domain_impl(ctx):
         "EnableAutoSubDomain": parse_json_or_none(ctx.attr.EnableAutoSubDomain),
         "SubDomainSettings": parse_json_or_none(ctx.attr.SubDomainSettings),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_amplify_domain.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -958,7 +958,7 @@ def _cloudformation_aws_amplify_jobs_impl(ctx):
         "AppId": ctx.attr.AppId,
         "BranchName": ctx.attr.BranchName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_amplify_jobs.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1000,7 +1000,7 @@ def _cloudformation_aws_amplify_uibuilder_codegen_job_impl(ctx):
         "Features": parse_json_or_none(ctx.attr.Features),
         "RenderConfig": parse_json_or_none(ctx.attr.RenderConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_amplify_uibuilder_codegen_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1060,7 +1060,7 @@ def _cloudformation_aws_amplify_uibuilder_component_impl(ctx):
         "Tags": ctx.attr.Tags,
         "Variants": parse_json_or_none(ctx.attr.Variants),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_amplify_uibuilder_component.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1145,7 +1145,7 @@ def _cloudformation_aws_amplify_uibuilder_form_impl(ctx):
         "Style": parse_json_or_none(ctx.attr.Style),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_amplify_uibuilder_form.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1218,7 +1218,7 @@ def _cloudformation_aws_amplify_uibuilder_theme_impl(ctx):
         "Tags": ctx.attr.Tags,
         "Values": parse_json_or_none(ctx.attr.Values),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_amplify_uibuilder_theme.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1268,7 +1268,7 @@ def _cloudformation_aws_api_gateway_account_impl(ctx):
     payload = {
         "CloudWatchRoleArn": ctx.attr.CloudWatchRoleArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_account.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1310,7 +1310,7 @@ def _cloudformation_aws_api_gateway_api_key_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Value": ctx.attr.Value,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_api_key.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1375,7 +1375,7 @@ def _cloudformation_aws_api_gateway_authorizer_impl(ctx):
         "RestApiId": ctx.attr.RestApiId,
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_authorizer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1441,7 +1441,7 @@ def _cloudformation_aws_api_gateway_base_path_mapping_impl(ctx):
         "RestApiId": ctx.attr.RestApiId,
         "Stage": ctx.attr.Stage,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_base_path_mapping.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1491,7 +1491,7 @@ def _cloudformation_aws_api_gateway_base_path_mapping_v2_impl(ctx):
         "RestApiId": ctx.attr.RestApiId,
         "Stage": ctx.attr.Stage,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_base_path_mapping_v2.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1536,7 +1536,7 @@ def _cloudformation_aws_api_gateway_client_certificate_impl(ctx):
         "Description": ctx.attr.Description,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_client_certificate.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1578,7 +1578,7 @@ def _cloudformation_aws_api_gateway_deployment_impl(ctx):
         "StageDescription": parse_json_or_none(ctx.attr.StageDescription),
         "StageName": ctx.attr.StageName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_deployment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1627,7 +1627,7 @@ def _cloudformation_aws_api_gateway_documentation_part_impl(ctx):
         "Properties": ctx.attr.Properties,
         "RestApiId": ctx.attr.RestApiId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_documentation_part.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1670,7 +1670,7 @@ def _cloudformation_aws_api_gateway_documentation_version_impl(ctx):
         "DocumentationVersion": ctx.attr.DocumentationVersion,
         "RestApiId": ctx.attr.RestApiId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_documentation_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1720,7 +1720,7 @@ def _cloudformation_aws_api_gateway_domain_name_impl(ctx):
         "SecurityPolicy": ctx.attr.SecurityPolicy,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_domain_name.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1785,7 +1785,7 @@ def _cloudformation_aws_api_gateway_domain_name_access_association_impl(ctx):
         "DomainNameArn": ctx.attr.DomainNameArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_domain_name_access_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1836,7 +1836,7 @@ def _cloudformation_aws_api_gateway_domain_name_v2_impl(ctx):
         "SecurityPolicy": ctx.attr.SecurityPolicy,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_domain_name_v2.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1896,7 +1896,7 @@ def _cloudformation_aws_api_gateway_gateway_response_impl(ctx):
         "RestApiId": ctx.attr.RestApiId,
         "StatusCode": ctx.attr.StatusCode,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_gateway_response.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -1955,7 +1955,7 @@ def _cloudformation_aws_api_gateway_method_impl(ctx):
         "ResourceId": ctx.attr.ResourceId,
         "RestApiId": ctx.attr.RestApiId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_method.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2030,7 +2030,7 @@ def _cloudformation_aws_api_gateway_model_impl(ctx):
         "RestApiId": ctx.attr.RestApiId,
         "Schema": parse_json_or_none(ctx.attr.Schema),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_model.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2080,7 +2080,7 @@ def _cloudformation_aws_api_gateway_request_validator_impl(ctx):
         "ValidateRequestBody": parse_json_or_none(ctx.attr.ValidateRequestBody),
         "ValidateRequestParameters": parse_json_or_none(ctx.attr.ValidateRequestParameters),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_request_validator.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2126,7 +2126,7 @@ def _cloudformation_aws_api_gateway_resource_impl(ctx):
         "PathPart": ctx.attr.PathPart,
         "RestApiId": ctx.attr.RestApiId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_resource.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2183,7 +2183,7 @@ def _cloudformation_aws_api_gateway_rest_api_impl(ctx):
         "SecurityPolicy": ctx.attr.SecurityPolicy,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_rest_api.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2279,7 +2279,7 @@ def _cloudformation_aws_api_gateway_stage_impl(ctx):
         "TracingEnabled": parse_json_or_none(ctx.attr.TracingEnabled),
         "Variables": ctx.attr.Variables,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_stage.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2358,7 +2358,7 @@ def _cloudformation_aws_api_gateway_usage_plan_impl(ctx):
         "Throttle": parse_json_or_none(ctx.attr.Throttle),
         "UsagePlanName": ctx.attr.UsagePlanName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_usage_plan.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2410,7 +2410,7 @@ def _cloudformation_aws_api_gateway_usage_plan_key_impl(ctx):
         "KeyType": ctx.attr.KeyType,
         "UsagePlanId": ctx.attr.UsagePlanId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_usage_plan_key.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2468,7 +2468,7 @@ def _cloudformation_aws_api_gateway_v2_api_impl(ctx):
         "Target": ctx.attr.Target,
         "Version": ctx.attr.Version,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_api.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2557,7 +2557,7 @@ def _cloudformation_aws_api_gateway_v2_api_gateway_managed_overrides_impl(ctx):
         "Route": parse_json_or_none(ctx.attr.Route),
         "Stage": parse_json_or_none(ctx.attr.Stage),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_api_gateway_managed_overrides.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2604,7 +2604,7 @@ def _cloudformation_aws_api_gateway_v2_api_mapping_impl(ctx):
         "DomainName": ctx.attr.DomainName,
         "Stage": ctx.attr.Stage,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_api_mapping.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2658,7 +2658,7 @@ def _cloudformation_aws_api_gateway_v2_authorizer_impl(ctx):
         "JwtConfiguration": parse_json_or_none(ctx.attr.JwtConfiguration),
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_authorizer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2725,7 +2725,7 @@ def _cloudformation_aws_api_gateway_v2_deployment_impl(ctx):
         "Description": ctx.attr.Description,
         "StageName": ctx.attr.StageName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_deployment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2770,7 +2770,7 @@ def _cloudformation_aws_api_gateway_v2_domain_name_impl(ctx):
         "RoutingMode": ctx.attr.RoutingMode,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_domain_name.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2834,7 +2834,7 @@ def _cloudformation_aws_api_gateway_v2_integration_impl(ctx):
         "TimeoutInMillis": parse_json_or_none(ctx.attr.TimeoutInMillis),
         "TlsConfig": parse_json_or_none(ctx.attr.TlsConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_integration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2926,7 +2926,7 @@ def _cloudformation_aws_api_gateway_v2_integration_response_impl(ctx):
         "ResponseTemplates": parse_json_or_none(ctx.attr.ResponseTemplates),
         "TemplateSelectionExpression": ctx.attr.TemplateSelectionExpression,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_integration_response.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -2983,7 +2983,7 @@ def _cloudformation_aws_api_gateway_v2_model_impl(ctx):
         "Name": ctx.attr.Name,
         "Schema": parse_json_or_none(ctx.attr.Schema),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_model.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3032,7 +3032,7 @@ def _cloudformation_aws_api_gateway_v2_portal_product_impl(ctx):
         "DisplayName": ctx.attr.DisplayName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_portal_product.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3084,7 +3084,7 @@ def _cloudformation_aws_api_gateway_v2_route_impl(ctx):
         "RouteResponseSelectionExpression": ctx.attr.RouteResponseSelectionExpression,
         "Target": ctx.attr.Target,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_route.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3157,7 +3157,7 @@ def _cloudformation_aws_api_gateway_v2_route_response_impl(ctx):
         "RouteId": ctx.attr.RouteId,
         "RouteResponseKey": ctx.attr.RouteResponseKey,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_route_response.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3210,7 +3210,7 @@ def _cloudformation_aws_api_gateway_v2_routing_rule_impl(ctx):
         "DomainNameArn": ctx.attr.DomainNameArn,
         "Priority": parse_json_or_none(ctx.attr.Priority),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_routing_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3264,7 +3264,7 @@ def _cloudformation_aws_api_gateway_v2_stage_impl(ctx):
         "StageVariables": parse_json_or_none(ctx.attr.StageVariables),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_stage.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3332,7 +3332,7 @@ def _cloudformation_aws_api_gateway_v2_vpc_link_impl(ctx):
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_vpc_link.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3379,7 +3379,7 @@ def _cloudformation_aws_api_gateway_vpc_link_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetArns": parse_json_or_none(ctx.attr.TargetArns),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_vpc_link.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3425,7 +3425,7 @@ def _cloudformation_aws_app_config_application_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_config_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3475,7 +3475,7 @@ def _cloudformation_aws_app_config_configuration_profile_impl(ctx):
         "Type": ctx.attr.Type,
         "Validators": parse_json_or_none(ctx.attr.Validators),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_config_configuration_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3545,7 +3545,7 @@ def _cloudformation_aws_app_config_deployment_impl(ctx):
         "KmsKeyIdentifier": ctx.attr.KmsKeyIdentifier,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_config_deployment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3611,7 +3611,7 @@ def _cloudformation_aws_app_config_deployment_strategy_impl(ctx):
         "ReplicateTo": ctx.attr.ReplicateTo,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_config_deployment_strategy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3672,7 +3672,7 @@ def _cloudformation_aws_app_config_environment_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_config_environment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3733,7 +3733,7 @@ def _cloudformation_aws_app_config_experiment_definition_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Treatments": parse_json_or_none(ctx.attr.Treatments),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_config_experiment_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3806,7 +3806,7 @@ def _cloudformation_aws_app_config_extension_impl(ctx):
         "Parameters": parse_json_or_none(ctx.attr.Parameters),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_config_extension.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3860,7 +3860,7 @@ def _cloudformation_aws_app_config_extension_association_impl(ctx):
         "ResourceIdentifier": ctx.attr.ResourceIdentifier,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_config_extension_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3913,7 +3913,7 @@ def _cloudformation_aws_app_config_hosted_configuration_version_impl(ctx):
         "LatestVersionNumber": parse_json_or_none(ctx.attr.LatestVersionNumber),
         "VersionLabel": ctx.attr.VersionLabel,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_config_hosted_configuration_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -3969,7 +3969,7 @@ def _cloudformation_aws_app_flow_connector_impl(ctx):
         "ConnectorProvisioningType": ctx.attr.ConnectorProvisioningType,
         "Description": ctx.attr.Description,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_flow_connector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4018,7 +4018,7 @@ def _cloudformation_aws_app_flow_connector_profile_impl(ctx):
         "ConnectorType": ctx.attr.ConnectorType,
         "KMSArn": ctx.attr.KMSArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_flow_connector_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4077,7 +4077,7 @@ def _cloudformation_aws_app_flow_flow_impl(ctx):
         "Tasks": parse_json_or_none(ctx.attr.Tasks),
         "TriggerConfig": parse_json_or_none(ctx.attr.TriggerConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_flow_flow.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4149,7 +4149,7 @@ def _cloudformation_aws_app_integrations_application_impl(ctx):
         "Permissions": parse_json_or_none(ctx.attr.Permissions),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_integrations_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4221,7 +4221,7 @@ def _cloudformation_aws_app_integrations_data_integration_impl(ctx):
         "SourceURI": ctx.attr.SourceURI,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_integrations_data_integration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4281,7 +4281,7 @@ def _cloudformation_aws_app_integrations_event_integration_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_integrations_event_integration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4333,7 +4333,7 @@ def _cloudformation_aws_app_mesh_gateway_route_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VirtualGatewayName": ctx.attr.VirtualGatewayName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_mesh_gateway_route.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4385,7 +4385,7 @@ def _cloudformation_aws_app_mesh_mesh_impl(ctx):
         "Spec": parse_json_or_none(ctx.attr.Spec),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_mesh_mesh.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4431,7 +4431,7 @@ def _cloudformation_aws_app_mesh_route_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VirtualRouterName": ctx.attr.VirtualRouterName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_mesh_route.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4485,7 +4485,7 @@ def _cloudformation_aws_app_mesh_virtual_gateway_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VirtualGatewayName": ctx.attr.VirtualGatewayName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_mesh_virtual_gateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4536,7 +4536,7 @@ def _cloudformation_aws_app_mesh_virtual_node_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VirtualNodeName": ctx.attr.VirtualNodeName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_mesh_virtual_node.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4587,7 +4587,7 @@ def _cloudformation_aws_app_mesh_virtual_router_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VirtualRouterName": ctx.attr.VirtualRouterName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_mesh_virtual_router.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4638,7 +4638,7 @@ def _cloudformation_aws_app_mesh_virtual_service_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VirtualServiceName": ctx.attr.VirtualServiceName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_mesh_virtual_service.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4689,7 +4689,7 @@ def _cloudformation_aws_app_runner_auto_scaling_configuration_impl(ctx):
         "MinSize": parse_json_or_none(ctx.attr.MinSize),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_runner_auto_scaling_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4738,7 +4738,7 @@ def _cloudformation_aws_app_runner_observability_configuration_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TraceConfiguration": parse_json_or_none(ctx.attr.TraceConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_runner_observability_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4787,7 +4787,7 @@ def _cloudformation_aws_app_runner_service_impl(ctx):
         "SourceConfiguration": parse_json_or_none(ctx.attr.SourceConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_runner_service.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4849,7 +4849,7 @@ def _cloudformation_aws_app_runner_vpc_connector_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcConnectorName": ctx.attr.VpcConnectorName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_runner_vpc_connector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4896,7 +4896,7 @@ def _cloudformation_aws_app_runner_vpc_ingress_connection_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcIngressConnectionName": ctx.attr.VpcIngressConnectionName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_runner_vpc_ingress_connection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -4947,7 +4947,7 @@ def _cloudformation_aws_app_stream_app_block_impl(ctx):
         "SourceS3Location": parse_json_or_none(ctx.attr.SourceS3Location),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_stream_app_block.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5013,7 +5013,7 @@ def _cloudformation_aws_app_stream_app_block_builder_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_stream_app_block_builder.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5089,7 +5089,7 @@ def _cloudformation_aws_app_stream_application_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WorkingDirectory": ctx.attr.WorkingDirectory,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_stream_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5159,7 +5159,7 @@ def _cloudformation_aws_app_stream_application_entitlement_association_impl(ctx)
         "EntitlementName": ctx.attr.EntitlementName,
         "StackName": ctx.attr.StackName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_stream_application_entitlement_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5201,7 +5201,7 @@ def _cloudformation_aws_app_stream_application_fleet_association_impl(ctx):
         "ApplicationArn": ctx.attr.ApplicationArn,
         "FleetName": ctx.attr.FleetName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_stream_application_fleet_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5242,7 +5242,7 @@ def _cloudformation_aws_app_stream_directory_config_impl(ctx):
         "OrganizationalUnitDistinguishedNames": parse_json_or_none(ctx.attr.OrganizationalUnitDistinguishedNames),
         "ServiceAccountCredentials": parse_json_or_none(ctx.attr.ServiceAccountCredentials),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_stream_directory_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5290,7 +5290,7 @@ def _cloudformation_aws_app_stream_entitlement_impl(ctx):
         "Name": ctx.attr.Name,
         "StackName": ctx.attr.StackName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_stream_entitlement.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5360,7 +5360,7 @@ def _cloudformation_aws_app_stream_fleet_impl(ctx):
         "UsbDeviceFilterStrings": parse_json_or_none(ctx.attr.UsbDeviceFilterStrings),
         "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_stream_fleet.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5479,7 +5479,7 @@ def _cloudformation_aws_app_stream_image_builder_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_stream_image_builder.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5574,7 +5574,7 @@ def _cloudformation_aws_app_stream_stack_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UserSettings": parse_json_or_none(ctx.attr.UserSettings),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_stream_stack.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5655,7 +5655,7 @@ def _cloudformation_aws_app_stream_stack_fleet_association_impl(ctx):
         "FleetName": ctx.attr.FleetName,
         "StackName": ctx.attr.StackName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_stream_stack_fleet_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5696,7 +5696,7 @@ def _cloudformation_aws_app_stream_stack_user_association_impl(ctx):
         "StackName": ctx.attr.StackName,
         "UserName": ctx.attr.UserName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_stream_stack_user_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5744,7 +5744,7 @@ def _cloudformation_aws_app_stream_user_impl(ctx):
         "MessageAction": ctx.attr.MessageAction,
         "UserName": ctx.attr.UserName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_stream_user.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5794,7 +5794,7 @@ def _cloudformation_aws_app_sync_api_impl(ctx):
         "OwnerContact": ctx.attr.OwnerContact,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_sync_api.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5844,7 +5844,7 @@ def _cloudformation_aws_app_sync_api_cache_impl(ctx):
         "Ttl": parse_json_or_none(ctx.attr.Ttl),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_sync_api_cache.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5900,7 +5900,7 @@ def _cloudformation_aws_app_sync_api_key_impl(ctx):
         "Description": ctx.attr.Description,
         "Expires": parse_json_or_none(ctx.attr.Expires),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_sync_api_key.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -5951,7 +5951,7 @@ def _cloudformation_aws_app_sync_channel_namespace_impl(ctx):
         "SubscribeAuthModes": parse_json_or_none(ctx.attr.SubscribeAuthModes),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_sync_channel_namespace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6018,7 +6018,7 @@ def _cloudformation_aws_app_sync_data_source_impl(ctx):
         "ServiceRoleArn": ctx.attr.ServiceRoleArn,
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_sync_data_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6089,7 +6089,7 @@ def _cloudformation_aws_app_sync_domain_name_impl(ctx):
         "DomainName": ctx.attr.DomainName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_sync_domain_name.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6134,7 +6134,7 @@ def _cloudformation_aws_app_sync_domain_name_api_association_impl(ctx):
         "ApiId": ctx.attr.ApiId,
         "DomainName": ctx.attr.DomainName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_sync_domain_name_api_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6185,7 +6185,7 @@ def _cloudformation_aws_app_sync_function_configuration_impl(ctx):
         "Runtime": parse_json_or_none(ctx.attr.Runtime),
         "SyncConfig": parse_json_or_none(ctx.attr.SyncConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_sync_function_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6276,7 +6276,7 @@ def _cloudformation_aws_app_sync_graph_qlapi_impl(ctx):
         "Visibility": ctx.attr.Visibility,
         "XrayEnabled": parse_json_or_none(ctx.attr.XrayEnabled),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_sync_graph_qlapi.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6364,7 +6364,7 @@ def _cloudformation_aws_app_sync_graph_qlschema_impl(ctx):
         "Definition": ctx.attr.Definition,
         "DefinitionS3Location": ctx.attr.DefinitionS3Location,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_sync_graph_qlschema.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6421,7 +6421,7 @@ def _cloudformation_aws_app_sync_resolver_impl(ctx):
         "SyncConfig": parse_json_or_none(ctx.attr.SyncConfig),
         "TypeName": ctx.attr.TypeName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_sync_resolver.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6507,7 +6507,7 @@ def _cloudformation_aws_app_sync_source_api_association_impl(ctx):
         "SourceApiAssociationConfig": parse_json_or_none(ctx.attr.SourceApiAssociationConfig),
         "SourceApiIdentifier": ctx.attr.SourceApiIdentifier,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_sync_source_api_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6554,7 +6554,7 @@ def _cloudformation_aws_app_test_test_case_impl(ctx):
         "Steps": parse_json_or_none(ctx.attr.Steps),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_test_test_case.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6605,7 +6605,7 @@ def _cloudformation_aws_application_auto_scaling_scalable_target_impl(ctx):
         "ServiceNamespace": ctx.attr.ServiceNamespace,
         "SuspendedState": parse_json_or_none(ctx.attr.SuspendedState),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_application_auto_scaling_scalable_target.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6669,7 +6669,7 @@ def _cloudformation_aws_application_auto_scaling_scaling_policy_impl(ctx):
         "StepScalingPolicyConfiguration": parse_json_or_none(ctx.attr.StepScalingPolicyConfiguration),
         "TargetTrackingScalingPolicyConfiguration": parse_json_or_none(ctx.attr.TargetTrackingScalingPolicyConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_application_auto_scaling_scaling_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6739,7 +6739,7 @@ def _cloudformation_aws_application_insights_application_impl(ctx):
         "SNSNotificationArn": ctx.attr.SNSNotificationArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_application_insights_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6806,7 +6806,7 @@ def _cloudformation_aws_application_signals_discovery_impl(ctx):
     item_name = ctx.attr.aws_application_signals_discovery_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_application_signals_discovery.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6838,7 +6838,7 @@ def _cloudformation_aws_application_signals_grouping_configuration_impl(ctx):
     payload = {
         "GroupingAttributeDefinitions": parse_json_or_none(ctx.attr.GroupingAttributeDefinitions),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_application_signals_grouping_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6880,7 +6880,7 @@ def _cloudformation_aws_application_signals_service_level_objective_impl(ctx):
         "Sli": parse_json_or_none(ctx.attr.Sli),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_application_signals_service_level_objective.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6942,7 +6942,7 @@ def _cloudformation_aws_aps_anomaly_detector_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Workspace": ctx.attr.Workspace,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_aps_anomaly_detector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -6996,7 +6996,7 @@ def _cloudformation_aws_aps_resource_policy_impl(ctx):
         "PolicyDocument": ctx.attr.PolicyDocument,
         "WorkspaceArn": ctx.attr.WorkspaceArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_aps_resource_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7037,7 +7037,7 @@ def _cloudformation_aws_aps_rule_groups_namespace_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Workspace": ctx.attr.Workspace,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_aps_rule_groups_namespace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7087,7 +7087,7 @@ def _cloudformation_aws_aps_scraper_impl(ctx):
         "Source": parse_json_or_none(ctx.attr.Source),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_aps_scraper.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7146,7 +7146,7 @@ def _cloudformation_aws_aps_workspace_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WorkspaceConfiguration": parse_json_or_none(ctx.attr.WorkspaceConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_aps_workspace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7210,7 +7210,7 @@ def _cloudformation_aws_arcregion_switch_plan_impl(ctx):
         "Triggers": parse_json_or_none(ctx.attr.Triggers),
         "Workflows": parse_json_or_none(ctx.attr.Workflows),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_arcregion_switch_plan.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7278,7 +7278,7 @@ def _cloudformation_aws_arczonal_shift_autoshift_observer_notification_status_im
     payload = {
         "Status": ctx.attr.Status,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_arczonal_shift_autoshift_observer_notification_status.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7315,7 +7315,7 @@ def _cloudformation_aws_arczonal_shift_zonal_autoshift_configuration_impl(ctx):
         "ResourceIdentifier": ctx.attr.ResourceIdentifier,
         "ZonalAutoshiftStatus": ctx.attr.ZonalAutoshiftStatus,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_arczonal_shift_zonal_autoshift_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7355,7 +7355,7 @@ def _cloudformation_aws_artifact_report_impl(ctx):
     item_name = ctx.attr.aws_artifact_report_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_artifact_report.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7390,7 +7390,7 @@ def _cloudformation_aws_athena_capacity_reservation_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetDpus": parse_json_or_none(ctx.attr.TargetDpus),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_athena_capacity_reservation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7441,7 +7441,7 @@ def _cloudformation_aws_athena_data_catalog_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_athena_data_catalog.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7501,7 +7501,7 @@ def _cloudformation_aws_athena_named_query_impl(ctx):
         "QueryString": ctx.attr.QueryString,
         "WorkGroup": ctx.attr.WorkGroup,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_athena_named_query.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7551,7 +7551,7 @@ def _cloudformation_aws_athena_prepared_statement_impl(ctx):
         "StatementName": ctx.attr.StatementName,
         "WorkGroup": ctx.attr.WorkGroup,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_athena_prepared_statement.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7597,7 +7597,7 @@ def _cloudformation_aws_athena_session_impl(ctx):
         "ExecutionRole": ctx.attr.ExecutionRole,
         "WorkGroup": ctx.attr.WorkGroup,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_athena_session.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7643,7 +7643,7 @@ def _cloudformation_aws_athena_work_group_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WorkGroupConfiguration": parse_json_or_none(ctx.attr.WorkGroupConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_athena_work_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7702,7 +7702,7 @@ def _cloudformation_aws_audit_manager_assessment_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_audit_manager_assessment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7768,7 +7768,7 @@ def _cloudformation_aws_audit_manager_assessment_framework_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_audit_manager_assessment_framework.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -7851,7 +7851,7 @@ def _cloudformation_aws_auto_scaling_auto_scaling_group_impl(ctx):
         "TrafficSources": parse_json_or_none(ctx.attr.TrafficSources),
         "VPCZoneIdentifier": parse_json_or_none(ctx.attr.VPCZoneIdentifier),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_auto_scaling_auto_scaling_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8012,7 +8012,7 @@ def _cloudformation_aws_auto_scaling_launch_configuration_impl(ctx):
         "SpotPrice": ctx.attr.SpotPrice,
         "UserData": ctx.attr.UserData,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_auto_scaling_launch_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8108,7 +8108,7 @@ def _cloudformation_aws_auto_scaling_lifecycle_hook_impl(ctx):
         "NotificationTargetARN": ctx.attr.NotificationTargetARN,
         "RoleARN": ctx.attr.RoleARN,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_auto_scaling_lifecycle_hook.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8165,7 +8165,7 @@ def _cloudformation_aws_auto_scaling_plans_scaling_plan_impl(ctx):
         "ApplicationSource": parse_json_or_none(ctx.attr.ApplicationSource),
         "ScalingInstructions": parse_json_or_none(ctx.attr.ScalingInstructions),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_auto_scaling_plans_scaling_plan.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8213,7 +8213,7 @@ def _cloudformation_aws_auto_scaling_scaling_policy_impl(ctx):
         "StepAdjustments": parse_json_or_none(ctx.attr.StepAdjustments),
         "TargetTrackingConfiguration": parse_json_or_none(ctx.attr.TargetTrackingConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_auto_scaling_scaling_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8285,7 +8285,7 @@ def _cloudformation_aws_auto_scaling_scheduled_action_impl(ctx):
         "StartTime": ctx.attr.StartTime,
         "TimeZone": ctx.attr.TimeZone,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_auto_scaling_scheduled_action.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8345,7 +8345,7 @@ def _cloudformation_aws_auto_scaling_warm_pool_impl(ctx):
         "MinSize": parse_json_or_none(ctx.attr.MinSize),
         "PoolState": ctx.attr.PoolState,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_auto_scaling_warm_pool.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8394,7 +8394,7 @@ def _cloudformation_aws_awsexternal_anthropic_workspace_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_awsexternal_anthropic_workspace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8439,7 +8439,7 @@ def _cloudformation_aws_b2_bi_capability_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_b2_bi_capability.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8492,7 +8492,7 @@ def _cloudformation_aws_b2_bi_partnership_impl(ctx):
         "ProfileId": ctx.attr.ProfileId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_b2_bi_partnership.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8550,7 +8550,7 @@ def _cloudformation_aws_b2_bi_profile_impl(ctx):
         "Phone": ctx.attr.Phone,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_b2_bi_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8606,7 +8606,7 @@ def _cloudformation_aws_b2_bi_transformer_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_b2_bi_transformer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8660,7 +8660,7 @@ def _cloudformation_aws_backup_backup_plan_impl(ctx):
         "BackupPlan": parse_json_or_none(ctx.attr.BackupPlan),
         "BackupPlanTags": ctx.attr.BackupPlanTags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_backup_backup_plan.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8699,7 +8699,7 @@ def _cloudformation_aws_backup_backup_selection_impl(ctx):
         "BackupPlanId": ctx.attr.BackupPlanId,
         "BackupSelection": parse_json_or_none(ctx.attr.BackupSelection),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_backup_backup_selection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8742,7 +8742,7 @@ def _cloudformation_aws_backup_backup_vault_impl(ctx):
         "LockConfiguration": parse_json_or_none(ctx.attr.LockConfiguration),
         "Notifications": parse_json_or_none(ctx.attr.Notifications),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_backup_backup_vault.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8795,7 +8795,7 @@ def _cloudformation_aws_backup_framework_impl(ctx):
         "FrameworkName": ctx.attr.FrameworkName,
         "FrameworkTags": parse_json_or_none(ctx.attr.FrameworkTags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_backup_framework.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8845,7 +8845,7 @@ def _cloudformation_aws_backup_gateway_hypervisor_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Username": ctx.attr.Username,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_backup_gateway_hypervisor.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8901,7 +8901,7 @@ def _cloudformation_aws_backup_legal_hold_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Title": ctx.attr.Title,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_backup_legal_hold.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -8952,7 +8952,7 @@ def _cloudformation_aws_backup_logically_air_gapped_backup_vault_impl(ctx):
         "MpaApprovalTeamArn": ctx.attr.MpaApprovalTeamArn,
         "Notifications": parse_json_or_none(ctx.attr.Notifications),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_backup_logically_air_gapped_backup_vault.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9012,7 +9012,7 @@ def _cloudformation_aws_backup_report_plan_impl(ctx):
         "ReportPlanTags": parse_json_or_none(ctx.attr.ReportPlanTags),
         "ReportSetting": parse_json_or_none(ctx.attr.ReportSetting),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_backup_report_plan.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9064,7 +9064,7 @@ def _cloudformation_aws_backup_restore_testing_plan_impl(ctx):
         "StartWindowHours": parse_json_or_none(ctx.attr.StartWindowHours),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_backup_restore_testing_plan.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9121,7 +9121,7 @@ def _cloudformation_aws_backup_restore_testing_selection_impl(ctx):
         "RestoreTestingSelectionName": ctx.attr.RestoreTestingSelectionName,
         "ValidationWindowHours": parse_json_or_none(ctx.attr.ValidationWindowHours),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_backup_restore_testing_selection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9179,7 +9179,7 @@ def _cloudformation_aws_backup_search_search_job_impl(ctx):
         "SearchScope": parse_json_or_none(ctx.attr.SearchScope),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_backup_search_search_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9223,7 +9223,7 @@ def _cloudformation_aws_backup_tiering_configuration_impl(ctx):
         "TieringConfigurationName": ctx.attr.TieringConfigurationName,
         "TieringConfigurationTags": ctx.attr.TieringConfigurationTags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_backup_tiering_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9277,7 +9277,7 @@ def _cloudformation_aws_batch_compute_environment_impl(ctx):
         "UnmanagedvCpus": parse_json_or_none(ctx.attr.UnmanagedvCpus),
         "UpdatePolicy": parse_json_or_none(ctx.attr.UpdatePolicy),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_batch_compute_environment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9345,7 +9345,7 @@ def _cloudformation_aws_batch_consumable_resource_impl(ctx):
         "Tags": ctx.attr.Tags,
         "TotalQuantity": parse_json_or_none(ctx.attr.TotalQuantity),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_batch_consumable_resource.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9403,7 +9403,7 @@ def _cloudformation_aws_batch_job_definition_impl(ctx):
         "Timeout": parse_json_or_none(ctx.attr.Timeout),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_batch_job_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9488,7 +9488,7 @@ def _cloudformation_aws_batch_job_queue_impl(ctx):
         "State": ctx.attr.State,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_batch_job_queue.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9553,7 +9553,7 @@ def _cloudformation_aws_batch_quota_share_impl(ctx):
         "State": ctx.attr.State,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_batch_quota_share.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9609,7 +9609,7 @@ def _cloudformation_aws_batch_scheduling_policy_impl(ctx):
         "QuotaSharePolicy": parse_json_or_none(ctx.attr.QuotaSharePolicy),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_batch_scheduling_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9657,7 +9657,7 @@ def _cloudformation_aws_batch_service_environment_impl(ctx):
         "State": ctx.attr.State,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_batch_service_environment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9707,7 +9707,7 @@ def _cloudformation_aws_bcm_dashboard_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Widgets": parse_json_or_none(ctx.attr.Widgets),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bcm_dashboard.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9755,7 +9755,7 @@ def _cloudformation_aws_bcm_pricing_calculator_bill_scenario_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bcm_pricing_calculator_bill_scenario.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9803,7 +9803,7 @@ def _cloudformation_aws_bcmdata_exports_export_impl(ctx):
         "Export": parse_json_or_none(ctx.attr.Export),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bcmdata_exports_export.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9841,7 +9841,7 @@ def _cloudformation_aws_bcmdata_exports_table_impl(ctx):
     payload = {
         "TableName": ctx.attr.TableName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bcmdata_exports_table.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9895,7 +9895,7 @@ def _cloudformation_aws_bedrock_agent_impl(ctx):
         "Tags": ctx.attr.Tags,
         "TestAliasTags": ctx.attr.TestAliasTags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -9991,7 +9991,7 @@ def _cloudformation_aws_bedrock_agent_alias_impl(ctx):
         "RoutingConfiguration": parse_json_or_none(ctx.attr.RoutingConfiguration),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_alias.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10042,7 +10042,7 @@ def _cloudformation_aws_bedrock_agent_core_api_key_credential_provider_impl(ctx)
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_api_key_credential_provider.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10088,7 +10088,7 @@ def _cloudformation_aws_bedrock_agent_core_browser_impl(ctx):
     item_name = ctx.attr.aws_bedrock_agent_core_browser_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_browser.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10128,7 +10128,7 @@ def _cloudformation_aws_bedrock_agent_core_browser_custom_impl(ctx):
         "RecordingConfig": parse_json_or_none(ctx.attr.RecordingConfig),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_browser_custom.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10189,7 +10189,7 @@ def _cloudformation_aws_bedrock_agent_core_browser_profile_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_browser_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10234,7 +10234,7 @@ def _cloudformation_aws_bedrock_agent_core_capacity_provider_impl(ctx):
         "PermissionsConfiguration": parse_json_or_none(ctx.attr.PermissionsConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_capacity_provider.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10280,7 +10280,7 @@ def _cloudformation_aws_bedrock_agent_core_code_interpreter_impl(ctx):
     item_name = ctx.attr.aws_bedrock_agent_core_code_interpreter_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_code_interpreter.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10317,7 +10317,7 @@ def _cloudformation_aws_bedrock_agent_core_code_interpreter_custom_impl(ctx):
         "NetworkConfiguration": parse_json_or_none(ctx.attr.NetworkConfiguration),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_code_interpreter_custom.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10374,7 +10374,7 @@ def _cloudformation_aws_bedrock_agent_core_configuration_bundle_impl(ctx):
         "KmsKeyArn": ctx.attr.KmsKeyArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_configuration_bundle.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10433,7 +10433,7 @@ def _cloudformation_aws_bedrock_agent_core_configuration_bundle_version_impl(ctx
         "Components": parse_json_or_none(ctx.attr.Components),
         "CreatedBy": parse_json_or_none(ctx.attr.CreatedBy),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_configuration_bundle_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10482,7 +10482,7 @@ def _cloudformation_aws_bedrock_agent_core_dataset_impl(ctx):
         "Source": parse_json_or_none(ctx.attr.Source),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_dataset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10537,7 +10537,7 @@ def _cloudformation_aws_bedrock_agent_core_evaluator_impl(ctx):
         "Level": ctx.attr.Level,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_evaluator.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10598,7 +10598,7 @@ def _cloudformation_aws_bedrock_agent_core_gateway_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_gateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10670,7 +10670,7 @@ def _cloudformation_aws_bedrock_agent_core_gateway_rate_limit_impl(ctx):
         "GatewayIdentifier": ctx.attr.GatewayIdentifier,
         "RateLimitId": ctx.attr.RateLimitId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_gateway_rate_limit.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10721,7 +10721,7 @@ def _cloudformation_aws_bedrock_agent_core_gateway_rule_impl(ctx):
         "GatewayIdentifier": ctx.attr.GatewayIdentifier,
         "Priority": parse_json_or_none(ctx.attr.Priority),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_gateway_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10774,7 +10774,7 @@ def _cloudformation_aws_bedrock_agent_core_gateway_target_impl(ctx):
         "PrivateEndpoint": parse_json_or_none(ctx.attr.PrivateEndpoint),
         "TargetConfiguration": parse_json_or_none(ctx.attr.TargetConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_gateway_target.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10843,7 +10843,7 @@ def _cloudformation_aws_bedrock_agent_core_harness_impl(ctx):
         "Tools": parse_json_or_none(ctx.attr.Tools),
         "Truncation": parse_json_or_none(ctx.attr.Truncation),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_harness.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10930,7 +10930,7 @@ def _cloudformation_aws_bedrock_agent_core_harness_endpoint_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetVersion": ctx.attr.TargetVersion,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_harness_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -10977,7 +10977,7 @@ def _cloudformation_aws_bedrock_agent_core_harness_version_impl(ctx):
     payload = {
         "HarnessId": ctx.attr.HarnessId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_harness_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11020,7 +11020,7 @@ def _cloudformation_aws_bedrock_agent_core_memory_impl(ctx):
         "StreamDeliveryResources": parse_json_or_none(ctx.attr.StreamDeliveryResources),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_memory.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11082,7 +11082,7 @@ def _cloudformation_aws_bedrock_agent_core_oauth2_credential_provider_impl(ctx):
         "Oauth2ProviderConfigInput": parse_json_or_none(ctx.attr.Oauth2ProviderConfigInput),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_oauth2_credential_provider.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11135,7 +11135,7 @@ def _cloudformation_aws_bedrock_agent_core_online_evaluation_config_impl(ctx):
         "Rule": parse_json_or_none(ctx.attr.Rule),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_online_evaluation_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11201,7 +11201,7 @@ def _cloudformation_aws_bedrock_agent_core_payment_connector_impl(ctx):
         "Description": ctx.attr.Description,
         "PaymentManagerId": ctx.attr.PaymentManagerId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_payment_connector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11251,7 +11251,7 @@ def _cloudformation_aws_bedrock_agent_core_payment_credential_provider_impl(ctx)
         "ProviderConfigurationInput": parse_json_or_none(ctx.attr.ProviderConfigurationInput),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_payment_credential_provider.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11300,7 +11300,7 @@ def _cloudformation_aws_bedrock_agent_core_payment_manager_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_payment_manager.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11355,7 +11355,7 @@ def _cloudformation_aws_bedrock_agent_core_policy_impl(ctx):
         "PolicyEngineId": ctx.attr.PolicyEngineId,
         "ValidationMode": ctx.attr.ValidationMode,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11408,7 +11408,7 @@ def _cloudformation_aws_bedrock_agent_core_policy_engine_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_policy_engine.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11454,7 +11454,7 @@ def _cloudformation_aws_bedrock_agent_core_policy_generation_impl(ctx):
         "PolicyEngineId": ctx.attr.PolicyEngineId,
         "Resource": parse_json_or_none(ctx.attr.Resource),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_policy_generation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11496,7 +11496,7 @@ def _cloudformation_aws_bedrock_agent_core_resource_policy_impl(ctx):
         "Policy": ctx.attr.Policy,
         "ResourceArn": ctx.attr.ResourceArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_resource_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11545,7 +11545,7 @@ def _cloudformation_aws_bedrock_agent_core_runtime_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_runtime.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11617,7 +11617,7 @@ def _cloudformation_aws_bedrock_agent_core_runtime_endpoint_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_runtime_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11663,7 +11663,7 @@ def _cloudformation_aws_bedrock_agent_core_token_vault_impl(ctx):
     item_name = ctx.attr.aws_bedrock_agent_core_token_vault_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_token_vault.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11697,7 +11697,7 @@ def _cloudformation_aws_bedrock_agent_core_workload_identity_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_workload_identity.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11741,7 +11741,7 @@ def _cloudformation_aws_bedrock_application_inference_profile_impl(ctx):
         "ModelSource": parse_json_or_none(ctx.attr.ModelSource),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_application_inference_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11785,7 +11785,7 @@ def _cloudformation_aws_bedrock_async_invoke_impl(ctx):
     payload = {
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_async_invoke.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11825,7 +11825,7 @@ def _cloudformation_aws_bedrock_automated_reasoning_policy_impl(ctx):
         "PolicyDefinition": parse_json_or_none(ctx.attr.PolicyDefinition),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_automated_reasoning_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11877,7 +11877,7 @@ def _cloudformation_aws_bedrock_automated_reasoning_policy_version_impl(ctx):
         "PolicyArn": ctx.attr.PolicyArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_automated_reasoning_policy_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11923,7 +11923,7 @@ def _cloudformation_aws_bedrock_blueprint_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_blueprint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -11976,7 +11976,7 @@ def _cloudformation_aws_bedrock_data_automation_library_impl(ctx):
         "LibraryName": ctx.attr.LibraryName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_data_automation_library.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12028,7 +12028,7 @@ def _cloudformation_aws_bedrock_data_automation_project_impl(ctx):
         "StandardOutputConfiguration": parse_json_or_none(ctx.attr.StandardOutputConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_data_automation_project.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12093,7 +12093,7 @@ def _cloudformation_aws_bedrock_data_source_impl(ctx):
         "ServerSideEncryptionConfiguration": parse_json_or_none(ctx.attr.ServerSideEncryptionConfiguration),
         "VectorIngestionConfiguration": parse_json_or_none(ctx.attr.VectorIngestionConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_data_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12145,7 +12145,7 @@ def _cloudformation_aws_bedrock_default_prompt_router_impl(ctx):
     item_name = ctx.attr.aws_bedrock_default_prompt_router_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_default_prompt_router.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12180,7 +12180,7 @@ def _cloudformation_aws_bedrock_enforced_guardrail_configuration_impl(ctx):
         "ModelEnforcement": parse_json_or_none(ctx.attr.ModelEnforcement),
         "SelectiveContentGuarding": parse_json_or_none(ctx.attr.SelectiveContentGuarding),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_enforced_guardrail_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12233,7 +12233,7 @@ def _cloudformation_aws_bedrock_flow_impl(ctx):
         "Tags": ctx.attr.Tags,
         "TestAliasTags": ctx.attr.TestAliasTags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_flow.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12300,7 +12300,7 @@ def _cloudformation_aws_bedrock_flow_alias_impl(ctx):
         "RoutingConfiguration": parse_json_or_none(ctx.attr.RoutingConfiguration),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_flow_alias.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12351,7 +12351,7 @@ def _cloudformation_aws_bedrock_flow_version_impl(ctx):
         "Description": ctx.attr.Description,
         "FlowArn": ctx.attr.FlowArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_flow_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12388,7 +12388,7 @@ def _cloudformation_aws_bedrock_foundation_model_impl(ctx):
     item_name = ctx.attr.aws_bedrock_foundation_model_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_foundation_model.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12432,7 +12432,7 @@ def _cloudformation_aws_bedrock_guardrail_impl(ctx):
         "TopicPolicyConfig": parse_json_or_none(ctx.attr.TopicPolicyConfig),
         "WordPolicyConfig": parse_json_or_none(ctx.attr.WordPolicyConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_guardrail.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12504,7 +12504,7 @@ def _cloudformation_aws_bedrock_guardrail_version_impl(ctx):
         "Description": ctx.attr.Description,
         "GuardrailIdentifier": ctx.attr.GuardrailIdentifier,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_guardrail_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12547,7 +12547,7 @@ def _cloudformation_aws_bedrock_intelligent_prompt_router_impl(ctx):
         "RoutingCriteria": parse_json_or_none(ctx.attr.RoutingCriteria),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_intelligent_prompt_router.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12602,7 +12602,7 @@ def _cloudformation_aws_bedrock_knowledge_base_impl(ctx):
         "StorageConfiguration": parse_json_or_none(ctx.attr.StorageConfiguration),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_knowledge_base.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12653,7 +12653,7 @@ def _cloudformation_aws_bedrock_knowledge_base_policy_impl(ctx):
         "KnowledgeBaseId": ctx.attr.KnowledgeBaseId,
         "PolicyDocument": parse_json_or_none(ctx.attr.PolicyDocument),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_knowledge_base_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12692,7 +12692,7 @@ def _cloudformation_aws_bedrock_mantle_project_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_mantle_project.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12734,7 +12734,7 @@ def _cloudformation_aws_bedrock_model_import_job_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_model_import_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12780,7 +12780,7 @@ def _cloudformation_aws_bedrock_model_invocation_job_impl(ctx):
     item_name = ctx.attr.aws_bedrock_model_invocation_job_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_model_invocation_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12817,7 +12817,7 @@ def _cloudformation_aws_bedrock_prompt_impl(ctx):
         "Tags": ctx.attr.Tags,
         "Variants": parse_json_or_none(ctx.attr.Variants),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_prompt.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12869,7 +12869,7 @@ def _cloudformation_aws_bedrock_prompt_version_impl(ctx):
         "PromptArn": ctx.attr.PromptArn,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_prompt_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12911,7 +12911,7 @@ def _cloudformation_aws_bedrock_resource_policy_impl(ctx):
         "PolicyDocument": parse_json_or_none(ctx.attr.PolicyDocument),
         "ResourceArn": ctx.attr.ResourceArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_resource_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12951,7 +12951,7 @@ def _cloudformation_aws_bedrock_session_impl(ctx):
         "SessionMetadata": ctx.attr.SessionMetadata,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_session.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -12996,7 +12996,7 @@ def _cloudformation_aws_billing_billing_view_impl(ctx):
         "SourceViews": parse_json_or_none(ctx.attr.SourceViews),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_billing_billing_view.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13048,7 +13048,7 @@ def _cloudformation_aws_billing_conductor_billing_group_impl(ctx):
         "PrimaryAccountId": ctx.attr.PrimaryAccountId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_billing_conductor_billing_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13106,7 +13106,7 @@ def _cloudformation_aws_billing_conductor_custom_line_item_impl(ctx):
         "PresentationDetails": parse_json_or_none(ctx.attr.PresentationDetails),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_billing_conductor_custom_line_item.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13168,7 +13168,7 @@ def _cloudformation_aws_billing_conductor_pricing_plan_impl(ctx):
         "PricingRuleArns": parse_json_or_none(ctx.attr.PricingRuleArns),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_billing_conductor_pricing_plan.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13222,7 +13222,7 @@ def _cloudformation_aws_billing_conductor_pricing_rule_impl(ctx):
         "Type": ctx.attr.Type,
         "UsageType": ctx.attr.UsageType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_billing_conductor_pricing_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13297,7 +13297,7 @@ def _cloudformation_aws_braket_job_impl(ctx):
         "StoppingCondition": parse_json_or_none(ctx.attr.StoppingCondition),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_braket_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13365,7 +13365,7 @@ def _cloudformation_aws_braket_spending_limit_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TimePeriod": parse_json_or_none(ctx.attr.TimePeriod),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_braket_spending_limit.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13411,7 +13411,7 @@ def _cloudformation_aws_budgets_budget_impl(ctx):
         "NotificationsWithSubscribers": parse_json_or_none(ctx.attr.NotificationsWithSubscribers),
         "ResourceTags": parse_json_or_none(ctx.attr.ResourceTags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_budgets_budget.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13460,7 +13460,7 @@ def _cloudformation_aws_budgets_budgets_action_impl(ctx):
         "ResourceTags": parse_json_or_none(ctx.attr.ResourceTags),
         "Subscribers": parse_json_or_none(ctx.attr.Subscribers),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_budgets_budgets_action.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13523,7 +13523,7 @@ def _cloudformation_aws_cases_case_rule_impl(ctx):
         "Rule": parse_json_or_none(ctx.attr.Rule),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cases_case_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13571,7 +13571,7 @@ def _cloudformation_aws_cases_domain_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cases_domain.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13614,7 +13614,7 @@ def _cloudformation_aws_cases_field_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cases_field.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13667,7 +13667,7 @@ def _cloudformation_aws_cases_layout_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cases_layout.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13718,7 +13718,7 @@ def _cloudformation_aws_cases_template_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cases_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13777,7 +13777,7 @@ def _cloudformation_aws_cassandra_keyspace_impl(ctx):
         "ReplicationSpecification": parse_json_or_none(ctx.attr.ReplicationSpecification),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cassandra_keyspace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13823,7 +13823,7 @@ def _cloudformation_aws_cassandra_stream_impl(ctx):
         "StreamViewType": ctx.attr.StreamViewType,
         "TableName": ctx.attr.TableName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cassandra_stream.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13878,7 +13878,7 @@ def _cloudformation_aws_cassandra_table_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WarmThroughput": parse_json_or_none(ctx.attr.WarmThroughput),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cassandra_table.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -13957,7 +13957,7 @@ def _cloudformation_aws_cassandra_type_impl(ctx):
         "KeyspaceName": ctx.attr.KeyspaceName,
         "TypeName": ctx.attr.TypeName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cassandra_type.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14002,7 +14002,7 @@ def _cloudformation_aws_ce_anomaly_monitor_impl(ctx):
         "MonitorType": ctx.attr.MonitorType,
         "ResourceTags": parse_json_or_none(ctx.attr.ResourceTags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ce_anomaly_monitor.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14055,7 +14055,7 @@ def _cloudformation_aws_ce_anomaly_subscription_impl(ctx):
         "Threshold": parse_json_or_none(ctx.attr.Threshold),
         "ThresholdExpression": ctx.attr.ThresholdExpression,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ce_anomaly_subscription.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14113,7 +14113,7 @@ def _cloudformation_aws_ce_cost_category_impl(ctx):
         "SplitChargeRules": ctx.attr.SplitChargeRules,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ce_cost_category.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14163,7 +14163,7 @@ def _cloudformation_aws_certificate_manager_account_impl(ctx):
     payload = {
         "ExpiryEventsConfiguration": parse_json_or_none(ctx.attr.ExpiryEventsConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_certificate_manager_account.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14201,7 +14201,7 @@ def _cloudformation_aws_certificate_manager_acme_domain_validation_impl(ctx):
         "PrevalidationOptions": parse_json_or_none(ctx.attr.PrevalidationOptions),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_certificate_manager_acme_domain_validation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14249,7 +14249,7 @@ def _cloudformation_aws_certificate_manager_acme_endpoint_impl(ctx):
         "Contact": ctx.attr.Contact,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_certificate_manager_acme_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14299,7 +14299,7 @@ def _cloudformation_aws_certificate_manager_acme_external_account_binding_impl(c
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_certificate_manager_acme_external_account_binding.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14351,7 +14351,7 @@ def _cloudformation_aws_certificate_manager_certificate_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "ValidationMethod": ctx.attr.ValidationMethod,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_certificate_manager_certificate.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14414,7 +14414,7 @@ def _cloudformation_aws_chatbot_custom_action_impl(ctx):
         "Definition": parse_json_or_none(ctx.attr.Definition),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_chatbot_custom_action.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14472,7 +14472,7 @@ def _cloudformation_aws_chatbot_microsoft_teams_channel_configuration_impl(ctx):
         "TeamsTenantId": ctx.attr.TeamsTenantId,
         "UserRoleRequired": parse_json_or_none(ctx.attr.UserRoleRequired),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_chatbot_microsoft_teams_channel_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14549,7 +14549,7 @@ def _cloudformation_aws_chatbot_slack_channel_configuration_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UserRoleRequired": parse_json_or_none(ctx.attr.UserRoleRequired),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_chatbot_slack_channel_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14613,7 +14613,7 @@ def _cloudformation_aws_chime_app_instance_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_chime_app_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14658,7 +14658,7 @@ def _cloudformation_aws_chime_app_instance_bot_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_chime_app_instance_bot.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14710,7 +14710,7 @@ def _cloudformation_aws_chime_app_instance_user_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_chime_app_instance_user.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14770,7 +14770,7 @@ def _cloudformation_aws_clean_rooms_analysis_template_impl(ctx):
         "SyntheticDataParameters": parse_json_or_none(ctx.attr.SyntheticDataParameters),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_clean_rooms_analysis_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14849,7 +14849,7 @@ def _cloudformation_aws_clean_rooms_collaboration_impl(ctx):
         "QueryLogStatus": ctx.attr.QueryLogStatus,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_clean_rooms_collaboration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14933,7 +14933,7 @@ def _cloudformation_aws_clean_rooms_configured_table_impl(ctx):
         "TableReference": parse_json_or_none(ctx.attr.TableReference),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_clean_rooms_configured_table.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -14995,7 +14995,7 @@ def _cloudformation_aws_clean_rooms_configured_table_association_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_clean_rooms_configured_table_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15053,7 +15053,7 @@ def _cloudformation_aws_clean_rooms_id_mapping_table_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_clean_rooms_id_mapping_table.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15108,7 +15108,7 @@ def _cloudformation_aws_clean_rooms_id_namespace_association_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_clean_rooms_id_namespace_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15164,7 +15164,7 @@ def _cloudformation_aws_clean_rooms_intermediate_table_impl(ctx):
         "PopulationAnalysisConfiguration": parse_json_or_none(ctx.attr.PopulationAnalysisConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_clean_rooms_intermediate_table.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15224,7 +15224,7 @@ def _cloudformation_aws_clean_rooms_membership_impl(ctx):
         "QueryLogStatus": ctx.attr.QueryLogStatus,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_clean_rooms_membership.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15286,7 +15286,7 @@ def _cloudformation_aws_clean_rooms_ml_configured_model_algorithm_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TrainingContainerConfig": parse_json_or_none(ctx.attr.TrainingContainerConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_clean_rooms_ml_configured_model_algorithm.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15344,7 +15344,7 @@ def _cloudformation_aws_clean_rooms_ml_configured_model_algorithm_association_im
         "PrivacyConfiguration": parse_json_or_none(ctx.attr.PrivacyConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_clean_rooms_ml_configured_model_algorithm_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15398,7 +15398,7 @@ def _cloudformation_aws_clean_rooms_ml_training_dataset_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TrainingData": parse_json_or_none(ctx.attr.TrainingData),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_clean_rooms_ml_training_dataset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15449,7 +15449,7 @@ def _cloudformation_aws_clean_rooms_privacy_budget_template_impl(ctx):
         "PrivacyBudgetType": ctx.attr.PrivacyBudgetType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_clean_rooms_privacy_budget_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15505,7 +15505,7 @@ def _cloudformation_aws_cloud9_environment_ec2_impl(ctx):
         "SubnetId": ctx.attr.SubnetId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud9_environment_ec2.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15568,7 +15568,7 @@ def _cloudformation_aws_cloud_formation_custom_resource_impl(ctx):
         "ServiceTimeout": parse_json_or_none(ctx.attr.ServiceTimeout),
         "ServiceToken": ctx.attr.ServiceToken,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_custom_resource.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15607,7 +15607,7 @@ def _cloudformation_aws_cloud_formation_generated_template_impl(ctx):
         "GeneratedTemplateName": ctx.attr.GeneratedTemplateName,
         "TemplateConfiguration": parse_json_or_none(ctx.attr.TemplateConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_generated_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15654,7 +15654,7 @@ def _cloudformation_aws_cloud_formation_guard_hook_impl(ctx):
         "TargetFilters": parse_json_or_none(ctx.attr.TargetFilters),
         "TargetOperations": parse_json_or_none(ctx.attr.TargetOperations),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_guard_hook.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15718,7 +15718,7 @@ def _cloudformation_aws_cloud_formation_hook_default_version_impl(ctx):
         "TypeVersionArn": ctx.attr.TypeVersionArn,
         "VersionId": ctx.attr.VersionId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_hook_default_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15762,7 +15762,7 @@ def _cloudformation_aws_cloud_formation_hook_type_config_impl(ctx):
         "TypeArn": ctx.attr.TypeArn,
         "TypeName": ctx.attr.TypeName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_hook_type_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15809,7 +15809,7 @@ def _cloudformation_aws_cloud_formation_hook_version_impl(ctx):
         "SchemaHandlerPackage": ctx.attr.SchemaHandlerPackage,
         "TypeName": ctx.attr.TypeName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_hook_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15862,7 +15862,7 @@ def _cloudformation_aws_cloud_formation_lambda_hook_impl(ctx):
         "TargetFilters": parse_json_or_none(ctx.attr.TargetFilters),
         "TargetOperations": parse_json_or_none(ctx.attr.TargetOperations),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_lambda_hook.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15928,7 +15928,7 @@ def _cloudformation_aws_cloud_formation_macro_impl(ctx):
         "LogRoleARN": ctx.attr.LogRoleARN,
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_macro.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -15977,7 +15977,7 @@ def _cloudformation_aws_cloud_formation_module_default_version_impl(ctx):
         "ModuleName": ctx.attr.ModuleName,
         "VersionId": ctx.attr.VersionId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_module_default_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16019,7 +16019,7 @@ def _cloudformation_aws_cloud_formation_module_version_impl(ctx):
         "ModuleName": ctx.attr.ModuleName,
         "ModulePackage": ctx.attr.ModulePackage,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_module_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16061,7 +16061,7 @@ def _cloudformation_aws_cloud_formation_public_type_version_impl(ctx):
         "Type": ctx.attr.Type,
         "TypeName": ctx.attr.TypeName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_public_type_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16109,7 +16109,7 @@ def _cloudformation_aws_cloud_formation_publisher_impl(ctx):
         "AcceptTermsAndConditions": parse_json_or_none(ctx.attr.AcceptTermsAndConditions),
         "ConnectionArn": ctx.attr.ConnectionArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_publisher.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16149,7 +16149,7 @@ def _cloudformation_aws_cloud_formation_resource_default_version_impl(ctx):
         "TypeVersionArn": ctx.attr.TypeVersionArn,
         "VersionId": ctx.attr.VersionId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_resource_default_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16190,7 +16190,7 @@ def _cloudformation_aws_cloud_formation_resource_scan_impl(ctx):
     payload = {
         "ScanFilters": parse_json_or_none(ctx.attr.ScanFilters),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_resource_scan.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16228,7 +16228,7 @@ def _cloudformation_aws_cloud_formation_resource_version_impl(ctx):
         "SchemaHandlerPackage": ctx.attr.SchemaHandlerPackage,
         "TypeName": ctx.attr.TypeName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_resource_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16276,7 +16276,7 @@ def _cloudformation_aws_cloud_formation_stack_impl(ctx):
         "TemplateURL": ctx.attr.TemplateURL,
         "TimeoutInMinutes": parse_json_or_none(ctx.attr.TimeoutInMinutes),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_stack.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16337,7 +16337,7 @@ def _cloudformation_aws_cloud_formation_stack_set_impl(ctx):
         "TemplateBody": ctx.attr.TemplateBody,
         "TemplateURL": ctx.attr.TemplateURL,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_stack_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16423,7 +16423,7 @@ def _cloudformation_aws_cloud_formation_type_activation_impl(ctx):
         "TypeNameAlias": ctx.attr.TypeNameAlias,
         "VersionBump": ctx.attr.VersionBump,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_type_activation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16487,7 +16487,7 @@ def _cloudformation_aws_cloud_formation_wait_condition_impl(ctx):
         "Handle": ctx.attr.Handle,
         "Timeout": ctx.attr.Timeout,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_wait_condition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16527,7 +16527,7 @@ def _cloudformation_aws_cloud_formation_wait_condition_handle_impl(ctx):
     item_name = ctx.attr.aws_cloud_formation_wait_condition_handle_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_wait_condition_handle.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16563,7 +16563,7 @@ def _cloudformation_aws_cloud_front_anycast_ip_list_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_anycast_ip_list.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16610,7 +16610,7 @@ def _cloudformation_aws_cloud_front_cache_policy_impl(ctx):
     payload = {
         "CachePolicyConfig": parse_json_or_none(ctx.attr.CachePolicyConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_cache_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16645,7 +16645,7 @@ def _cloudformation_aws_cloud_front_cloud_front_origin_access_identity_impl(ctx)
     payload = {
         "CloudFrontOriginAccessIdentityConfig": parse_json_or_none(ctx.attr.CloudFrontOriginAccessIdentityConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_cloud_front_origin_access_identity.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16684,7 +16684,7 @@ def _cloudformation_aws_cloud_front_connection_function_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_connection_function.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16735,7 +16735,7 @@ def _cloudformation_aws_cloud_front_connection_group_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_connection_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16782,7 +16782,7 @@ def _cloudformation_aws_cloud_front_continuous_deployment_policy_impl(ctx):
     payload = {
         "ContinuousDeploymentPolicyConfig": parse_json_or_none(ctx.attr.ContinuousDeploymentPolicyConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_continuous_deployment_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16818,7 +16818,7 @@ def _cloudformation_aws_cloud_front_distribution_impl(ctx):
         "DistributionConfig": parse_json_or_none(ctx.attr.DistributionConfig),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_distribution.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16864,7 +16864,7 @@ def _cloudformation_aws_cloud_front_distribution_tenant_impl(ctx):
         "Parameters": parse_json_or_none(ctx.attr.Parameters),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_distribution_tenant.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16928,7 +16928,7 @@ def _cloudformation_aws_cloud_front_function_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_function.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -16978,7 +16978,7 @@ def _cloudformation_aws_cloud_front_key_group_impl(ctx):
     payload = {
         "KeyGroupConfig": parse_json_or_none(ctx.attr.KeyGroupConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_key_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17016,7 +17016,7 @@ def _cloudformation_aws_cloud_front_key_value_store_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_key_value_store.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17061,7 +17061,7 @@ def _cloudformation_aws_cloud_front_monitoring_subscription_impl(ctx):
         "DistributionId": ctx.attr.DistributionId,
         "MonitoringSubscription": parse_json_or_none(ctx.attr.MonitoringSubscription),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_monitoring_subscription.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17099,7 +17099,7 @@ def _cloudformation_aws_cloud_front_origin_access_control_impl(ctx):
     payload = {
         "OriginAccessControlConfig": parse_json_or_none(ctx.attr.OriginAccessControlConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_origin_access_control.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17134,7 +17134,7 @@ def _cloudformation_aws_cloud_front_origin_request_policy_impl(ctx):
     payload = {
         "OriginRequestPolicyConfig": parse_json_or_none(ctx.attr.OriginRequestPolicyConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_origin_request_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17169,7 +17169,7 @@ def _cloudformation_aws_cloud_front_public_key_impl(ctx):
     payload = {
         "PublicKeyConfig": parse_json_or_none(ctx.attr.PublicKeyConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_public_key.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17207,7 +17207,7 @@ def _cloudformation_aws_cloud_front_realtime_log_config_impl(ctx):
         "Name": ctx.attr.Name,
         "SamplingRate": parse_json_or_none(ctx.attr.SamplingRate),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_realtime_log_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17251,7 +17251,7 @@ def _cloudformation_aws_cloud_front_response_headers_policy_impl(ctx):
     payload = {
         "ResponseHeadersPolicyConfig": parse_json_or_none(ctx.attr.ResponseHeadersPolicyConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_response_headers_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17287,7 +17287,7 @@ def _cloudformation_aws_cloud_front_streaming_distribution_impl(ctx):
         "StreamingDistributionConfig": parse_json_or_none(ctx.attr.StreamingDistributionConfig),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_streaming_distribution.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17328,7 +17328,7 @@ def _cloudformation_aws_cloud_front_trust_store_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UseClientCertificateOCSPEndpoint": parse_json_or_none(ctx.attr.UseClientCertificateOCSPEndpoint),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_trust_store.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17373,7 +17373,7 @@ def _cloudformation_aws_cloud_front_vpc_origin_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcOriginEndpointConfig": parse_json_or_none(ctx.attr.VpcOriginEndpointConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_front_vpc_origin.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17416,7 +17416,7 @@ def _cloudformation_aws_cloud_hsm_cluster_impl(ctx):
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_hsm_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17469,7 +17469,7 @@ def _cloudformation_aws_cloud_trail_channel_impl(ctx):
         "Source": ctx.attr.Source,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_trail_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17517,7 +17517,7 @@ def _cloudformation_aws_cloud_trail_dashboard_impl(ctx):
         "TerminationProtectionEnabled": parse_json_or_none(ctx.attr.TerminationProtectionEnabled),
         "Widgets": parse_json_or_none(ctx.attr.Widgets),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_trail_dashboard.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17579,7 +17579,7 @@ def _cloudformation_aws_cloud_trail_event_data_store_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TerminationProtectionEnabled": parse_json_or_none(ctx.attr.TerminationProtectionEnabled),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_trail_event_data_store.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17660,7 +17660,7 @@ def _cloudformation_aws_cloud_trail_resource_policy_impl(ctx):
         "ResourceArn": ctx.attr.ResourceArn,
         "ResourcePolicy": parse_json_or_none(ctx.attr.ResourcePolicy),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_trail_resource_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17714,7 +17714,7 @@ def _cloudformation_aws_cloud_trail_trail_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TrailName": ctx.attr.TrailName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_trail_trail.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17821,7 +17821,7 @@ def _cloudformation_aws_cloud_watch_alarm_impl(ctx):
         "TreatMissingData": ctx.attr.TreatMissingData,
         "Unit": ctx.attr.Unit,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_watch_alarm.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17934,7 +17934,7 @@ def _cloudformation_aws_cloud_watch_alarm_mute_rule_impl(ctx):
         "StartDate": ctx.attr.StartDate,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_watch_alarm_mute_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -17994,7 +17994,7 @@ def _cloudformation_aws_cloud_watch_anomaly_detector_impl(ctx):
         "SingleMetricAnomalyDetector": parse_json_or_none(ctx.attr.SingleMetricAnomalyDetector),
         "Stat": ctx.attr.Stat,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_watch_anomaly_detector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18060,7 +18060,7 @@ def _cloudformation_aws_cloud_watch_composite_alarm_impl(ctx):
         "OKActions": parse_json_or_none(ctx.attr.OKActions),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_watch_composite_alarm.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18127,7 +18127,7 @@ def _cloudformation_aws_cloud_watch_dashboard_impl(ctx):
         "DashboardName": ctx.attr.DashboardName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_watch_dashboard.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18172,7 +18172,7 @@ def _cloudformation_aws_cloud_watch_insight_rule_impl(ctx):
         "RuleState": ctx.attr.RuleState,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_watch_insight_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18233,7 +18233,7 @@ def _cloudformation_aws_cloud_watch_log_alarm_impl(ctx):
         "Threshold": parse_json_or_none(ctx.attr.Threshold),
         "TreatMissingData": ctx.attr.TreatMissingData,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_watch_log_alarm.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18318,7 +18318,7 @@ def _cloudformation_aws_cloud_watch_metric_stream_impl(ctx):
         "StatisticsConfigurations": parse_json_or_none(ctx.attr.StatisticsConfigurations),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_watch_metric_stream.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18376,7 +18376,7 @@ def _cloudformation_aws_cloud_watch_otel_enrichment_impl(ctx):
     item_name = ctx.attr.aws_cloud_watch_otel_enrichment_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_watch_otel_enrichment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18411,7 +18411,7 @@ def _cloudformation_aws_code_artifact_domain_impl(ctx):
         "PermissionsPolicyDocument": parse_json_or_none(ctx.attr.PermissionsPolicyDocument),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_artifact_domain.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18459,7 +18459,7 @@ def _cloudformation_aws_code_artifact_package_impl(ctx):
         "Namespace": ctx.attr.Namespace,
         "Repository": ctx.attr.Repository,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_artifact_package.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18512,7 +18512,7 @@ def _cloudformation_aws_code_artifact_package_group_impl(ctx):
         "Pattern": ctx.attr.Pattern,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_artifact_package_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18572,7 +18572,7 @@ def _cloudformation_aws_code_artifact_repository_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Upstreams": parse_json_or_none(ctx.attr.Upstreams),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_artifact_repository.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18628,7 +18628,7 @@ def _cloudformation_aws_code_build_build_impl(ctx):
     payload = {
         "ProjectName": ctx.attr.ProjectName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_build_build.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18663,7 +18663,7 @@ def _cloudformation_aws_code_build_build_batch_impl(ctx):
     payload = {
         "ProjectName": ctx.attr.ProjectName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_build_build_batch.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18709,7 +18709,7 @@ def _cloudformation_aws_code_build_fleet_impl(ctx):
         "ScalingConfiguration": parse_json_or_none(ctx.attr.ScalingConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_build_fleet.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18801,7 +18801,7 @@ def _cloudformation_aws_code_build_project_impl(ctx):
         "Visibility": ctx.attr.Visibility,
         "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_build_project.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18912,7 +18912,7 @@ def _cloudformation_aws_code_build_report_group_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_build_report_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18959,7 +18959,7 @@ def _cloudformation_aws_code_build_sandbox_impl(ctx):
     payload = {
         "ProjectName": ctx.attr.ProjectName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_build_sandbox.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -18997,7 +18997,7 @@ def _cloudformation_aws_code_build_source_credential_impl(ctx):
         "Token": ctx.attr.Token,
         "Username": ctx.attr.Username,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_build_source_credential.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19046,7 +19046,7 @@ def _cloudformation_aws_code_commit_repository_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Triggers": parse_json_or_none(ctx.attr.Triggers),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_commit_repository.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19099,7 +19099,7 @@ def _cloudformation_aws_code_connections_connection_impl(ctx):
         "ProviderType": ctx.attr.ProviderType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_connections_connection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19145,7 +19145,7 @@ def _cloudformation_aws_code_deploy_application_impl(ctx):
         "ComputePlatform": ctx.attr.ComputePlatform,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_deploy_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19190,7 +19190,7 @@ def _cloudformation_aws_code_deploy_deployment_config_impl(ctx):
         "TrafficRoutingConfig": parse_json_or_none(ctx.attr.TrafficRoutingConfig),
         "ZonalConfig": parse_json_or_none(ctx.attr.ZonalConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_deploy_deployment_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19256,7 +19256,7 @@ def _cloudformation_aws_code_deploy_deployment_group_impl(ctx):
         "TerminationHookEnabled": parse_json_or_none(ctx.attr.TerminationHookEnabled),
         "TriggerConfigurations": parse_json_or_none(ctx.attr.TriggerConfigurations),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_deploy_deployment_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19352,7 +19352,7 @@ def _cloudformation_aws_code_guru_profiler_profiling_group_impl(ctx):
         "ProfilingGroupName": ctx.attr.ProfilingGroupName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_guru_profiler_profiling_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19404,7 +19404,7 @@ def _cloudformation_aws_code_guru_reviewer_repository_association_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_guru_reviewer_repository_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19461,7 +19461,7 @@ def _cloudformation_aws_code_pipeline_custom_action_type_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Version": ctx.attr.Version,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_pipeline_custom_action_type.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19528,7 +19528,7 @@ def _cloudformation_aws_code_pipeline_pipeline_impl(ctx):
         "Triggers": parse_json_or_none(ctx.attr.Triggers),
         "Variables": parse_json_or_none(ctx.attr.Variables),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_pipeline_pipeline.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19604,7 +19604,7 @@ def _cloudformation_aws_code_pipeline_webhook_impl(ctx):
         "TargetPipeline": ctx.attr.TargetPipeline,
         "TargetPipelineVersion": parse_json_or_none(ctx.attr.TargetPipelineVersion),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_pipeline_webhook.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19666,7 +19666,7 @@ def _cloudformation_aws_code_star_connections_connection_impl(ctx):
         "ProviderType": ctx.attr.ProviderType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_star_connections_connection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19714,7 +19714,7 @@ def _cloudformation_aws_code_star_connections_repository_link_impl(ctx):
         "RepositoryName": ctx.attr.RepositoryName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_star_connections_repository_link.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19768,7 +19768,7 @@ def _cloudformation_aws_code_star_connections_sync_configuration_impl(ctx):
         "SyncType": ctx.attr.SyncType,
         "TriggerResourceUpdateOn": ctx.attr.TriggerResourceUpdateOn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_star_connections_sync_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19831,7 +19831,7 @@ def _cloudformation_aws_code_star_git_hub_repository_impl(ctx):
         "RepositoryName": ctx.attr.RepositoryName,
         "RepositoryOwner": ctx.attr.RepositoryOwner,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_star_git_hub_repository.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19896,7 +19896,7 @@ def _cloudformation_aws_code_star_notifications_notification_rule_impl(ctx):
         "TargetAddress": ctx.attr.TargetAddress,
         "Targets": parse_json_or_none(ctx.attr.Targets),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_star_notifications_notification_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -19969,7 +19969,7 @@ def _cloudformation_aws_cognito_identity_pool_impl(ctx):
         "SamlProviderARNs": parse_json_or_none(ctx.attr.SamlProviderARNs),
         "SupportedLoginProviders": parse_json_or_none(ctx.attr.SupportedLoginProviders),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_identity_pool.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20040,7 +20040,7 @@ def _cloudformation_aws_cognito_identity_pool_principal_tag_impl(ctx):
         "PrincipalTags": parse_json_or_none(ctx.attr.PrincipalTags),
         "UseDefaults": parse_json_or_none(ctx.attr.UseDefaults),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_identity_pool_principal_tag.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20086,7 +20086,7 @@ def _cloudformation_aws_cognito_identity_pool_role_attachment_impl(ctx):
         "RoleMappings": parse_json_or_none(ctx.attr.RoleMappings),
         "Roles": ctx.attr.Roles,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_identity_pool_role_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20128,7 +20128,7 @@ def _cloudformation_aws_cognito_log_delivery_configuration_impl(ctx):
         "LogConfigurations": parse_json_or_none(ctx.attr.LogConfigurations),
         "UserPoolId": ctx.attr.UserPoolId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_log_delivery_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20171,7 +20171,7 @@ def _cloudformation_aws_cognito_managed_login_branding_impl(ctx):
         "UseCognitoProvidedValues": parse_json_or_none(ctx.attr.UseCognitoProvidedValues),
         "UserPoolId": ctx.attr.UserPoolId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_managed_login_branding.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20223,7 +20223,7 @@ def _cloudformation_aws_cognito_sync_dataset_impl(ctx):
         "IdentityId": ctx.attr.IdentityId,
         "IdentityPoolId": ctx.attr.IdentityPoolId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_sync_dataset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20269,7 +20269,7 @@ def _cloudformation_aws_cognito_terms_impl(ctx):
         "TermsSource": ctx.attr.TermsSource,
         "UserPoolId": ctx.attr.UserPoolId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_terms.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20350,7 +20350,7 @@ def _cloudformation_aws_cognito_user_pool_impl(ctx):
         "WebAuthnRelyingPartyID": ctx.attr.WebAuthnRelyingPartyID,
         "WebAuthnUserVerification": ctx.attr.WebAuthnUserVerification,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_user_pool.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20500,7 +20500,7 @@ def _cloudformation_aws_cognito_user_pool_client_impl(ctx):
         "UserPoolId": ctx.attr.UserPoolId,
         "WriteAttributes": parse_json_or_none(ctx.attr.WriteAttributes),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_user_pool_client.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20605,7 +20605,7 @@ def _cloudformation_aws_cognito_user_pool_domain_impl(ctx):
         "Routing": parse_json_or_none(ctx.attr.Routing),
         "UserPoolId": ctx.attr.UserPoolId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_user_pool_domain.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20656,7 +20656,7 @@ def _cloudformation_aws_cognito_user_pool_group_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "UserPoolId": ctx.attr.UserPoolId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_user_pool_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20708,7 +20708,7 @@ def _cloudformation_aws_cognito_user_pool_identity_provider_impl(ctx):
         "ProviderType": ctx.attr.ProviderType,
         "UserPoolId": ctx.attr.UserPoolId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_user_pool_identity_provider.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20763,7 +20763,7 @@ def _cloudformation_aws_cognito_user_pool_regional_configuration_attachment_impl
         "UserPoolId": ctx.attr.UserPoolId,
         "UserPoolTags": ctx.attr.UserPoolTags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_user_pool_regional_configuration_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20815,7 +20815,7 @@ def _cloudformation_aws_cognito_user_pool_replica_impl(ctx):
         "UserPoolId": ctx.attr.UserPoolId,
         "UserPoolTagsAtCreate": ctx.attr.UserPoolTagsAtCreate,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_user_pool_replica.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20859,7 +20859,7 @@ def _cloudformation_aws_cognito_user_pool_resource_server_impl(ctx):
         "Scopes": parse_json_or_none(ctx.attr.Scopes),
         "UserPoolId": ctx.attr.UserPoolId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_user_pool_resource_server.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20907,7 +20907,7 @@ def _cloudformation_aws_cognito_user_pool_risk_configuration_attachment_impl(ctx
         "RiskExceptionConfiguration": parse_json_or_none(ctx.attr.RiskExceptionConfiguration),
         "UserPoolId": ctx.attr.UserPoolId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_user_pool_risk_configuration_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -20956,7 +20956,7 @@ def _cloudformation_aws_cognito_user_pool_uicustomization_attachment_impl(ctx):
         "ClientId": ctx.attr.ClientId,
         "UserPoolId": ctx.attr.UserPoolId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_user_pool_uicustomization_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21004,7 +21004,7 @@ def _cloudformation_aws_cognito_user_pool_user_impl(ctx):
         "Username": ctx.attr.Username,
         "ValidationData": parse_json_or_none(ctx.attr.ValidationData),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_user_pool_user.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21062,7 +21062,7 @@ def _cloudformation_aws_cognito_user_pool_user_to_group_attachment_impl(ctx):
         "UserPoolId": ctx.attr.UserPoolId,
         "Username": ctx.attr.Username,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_user_pool_user_to_group_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21107,7 +21107,7 @@ def _cloudformation_aws_comprehend_document_classification_job_impl(ctx):
         "JobName": ctx.attr.JobName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_comprehend_document_classification_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21165,7 +21165,7 @@ def _cloudformation_aws_comprehend_document_classifier_impl(ctx):
         "VolumeKmsKeyId": ctx.attr.VolumeKmsKeyId,
         "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_comprehend_document_classifier.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21237,7 +21237,7 @@ def _cloudformation_aws_comprehend_entities_detection_job_impl(ctx):
         "LanguageCode": ctx.attr.LanguageCode,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_comprehend_entities_detection_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21291,7 +21291,7 @@ def _cloudformation_aws_comprehend_flywheel_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TaskConfig": parse_json_or_none(ctx.attr.TaskConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_comprehend_flywheel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21351,7 +21351,7 @@ def _cloudformation_aws_comprehend_flywheel_dataset_impl(ctx):
         "FlywheelArn": ctx.attr.FlywheelArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_comprehend_flywheel_dataset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21402,7 +21402,7 @@ def _cloudformation_aws_comprehend_sentiment_detection_job_impl(ctx):
         "LanguageCode": ctx.attr.LanguageCode,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_comprehend_sentiment_detection_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21458,7 +21458,7 @@ def _cloudformation_aws_compute_optimizer_automation_rule_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_compute_optimizer_automation_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21522,7 +21522,7 @@ def _cloudformation_aws_config_aggregation_authorization_impl(ctx):
         "AuthorizedAwsRegion": ctx.attr.AuthorizedAwsRegion,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_config_aggregation_authorization.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21570,7 +21570,7 @@ def _cloudformation_aws_config_config_rule_impl(ctx):
         "Scope": parse_json_or_none(ctx.attr.Scope),
         "Source": parse_json_or_none(ctx.attr.Source),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_config_config_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21629,7 +21629,7 @@ def _cloudformation_aws_config_configuration_aggregator_impl(ctx):
         "OrganizationAggregationSource": parse_json_or_none(ctx.attr.OrganizationAggregationSource),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_config_configuration_aggregator.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21676,7 +21676,7 @@ def _cloudformation_aws_config_configuration_recorder_impl(ctx):
         "RecordingMode": parse_json_or_none(ctx.attr.RecordingMode),
         "RoleARN": ctx.attr.RoleARN,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_config_configuration_recorder.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21727,7 +21727,7 @@ def _cloudformation_aws_config_conformance_pack_impl(ctx):
         "TemplateS3Uri": ctx.attr.TemplateS3Uri,
         "TemplateSSMDocumentDetails": parse_json_or_none(ctx.attr.TemplateSSMDocumentDetails),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_config_conformance_pack.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21784,7 +21784,7 @@ def _cloudformation_aws_config_connector_impl(ctx):
         "ConnectorConfiguration": parse_json_or_none(ctx.attr.ConnectorConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_config_connector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21827,7 +21827,7 @@ def _cloudformation_aws_config_delivery_channel_impl(ctx):
         "S3KmsKeyArn": ctx.attr.S3KmsKeyArn,
         "SnsTopicARN": ctx.attr.SnsTopicARN,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_config_delivery_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21881,7 +21881,7 @@ def _cloudformation_aws_config_organization_config_rule_impl(ctx):
         "OrganizationCustomRuleMetadata": parse_json_or_none(ctx.attr.OrganizationCustomRuleMetadata),
         "OrganizationManagedRuleMetadata": parse_json_or_none(ctx.attr.OrganizationManagedRuleMetadata),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_config_organization_config_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -21935,7 +21935,7 @@ def _cloudformation_aws_config_organization_conformance_pack_impl(ctx):
         "TemplateBody": ctx.attr.TemplateBody,
         "TemplateS3Uri": ctx.attr.TemplateS3Uri,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_config_organization_conformance_pack.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22000,7 +22000,7 @@ def _cloudformation_aws_config_remediation_configuration_impl(ctx):
         "TargetType": ctx.attr.TargetType,
         "TargetVersion": ctx.attr.TargetVersion,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_config_remediation_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22065,7 +22065,7 @@ def _cloudformation_aws_config_stored_query_impl(ctx):
         "QueryName": ctx.attr.QueryName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_config_stored_query.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22116,7 +22116,7 @@ def _cloudformation_aws_connect_agent_status_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_agent_status.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22173,7 +22173,7 @@ def _cloudformation_aws_connect_approved_origin_impl(ctx):
         "InstanceId": ctx.attr.InstanceId,
         "Origin": ctx.attr.Origin,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_approved_origin.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22215,7 +22215,7 @@ def _cloudformation_aws_connect_campaigns_campaign_impl(ctx):
         "OutboundCallConfig": parse_json_or_none(ctx.attr.OutboundCallConfig),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_campaigns_campaign.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22272,7 +22272,7 @@ def _cloudformation_aws_connect_campaigns_v2_campaign_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_campaigns_v2_campaign.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22343,7 +22343,7 @@ def _cloudformation_aws_connect_contact_flow_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_contact_flow.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22403,7 +22403,7 @@ def _cloudformation_aws_connect_contact_flow_module_impl(ctx):
         "State": ctx.attr.State,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_contact_flow_module.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22462,7 +22462,7 @@ def _cloudformation_aws_connect_contact_flow_module_alias_impl(ctx):
         "Description": ctx.attr.Description,
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_contact_flow_module_alias.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22507,7 +22507,7 @@ def _cloudformation_aws_connect_contact_flow_module_version_impl(ctx):
         "ContactFlowModuleId": ctx.attr.ContactFlowModuleId,
         "Description": ctx.attr.Description,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_contact_flow_module_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22546,7 +22546,7 @@ def _cloudformation_aws_connect_contact_flow_version_impl(ctx):
         "ContactFlowId": ctx.attr.ContactFlowId,
         "Description": ctx.attr.Description,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_contact_flow_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22586,7 +22586,7 @@ def _cloudformation_aws_connect_data_lake_association_impl(ctx):
         "InstanceId": ctx.attr.InstanceId,
         "TargetAccountId": ctx.attr.TargetAccountId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_data_lake_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22633,7 +22633,7 @@ def _cloudformation_aws_connect_data_table_impl(ctx):
         "TimeZone": ctx.attr.TimeZone,
         "ValueLockLevel": ctx.attr.ValueLockLevel,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_data_table.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22692,7 +22692,7 @@ def _cloudformation_aws_connect_data_table_attribute_impl(ctx):
         "Validation": parse_json_or_none(ctx.attr.Validation),
         "ValueType": ctx.attr.ValueType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_data_table_attribute.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22747,7 +22747,7 @@ def _cloudformation_aws_connect_data_table_record_impl(ctx):
         "DataTableRecord": parse_json_or_none(ctx.attr.DataTableRecord),
         "InstanceArn": ctx.attr.InstanceArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_data_table_record.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22793,7 +22793,7 @@ def _cloudformation_aws_connect_email_address_impl(ctx):
         "InstanceArn": ctx.attr.InstanceArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_email_address.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22853,7 +22853,7 @@ def _cloudformation_aws_connect_evaluation_form_impl(ctx):
         "TargetConfiguration": parse_json_or_none(ctx.attr.TargetConfiguration),
         "Title": ctx.attr.Title,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_evaluation_form.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22926,7 +22926,7 @@ def _cloudformation_aws_connect_hours_of_operation_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TimeZone": ctx.attr.TimeZone,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_hours_of_operation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -22989,7 +22989,7 @@ def _cloudformation_aws_connect_instance_impl(ctx):
         "InstanceAlias": ctx.attr.InstanceAlias,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23042,7 +23042,7 @@ def _cloudformation_aws_connect_instance_storage_config_impl(ctx):
         "S3Config": parse_json_or_none(ctx.attr.S3Config),
         "StorageType": ctx.attr.StorageType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_instance_storage_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23098,7 +23098,7 @@ def _cloudformation_aws_connect_integration_association_impl(ctx):
         "IntegrationType": ctx.attr.IntegrationType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_integration_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23147,7 +23147,7 @@ def _cloudformation_aws_connect_notification_impl(ctx):
         "Recipients": parse_json_or_none(ctx.attr.Recipients),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_notification.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23203,7 +23203,7 @@ def _cloudformation_aws_connect_phone_number_impl(ctx):
         "TargetArn": ctx.attr.TargetArn,
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_phone_number.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23260,7 +23260,7 @@ def _cloudformation_aws_connect_predefined_attribute_impl(ctx):
         "Purposes": parse_json_or_none(ctx.attr.Purposes),
         "Values": parse_json_or_none(ctx.attr.Values),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_predefined_attribute.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23311,7 +23311,7 @@ def _cloudformation_aws_connect_prompt_impl(ctx):
         "S3Uri": ctx.attr.S3Uri,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_prompt.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23368,7 +23368,7 @@ def _cloudformation_aws_connect_queue_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_queue.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23437,7 +23437,7 @@ def _cloudformation_aws_connect_quick_connect_impl(ctx):
         "QuickConnectConfig": parse_json_or_none(ctx.attr.QuickConnectConfig),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_quick_connect.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23492,7 +23492,7 @@ def _cloudformation_aws_connect_routing_profile_impl(ctx):
         "QueueConfigs": parse_json_or_none(ctx.attr.QueueConfigs),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_routing_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23557,7 +23557,7 @@ def _cloudformation_aws_connect_rule_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TriggerEventSource": parse_json_or_none(ctx.attr.TriggerEventSource),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23611,7 +23611,7 @@ def _cloudformation_aws_connect_security_key_impl(ctx):
         "InstanceId": ctx.attr.InstanceId,
         "Key": ctx.attr.Key,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_security_key.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23660,7 +23660,7 @@ def _cloudformation_aws_connect_security_profile_impl(ctx):
         "TagRestrictedResources": parse_json_or_none(ctx.attr.TagRestrictedResources),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_security_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23738,7 +23738,7 @@ def _cloudformation_aws_connect_task_template_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_task_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23810,7 +23810,7 @@ def _cloudformation_aws_connect_test_case_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_test_case.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23869,7 +23869,7 @@ def _cloudformation_aws_connect_traffic_distribution_group_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_traffic_distribution_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -23928,7 +23928,7 @@ def _cloudformation_aws_connect_user_impl(ctx):
         "Username": ctx.attr.Username,
         "VoiceEnhancementConfigs": parse_json_or_none(ctx.attr.VoiceEnhancementConfigs),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_user.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24011,7 +24011,7 @@ def _cloudformation_aws_connect_user_hierarchy_group_impl(ctx):
         "ParentGroupArn": ctx.attr.ParentGroupArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_user_hierarchy_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24056,7 +24056,7 @@ def _cloudformation_aws_connect_user_hierarchy_structure_impl(ctx):
         "InstanceArn": ctx.attr.InstanceArn,
         "UserHierarchyStructure": parse_json_or_none(ctx.attr.UserHierarchyStructure),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_user_hierarchy_structure.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24099,7 +24099,7 @@ def _cloudformation_aws_connect_view_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Template": parse_json_or_none(ctx.attr.Template),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_view.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24151,7 +24151,7 @@ def _cloudformation_aws_connect_view_version_impl(ctx):
         "ViewArn": ctx.attr.ViewArn,
         "ViewContentSha256": ctx.attr.ViewContentSha256,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_view_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24201,7 +24201,7 @@ def _cloudformation_aws_connect_workspace_impl(ctx):
         "Title": ctx.attr.Title,
         "Visibility": ctx.attr.Visibility,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_workspace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24262,7 +24262,7 @@ def _cloudformation_aws_control_catalog_common_control_impl(ctx):
     item_name = ctx.attr.aws_control_catalog_common_control_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_control_catalog_common_control.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24293,7 +24293,7 @@ def _cloudformation_aws_control_catalog_control_impl(ctx):
     item_name = ctx.attr.aws_control_catalog_control_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_control_catalog_control.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24324,7 +24324,7 @@ def _cloudformation_aws_control_catalog_objective_impl(ctx):
     item_name = ctx.attr.aws_control_catalog_objective_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_control_catalog_objective.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24360,7 +24360,7 @@ def _cloudformation_aws_control_tower_enabled_baseline_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetIdentifier": ctx.attr.TargetIdentifier,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_control_tower_enabled_baseline.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24410,7 +24410,7 @@ def _cloudformation_aws_control_tower_enabled_control_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetIdentifier": ctx.attr.TargetIdentifier,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_control_tower_enabled_control.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24457,7 +24457,7 @@ def _cloudformation_aws_control_tower_landing_zone_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Version": ctx.attr.Version,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_control_tower_landing_zone.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24513,7 +24513,7 @@ def _cloudformation_aws_cur_report_definition_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TimeUnit": ctx.attr.TimeUnit,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_cur_report_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24592,7 +24592,7 @@ def _cloudformation_aws_customer_profiles_calculated_attribute_definition_impl(c
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UseHistoricalData": parse_json_or_none(ctx.attr.UseHistoricalData),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_customer_profiles_calculated_attribute_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24658,7 +24658,7 @@ def _cloudformation_aws_customer_profiles_domain_impl(ctx):
         "RuleBasedMatching": parse_json_or_none(ctx.attr.RuleBasedMatching),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_customer_profiles_domain.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24719,7 +24719,7 @@ def _cloudformation_aws_customer_profiles_domain_object_type_impl(ctx):
         "ObjectTypeName": ctx.attr.ObjectTypeName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_customer_profiles_domain_object_type.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24772,7 +24772,7 @@ def _cloudformation_aws_customer_profiles_event_stream_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Uri": ctx.attr.Uri,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_customer_profiles_event_stream.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24823,7 +24823,7 @@ def _cloudformation_aws_customer_profiles_event_trigger_impl(ctx):
         "SegmentFilter": ctx.attr.SegmentFilter,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_customer_profiles_event_trigger.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24886,7 +24886,7 @@ def _cloudformation_aws_customer_profiles_integration_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Uri": ctx.attr.Uri,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_customer_profiles_integration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -24954,7 +24954,7 @@ def _cloudformation_aws_customer_profiles_object_type_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TemplateId": ctx.attr.TemplateId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_customer_profiles_object_type.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25030,7 +25030,7 @@ def _cloudformation_aws_customer_profiles_recommender_impl(ctx):
         "RecommenderRecipeName": ctx.attr.RecommenderRecipeName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_customer_profiles_recommender.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25087,7 +25087,7 @@ def _cloudformation_aws_customer_profiles_segment_definition_impl(ctx):
         "SegmentSqlQuery": ctx.attr.SegmentSqlQuery,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_customer_profiles_segment_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25149,7 +25149,7 @@ def _cloudformation_aws_data_brew_dataset_impl(ctx):
         "Source": ctx.attr.Source,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_brew_dataset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25221,7 +25221,7 @@ def _cloudformation_aws_data_brew_job_impl(ctx):
         "Type": ctx.attr.Type,
         "ValidationConfigurations": parse_json_or_none(ctx.attr.ValidationConfigurations),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_brew_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25318,7 +25318,7 @@ def _cloudformation_aws_data_brew_project_impl(ctx):
         "Sample": parse_json_or_none(ctx.attr.Sample),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_brew_project.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25371,7 +25371,7 @@ def _cloudformation_aws_data_brew_recipe_impl(ctx):
         "Steps": parse_json_or_none(ctx.attr.Steps),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_brew_recipe.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25419,7 +25419,7 @@ def _cloudformation_aws_data_brew_ruleset_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetArn": ctx.attr.TargetArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_brew_ruleset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25469,7 +25469,7 @@ def _cloudformation_aws_data_brew_schedule_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_brew_schedule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25515,7 +25515,7 @@ def _cloudformation_aws_data_exchange_assets_impl(ctx):
         "Name": ctx.attr.Name,
         "RevisionId": ctx.attr.RevisionId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_exchange_assets.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25559,7 +25559,7 @@ def _cloudformation_aws_data_exchange_data_set_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_exchange_data_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25605,7 +25605,7 @@ def _cloudformation_aws_data_exchange_entitled_data_sets_impl(ctx):
         "Description": ctx.attr.Description,
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_exchange_entitled_data_sets.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25645,7 +25645,7 @@ def _cloudformation_aws_data_exchange_job_impl(ctx):
     item_name = ctx.attr.aws_data_exchange_job_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_exchange_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25683,7 +25683,7 @@ def _cloudformation_aws_data_pipeline_pipeline_impl(ctx):
         "PipelineObjects": parse_json_or_none(ctx.attr.PipelineObjects),
         "PipelineTags": parse_json_or_none(ctx.attr.PipelineTags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_pipeline_pipeline.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25741,7 +25741,7 @@ def _cloudformation_aws_data_sync_agent_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcEndpointId": ctx.attr.VpcEndpointId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_sync_agent.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25800,7 +25800,7 @@ def _cloudformation_aws_data_sync_location_azure_blob_impl(ctx):
         "Subdirectory": ctx.attr.Subdirectory,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_sync_location_azure_blob.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25868,7 +25868,7 @@ def _cloudformation_aws_data_sync_location_efs_impl(ctx):
         "Subdirectory": ctx.attr.Subdirectory,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_sync_location_efs.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25924,7 +25924,7 @@ def _cloudformation_aws_data_sync_location_fsx_lustre_impl(ctx):
         "Subdirectory": ctx.attr.Subdirectory,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_sync_location_fsx_lustre.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -25972,7 +25972,7 @@ def _cloudformation_aws_data_sync_location_fsx_ontap_impl(ctx):
         "Subdirectory": ctx.attr.Subdirectory,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_sync_location_fsx_ontap.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -26023,7 +26023,7 @@ def _cloudformation_aws_data_sync_location_fsx_open_zfs_impl(ctx):
         "Subdirectory": ctx.attr.Subdirectory,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_sync_location_fsx_open_zfs.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -26078,7 +26078,7 @@ def _cloudformation_aws_data_sync_location_fsx_windows_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "User": ctx.attr.User,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_sync_location_fsx_windows.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -26151,7 +26151,7 @@ def _cloudformation_aws_data_sync_location_hdfs_impl(ctx):
         "Subdirectory": ctx.attr.Subdirectory,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_sync_location_hdfs.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -26232,7 +26232,7 @@ def _cloudformation_aws_data_sync_location_nfs_impl(ctx):
         "Subdirectory": ctx.attr.Subdirectory,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_sync_location_nfs.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -26290,7 +26290,7 @@ def _cloudformation_aws_data_sync_location_object_storage_impl(ctx):
         "Subdirectory": ctx.attr.Subdirectory,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_sync_location_object_storage.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -26362,7 +26362,7 @@ def _cloudformation_aws_data_sync_location_s3_impl(ctx):
         "Subdirectory": ctx.attr.Subdirectory,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_sync_location_s3.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -26423,7 +26423,7 @@ def _cloudformation_aws_data_sync_location_smb_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "User": ctx.attr.User,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_sync_location_smb.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -26511,7 +26511,7 @@ def _cloudformation_aws_data_sync_task_impl(ctx):
         "TaskMode": ctx.attr.TaskMode,
         "TaskReportConfig": parse_json_or_none(ctx.attr.TaskReportConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_sync_task.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -26588,7 +26588,7 @@ def _cloudformation_aws_data_zone_connection_impl(ctx):
         "Props": parse_json_or_none(ctx.attr.Props),
         "Scope": ctx.attr.Scope,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_connection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -26662,7 +26662,7 @@ def _cloudformation_aws_data_zone_data_source_impl(ctx):
         "Schedule": parse_json_or_none(ctx.attr.Schedule),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_data_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -26740,7 +26740,7 @@ def _cloudformation_aws_data_zone_domain_impl(ctx):
         "SingleSignOn": parse_json_or_none(ctx.attr.SingleSignOn),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_domain.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -26799,7 +26799,7 @@ def _cloudformation_aws_data_zone_domain_unit_impl(ctx):
         "Name": ctx.attr.Name,
         "ParentDomainUnitIdentifier": ctx.attr.ParentDomainUnitIdentifier,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_domain_unit.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -26855,7 +26855,7 @@ def _cloudformation_aws_data_zone_environment_impl(ctx):
         "ProjectIdentifier": ctx.attr.ProjectIdentifier,
         "UserParameters": parse_json_or_none(ctx.attr.UserParameters),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_environment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -26931,7 +26931,7 @@ def _cloudformation_aws_data_zone_environment_actions_impl(ctx):
         "Name": ctx.attr.Name,
         "Parameters": parse_json_or_none(ctx.attr.Parameters),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_environment_actions.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -26989,7 +26989,7 @@ def _cloudformation_aws_data_zone_environment_blueprint_configuration_impl(ctx):
         "ProvisioningRoleArn": ctx.attr.ProvisioningRoleArn,
         "RegionalParameters": parse_json_or_none(ctx.attr.RegionalParameters),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_environment_blueprint_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27055,7 +27055,7 @@ def _cloudformation_aws_data_zone_environment_profile_impl(ctx):
         "ProjectIdentifier": ctx.attr.ProjectIdentifier,
         "UserParameters": parse_json_or_none(ctx.attr.UserParameters),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_environment_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27116,7 +27116,7 @@ def _cloudformation_aws_data_zone_form_type_impl(ctx):
         "OwningProjectIdentifier": ctx.attr.OwningProjectIdentifier,
         "Status": ctx.attr.Status,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_form_type.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27170,7 +27170,7 @@ def _cloudformation_aws_data_zone_group_profile_impl(ctx):
         "RolePrincipalArn": ctx.attr.RolePrincipalArn,
         "Status": ctx.attr.Status,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_group_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27220,7 +27220,7 @@ def _cloudformation_aws_data_zone_owner_impl(ctx):
         "EntityType": ctx.attr.EntityType,
         "Owner": parse_json_or_none(ctx.attr.Owner),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_owner.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27269,7 +27269,7 @@ def _cloudformation_aws_data_zone_policy_grant_impl(ctx):
         "PolicyType": ctx.attr.PolicyType,
         "Principal": parse_json_or_none(ctx.attr.Principal),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_policy_grant.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27330,7 +27330,7 @@ def _cloudformation_aws_data_zone_project_impl(ctx):
         "ResourceTags": parse_json_or_none(ctx.attr.ResourceTags),
         "UserParameters": parse_json_or_none(ctx.attr.UserParameters),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_project.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27401,7 +27401,7 @@ def _cloudformation_aws_data_zone_project_membership_impl(ctx):
         "Member": parse_json_or_none(ctx.attr.Member),
         "ProjectIdentifier": ctx.attr.ProjectIdentifier,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_project_membership.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27454,7 +27454,7 @@ def _cloudformation_aws_data_zone_project_profile_impl(ctx):
         "Status": ctx.attr.Status,
         "UseDefaultConfigurations": parse_json_or_none(ctx.attr.UseDefaultConfigurations),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_project_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27524,7 +27524,7 @@ def _cloudformation_aws_data_zone_subscription_target_impl(ctx):
         "SubscriptionTargetConfig": parse_json_or_none(ctx.attr.SubscriptionTargetConfig),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_subscription_target.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27587,7 +27587,7 @@ def _cloudformation_aws_data_zone_user_profile_impl(ctx):
         "UserIdentifier": ctx.attr.UserIdentifier,
         "UserType": ctx.attr.UserType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_zone_user_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27648,7 +27648,7 @@ def _cloudformation_aws_dax_cluster_impl(ctx):
         "SubnetGroupName": ctx.attr.SubnetGroupName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dax_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27727,7 +27727,7 @@ def _cloudformation_aws_dax_parameter_group_impl(ctx):
         "ParameterGroupName": ctx.attr.ParameterGroupName,
         "ParameterNameValues": parse_json_or_none(ctx.attr.ParameterNameValues),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dax_parameter_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27770,7 +27770,7 @@ def _cloudformation_aws_dax_subnet_group_impl(ctx):
         "SubnetGroupName": ctx.attr.SubnetGroupName,
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dax_subnet_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27815,7 +27815,7 @@ def _cloudformation_aws_deadline_farm_impl(ctx):
         "KmsKeyArn": ctx.attr.KmsKeyArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_deadline_farm.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27870,7 +27870,7 @@ def _cloudformation_aws_deadline_fleet_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_deadline_fleet.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27932,7 +27932,7 @@ def _cloudformation_aws_deadline_license_endpoint_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_deadline_license_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -27980,7 +27980,7 @@ def _cloudformation_aws_deadline_limit_impl(ctx):
         "FarmId": ctx.attr.FarmId,
         "MaxCount": parse_json_or_none(ctx.attr.MaxCount),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_deadline_limit.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28028,7 +28028,7 @@ def _cloudformation_aws_deadline_metered_product_impl(ctx):
         "LicenseEndpointId": ctx.attr.LicenseEndpointId,
         "ProductId": ctx.attr.ProductId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_deadline_metered_product.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28071,7 +28071,7 @@ def _cloudformation_aws_deadline_monitor_impl(ctx):
         "Subdomain": ctx.attr.Subdomain,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_deadline_monitor.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28131,7 +28131,7 @@ def _cloudformation_aws_deadline_queue_impl(ctx):
         "SchedulingConfiguration": parse_json_or_none(ctx.attr.SchedulingConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_deadline_queue.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28200,7 +28200,7 @@ def _cloudformation_aws_deadline_queue_environment_impl(ctx):
         "Template": ctx.attr.Template,
         "TemplateType": ctx.attr.TemplateType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_deadline_queue_environment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28249,7 +28249,7 @@ def _cloudformation_aws_deadline_queue_fleet_association_impl(ctx):
         "FleetId": ctx.attr.FleetId,
         "QueueId": ctx.attr.QueueId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_deadline_queue_fleet_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28292,7 +28292,7 @@ def _cloudformation_aws_deadline_queue_limit_association_impl(ctx):
         "LimitId": ctx.attr.LimitId,
         "QueueId": ctx.attr.QueueId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_deadline_queue_limit_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28336,7 +28336,7 @@ def _cloudformation_aws_deadline_storage_profile_impl(ctx):
         "FileSystemLocations": parse_json_or_none(ctx.attr.FileSystemLocations),
         "OsFamily": ctx.attr.OsFamily,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_deadline_storage_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28381,7 +28381,7 @@ def _cloudformation_aws_detective_graph_impl(ctx):
         "AutoEnableMembers": parse_json_or_none(ctx.attr.AutoEnableMembers),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_detective_graph.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28423,7 +28423,7 @@ def _cloudformation_aws_detective_member_invitation_impl(ctx):
         "MemberId": ctx.attr.MemberId,
         "Message": ctx.attr.Message,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_detective_member_invitation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28470,7 +28470,7 @@ def _cloudformation_aws_detective_organization_admin_impl(ctx):
     payload = {
         "AccountId": ctx.attr.AccountId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_detective_organization_admin.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28510,7 +28510,7 @@ def _cloudformation_aws_dev_ops_agent_agent_space_impl(ctx):
         "OperatorApp": parse_json_or_none(ctx.attr.OperatorApp),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dev_ops_agent_agent_space.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28564,7 +28564,7 @@ def _cloudformation_aws_dev_ops_agent_asset_impl(ctx):
         "Metadata": parse_json_or_none(ctx.attr.Metadata),
         "Zip": ctx.attr.Zip,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dev_ops_agent_asset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28614,7 +28614,7 @@ def _cloudformation_aws_dev_ops_agent_association_impl(ctx):
         "LinkedAssociationIds": parse_json_or_none(ctx.attr.LinkedAssociationIds),
         "ServiceId": ctx.attr.ServiceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dev_ops_agent_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28661,7 +28661,7 @@ def _cloudformation_aws_dev_ops_agent_private_connection_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dev_ops_agent_private_connection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28711,7 +28711,7 @@ def _cloudformation_aws_dev_ops_agent_service_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetUrlPrivateConnectionName": ctx.attr.TargetUrlPrivateConnectionName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dev_ops_agent_service.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28768,7 +28768,7 @@ def _cloudformation_aws_dev_ops_agent_trigger_impl(ctx):
         "Status": ctx.attr.Status,
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dev_ops_agent_trigger.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28814,7 +28814,7 @@ def _cloudformation_aws_dev_ops_guru_log_anomaly_detection_integration_impl(ctx)
     item_name = ctx.attr.aws_dev_ops_guru_log_anomaly_detection_integration_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dev_ops_guru_log_anomaly_detection_integration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28846,7 +28846,7 @@ def _cloudformation_aws_dev_ops_guru_notification_channel_impl(ctx):
     payload = {
         "Config": parse_json_or_none(ctx.attr.Config),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dev_ops_guru_notification_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28881,7 +28881,7 @@ def _cloudformation_aws_dev_ops_guru_resource_collection_impl(ctx):
     payload = {
         "ResourceCollectionFilter": parse_json_or_none(ctx.attr.ResourceCollectionFilter),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dev_ops_guru_resource_collection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28922,7 +28922,7 @@ def _cloudformation_aws_direct_connect_connection_impl(ctx):
         "RequestMACSec": parse_json_or_none(ctx.attr.RequestMACSec),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_direct_connect_connection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -28977,7 +28977,7 @@ def _cloudformation_aws_direct_connect_direct_connect_gateway_impl(ctx):
         "DirectConnectGatewayName": ctx.attr.DirectConnectGatewayName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_direct_connect_direct_connect_gateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -29021,7 +29021,7 @@ def _cloudformation_aws_direct_connect_direct_connect_gateway_association_impl(c
         "AssociatedGatewayId": ctx.attr.AssociatedGatewayId,
         "DirectConnectGatewayId": ctx.attr.DirectConnectGatewayId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_direct_connect_direct_connect_gateway_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -29071,7 +29071,7 @@ def _cloudformation_aws_direct_connect_lag_impl(ctx):
         "RequestMACSec": parse_json_or_none(ctx.attr.RequestMACSec),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_direct_connect_lag.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -29134,7 +29134,7 @@ def _cloudformation_aws_direct_connect_private_virtual_interface_impl(ctx):
         "VirtualInterfaceName": ctx.attr.VirtualInterfaceName,
         "Vlan": parse_json_or_none(ctx.attr.Vlan),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_direct_connect_private_virtual_interface.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -29206,7 +29206,7 @@ def _cloudformation_aws_direct_connect_public_virtual_interface_impl(ctx):
         "VirtualInterfaceName": ctx.attr.VirtualInterfaceName,
         "Vlan": parse_json_or_none(ctx.attr.Vlan),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_direct_connect_public_virtual_interface.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -29271,7 +29271,7 @@ def _cloudformation_aws_direct_connect_transit_virtual_interface_impl(ctx):
         "VirtualInterfaceName": ctx.attr.VirtualInterfaceName,
         "Vlan": parse_json_or_none(ctx.attr.Vlan),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_direct_connect_transit_virtual_interface.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -29339,7 +29339,7 @@ def _cloudformation_aws_directory_service_microsoft_ad_impl(ctx):
         "ShortName": ctx.attr.ShortName,
         "VpcSettings": parse_json_or_none(ctx.attr.VpcSettings),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_directory_service_microsoft_ad.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -29400,7 +29400,7 @@ def _cloudformation_aws_directory_service_simple_ad_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcSettings": parse_json_or_none(ctx.attr.VpcSettings),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_directory_service_simple_ad.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -29470,7 +29470,7 @@ def _cloudformation_aws_dlm_lifecycle_policy_impl(ctx):
         "State": ctx.attr.State,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dlm_lifecycle_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -29540,7 +29540,7 @@ def _cloudformation_aws_dms_certificate_impl(ctx):
         "CertificatePem": ctx.attr.CertificatePem,
         "CertificateWallet": ctx.attr.CertificateWallet,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dms_certificate.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -29588,7 +29588,7 @@ def _cloudformation_aws_dms_data_migration_impl(ctx):
         "SourceDataSettings": parse_json_or_none(ctx.attr.SourceDataSettings),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dms_data_migration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -29650,7 +29650,7 @@ def _cloudformation_aws_dms_data_provider_impl(ctx):
         "Settings": parse_json_or_none(ctx.attr.Settings),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dms_data_provider.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -29733,7 +29733,7 @@ def _cloudformation_aws_dms_endpoint_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Username": ctx.attr.Username,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dms_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -29864,7 +29864,7 @@ def _cloudformation_aws_dms_event_subscription_impl(ctx):
         "SubscriptionName": ctx.attr.SubscriptionName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dms_event_subscription.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -29926,7 +29926,7 @@ def _cloudformation_aws_dms_instance_profile_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcSecurityGroups": parse_json_or_none(ctx.attr.VpcSecurityGroups),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dms_instance_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -29998,7 +29998,7 @@ def _cloudformation_aws_dms_migration_project_impl(ctx):
         "TargetDataProviderDescriptors": parse_json_or_none(ctx.attr.TargetDataProviderDescriptors),
         "TransformationRules": ctx.attr.TransformationRules,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dms_migration_project.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -30072,7 +30072,7 @@ def _cloudformation_aws_dms_replication_config_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetEndpointArn": ctx.attr.TargetEndpointArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dms_replication_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -30150,7 +30150,7 @@ def _cloudformation_aws_dms_replication_instance_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcSecurityGroupIds": parse_json_or_none(ctx.attr.VpcSecurityGroupIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dms_replication_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -30236,7 +30236,7 @@ def _cloudformation_aws_dms_replication_subnet_group_impl(ctx):
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dms_replication_subnet_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -30292,7 +30292,7 @@ def _cloudformation_aws_dms_replication_task_impl(ctx):
         "TargetEndpointArn": ctx.attr.TargetEndpointArn,
         "TaskData": ctx.attr.TaskData,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dms_replication_task.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -30392,7 +30392,7 @@ def _cloudformation_aws_doc_db_dbcluster_impl(ctx):
         "UseLatestRestorableTime": parse_json_or_none(ctx.attr.UseLatestRestorableTime),
         "VpcSecurityGroupIds": parse_json_or_none(ctx.attr.VpcSecurityGroupIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_doc_db_dbcluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -30518,7 +30518,7 @@ def _cloudformation_aws_doc_db_dbcluster_parameter_group_impl(ctx):
         "Parameters": parse_json_or_none(ctx.attr.Parameters),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_doc_db_dbcluster_parameter_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -30574,7 +30574,7 @@ def _cloudformation_aws_doc_db_dbinstance_impl(ctx):
         "PreferredMaintenanceWindow": ctx.attr.PreferredMaintenanceWindow,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_doc_db_dbinstance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -30639,7 +30639,7 @@ def _cloudformation_aws_doc_db_dbsubnet_group_impl(ctx):
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_doc_db_dbsubnet_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -30688,7 +30688,7 @@ def _cloudformation_aws_doc_db_event_subscription_impl(ctx):
         "SourceType": ctx.attr.SourceType,
         "SubscriptionName": ctx.attr.SubscriptionName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_doc_db_event_subscription.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -30744,7 +30744,7 @@ def _cloudformation_aws_doc_db_global_cluster_impl(ctx):
         "StorageEncrypted": parse_json_or_none(ctx.attr.StorageEncrypted),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_doc_db_global_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -30810,7 +30810,7 @@ def _cloudformation_aws_doc_dbelastic_cluster_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcSecurityGroupIds": parse_json_or_none(ctx.attr.VpcSecurityGroupIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_doc_dbelastic_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -30883,7 +30883,7 @@ def _cloudformation_aws_drs_recovery_instance_impl(ctx):
     item_name = ctx.attr.aws_drs_recovery_instance_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_drs_recovery_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -30919,7 +30919,7 @@ def _cloudformation_aws_dsql_cluster_impl(ctx):
         "PolicyDocument": ctx.attr.PolicyDocument,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dsql_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -30972,7 +30972,7 @@ def _cloudformation_aws_dynamo_db_export_impl(ctx):
         "S3SseAlgorithm": ctx.attr.S3SseAlgorithm,
         "TableArn": ctx.attr.TableArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dynamo_db_export.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -31042,7 +31042,7 @@ def _cloudformation_aws_dynamo_db_global_table_impl(ctx):
         "WriteOnDemandThroughputSettings": parse_json_or_none(ctx.attr.WriteOnDemandThroughputSettings),
         "WriteProvisionedThroughputSettings": parse_json_or_none(ctx.attr.WriteProvisionedThroughputSettings),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dynamo_db_global_table.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -31129,7 +31129,7 @@ def _cloudformation_aws_dynamo_db_stream_impl(ctx):
         "StreamViewType": ctx.attr.StreamViewType,
         "TableName": ctx.attr.TableName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dynamo_db_stream.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -31186,7 +31186,7 @@ def _cloudformation_aws_dynamo_db_table_impl(ctx):
         "TimeToLiveSpecification": parse_json_or_none(ctx.attr.TimeToLiveSpecification),
         "WarmThroughput": parse_json_or_none(ctx.attr.WarmThroughput),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dynamo_db_table.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -31282,7 +31282,7 @@ def _cloudformation_aws_ec2_capacity_manager_data_export_impl(ctx):
         "Schedule": ctx.attr.Schedule,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_capacity_manager_data_export.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -31343,7 +31343,7 @@ def _cloudformation_aws_ec2_capacity_reservation_impl(ctx):
         "Tenancy": ctx.attr.Tenancy,
         "UnusedReservationBillingOwnerId": ctx.attr.UnusedReservationBillingOwnerId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_capacity_reservation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -31428,7 +31428,7 @@ def _cloudformation_aws_ec2_capacity_reservation_fleet_impl(ctx):
         "Tenancy": ctx.attr.Tenancy,
         "TotalTargetCapacity": parse_json_or_none(ctx.attr.TotalTargetCapacity),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_capacity_reservation_fleet.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -31488,7 +31488,7 @@ def _cloudformation_aws_ec2_carrier_gateway_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_carrier_gateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -31530,7 +31530,7 @@ def _cloudformation_aws_ec2_client_vpn_authorization_rule_impl(ctx):
         "Description": ctx.attr.Description,
         "TargetNetworkCidr": ctx.attr.TargetNetworkCidr,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_client_vpn_authorization_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -31597,7 +31597,7 @@ def _cloudformation_aws_ec2_client_vpn_endpoint_impl(ctx):
         "VpcId": ctx.attr.VpcId,
         "VpnPort": parse_json_or_none(ctx.attr.VpnPort),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_client_vpn_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -31695,7 +31695,7 @@ def _cloudformation_aws_ec2_client_vpn_route_impl(ctx):
         "DestinationCidrBlock": ctx.attr.DestinationCidrBlock,
         "TargetVpcSubnetId": ctx.attr.TargetVpcSubnetId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_client_vpn_route.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -31742,7 +31742,7 @@ def _cloudformation_aws_ec2_client_vpn_target_network_association_impl(ctx):
         "ClientVpnEndpointId": ctx.attr.ClientVpnEndpointId,
         "SubnetId": ctx.attr.SubnetId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_client_vpn_target_network_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -31792,7 +31792,7 @@ def _cloudformation_aws_ec2_customer_gateway_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_customer_gateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -31851,7 +31851,7 @@ def _cloudformation_aws_ec2_dhcpoptions_impl(ctx):
         "NtpServers": parse_json_or_none(ctx.attr.NtpServers),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_dhcpoptions.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -31916,7 +31916,7 @@ def _cloudformation_aws_ec2_ec2_fleet_impl(ctx):
         "ValidFrom": ctx.attr.ValidFrom,
         "ValidUntil": ctx.attr.ValidUntil,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_ec2_fleet.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -31988,7 +31988,7 @@ def _cloudformation_aws_ec2_egress_only_internet_gateway_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_egress_only_internet_gateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32033,7 +32033,7 @@ def _cloudformation_aws_ec2_eip_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TransferAddress": ctx.attr.TransferAddress,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_eip.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32092,7 +32092,7 @@ def _cloudformation_aws_ec2_eipassociation_impl(ctx):
         "NetworkInterfaceId": ctx.attr.NetworkInterfaceId,
         "PrivateIpAddress": ctx.attr.PrivateIpAddress,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_eipassociation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32137,7 +32137,7 @@ def _cloudformation_aws_ec2_enclave_certificate_iam_role_association_impl(ctx):
         "CertificateArn": ctx.attr.CertificateArn,
         "RoleArn": ctx.attr.RoleArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_enclave_certificate_iam_role_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32179,7 +32179,7 @@ def _cloudformation_aws_ec2_export_instance_task_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetEnvironment": ctx.attr.TargetEnvironment,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_export_instance_task.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32238,7 +32238,7 @@ def _cloudformation_aws_ec2_flow_log_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TrafficType": ctx.attr.TrafficType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_flow_log.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32310,7 +32310,7 @@ def _cloudformation_aws_ec2_gateway_route_table_association_impl(ctx):
         "GatewayId": ctx.attr.GatewayId,
         "RouteTableId": ctx.attr.RouteTableId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_gateway_route_table_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32356,7 +32356,7 @@ def _cloudformation_aws_ec2_host_impl(ctx):
         "OutpostArn": ctx.attr.OutpostArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_host.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32455,7 +32455,7 @@ def _cloudformation_aws_ec2_instance_impl(ctx):
         "UserData": ctx.attr.UserData,
         "Volumes": parse_json_or_none(ctx.attr.Volumes),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32614,7 +32614,7 @@ def _cloudformation_aws_ec2_instance_connect_endpoint_impl(ctx):
         "SubnetId": ctx.attr.SubnetId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_instance_connect_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32661,7 +32661,7 @@ def _cloudformation_aws_ec2_internet_gateway_impl(ctx):
     payload = {
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_internet_gateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32697,7 +32697,7 @@ def _cloudformation_aws_ec2_ip_pool_route_table_association_impl(ctx):
         "PublicIpv4Pool": ctx.attr.PublicIpv4Pool,
         "RouteTableId": ctx.attr.RouteTableId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_ip_pool_route_table_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32741,7 +32741,7 @@ def _cloudformation_aws_ec2_ipam_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Tier": ctx.attr.Tier,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_ipam.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32797,7 +32797,7 @@ def _cloudformation_aws_ec2_ipamallocation_impl(ctx):
         "IpamPoolId": ctx.attr.IpamPoolId,
         "NetmaskLength": parse_json_or_none(ctx.attr.NetmaskLength),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_ipamallocation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32856,7 +32856,7 @@ def _cloudformation_aws_ec2_ipampool_impl(ctx):
         "SourceResource": parse_json_or_none(ctx.attr.SourceResource),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_ipampool.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32938,7 +32938,7 @@ def _cloudformation_aws_ec2_ipampool_cidr_impl(ctx):
         "IpamPoolId": ctx.attr.IpamPoolId,
         "NetmaskLength": parse_json_or_none(ctx.attr.NetmaskLength),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_ipampool_cidr.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -32983,7 +32983,7 @@ def _cloudformation_aws_ec2_ipamprefix_list_resolver_impl(ctx):
         "Rules": parse_json_or_none(ctx.attr.Rules),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_ipamprefix_list_resolver.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33035,7 +33035,7 @@ def _cloudformation_aws_ec2_ipamprefix_list_resolver_target_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TrackLatestVersion": parse_json_or_none(ctx.attr.TrackLatestVersion),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_ipamprefix_list_resolver_target.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33088,7 +33088,7 @@ def _cloudformation_aws_ec2_ipamresource_discovery_impl(ctx):
         "OrganizationalUnitExclusions": parse_json_or_none(ctx.attr.OrganizationalUnitExclusions),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_ipamresource_discovery.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33134,7 +33134,7 @@ def _cloudformation_aws_ec2_ipamresource_discovery_association_impl(ctx):
         "IpamResourceDiscoveryId": ctx.attr.IpamResourceDiscoveryId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_ipamresource_discovery_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33178,7 +33178,7 @@ def _cloudformation_aws_ec2_ipamscope_impl(ctx):
         "IpamId": ctx.attr.IpamId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_ipamscope.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33226,7 +33226,7 @@ def _cloudformation_aws_ec2_key_pair_impl(ctx):
         "PublicKeyMaterial": ctx.attr.PublicKeyMaterial,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_key_pair.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33276,7 +33276,7 @@ def _cloudformation_aws_ec2_launch_template_impl(ctx):
         "TagSpecifications": parse_json_or_none(ctx.attr.TagSpecifications),
         "VersionDescription": ctx.attr.VersionDescription,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_launch_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33323,7 +33323,7 @@ def _cloudformation_aws_ec2_local_gateway_route_impl(ctx):
         "LocalGatewayVirtualInterfaceGroupId": ctx.attr.LocalGatewayVirtualInterfaceGroupId,
         "NetworkInterfaceId": ctx.attr.NetworkInterfaceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_local_gateway_route.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33369,7 +33369,7 @@ def _cloudformation_aws_ec2_local_gateway_route_table_impl(ctx):
         "Mode": ctx.attr.Mode,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_local_gateway_route_table.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33412,7 +33412,7 @@ def _cloudformation_aws_ec2_local_gateway_route_table_virtual_interface_group_as
         "LocalGatewayVirtualInterfaceGroupId": ctx.attr.LocalGatewayVirtualInterfaceGroupId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_local_gateway_route_table_virtual_interface_group_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33455,7 +33455,7 @@ def _cloudformation_aws_ec2_local_gateway_route_table_vpcassociation_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_local_gateway_route_table_vpcassociation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33503,7 +33503,7 @@ def _cloudformation_aws_ec2_local_gateway_virtual_interface_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Vlan": parse_json_or_none(ctx.attr.Vlan),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_local_gateway_virtual_interface.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33562,7 +33562,7 @@ def _cloudformation_aws_ec2_local_gateway_virtual_interface_group_impl(ctx):
         "LocalGatewayId": ctx.attr.LocalGatewayId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_local_gateway_virtual_interface_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33617,7 +33617,7 @@ def _cloudformation_aws_ec2_nat_gateway_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_nat_gateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33686,7 +33686,7 @@ def _cloudformation_aws_ec2_network_acl_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_network_acl.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33732,7 +33732,7 @@ def _cloudformation_aws_ec2_network_acl_entry_impl(ctx):
         "RuleAction": ctx.attr.RuleAction,
         "RuleNumber": parse_json_or_none(ctx.attr.RuleNumber),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_network_acl_entry.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33793,7 +33793,7 @@ def _cloudformation_aws_ec2_network_insights_access_scope_impl(ctx):
         "MatchPaths": parse_json_or_none(ctx.attr.MatchPaths),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_network_insights_access_scope.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33835,7 +33835,7 @@ def _cloudformation_aws_ec2_network_insights_access_scope_analysis_impl(ctx):
         "NetworkInsightsAccessScopeId": ctx.attr.NetworkInsightsAccessScopeId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_network_insights_access_scope_analysis.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33877,7 +33877,7 @@ def _cloudformation_aws_ec2_network_insights_analysis_impl(ctx):
         "NetworkInsightsPathId": ctx.attr.NetworkInsightsPathId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_network_insights_analysis.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -33932,7 +33932,7 @@ def _cloudformation_aws_ec2_network_insights_path_impl(ctx):
         "SourceIp": ctx.attr.SourceIp,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_network_insights_path.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34007,7 +34007,7 @@ def _cloudformation_aws_ec2_network_interface_impl(ctx):
         "SubnetId": ctx.attr.SubnetId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_network_interface.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34095,7 +34095,7 @@ def _cloudformation_aws_ec2_network_interface_attachment_impl(ctx):
         "InstanceId": ctx.attr.InstanceId,
         "NetworkInterfaceId": ctx.attr.NetworkInterfaceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_network_interface_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34147,7 +34147,7 @@ def _cloudformation_aws_ec2_network_interface_permission_impl(ctx):
         "NetworkInterfaceId": ctx.attr.NetworkInterfaceId,
         "Permission": ctx.attr.Permission,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_network_interface_permission.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34191,7 +34191,7 @@ def _cloudformation_aws_ec2_network_performance_metric_subscription_impl(ctx):
         "Source": ctx.attr.Source,
         "Statistic": ctx.attr.Statistic,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_network_performance_metric_subscription.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34239,7 +34239,7 @@ def _cloudformation_aws_ec2_placement_group_impl(ctx):
         "Strategy": ctx.attr.Strategy,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_placement_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34290,7 +34290,7 @@ def _cloudformation_aws_ec2_prefix_list_impl(ctx):
         "PrefixListName": ctx.attr.PrefixListName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_prefix_list.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34352,7 +34352,7 @@ def _cloudformation_aws_ec2_route_impl(ctx):
         "VpcEndpointId": ctx.attr.VpcEndpointId,
         "VpcPeeringConnectionId": ctx.attr.VpcPeeringConnectionId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_route.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34436,7 +34436,7 @@ def _cloudformation_aws_ec2_route_server_impl(ctx):
         "SnsNotificationsEnabled": parse_json_or_none(ctx.attr.SnsNotificationsEnabled),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_route_server.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34484,7 +34484,7 @@ def _cloudformation_aws_ec2_route_server_association_impl(ctx):
         "RouteServerId": ctx.attr.RouteServerId,
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_route_server_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34524,7 +34524,7 @@ def _cloudformation_aws_ec2_route_server_endpoint_impl(ctx):
         "SubnetId": ctx.attr.SubnetId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_route_server_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34568,7 +34568,7 @@ def _cloudformation_aws_ec2_route_server_peer_impl(ctx):
         "RouteServerEndpointId": ctx.attr.RouteServerEndpointId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_route_server_peer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34613,7 +34613,7 @@ def _cloudformation_aws_ec2_route_server_propagation_impl(ctx):
         "RouteServerId": ctx.attr.RouteServerId,
         "RouteTableId": ctx.attr.RouteTableId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_route_server_propagation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34652,7 +34652,7 @@ def _cloudformation_aws_ec2_route_table_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_route_table.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34695,7 +34695,7 @@ def _cloudformation_aws_ec2_security_group_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_security_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34753,7 +34753,7 @@ def _cloudformation_aws_ec2_security_group_egress_impl(ctx):
         "IpProtocol": ctx.attr.IpProtocol,
         "ToPort": parse_json_or_none(ctx.attr.ToPort),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_security_group_egress.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34823,7 +34823,7 @@ def _cloudformation_aws_ec2_security_group_ingress_impl(ctx):
         "SourceSecurityGroupOwnerId": ctx.attr.SourceSecurityGroupOwnerId,
         "ToPort": parse_json_or_none(ctx.attr.ToPort),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_security_group_ingress.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34892,7 +34892,7 @@ def _cloudformation_aws_ec2_security_group_vpc_association_impl(ctx):
         "GroupId": ctx.attr.GroupId,
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_security_group_vpc_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34930,7 +34930,7 @@ def _cloudformation_aws_ec2_snapshot_block_public_access_impl(ctx):
     payload = {
         "State": ctx.attr.State,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_snapshot_block_public_access.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -34966,7 +34966,7 @@ def _cloudformation_aws_ec2_spot_fleet_impl(ctx):
         "SpotFleetRequestConfigData": parse_json_or_none(ctx.attr.SpotFleetRequestConfigData),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_spot_fleet.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35005,7 +35005,7 @@ def _cloudformation_aws_ec2_sql_ha_standby_detected_instance_impl(ctx):
         "InstanceId": ctx.attr.InstanceId,
         "SqlServerCredentials": ctx.attr.SqlServerCredentials,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_sql_ha_standby_detected_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35059,7 +35059,7 @@ def _cloudformation_aws_ec2_subnet_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_subnet.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35145,7 +35145,7 @@ def _cloudformation_aws_ec2_subnet_cidr_block_impl(ctx):
         "Ipv6NetmaskLength": parse_json_or_none(ctx.attr.Ipv6NetmaskLength),
         "SubnetId": ctx.attr.SubnetId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_subnet_cidr_block.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35190,7 +35190,7 @@ def _cloudformation_aws_ec2_subnet_network_acl_association_impl(ctx):
         "NetworkAclId": ctx.attr.NetworkAclId,
         "SubnetId": ctx.attr.SubnetId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_subnet_network_acl_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35229,7 +35229,7 @@ def _cloudformation_aws_ec2_subnet_route_table_association_impl(ctx):
         "RouteTableId": ctx.attr.RouteTableId,
         "SubnetId": ctx.attr.SubnetId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_subnet_route_table_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35269,7 +35269,7 @@ def _cloudformation_aws_ec2_traffic_mirror_filter_impl(ctx):
         "NetworkServices": parse_json_or_none(ctx.attr.NetworkServices),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_traffic_mirror_filter.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35320,7 +35320,7 @@ def _cloudformation_aws_ec2_traffic_mirror_filter_rule_impl(ctx):
         "TrafficDirection": ctx.attr.TrafficDirection,
         "TrafficMirrorFilterId": ctx.attr.TrafficMirrorFilterId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_traffic_mirror_filter_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35393,7 +35393,7 @@ def _cloudformation_aws_ec2_traffic_mirror_session_impl(ctx):
         "TrafficMirrorTargetId": ctx.attr.TrafficMirrorTargetId,
         "VirtualNetworkId": parse_json_or_none(ctx.attr.VirtualNetworkId),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_traffic_mirror_session.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35456,7 +35456,7 @@ def _cloudformation_aws_ec2_traffic_mirror_target_impl(ctx):
         "NetworkLoadBalancerArn": ctx.attr.NetworkLoadBalancerArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_traffic_mirror_target.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35516,7 +35516,7 @@ def _cloudformation_aws_ec2_transit_gateway_impl(ctx):
         "TransitGatewayCidrBlocks": parse_json_or_none(ctx.attr.TransitGatewayCidrBlocks),
         "VpnEcmpSupport": ctx.attr.VpnEcmpSupport,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35594,7 +35594,7 @@ def _cloudformation_aws_ec2_transit_gateway_attachment_impl(ctx):
         "TransitGatewayId": ctx.attr.TransitGatewayId,
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35643,7 +35643,7 @@ def _cloudformation_aws_ec2_transit_gateway_connect_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TransportTransitGatewayAttachmentId": ctx.attr.TransportTransitGatewayAttachmentId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_connect.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35686,7 +35686,7 @@ def _cloudformation_aws_ec2_transit_gateway_connect_peer_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TransitGatewayAttachmentId": ctx.attr.TransitGatewayAttachmentId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_connect_peer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35729,7 +35729,7 @@ def _cloudformation_aws_ec2_transit_gateway_metering_policy_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TransitGatewayId": ctx.attr.TransitGatewayId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_metering_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35781,7 +35781,7 @@ def _cloudformation_aws_ec2_transit_gateway_metering_policy_entry_impl(ctx):
         "SourceTransitGatewayAttachmentType": ctx.attr.SourceTransitGatewayAttachmentType,
         "TransitGatewayMeteringPolicyId": ctx.attr.TransitGatewayMeteringPolicyId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_metering_policy_entry.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35851,7 +35851,7 @@ def _cloudformation_aws_ec2_transit_gateway_multicast_domain_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TransitGatewayId": ctx.attr.TransitGatewayId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_multicast_domain.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35894,7 +35894,7 @@ def _cloudformation_aws_ec2_transit_gateway_multicast_domain_association_impl(ct
         "TransitGatewayAttachmentId": ctx.attr.TransitGatewayAttachmentId,
         "TransitGatewayMulticastDomainId": ctx.attr.TransitGatewayMulticastDomainId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_multicast_domain_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35937,7 +35937,7 @@ def _cloudformation_aws_ec2_transit_gateway_multicast_group_member_impl(ctx):
         "NetworkInterfaceId": ctx.attr.NetworkInterfaceId,
         "TransitGatewayMulticastDomainId": ctx.attr.TransitGatewayMulticastDomainId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_multicast_group_member.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -35980,7 +35980,7 @@ def _cloudformation_aws_ec2_transit_gateway_multicast_group_source_impl(ctx):
         "NetworkInterfaceId": ctx.attr.NetworkInterfaceId,
         "TransitGatewayMulticastDomainId": ctx.attr.TransitGatewayMulticastDomainId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_multicast_group_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36025,7 +36025,7 @@ def _cloudformation_aws_ec2_transit_gateway_peering_attachment_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TransitGatewayId": ctx.attr.TransitGatewayId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_peering_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36073,7 +36073,7 @@ def _cloudformation_aws_ec2_transit_gateway_policy_table_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TransitGatewayId": ctx.attr.TransitGatewayId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_policy_table.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36112,7 +36112,7 @@ def _cloudformation_aws_ec2_transit_gateway_policy_table_association_impl(ctx):
         "TransitGatewayAttachmentId": ctx.attr.TransitGatewayAttachmentId,
         "TransitGatewayPolicyTableId": ctx.attr.TransitGatewayPolicyTableId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_policy_table_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36153,7 +36153,7 @@ def _cloudformation_aws_ec2_transit_gateway_policy_table_entry_impl(ctx):
         "TargetRouteTableId": ctx.attr.TargetRouteTableId,
         "TransitGatewayPolicyTableId": ctx.attr.TransitGatewayPolicyTableId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_policy_table_entry.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36200,7 +36200,7 @@ def _cloudformation_aws_ec2_transit_gateway_route_impl(ctx):
         "TransitGatewayAttachmentId": ctx.attr.TransitGatewayAttachmentId,
         "TransitGatewayRouteTableId": ctx.attr.TransitGatewayRouteTableId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_route.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36245,7 +36245,7 @@ def _cloudformation_aws_ec2_transit_gateway_route_table_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TransitGatewayId": ctx.attr.TransitGatewayId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_route_table.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36284,7 +36284,7 @@ def _cloudformation_aws_ec2_transit_gateway_route_table_association_impl(ctx):
         "TransitGatewayAttachmentId": ctx.attr.TransitGatewayAttachmentId,
         "TransitGatewayRouteTableId": ctx.attr.TransitGatewayRouteTableId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_route_table_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36323,7 +36323,7 @@ def _cloudformation_aws_ec2_transit_gateway_route_table_propagation_impl(ctx):
         "TransitGatewayAttachmentId": ctx.attr.TransitGatewayAttachmentId,
         "TransitGatewayRouteTableId": ctx.attr.TransitGatewayRouteTableId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_route_table_propagation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36367,7 +36367,7 @@ def _cloudformation_aws_ec2_transit_gateway_vpc_attachment_impl(ctx):
         "TransitGatewayId": ctx.attr.TransitGatewayId,
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_vpc_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36435,7 +36435,7 @@ def _cloudformation_aws_ec2_verified_access_endpoint_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VerifiedAccessGroupId": ctx.attr.VerifiedAccessGroupId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_verified_access_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36520,7 +36520,7 @@ def _cloudformation_aws_ec2_verified_access_group_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VerifiedAccessInstanceId": ctx.attr.VerifiedAccessInstanceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_verified_access_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36576,7 +36576,7 @@ def _cloudformation_aws_ec2_verified_access_instance_impl(ctx):
         "VerifiedAccessTrustProviderIds": parse_json_or_none(ctx.attr.VerifiedAccessTrustProviderIds),
         "VerifiedAccessTrustProviders": parse_json_or_none(ctx.attr.VerifiedAccessTrustProviders),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_verified_access_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36638,7 +36638,7 @@ def _cloudformation_aws_ec2_verified_access_trust_provider_impl(ctx):
         "TrustProviderType": ctx.attr.TrustProviderType,
         "UserTrustProviderType": ctx.attr.UserTrustProviderType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_verified_access_trust_provider.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36714,7 +36714,7 @@ def _cloudformation_aws_ec2_volume_impl(ctx):
         "VolumeInitializationRate": parse_json_or_none(ctx.attr.VolumeInitializationRate),
         "VolumeType": ctx.attr.VolumeType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_volume.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36794,7 +36794,7 @@ def _cloudformation_aws_ec2_volume_attachment_impl(ctx):
         "InstanceId": ctx.attr.InstanceId,
         "VolumeId": ctx.attr.VolumeId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_volume_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36845,7 +36845,7 @@ def _cloudformation_aws_ec2_vpc_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcEncryptionControl": parse_json_or_none(ctx.attr.VpcEncryptionControl),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpc.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36904,7 +36904,7 @@ def _cloudformation_aws_ec2_vpcblock_public_access_exclusion_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpcblock_public_access_exclusion.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36948,7 +36948,7 @@ def _cloudformation_aws_ec2_vpcblock_public_access_options_impl(ctx):
     payload = {
         "InternetGatewayBlockMode": ctx.attr.InternetGatewayBlockMode,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpcblock_public_access_options.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -36992,7 +36992,7 @@ def _cloudformation_aws_ec2_vpccidr_block_impl(ctx):
         "Ipv6Pool": ctx.attr.Ipv6Pool,
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpccidr_block.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37055,7 +37055,7 @@ def _cloudformation_aws_ec2_vpcdhcpoptions_association_impl(ctx):
         "DhcpOptionsId": ctx.attr.DhcpOptionsId,
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpcdhcpoptions_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37103,7 +37103,7 @@ def _cloudformation_aws_ec2_vpcencryption_control_impl(ctx):
         "VpcLatticeExclusionInput": ctx.attr.VpcLatticeExclusionInput,
         "VpcPeeringExclusionInput": ctx.attr.VpcPeeringExclusionInput,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpcencryption_control.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37181,7 +37181,7 @@ def _cloudformation_aws_ec2_vpcendpoint_impl(ctx):
         "VpcEndpointType": ctx.attr.VpcEndpointType,
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpcendpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37258,7 +37258,7 @@ def _cloudformation_aws_ec2_vpcendpoint_connection_notification_impl(ctx):
         "ServiceId": ctx.attr.ServiceId,
         "VPCEndpointId": ctx.attr.VPCEndpointId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpcendpoint_connection_notification.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37309,7 +37309,7 @@ def _cloudformation_aws_ec2_vpcendpoint_service_impl(ctx):
         "SupportedRegions": parse_json_or_none(ctx.attr.SupportedRegions),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpcendpoint_service.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37366,7 +37366,7 @@ def _cloudformation_aws_ec2_vpcendpoint_service_permissions_impl(ctx):
         "AllowedPrincipals": parse_json_or_none(ctx.attr.AllowedPrincipals),
         "ServiceId": ctx.attr.ServiceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpcendpoint_service_permissions.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37406,7 +37406,7 @@ def _cloudformation_aws_ec2_vpcgateway_attachment_impl(ctx):
         "VpcId": ctx.attr.VpcId,
         "VpnGatewayId": ctx.attr.VpnGatewayId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpcgateway_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37453,7 +37453,7 @@ def _cloudformation_aws_ec2_vpcpeering_connection_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpcpeering_connection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37508,7 +37508,7 @@ def _cloudformation_aws_ec2_vpnconcentrator_impl(ctx):
         "TransitGatewayId": ctx.attr.TransitGatewayId,
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpnconcentrator.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37566,7 +37566,7 @@ def _cloudformation_aws_ec2_vpnconnection_impl(ctx):
         "VpnGatewayId": ctx.attr.VpnGatewayId,
         "VpnTunnelOptionsSpecifications": parse_json_or_none(ctx.attr.VpnTunnelOptionsSpecifications),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpnconnection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37653,7 +37653,7 @@ def _cloudformation_aws_ec2_vpnconnection_route_impl(ctx):
         "DestinationCidrBlock": ctx.attr.DestinationCidrBlock,
         "VpnConnectionId": ctx.attr.VpnConnectionId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpnconnection_route.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37693,7 +37693,7 @@ def _cloudformation_aws_ec2_vpngateway_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpngateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37735,7 +37735,7 @@ def _cloudformation_aws_ec2_vpngateway_route_propagation_impl(ctx):
         "RouteTableIds": parse_json_or_none(ctx.attr.RouteTableIds),
         "VpnGatewayId": ctx.attr.VpnGatewayId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpngateway_route_propagation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37776,7 +37776,7 @@ def _cloudformation_aws_ecr_public_repository_impl(ctx):
         "RepositoryPolicyText": parse_json_or_none(ctx.attr.RepositoryPolicyText),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecr_public_repository.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37825,7 +37825,7 @@ def _cloudformation_aws_ecr_pull_through_cache_rule_impl(ctx):
         "UpstreamRegistryUrl": ctx.attr.UpstreamRegistryUrl,
         "UpstreamRepositoryPrefix": ctx.attr.UpstreamRepositoryPrefix,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecr_pull_through_cache_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37875,7 +37875,7 @@ def _cloudformation_aws_ecr_pull_time_update_exclusion_impl(ctx):
     payload = {
         "PrincipalArn": ctx.attr.PrincipalArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecr_pull_time_update_exclusion.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37910,7 +37910,7 @@ def _cloudformation_aws_ecr_registry_policy_impl(ctx):
     payload = {
         "PolicyText": parse_json_or_none(ctx.attr.PolicyText),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecr_registry_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37946,7 +37946,7 @@ def _cloudformation_aws_ecr_registry_scanning_configuration_impl(ctx):
         "Rules": parse_json_or_none(ctx.attr.Rules),
         "ScanType": ctx.attr.ScanType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecr_registry_scanning_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -37984,7 +37984,7 @@ def _cloudformation_aws_ecr_replication_configuration_impl(ctx):
     payload = {
         "ReplicationConfiguration": parse_json_or_none(ctx.attr.ReplicationConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecr_replication_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38027,7 +38027,7 @@ def _cloudformation_aws_ecr_repository_impl(ctx):
         "RepositoryPolicyText": parse_json_or_none(ctx.attr.RepositoryPolicyText),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecr_repository.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38095,7 +38095,7 @@ def _cloudformation_aws_ecr_repository_creation_template_impl(ctx):
         "RepositoryPolicy": ctx.attr.RepositoryPolicy,
         "ResourceTags": parse_json_or_none(ctx.attr.ResourceTags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecr_repository_creation_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38157,7 +38157,7 @@ def _cloudformation_aws_ecr_signing_configuration_impl(ctx):
     payload = {
         "Rules": parse_json_or_none(ctx.attr.Rules),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecr_signing_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38191,7 +38191,7 @@ def _cloudformation_aws_ecrpublic_registry_impl(ctx):
     item_name = ctx.attr.aws_ecrpublic_registry_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecrpublic_registry.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38227,7 +38227,7 @@ def _cloudformation_aws_ecs_capacity_provider_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecs_capacity_provider.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38280,7 +38280,7 @@ def _cloudformation_aws_ecs_cluster_impl(ctx):
         "ServiceConnectDefaults": parse_json_or_none(ctx.attr.ServiceConnectDefaults),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecs_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38335,7 +38335,7 @@ def _cloudformation_aws_ecs_cluster_capacity_provider_associations_impl(ctx):
         "Cluster": ctx.attr.Cluster,
         "DefaultCapacityProviderStrategy": parse_json_or_none(ctx.attr.DefaultCapacityProviderStrategy),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecs_cluster_capacity_provider_associations.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38375,7 +38375,7 @@ def _cloudformation_aws_ecs_container_instance_impl(ctx):
     item_name = ctx.attr.aws_ecs_container_instance_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecs_container_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38415,7 +38415,7 @@ def _cloudformation_aws_ecs_daemon_impl(ctx):
         "PropagateTags": ctx.attr.PropagateTags,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecs_daemon.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38483,7 +38483,7 @@ def _cloudformation_aws_ecs_daemon_task_definition_impl(ctx):
         "TaskRoleArn": ctx.attr.TaskRoleArn,
         "Volumes": parse_json_or_none(ctx.attr.Volumes),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecs_daemon_task_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38557,7 +38557,7 @@ def _cloudformation_aws_ecs_express_gateway_service_impl(ctx):
         "TaskDefinitionArn": ctx.attr.TaskDefinitionArn,
         "TaskRoleArn": ctx.attr.TaskRoleArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecs_express_gateway_service.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38630,7 +38630,7 @@ def _cloudformation_aws_ecs_primary_task_set_impl(ctx):
         "Service": ctx.attr.Service,
         "TaskSetId": ctx.attr.TaskSetId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecs_primary_task_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38697,7 +38697,7 @@ def _cloudformation_aws_ecs_service_impl(ctx):
         "VolumeConfigurations": parse_json_or_none(ctx.attr.VolumeConfigurations),
         "VpcLatticeConfigurations": parse_json_or_none(ctx.attr.VpcLatticeConfigurations),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecs_service.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38809,7 +38809,7 @@ def _cloudformation_aws_ecs_task_impl(ctx):
     item_name = ctx.attr.aws_ecs_task_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecs_task.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38857,7 +38857,7 @@ def _cloudformation_aws_ecs_task_definition_impl(ctx):
         "TaskRoleArn": ctx.attr.TaskRoleArn,
         "Volumes": parse_json_or_none(ctx.attr.Volumes),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecs_task_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -38951,7 +38951,7 @@ def _cloudformation_aws_ecs_task_set_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TaskDefinition": ctx.attr.TaskDefinition,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecs_task_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -39023,7 +39023,7 @@ def _cloudformation_aws_efs_access_point_impl(ctx):
         "PosixUser": parse_json_or_none(ctx.attr.PosixUser),
         "RootDirectory": parse_json_or_none(ctx.attr.RootDirectory),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_efs_access_point.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -39082,7 +39082,7 @@ def _cloudformation_aws_efs_file_system_impl(ctx):
         "ReplicationConfiguration": parse_json_or_none(ctx.attr.ReplicationConfiguration),
         "ThroughputMode": ctx.attr.ThroughputMode,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_efs_file_system.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -39158,7 +39158,7 @@ def _cloudformation_aws_efs_mount_target_impl(ctx):
         "SecurityGroups": parse_json_or_none(ctx.attr.SecurityGroups),
         "SubnetId": ctx.attr.SubnetId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_efs_mount_target.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -39214,7 +39214,7 @@ def _cloudformation_aws_eks_access_entry_impl(ctx):
         "Type": ctx.attr.Type,
         "Username": ctx.attr.Username,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_eks_access_entry.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -39276,7 +39276,7 @@ def _cloudformation_aws_eks_addon_impl(ctx):
         "ServiceAccountRoleArn": ctx.attr.ServiceAccountRoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_eks_addon.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -39344,7 +39344,7 @@ def _cloudformation_aws_eks_capability_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_eks_capability.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -39419,7 +39419,7 @@ def _cloudformation_aws_eks_cluster_impl(ctx):
         "Version": ctx.attr.Version,
         "ZonalShiftConfig": parse_json_or_none(ctx.attr.ZonalShiftConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_eks_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -39525,7 +39525,7 @@ def _cloudformation_aws_eks_fargate_profile_impl(ctx):
         "Subnets": parse_json_or_none(ctx.attr.Subnets),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_eks_fargate_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -39579,7 +39579,7 @@ def _cloudformation_aws_eks_identity_provider_config_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_eks_identity_provider_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -39645,7 +39645,7 @@ def _cloudformation_aws_eks_nodegroup_impl(ctx):
         "Version": ctx.attr.Version,
         "WarmPoolConfig": parse_json_or_none(ctx.attr.WarmPoolConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_eks_nodegroup.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -39744,7 +39744,7 @@ def _cloudformation_aws_eks_pod_identity_association_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetRoleArn": ctx.attr.TargetRoleArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_eks_pod_identity_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -39823,7 +39823,7 @@ def _cloudformation_aws_elasti_cache_cache_cluster_impl(ctx):
         "TransitEncryptionEnabled": parse_json_or_none(ctx.attr.TransitEncryptionEnabled),
         "VpcSecurityGroupIds": parse_json_or_none(ctx.attr.VpcSecurityGroupIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elasti_cache_cache_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -39936,7 +39936,7 @@ def _cloudformation_aws_elasti_cache_global_replication_group_impl(ctx):
         "Members": parse_json_or_none(ctx.attr.Members),
         "RegionalConfigurations": parse_json_or_none(ctx.attr.RegionalConfigurations),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elasti_cache_global_replication_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40001,7 +40001,7 @@ def _cloudformation_aws_elasti_cache_parameter_group_impl(ctx):
         "Properties": ctx.attr.Properties,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elasti_cache_parameter_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40083,7 +40083,7 @@ def _cloudformation_aws_elasti_cache_replication_group_impl(ctx):
         "TransitEncryptionMode": ctx.attr.TransitEncryptionMode,
         "UserGroupIds": parse_json_or_none(ctx.attr.UserGroupIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elasti_cache_replication_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40231,7 +40231,7 @@ def _cloudformation_aws_elasti_cache_reserved_cache_node_impl(ctx):
     item_name = ctx.attr.aws_elasti_cache_reserved_cache_node_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elasti_cache_reserved_cache_node.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40264,7 +40264,7 @@ def _cloudformation_aws_elasti_cache_security_group_impl(ctx):
         "Description": ctx.attr.Description,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elasti_cache_security_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40304,7 +40304,7 @@ def _cloudformation_aws_elasti_cache_security_group_ingress_impl(ctx):
         "EC2SecurityGroupName": ctx.attr.EC2SecurityGroupName,
         "EC2SecurityGroupOwnerId": ctx.attr.EC2SecurityGroupOwnerId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elasti_cache_security_group_ingress.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40360,7 +40360,7 @@ def _cloudformation_aws_elasti_cache_serverless_cache_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UserGroupId": ctx.attr.UserGroupId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elasti_cache_serverless_cache.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40443,7 +40443,7 @@ def _cloudformation_aws_elasti_cache_serverless_cache_snapshot_impl(ctx):
         "ServerlessCacheSnapshotName": ctx.attr.ServerlessCacheSnapshotName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elasti_cache_serverless_cache_snapshot.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40490,7 +40490,7 @@ def _cloudformation_aws_elasti_cache_subnet_group_impl(ctx):
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elasti_cache_subnet_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40541,7 +40541,7 @@ def _cloudformation_aws_elasti_cache_user_impl(ctx):
         "UserId": ctx.attr.UserId,
         "UserName": ctx.attr.UserName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elasti_cache_user.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40600,7 +40600,7 @@ def _cloudformation_aws_elasti_cache_user_group_impl(ctx):
         "UserGroupId": ctx.attr.UserGroupId,
         "UserIds": parse_json_or_none(ctx.attr.UserIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elasti_cache_user_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40646,7 +40646,7 @@ def _cloudformation_aws_elastic_beanstalk_application_impl(ctx):
         "Description": ctx.attr.Description,
         "ResourceLifecycleConfig": parse_json_or_none(ctx.attr.ResourceLifecycleConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elastic_beanstalk_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40689,7 +40689,7 @@ def _cloudformation_aws_elastic_beanstalk_application_version_impl(ctx):
         "Description": ctx.attr.Description,
         "SourceBundle": parse_json_or_none(ctx.attr.SourceBundle),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elastic_beanstalk_application_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40736,7 +40736,7 @@ def _cloudformation_aws_elastic_beanstalk_configuration_template_impl(ctx):
         "SolutionStackName": ctx.attr.SolutionStackName,
         "SourceConfiguration": parse_json_or_none(ctx.attr.SourceConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elastic_beanstalk_configuration_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40800,7 +40800,7 @@ def _cloudformation_aws_elastic_beanstalk_environment_impl(ctx):
         "Tier": parse_json_or_none(ctx.attr.Tier),
         "VersionLabel": ctx.attr.VersionLabel,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elastic_beanstalk_environment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40883,7 +40883,7 @@ def _cloudformation_aws_elastic_load_balancing_load_balancer_impl(ctx):
         "Subnets": parse_json_or_none(ctx.attr.Subnets),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elastic_load_balancing_load_balancer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -40972,7 +40972,7 @@ def _cloudformation_aws_elastic_load_balancing_v2_listener_impl(ctx):
         "SslPolicy": ctx.attr.SslPolicy,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elastic_load_balancing_v2_listener.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -41035,7 +41035,7 @@ def _cloudformation_aws_elastic_load_balancing_v2_listener_certificate_impl(ctx)
         "Certificates": parse_json_or_none(ctx.attr.Certificates),
         "ListenerArn": ctx.attr.ListenerArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elastic_load_balancing_v2_listener_certificate.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -41078,7 +41078,7 @@ def _cloudformation_aws_elastic_load_balancing_v2_listener_rule_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Transforms": parse_json_or_none(ctx.attr.Transforms),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elastic_load_balancing_v2_listener_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -41141,7 +41141,7 @@ def _cloudformation_aws_elastic_load_balancing_v2_load_balancer_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elastic_load_balancing_v2_load_balancer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -41234,7 +41234,7 @@ def _cloudformation_aws_elastic_load_balancing_v2_target_group_impl(ctx):
         "UnhealthyThresholdCount": parse_json_or_none(ctx.attr.UnhealthyThresholdCount),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elastic_load_balancing_v2_target_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -41330,7 +41330,7 @@ def _cloudformation_aws_elastic_load_balancing_v2_trust_store_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elastic_load_balancing_v2_trust_store.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -41378,7 +41378,7 @@ def _cloudformation_aws_elastic_load_balancing_v2_trust_store_revocation_impl(ct
         "RevocationContents": parse_json_or_none(ctx.attr.RevocationContents),
         "TrustStoreArn": ctx.attr.TrustStoreArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elastic_load_balancing_v2_trust_store_revocation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -41430,7 +41430,7 @@ def _cloudformation_aws_elasticsearch_domain_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VPCOptions": parse_json_or_none(ctx.attr.VPCOptions),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elasticsearch_domain.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -41510,7 +41510,7 @@ def _cloudformation_aws_elemental_inference_dictionary_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elemental_inference_dictionary.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -41556,7 +41556,7 @@ def _cloudformation_aws_elemental_inference_feed_impl(ctx):
         "Outputs": parse_json_or_none(ctx.attr.Outputs),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elemental_inference_feed.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -41623,7 +41623,7 @@ def _cloudformation_aws_emr_cluster_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VisibleToAllUsers": parse_json_or_none(ctx.attr.VisibleToAllUsers),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_emr_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -41743,7 +41743,7 @@ def _cloudformation_aws_emr_instance_fleet_config_impl(ctx):
         "TargetOnDemandCapacity": parse_json_or_none(ctx.attr.TargetOnDemandCapacity),
         "TargetSpotCapacity": parse_json_or_none(ctx.attr.TargetSpotCapacity),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_emr_instance_fleet_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -41809,7 +41809,7 @@ def _cloudformation_aws_emr_instance_group_config_impl(ctx):
         "Market": ctx.attr.Market,
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_emr_instance_group_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -41881,7 +41881,7 @@ def _cloudformation_aws_emr_notebook_execution_impl(ctx):
         "OutputNotebookS3Location": parse_json_or_none(ctx.attr.OutputNotebookS3Location),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_emr_notebook_execution.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -41938,7 +41938,7 @@ def _cloudformation_aws_emr_security_configuration_impl(ctx):
         "Name": ctx.attr.Name,
         "SecurityConfiguration": parse_json_or_none(ctx.attr.SecurityConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_emr_security_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -41981,7 +41981,7 @@ def _cloudformation_aws_emr_step_impl(ctx):
         "LogUri": ctx.attr.LogUri,
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_emr_step.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42047,7 +42047,7 @@ def _cloudformation_aws_emr_studio_impl(ctx):
         "VpcId": ctx.attr.VpcId,
         "WorkspaceSecurityGroupId": ctx.attr.WorkspaceSecurityGroupId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_emr_studio.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42133,7 +42133,7 @@ def _cloudformation_aws_emr_studio_session_mapping_impl(ctx):
         "SessionPolicyArn": ctx.attr.SessionPolicyArn,
         "StudioId": ctx.attr.StudioId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_emr_studio_session_mapping.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42178,7 +42178,7 @@ def _cloudformation_aws_emr_walworkspace_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WALWorkspaceName": ctx.attr.WALWorkspaceName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_emr_walworkspace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42223,7 +42223,7 @@ def _cloudformation_aws_emrcontainers_endpoint_impl(ctx):
         "Type": ctx.attr.Type,
         "VirtualClusterId": ctx.attr.VirtualClusterId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_emrcontainers_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42282,7 +42282,7 @@ def _cloudformation_aws_emrcontainers_security_configuration_impl(ctx):
         "SecurityConfigurationData": parse_json_or_none(ctx.attr.SecurityConfigurationData),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_emrcontainers_security_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42330,7 +42330,7 @@ def _cloudformation_aws_emrcontainers_virtual_cluster_impl(ctx):
         "SessionEnabled": parse_json_or_none(ctx.attr.SessionEnabled),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_emrcontainers_virtual_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42393,7 +42393,7 @@ def _cloudformation_aws_emrserverless_application_impl(ctx):
         "Type": ctx.attr.Type,
         "WorkerTypeSpecifications": parse_json_or_none(ctx.attr.WorkerTypeSpecifications),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_emrserverless_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42483,7 +42483,7 @@ def _cloudformation_aws_entity_resolution_id_mapping_workflow_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WorkflowName": ctx.attr.WorkflowName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_entity_resolution_id_mapping_workflow.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42545,7 +42545,7 @@ def _cloudformation_aws_entity_resolution_id_namespace_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_entity_resolution_id_namespace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42605,7 +42605,7 @@ def _cloudformation_aws_entity_resolution_matching_workflow_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WorkflowName": ctx.attr.WorkflowName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_entity_resolution_matching_workflow.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42666,7 +42666,7 @@ def _cloudformation_aws_entity_resolution_policy_statement_impl(ctx):
         "Principal": parse_json_or_none(ctx.attr.Principal),
         "StatementId": ctx.attr.StatementId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_entity_resolution_policy_statement.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42719,7 +42719,7 @@ def _cloudformation_aws_entity_resolution_schema_mapping_impl(ctx):
         "SchemaName": ctx.attr.SchemaName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_entity_resolution_schema_mapping.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42766,7 +42766,7 @@ def _cloudformation_aws_event_schemas_discoverer_impl(ctx):
         "SourceArn": ctx.attr.SourceArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_event_schemas_discoverer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42812,7 +42812,7 @@ def _cloudformation_aws_event_schemas_registry_impl(ctx):
         "RegistryName": ctx.attr.RegistryName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_event_schemas_registry.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42855,7 +42855,7 @@ def _cloudformation_aws_event_schemas_registry_policy_impl(ctx):
         "RegistryName": ctx.attr.RegistryName,
         "RevisionId": ctx.attr.RevisionId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_event_schemas_registry_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42901,7 +42901,7 @@ def _cloudformation_aws_event_schemas_schema_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_event_schemas_schema.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -42956,7 +42956,7 @@ def _cloudformation_aws_events_api_destination_impl(ctx):
         "InvocationRateLimitPerSecond": parse_json_or_none(ctx.attr.InvocationRateLimitPerSecond),
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_events_api_destination.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43011,7 +43011,7 @@ def _cloudformation_aws_events_archive_impl(ctx):
         "RetentionDays": parse_json_or_none(ctx.attr.RetentionDays),
         "SourceArn": ctx.attr.SourceArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_events_archive.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43066,7 +43066,7 @@ def _cloudformation_aws_events_connection_impl(ctx):
         "KmsKeyIdentifier": ctx.attr.KmsKeyIdentifier,
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_events_connection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43121,7 +43121,7 @@ def _cloudformation_aws_events_endpoint_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "RoutingConfig": parse_json_or_none(ctx.attr.RoutingConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_events_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43178,7 +43178,7 @@ def _cloudformation_aws_events_event_bus_impl(ctx):
         "Policy": parse_json_or_none(ctx.attr.Policy),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_events_event_bus.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43236,7 +43236,7 @@ def _cloudformation_aws_events_event_bus_policy_impl(ctx):
         "Statement": parse_json_or_none(ctx.attr.Statement),
         "StatementId": ctx.attr.StatementId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_events_event_bus_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43281,7 +43281,7 @@ def _cloudformation_aws_events_replay_impl(ctx):
         "EventStartTime": ctx.attr.EventStartTime,
         "ReplayName": ctx.attr.ReplayName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_events_replay.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43336,7 +43336,7 @@ def _cloudformation_aws_events_rule_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Targets": parse_json_or_none(ctx.attr.Targets),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_events_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43406,7 +43406,7 @@ def _cloudformation_aws_evidently_experiment_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Treatments": parse_json_or_none(ctx.attr.Treatments),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_evidently_experiment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43481,7 +43481,7 @@ def _cloudformation_aws_evidently_feature_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Variations": parse_json_or_none(ctx.attr.Variations),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_evidently_feature.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43545,7 +43545,7 @@ def _cloudformation_aws_evidently_launch_impl(ctx):
         "ScheduledSplitsConfig": parse_json_or_none(ctx.attr.ScheduledSplitsConfig),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_evidently_launch.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43608,7 +43608,7 @@ def _cloudformation_aws_evidently_project_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_evidently_project.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43658,7 +43658,7 @@ def _cloudformation_aws_evidently_segment_impl(ctx):
         "Pattern": ctx.attr.Pattern,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_evidently_segment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43715,7 +43715,7 @@ def _cloudformation_aws_evs_environment_impl(ctx):
         "VcfVersion": ctx.attr.VcfVersion,
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_evs_environment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43795,7 +43795,7 @@ def _cloudformation_aws_fin_space_environment_impl(ctx):
         "SuperuserParameters": parse_json_or_none(ctx.attr.SuperuserParameters),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fin_space_environment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43849,7 +43849,7 @@ def _cloudformation_aws_fis_experiment_impl(ctx):
         "ExperimentOptions": parse_json_or_none(ctx.attr.ExperimentOptions),
         "ExperimentTemplateId": ctx.attr.ExperimentTemplateId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fis_experiment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43895,7 +43895,7 @@ def _cloudformation_aws_fis_experiment_template_impl(ctx):
         "Tags": ctx.attr.Tags,
         "Targets": parse_json_or_none(ctx.attr.Targets),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fis_experiment_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43954,7 +43954,7 @@ def _cloudformation_aws_fis_safety_lever_impl(ctx):
     payload = {
         "Id": ctx.attr.Id,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fis_safety_lever.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -43992,7 +43992,7 @@ def _cloudformation_aws_fis_target_account_configuration_impl(ctx):
         "ExperimentTemplateId": ctx.attr.ExperimentTemplateId,
         "RoleArn": ctx.attr.RoleArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fis_target_account_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44037,7 +44037,7 @@ def _cloudformation_aws_fms_notification_channel_impl(ctx):
         "SnsRoleName": ctx.attr.SnsRoleName,
         "SnsTopicArn": ctx.attr.SnsTopicArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fms_notification_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44089,7 +44089,7 @@ def _cloudformation_aws_fms_policy_impl(ctx):
         "SecurityServicePolicyData": parse_json_or_none(ctx.attr.SecurityServicePolicyData),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fms_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44170,7 +44170,7 @@ def _cloudformation_aws_fms_resource_set_impl(ctx):
         "Resources": parse_json_or_none(ctx.attr.Resources),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fms_resource_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44223,7 +44223,7 @@ def _cloudformation_aws_forecast_dataset_impl(ctx):
         "Schema": parse_json_or_none(ctx.attr.Schema),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_forecast_dataset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44279,7 +44279,7 @@ def _cloudformation_aws_forecast_dataset_group_impl(ctx):
         "Domain": ctx.attr.Domain,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_forecast_dataset_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44330,7 +44330,7 @@ def _cloudformation_aws_fraud_detector_detector_impl(ctx):
         "Rules": parse_json_or_none(ctx.attr.Rules),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fraud_detector_detector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44388,7 +44388,7 @@ def _cloudformation_aws_fraud_detector_entity_type_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fraud_detector_entity_type.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44434,7 +44434,7 @@ def _cloudformation_aws_fraud_detector_event_type_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fraud_detector_event_type.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44486,7 +44486,7 @@ def _cloudformation_aws_fraud_detector_label_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fraud_detector_label.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44531,7 +44531,7 @@ def _cloudformation_aws_fraud_detector_list_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VariableType": ctx.attr.VariableType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fraud_detector_list.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44580,7 +44580,7 @@ def _cloudformation_aws_fraud_detector_outcome_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fraud_detector_outcome.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44627,7 +44627,7 @@ def _cloudformation_aws_fraud_detector_variable_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VariableType": ctx.attr.VariableType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fraud_detector_variable.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44686,7 +44686,7 @@ def _cloudformation_aws_fsx_data_repository_association_impl(ctx):
         "S3": parse_json_or_none(ctx.attr.S3),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fsx_data_repository_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44752,7 +44752,7 @@ def _cloudformation_aws_fsx_file_system_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WindowsConfiguration": parse_json_or_none(ctx.attr.WindowsConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fsx_file_system.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44830,7 +44830,7 @@ def _cloudformation_aws_fsx_s3_access_point_attachment_impl(ctx):
         "S3AccessPoint": parse_json_or_none(ctx.attr.S3AccessPoint),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fsx_s3_access_point_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44879,7 +44879,7 @@ def _cloudformation_aws_fsx_snapshot_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VolumeId": ctx.attr.VolumeId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fsx_snapshot.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44925,7 +44925,7 @@ def _cloudformation_aws_fsx_storage_virtual_machine_impl(ctx):
         "SvmAdminPassword": ctx.attr.SvmAdminPassword,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fsx_storage_virtual_machine.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -44980,7 +44980,7 @@ def _cloudformation_aws_fsx_volume_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VolumeType": ctx.attr.VolumeType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_fsx_volume.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -45033,7 +45033,7 @@ def _cloudformation_aws_game_lift_alias_impl(ctx):
         "RoutingStrategy": parse_json_or_none(ctx.attr.RoutingStrategy),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_game_lift_alias.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -45082,7 +45082,7 @@ def _cloudformation_aws_game_lift_build_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Version": ctx.attr.Version,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_game_lift_build.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -45149,7 +45149,7 @@ def _cloudformation_aws_game_lift_container_fleet_impl(ctx):
         "ScalingPolicies": parse_json_or_none(ctx.attr.ScalingPolicies),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_game_lift_container_fleet.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -45244,7 +45244,7 @@ def _cloudformation_aws_game_lift_container_group_definition_impl(ctx):
         "TotalVcpuLimit": parse_json_or_none(ctx.attr.TotalVcpuLimit),
         "VersionDescription": ctx.attr.VersionDescription,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_game_lift_container_group_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -45329,7 +45329,7 @@ def _cloudformation_aws_game_lift_fleet_impl(ctx):
         "ScriptId": ctx.attr.ScriptId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_game_lift_fleet.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -45444,7 +45444,7 @@ def _cloudformation_aws_game_lift_game_server_group_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcSubnets": parse_json_or_none(ctx.attr.VpcSubnets),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_game_lift_game_server_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -45520,7 +45520,7 @@ def _cloudformation_aws_game_lift_game_session_queue_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TimeoutInSeconds": parse_json_or_none(ctx.attr.TimeoutInSeconds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_game_lift_game_session_queue.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -45580,7 +45580,7 @@ def _cloudformation_aws_game_lift_location_impl(ctx):
         "LocationName": ctx.attr.LocationName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_game_lift_location.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -45634,7 +45634,7 @@ def _cloudformation_aws_game_lift_matchmaking_configuration_impl(ctx):
         "RuleSetName": ctx.attr.RuleSetName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_game_lift_matchmaking_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -45719,7 +45719,7 @@ def _cloudformation_aws_game_lift_matchmaking_rule_set_impl(ctx):
         "RuleSetBody": ctx.attr.RuleSetBody,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_game_lift_matchmaking_rule_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -45764,7 +45764,7 @@ def _cloudformation_aws_game_lift_script_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Version": ctx.attr.Version,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_game_lift_script.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -45818,7 +45818,7 @@ def _cloudformation_aws_global_accelerator_accelerator_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_global_accelerator_accelerator.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -45877,7 +45877,7 @@ def _cloudformation_aws_global_accelerator_cross_account_attachment_impl(ctx):
         "Resources": parse_json_or_none(ctx.attr.Resources),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_global_accelerator_cross_account_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -45930,7 +45930,7 @@ def _cloudformation_aws_global_accelerator_endpoint_group_impl(ctx):
         "ThresholdCount": parse_json_or_none(ctx.attr.ThresholdCount),
         "TrafficDialPercentage": parse_json_or_none(ctx.attr.TrafficDialPercentage),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_global_accelerator_endpoint_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -45995,7 +45995,7 @@ def _cloudformation_aws_global_accelerator_listener_impl(ctx):
         "PortRanges": parse_json_or_none(ctx.attr.PortRanges),
         "Protocol": ctx.attr.Protocol,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_global_accelerator_listener.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46042,7 +46042,7 @@ def _cloudformation_aws_glue_blueprint_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_blueprint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46096,7 +46096,7 @@ def _cloudformation_aws_glue_catalog_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetRedshiftCatalog": parse_json_or_none(ctx.attr.TargetRedshiftCatalog),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_catalog.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46164,7 +46164,7 @@ def _cloudformation_aws_glue_classifier_impl(ctx):
         "JsonClassifier": parse_json_or_none(ctx.attr.JsonClassifier),
         "XMLClassifier": parse_json_or_none(ctx.attr.XMLClassifier),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_classifier.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46209,7 +46209,7 @@ def _cloudformation_aws_glue_connection_impl(ctx):
         "CatalogId": ctx.attr.CatalogId,
         "ConnectionInput": parse_json_or_none(ctx.attr.ConnectionInput),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_connection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46260,7 +46260,7 @@ def _cloudformation_aws_glue_crawler_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Targets": parse_json_or_none(ctx.attr.Targets),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_crawler.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46337,7 +46337,7 @@ def _cloudformation_aws_glue_custom_entity_type_impl(ctx):
         "RegexString": ctx.attr.RegexString,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_custom_entity_type.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46382,7 +46382,7 @@ def _cloudformation_aws_glue_data_catalog_encryption_settings_impl(ctx):
         "CatalogId": ctx.attr.CatalogId,
         "DataCatalogEncryptionSettings": parse_json_or_none(ctx.attr.DataCatalogEncryptionSettings),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_data_catalog_encryption_settings.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46425,7 +46425,7 @@ def _cloudformation_aws_glue_data_quality_ruleset_impl(ctx):
         "Tags": ctx.attr.Tags,
         "TargetTable": parse_json_or_none(ctx.attr.TargetTable),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_data_quality_ruleset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46477,7 +46477,7 @@ def _cloudformation_aws_glue_database_impl(ctx):
         "DatabaseInput": parse_json_or_none(ctx.attr.DatabaseInput),
         "DatabaseName": ctx.attr.DatabaseName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_database.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46532,7 +46532,7 @@ def _cloudformation_aws_glue_dev_endpoint_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WorkerType": ctx.attr.WorkerType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_dev_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46611,7 +46611,7 @@ def _cloudformation_aws_glue_identity_center_configuration_impl(ctx):
         "Scopes": parse_json_or_none(ctx.attr.Scopes),
         "UserBackgroundSessionsEnabled": parse_json_or_none(ctx.attr.UserBackgroundSessionsEnabled),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_identity_center_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46660,7 +46660,7 @@ def _cloudformation_aws_glue_integration_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetArn": ctx.attr.TargetArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_integration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46722,7 +46722,7 @@ def _cloudformation_aws_glue_integration_resource_property_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetProcessingProperties": parse_json_or_none(ctx.attr.TargetProcessingProperties),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_integration_resource_property.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46788,7 +46788,7 @@ def _cloudformation_aws_glue_job_impl(ctx):
         "Timeout": parse_json_or_none(ctx.attr.Timeout),
         "WorkerType": ctx.attr.WorkerType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46901,7 +46901,7 @@ def _cloudformation_aws_glue_mltransform_impl(ctx):
         "TransformParameters": parse_json_or_none(ctx.attr.TransformParameters),
         "WorkerType": ctx.attr.WorkerType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_mltransform.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -46975,7 +46975,7 @@ def _cloudformation_aws_glue_partition_impl(ctx):
         "PartitionInput": parse_json_or_none(ctx.attr.PartitionInput),
         "TableName": ctx.attr.TableName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_partition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47021,7 +47021,7 @@ def _cloudformation_aws_glue_registry_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_registry.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47069,7 +47069,7 @@ def _cloudformation_aws_glue_schema_impl(ctx):
         "SchemaDefinition": ctx.attr.SchemaDefinition,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_schema.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47126,7 +47126,7 @@ def _cloudformation_aws_glue_schema_version_impl(ctx):
         "Schema": parse_json_or_none(ctx.attr.Schema),
         "SchemaDefinition": ctx.attr.SchemaDefinition,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_schema_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47166,7 +47166,7 @@ def _cloudformation_aws_glue_schema_version_metadata_impl(ctx):
         "SchemaVersionId": ctx.attr.SchemaVersionId,
         "Value": ctx.attr.Value,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_schema_version_metadata.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47208,7 +47208,7 @@ def _cloudformation_aws_glue_security_configuration_impl(ctx):
         "EncryptionConfiguration": parse_json_or_none(ctx.attr.EncryptionConfiguration),
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_security_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47250,7 +47250,7 @@ def _cloudformation_aws_glue_table_impl(ctx):
         "OpenTableFormatInput": parse_json_or_none(ctx.attr.OpenTableFormatInput),
         "TableInput": parse_json_or_none(ctx.attr.TableInput),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_table.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47301,7 +47301,7 @@ def _cloudformation_aws_glue_table_optimizer_impl(ctx):
         "TableOptimizerConfiguration": parse_json_or_none(ctx.attr.TableOptimizerConfiguration),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_table_optimizer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47349,7 +47349,7 @@ def _cloudformation_aws_glue_table_version_impl(ctx):
         "DatabaseName": ctx.attr.DatabaseName,
         "TableName": ctx.attr.TableName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_table_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47396,7 +47396,7 @@ def _cloudformation_aws_glue_trigger_impl(ctx):
         "Type": ctx.attr.Type,
         "WorkflowName": ctx.attr.WorkflowName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_trigger.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47461,7 +47461,7 @@ def _cloudformation_aws_glue_usage_profile_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_usage_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47511,7 +47511,7 @@ def _cloudformation_aws_glue_user_defined_function_impl(ctx):
         "OwnerType": ctx.attr.OwnerType,
         "ResourceUris": parse_json_or_none(ctx.attr.ResourceUris),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_user_defined_function.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47568,7 +47568,7 @@ def _cloudformation_aws_glue_workflow_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_workflow.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47632,7 +47632,7 @@ def _cloudformation_aws_grafana_workspace_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcConfiguration": parse_json_or_none(ctx.attr.VpcConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_grafana_workspace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47720,7 +47720,7 @@ def _cloudformation_aws_greengrass_connector_definition_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_connector_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47762,7 +47762,7 @@ def _cloudformation_aws_greengrass_connector_definition_version_impl(ctx):
         "ConnectorDefinitionId": ctx.attr.ConnectorDefinitionId,
         "Connectors": parse_json_or_none(ctx.attr.Connectors),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_connector_definition_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47802,7 +47802,7 @@ def _cloudformation_aws_greengrass_core_definition_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_core_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47844,7 +47844,7 @@ def _cloudformation_aws_greengrass_core_definition_version_impl(ctx):
         "CoreDefinitionId": ctx.attr.CoreDefinitionId,
         "Cores": parse_json_or_none(ctx.attr.Cores),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_core_definition_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47884,7 +47884,7 @@ def _cloudformation_aws_greengrass_device_definition_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_device_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47926,7 +47926,7 @@ def _cloudformation_aws_greengrass_device_definition_version_impl(ctx):
         "DeviceDefinitionId": ctx.attr.DeviceDefinitionId,
         "Devices": parse_json_or_none(ctx.attr.Devices),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_device_definition_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -47966,7 +47966,7 @@ def _cloudformation_aws_greengrass_function_definition_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_function_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48009,7 +48009,7 @@ def _cloudformation_aws_greengrass_function_definition_version_impl(ctx):
         "FunctionDefinitionId": ctx.attr.FunctionDefinitionId,
         "Functions": parse_json_or_none(ctx.attr.Functions),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_function_definition_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48053,7 +48053,7 @@ def _cloudformation_aws_greengrass_group_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48104,7 +48104,7 @@ def _cloudformation_aws_greengrass_group_version_impl(ctx):
         "ResourceDefinitionVersionArn": ctx.attr.ResourceDefinitionVersionArn,
         "SubscriptionDefinitionVersionArn": ctx.attr.SubscriptionDefinitionVersionArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_group_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48162,7 +48162,7 @@ def _cloudformation_aws_greengrass_logger_definition_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_logger_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48204,7 +48204,7 @@ def _cloudformation_aws_greengrass_logger_definition_version_impl(ctx):
         "LoggerDefinitionId": ctx.attr.LoggerDefinitionId,
         "Loggers": parse_json_or_none(ctx.attr.Loggers),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_logger_definition_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48244,7 +48244,7 @@ def _cloudformation_aws_greengrass_resource_definition_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_resource_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48286,7 +48286,7 @@ def _cloudformation_aws_greengrass_resource_definition_version_impl(ctx):
         "ResourceDefinitionId": ctx.attr.ResourceDefinitionId,
         "Resources": parse_json_or_none(ctx.attr.Resources),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_resource_definition_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48326,7 +48326,7 @@ def _cloudformation_aws_greengrass_subscription_definition_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_subscription_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48368,7 +48368,7 @@ def _cloudformation_aws_greengrass_subscription_definition_version_impl(ctx):
         "SubscriptionDefinitionId": ctx.attr.SubscriptionDefinitionId,
         "Subscriptions": parse_json_or_none(ctx.attr.Subscriptions),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_subscription_definition_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48407,7 +48407,7 @@ def _cloudformation_aws_greengrass_v2_component_impl(ctx):
         "ComponentName": ctx.attr.ComponentName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_v2_component.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48447,7 +48447,7 @@ def _cloudformation_aws_greengrass_v2_component_version_impl(ctx):
         "LambdaFunction": parse_json_or_none(ctx.attr.LambdaFunction),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_v2_component_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48488,7 +48488,7 @@ def _cloudformation_aws_greengrass_v2_core_device_impl(ctx):
     payload = {
         "CoreDeviceThingName": ctx.attr.CoreDeviceThingName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_v2_core_device.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48529,7 +48529,7 @@ def _cloudformation_aws_greengrass_v2_deployment_impl(ctx):
         "Tags": ctx.attr.Tags,
         "TargetArn": ctx.attr.TargetArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_v2_deployment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48584,7 +48584,7 @@ def _cloudformation_aws_ground_station_config_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ground_station_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48628,7 +48628,7 @@ def _cloudformation_aws_ground_station_dataflow_endpoint_group_impl(ctx):
         "EndpointDetails": parse_json_or_none(ctx.attr.EndpointDetails),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ground_station_dataflow_endpoint_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48675,7 +48675,7 @@ def _cloudformation_aws_ground_station_dataflow_endpoint_group_v2_impl(ctx):
         "Endpoints": parse_json_or_none(ctx.attr.Endpoints),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ground_station_dataflow_endpoint_group_v2.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48728,7 +48728,7 @@ def _cloudformation_aws_ground_station_mission_profile_impl(ctx):
         "TelemetrySinkConfigArn": ctx.attr.TelemetrySinkConfigArn,
         "TrackingConfigArn": ctx.attr.TrackingConfigArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ground_station_mission_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48794,7 +48794,7 @@ def _cloudformation_aws_guard_duty_detector_impl(ctx):
         "FindingPublishingFrequency": ctx.attr.FindingPublishingFrequency,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_guard_duty_detector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48847,7 +48847,7 @@ def _cloudformation_aws_guard_duty_filter_impl(ctx):
         "Rank": parse_json_or_none(ctx.attr.Rank),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_guard_duty_filter.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48906,7 +48906,7 @@ def _cloudformation_aws_guard_duty_ipset_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_guard_duty_ipset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -48962,7 +48962,7 @@ def _cloudformation_aws_guard_duty_malware_protection_plan_impl(ctx):
         "Role": ctx.attr.Role,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_guard_duty_malware_protection_plan.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49008,7 +49008,7 @@ def _cloudformation_aws_guard_duty_master_impl(ctx):
         "InvitationId": ctx.attr.InvitationId,
         "MasterId": ctx.attr.MasterId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_guard_duty_master.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49054,7 +49054,7 @@ def _cloudformation_aws_guard_duty_member_impl(ctx):
         "Message": ctx.attr.Message,
         "Status": ctx.attr.Status,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_guard_duty_member.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49107,7 +49107,7 @@ def _cloudformation_aws_guard_duty_publishing_destination_impl(ctx):
         "DetectorId": ctx.attr.DetectorId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_guard_duty_publishing_destination.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49157,7 +49157,7 @@ def _cloudformation_aws_guard_duty_threat_entity_set_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_guard_duty_threat_entity_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49216,7 +49216,7 @@ def _cloudformation_aws_guard_duty_threat_intel_set_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_guard_duty_threat_intel_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49275,7 +49275,7 @@ def _cloudformation_aws_guard_duty_trusted_entity_set_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_guard_duty_trusted_entity_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49330,7 +49330,7 @@ def _cloudformation_aws_health_imaging_datastore_impl(ctx):
         "KmsKeyArn": ctx.attr.KmsKeyArn,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_health_imaging_datastore.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49376,7 +49376,7 @@ def _cloudformation_aws_health_lake_data_transformation_profile_impl(ctx):
         "SourceFormat": ctx.attr.SourceFormat,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_health_lake_data_transformation_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49431,7 +49431,7 @@ def _cloudformation_aws_health_lake_fhirdatastore_impl(ctx):
         "SseConfiguration": parse_json_or_none(ctx.attr.SseConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_health_lake_fhirdatastore.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49483,7 +49483,7 @@ def _cloudformation_aws_iam_access_key_impl(ctx):
         "Status": ctx.attr.Status,
         "UserName": ctx.attr.UserName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_access_key.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49527,7 +49527,7 @@ def _cloudformation_aws_iam_group_impl(ctx):
         "Path": ctx.attr.Path,
         "Policies": parse_json_or_none(ctx.attr.Policies),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49573,7 +49573,7 @@ def _cloudformation_aws_iam_group_policy_impl(ctx):
         "PolicyDocument": parse_json_or_none(ctx.attr.PolicyDocument),
         "PolicyName": ctx.attr.PolicyName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_group_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49616,7 +49616,7 @@ def _cloudformation_aws_iam_instance_profile_impl(ctx):
         "Path": ctx.attr.Path,
         "Roles": parse_json_or_none(ctx.attr.Roles),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_instance_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49663,7 +49663,7 @@ def _cloudformation_aws_iam_managed_policy_impl(ctx):
         "Roles": parse_json_or_none(ctx.attr.Roles),
         "Users": parse_json_or_none(ctx.attr.Users),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_managed_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49719,7 +49719,7 @@ def _cloudformation_aws_iam_oidcprovider_impl(ctx):
         "ThumbprintList": parse_json_or_none(ctx.attr.ThumbprintList),
         "Url": ctx.attr.Url,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_oidcprovider.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49767,7 +49767,7 @@ def _cloudformation_aws_iam_policy_impl(ctx):
         "Roles": parse_json_or_none(ctx.attr.Roles),
         "Users": parse_json_or_none(ctx.attr.Users),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49822,7 +49822,7 @@ def _cloudformation_aws_iam_role_impl(ctx):
         "RoleName": ctx.attr.RoleName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_role.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49883,7 +49883,7 @@ def _cloudformation_aws_iam_role_policy_impl(ctx):
         "PolicyName": ctx.attr.PolicyName,
         "RoleName": ctx.attr.RoleName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_role_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49930,7 +49930,7 @@ def _cloudformation_aws_iam_samlprovider_impl(ctx):
         "SamlMetadataDocument": ctx.attr.SamlMetadataDocument,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_samlprovider.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -49988,7 +49988,7 @@ def _cloudformation_aws_iam_server_certificate_impl(ctx):
         "ServerCertificateName": ctx.attr.ServerCertificateName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_server_certificate.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50040,7 +50040,7 @@ def _cloudformation_aws_iam_service_linked_role_impl(ctx):
         "CustomSuffix": ctx.attr.CustomSuffix,
         "Description": ctx.attr.Description,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_service_linked_role.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50088,7 +50088,7 @@ def _cloudformation_aws_iam_user_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UserName": ctx.attr.UserName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_user.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50146,7 +50146,7 @@ def _cloudformation_aws_iam_user_policy_impl(ctx):
         "PolicyName": ctx.attr.PolicyName,
         "UserName": ctx.attr.UserName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_user_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50188,7 +50188,7 @@ def _cloudformation_aws_iam_user_to_group_addition_impl(ctx):
         "GroupName": ctx.attr.GroupName,
         "Users": parse_json_or_none(ctx.attr.Users),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_user_to_group_addition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50229,7 +50229,7 @@ def _cloudformation_aws_iam_virtual_mfadevice_impl(ctx):
         "Users": parse_json_or_none(ctx.attr.Users),
         "VirtualMfaDeviceName": ctx.attr.VirtualMfaDeviceName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_iam_virtual_mfadevice.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50275,7 +50275,7 @@ def _cloudformation_aws_identity_store_all_group_memberships_impl(ctx):
         "IdentityStoreId": ctx.attr.IdentityStoreId,
         "MemberId": parse_json_or_none(ctx.attr.MemberId),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_identity_store_all_group_memberships.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50318,7 +50318,7 @@ def _cloudformation_aws_identity_store_group_impl(ctx):
         "DisplayName": ctx.attr.DisplayName,
         "IdentityStoreId": ctx.attr.IdentityStoreId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_identity_store_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50361,7 +50361,7 @@ def _cloudformation_aws_identity_store_group_membership_impl(ctx):
         "IdentityStoreId": ctx.attr.IdentityStoreId,
         "MemberId": parse_json_or_none(ctx.attr.MemberId),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_identity_store_group_membership.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50401,7 +50401,7 @@ def _cloudformation_aws_image_builder_all_image_build_versions_impl(ctx):
     item_name = ctx.attr.aws_image_builder_all_image_build_versions_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_all_image_build_versions.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50432,7 +50432,7 @@ def _cloudformation_aws_image_builder_all_workflow_build_versions_impl(ctx):
     item_name = ctx.attr.aws_image_builder_all_workflow_build_versions_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_all_workflow_build_versions.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50473,7 +50473,7 @@ def _cloudformation_aws_image_builder_component_impl(ctx):
         "Uri": ctx.attr.Uri,
         "Version": ctx.attr.Version,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_component.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50549,7 +50549,7 @@ def _cloudformation_aws_image_builder_container_recipe_impl(ctx):
         "Version": ctx.attr.Version,
         "WorkingDirectory": ctx.attr.WorkingDirectory,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_container_recipe.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50629,7 +50629,7 @@ def _cloudformation_aws_image_builder_distribution_configuration_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_distribution_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50685,7 +50685,7 @@ def _cloudformation_aws_image_builder_image_impl(ctx):
         "Tags": ctx.attr.Tags,
         "Workflows": parse_json_or_none(ctx.attr.Workflows),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_image.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50771,7 +50771,7 @@ def _cloudformation_aws_image_builder_image_pipeline_impl(ctx):
         "Tags": ctx.attr.Tags,
         "Workflows": parse_json_or_none(ctx.attr.Workflows),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_image_pipeline.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50861,7 +50861,7 @@ def _cloudformation_aws_image_builder_image_recipe_impl(ctx):
         "Version": ctx.attr.Version,
         "WorkingDirectory": ctx.attr.WorkingDirectory,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_image_recipe.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -50939,7 +50939,7 @@ def _cloudformation_aws_image_builder_infrastructure_configuration_impl(ctx):
         "Tags": ctx.attr.Tags,
         "TerminateInstanceOnFailure": parse_json_or_none(ctx.attr.TerminateInstanceOnFailure),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_infrastructure_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51013,7 +51013,7 @@ def _cloudformation_aws_image_builder_lifecycle_execution_impl(ctx):
     payload = {
         "ResourceArn": ctx.attr.ResourceArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_lifecycle_execution.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51055,7 +51055,7 @@ def _cloudformation_aws_image_builder_lifecycle_policy_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_lifecycle_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51119,7 +51119,7 @@ def _cloudformation_aws_image_builder_workflow_impl(ctx):
         "Uri": ctx.attr.Uri,
         "Version": ctx.attr.Version,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_workflow.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51178,7 +51178,7 @@ def _cloudformation_aws_image_builder_workflow_execution_impl(ctx):
     payload = {
         "ImageBuildVersionArn": ctx.attr.ImageBuildVersionArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_workflow_execution.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51212,7 +51212,7 @@ def _cloudformation_aws_image_builder_workflow_step_execution_impl(ctx):
     item_name = ctx.attr.aws_image_builder_workflow_step_execution_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_workflow_step_execution.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51245,7 +51245,7 @@ def _cloudformation_aws_inspector_assessment_target_impl(ctx):
         "AssessmentTargetName": ctx.attr.AssessmentTargetName,
         "ResourceGroupArn": ctx.attr.ResourceGroupArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_inspector_assessment_target.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51287,7 +51287,7 @@ def _cloudformation_aws_inspector_assessment_template_impl(ctx):
         "RulesPackageArns": parse_json_or_none(ctx.attr.RulesPackageArns),
         "UserAttributesForFindings": parse_json_or_none(ctx.attr.UserAttributesForFindings),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_inspector_assessment_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51334,7 +51334,7 @@ def _cloudformation_aws_inspector_resource_group_impl(ctx):
     payload = {
         "ResourceGroupTags": parse_json_or_none(ctx.attr.ResourceGroupTags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_inspector_resource_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51373,7 +51373,7 @@ def _cloudformation_aws_inspector_v2_cis_scan_configuration_impl(ctx):
         "Tags": ctx.attr.Tags,
         "Targets": parse_json_or_none(ctx.attr.Targets),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_inspector_v2_cis_scan_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51424,7 +51424,7 @@ def _cloudformation_aws_inspector_v2_code_security_integration_impl(ctx):
         "Type": ctx.attr.Type,
         "UpdateIntegrationDetails": parse_json_or_none(ctx.attr.UpdateIntegrationDetails),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_inspector_v2_code_security_integration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51475,7 +51475,7 @@ def _cloudformation_aws_inspector_v2_code_security_scan_configuration_impl(ctx):
         "ScopeSettings": parse_json_or_none(ctx.attr.ScopeSettings),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_inspector_v2_code_security_scan_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51526,7 +51526,7 @@ def _cloudformation_aws_inspector_v2_connector_impl(ctx):
         "ProviderConfiguration": parse_json_or_none(ctx.attr.ProviderConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_inspector_v2_connector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51577,7 +51577,7 @@ def _cloudformation_aws_inspector_v2_filter_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_inspector_v2_filter.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51630,7 +51630,7 @@ def _cloudformation_aws_interconnect_connection_impl(ctx):
         "RemoteAccount": parse_json_or_none(ctx.attr.RemoteAccount),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_interconnect_connection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51682,7 +51682,7 @@ def _cloudformation_aws_internet_monitor_internet_event_impl(ctx):
     item_name = ctx.attr.aws_internet_monitor_internet_event_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_internet_monitor_internet_event.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51725,7 +51725,7 @@ def _cloudformation_aws_internet_monitor_monitor_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TrafficPercentageToMonitor": parse_json_or_none(ctx.attr.TrafficPercentageToMonitor),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_internet_monitor_monitor.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51798,7 +51798,7 @@ def _cloudformation_aws_invoicing_invoice_unit_impl(ctx):
         "Rule": parse_json_or_none(ctx.attr.Rule),
         "TaxInheritanceDisabled": parse_json_or_none(ctx.attr.TaxInheritanceDisabled),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_invoicing_invoice_unit.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51851,7 +51851,7 @@ def _cloudformation_aws_io_t_account_audit_configuration_impl(ctx):
         "AuditNotificationTargetConfigurations": parse_json_or_none(ctx.attr.AuditNotificationTargetConfigurations),
         "RoleArn": ctx.attr.RoleArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_account_audit_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51902,7 +51902,7 @@ def _cloudformation_aws_io_t_authorizer_impl(ctx):
         "TokenKeyName": ctx.attr.TokenKeyName,
         "TokenSigningPublicKeys": ctx.attr.TokenSigningPublicKeys,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_authorizer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -51960,7 +51960,7 @@ def _cloudformation_aws_io_t_billing_group_impl(ctx):
         "BillingGroupProperties": parse_json_or_none(ctx.attr.BillingGroupProperties),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_billing_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52008,7 +52008,7 @@ def _cloudformation_aws_io_t_cacertificate_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VerificationCertificatePem": ctx.attr.VerificationCertificatePem,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_cacertificate.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52068,7 +52068,7 @@ def _cloudformation_aws_io_t_certificate_impl(ctx):
         "CertificateSigningRequest": ctx.attr.CertificateSigningRequest,
         "Status": ctx.attr.Status,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_certificate.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52118,7 +52118,7 @@ def _cloudformation_aws_io_t_certificate_provider_impl(ctx):
         "LambdaFunctionArn": ctx.attr.LambdaFunctionArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_certificate_provider.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52175,7 +52175,7 @@ def _cloudformation_aws_io_t_command_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_command.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52252,7 +52252,7 @@ def _cloudformation_aws_io_t_custom_metric_impl(ctx):
         "MetricType": ctx.attr.MetricType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_custom_metric.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52299,7 +52299,7 @@ def _cloudformation_aws_io_t_dimension_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_dimension.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52355,7 +52355,7 @@ def _cloudformation_aws_io_t_domain_configuration_impl(ctx):
         "TlsConfig": parse_json_or_none(ctx.attr.TlsConfig),
         "ValidationCertificateArn": ctx.attr.ValidationCertificateArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_domain_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52428,7 +52428,7 @@ def _cloudformation_aws_io_t_encryption_configuration_impl(ctx):
         "KmsAccessRoleArn": ctx.attr.KmsAccessRoleArn,
         "KmsKeyArn": ctx.attr.KmsKeyArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_encryption_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52478,7 +52478,7 @@ def _cloudformation_aws_io_t_fleet_metric_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Unit": ctx.attr.Unit,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_fleet_metric.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52540,7 +52540,7 @@ def _cloudformation_aws_io_t_index_impl(ctx):
     payload = {
         "IndexName": ctx.attr.IndexName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_index.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52590,7 +52590,7 @@ def _cloudformation_aws_io_t_job_impl(ctx):
         "Targets": parse_json_or_none(ctx.attr.Targets),
         "TimeoutConfig": parse_json_or_none(ctx.attr.TimeoutConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52682,7 +52682,7 @@ def _cloudformation_aws_io_t_job_template_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TimeoutConfig": parse_json_or_none(ctx.attr.TimeoutConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_job_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52756,7 +52756,7 @@ def _cloudformation_aws_io_t_logging_impl(ctx):
         "EventConfigurations": parse_json_or_none(ctx.attr.EventConfigurations),
         "RoleArn": ctx.attr.RoleArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_logging.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52803,7 +52803,7 @@ def _cloudformation_aws_io_t_mitigation_action_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_mitigation_action.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52849,7 +52849,7 @@ def _cloudformation_aws_io_t_policy_impl(ctx):
         "PolicyName": ctx.attr.PolicyName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52891,7 +52891,7 @@ def _cloudformation_aws_io_t_policy_principal_attachment_impl(ctx):
         "PolicyName": ctx.attr.PolicyName,
         "Principal": ctx.attr.Principal,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_policy_principal_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52936,7 +52936,7 @@ def _cloudformation_aws_io_t_provisioning_template_impl(ctx):
         "TemplateName": ctx.attr.TemplateName,
         "TemplateType": ctx.attr.TemplateType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_provisioning_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -52994,7 +52994,7 @@ def _cloudformation_aws_io_t_resource_specific_logging_impl(ctx):
         "TargetName": ctx.attr.TargetName,
         "TargetType": ctx.attr.TargetType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_resource_specific_logging.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53038,7 +53038,7 @@ def _cloudformation_aws_io_t_role_alias_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_role_alias.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53087,7 +53087,7 @@ def _cloudformation_aws_io_t_scheduled_audit_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetCheckNames": parse_json_or_none(ctx.attr.TargetCheckNames),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_scheduled_audit.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53144,7 +53144,7 @@ def _cloudformation_aws_io_t_security_profile_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetArns": parse_json_or_none(ctx.attr.TargetArns),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_security_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53202,7 +53202,7 @@ def _cloudformation_aws_io_t_software_package_impl(ctx):
         "PackageName": ctx.attr.PackageName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_software_package.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53250,7 +53250,7 @@ def _cloudformation_aws_io_t_software_package_version_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VersionName": ctx.attr.VersionName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_software_package_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53307,7 +53307,7 @@ def _cloudformation_aws_io_t_thing_impl(ctx):
         "AttributePayload": parse_json_or_none(ctx.attr.AttributePayload),
         "ThingName": ctx.attr.ThingName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_thing.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53349,7 +53349,7 @@ def _cloudformation_aws_io_t_thing_group_impl(ctx):
         "ThingGroupName": ctx.attr.ThingGroupName,
         "ThingGroupProperties": parse_json_or_none(ctx.attr.ThingGroupProperties),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_thing_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53398,7 +53398,7 @@ def _cloudformation_aws_io_t_thing_principal_attachment_impl(ctx):
         "ThingName": ctx.attr.ThingName,
         "ThingPrincipalType": ctx.attr.ThingPrincipalType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_thing_principal_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53442,7 +53442,7 @@ def _cloudformation_aws_io_t_thing_type_impl(ctx):
         "ThingTypeName": ctx.attr.ThingTypeName,
         "ThingTypeProperties": parse_json_or_none(ctx.attr.ThingTypeProperties),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_thing_type.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53487,7 +53487,7 @@ def _cloudformation_aws_io_t_topic_rule_impl(ctx):
         "RuleName": ctx.attr.RuleName,
         "TopicRulePayload": parse_json_or_none(ctx.attr.TopicRulePayload),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_topic_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53527,7 +53527,7 @@ def _cloudformation_aws_io_t_topic_rule_destination_impl(ctx):
         "Status": ctx.attr.Status,
         "VpcProperties": parse_json_or_none(ctx.attr.VpcProperties),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_topic_rule_destination.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53571,7 +53571,7 @@ def _cloudformation_aws_io_tanalytics_channel_impl(ctx):
         "RetentionPeriod": parse_json_or_none(ctx.attr.RetentionPeriod),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tanalytics_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53622,7 +53622,7 @@ def _cloudformation_aws_io_tanalytics_dataset_impl(ctx):
         "Triggers": parse_json_or_none(ctx.attr.Triggers),
         "VersioningConfiguration": parse_json_or_none(ctx.attr.VersioningConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tanalytics_dataset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53683,7 +53683,7 @@ def _cloudformation_aws_io_tanalytics_datastore_impl(ctx):
         "RetentionPeriod": parse_json_or_none(ctx.attr.RetentionPeriod),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tanalytics_datastore.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53735,7 +53735,7 @@ def _cloudformation_aws_io_tanalytics_pipeline_impl(ctx):
         "PipelineName": ctx.attr.PipelineName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tanalytics_pipeline.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53777,7 +53777,7 @@ def _cloudformation_aws_io_tcore_device_advisor_suite_definition_impl(ctx):
         "SuiteDefinitionConfiguration": parse_json_or_none(ctx.attr.SuiteDefinitionConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tcore_device_advisor_suite_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53818,7 +53818,7 @@ def _cloudformation_aws_io_tdevice_advisor_suite_run_impl(ctx):
         "SuiteRunConfiguration": parse_json_or_none(ctx.attr.SuiteRunConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tdevice_advisor_suite_run.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53870,7 +53870,7 @@ def _cloudformation_aws_io_tevents_alarm_model_impl(ctx):
         "Severity": parse_json_or_none(ctx.attr.Severity),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tevents_alarm_model.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53935,7 +53935,7 @@ def _cloudformation_aws_io_tevents_detector_model_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tevents_detector_model.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -53991,7 +53991,7 @@ def _cloudformation_aws_io_tevents_input_impl(ctx):
         "InputName": ctx.attr.InputName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tevents_input.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54053,7 +54053,7 @@ def _cloudformation_aws_io_tfleet_wise_campaign_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetArn": ctx.attr.TargetArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tfleet_wise_campaign.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54149,7 +54149,7 @@ def _cloudformation_aws_io_tfleet_wise_decoder_manifest_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tfleet_wise_decoder_manifest.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54208,7 +54208,7 @@ def _cloudformation_aws_io_tfleet_wise_fleet_impl(ctx):
         "SignalCatalogArn": ctx.attr.SignalCatalogArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tfleet_wise_fleet.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54257,7 +54257,7 @@ def _cloudformation_aws_io_tfleet_wise_model_manifest_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tfleet_wise_model_manifest.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54311,7 +54311,7 @@ def _cloudformation_aws_io_tfleet_wise_signal_catalog_impl(ctx):
         "Nodes": parse_json_or_none(ctx.attr.Nodes),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tfleet_wise_signal_catalog.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54364,7 +54364,7 @@ def _cloudformation_aws_io_tfleet_wise_state_template_impl(ctx):
         "StateTemplateProperties": parse_json_or_none(ctx.attr.StateTemplateProperties),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tfleet_wise_state_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54423,7 +54423,7 @@ def _cloudformation_aws_io_tfleet_wise_vehicle_impl(ctx):
         "StateTemplates": parse_json_or_none(ctx.attr.StateTemplates),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tfleet_wise_vehicle.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54478,7 +54478,7 @@ def _cloudformation_aws_io_tsite_wise_access_policy_impl(ctx):
         "AccessPolicyPermission": ctx.attr.AccessPolicyPermission,
         "AccessPolicyResource": parse_json_or_none(ctx.attr.AccessPolicyResource),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tsite_wise_access_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54525,7 +54525,7 @@ def _cloudformation_aws_io_tsite_wise_asset_impl(ctx):
         "AssetProperties": parse_json_or_none(ctx.attr.AssetProperties),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tsite_wise_asset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54586,7 +54586,7 @@ def _cloudformation_aws_io_tsite_wise_asset_model_impl(ctx):
         "EnforcedAssetModelInterfaceRelationships": parse_json_or_none(ctx.attr.EnforcedAssetModelInterfaceRelationships),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tsite_wise_asset_model.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54649,7 +54649,7 @@ def _cloudformation_aws_io_tsite_wise_computation_model_impl(ctx):
         "ComputationModelName": ctx.attr.ComputationModelName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tsite_wise_computation_model.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54700,7 +54700,7 @@ def _cloudformation_aws_io_tsite_wise_dashboard_impl(ctx):
         "ProjectId": ctx.attr.ProjectId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tsite_wise_dashboard.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54750,7 +54750,7 @@ def _cloudformation_aws_io_tsite_wise_dataset_impl(ctx):
         "DatasetSource": parse_json_or_none(ctx.attr.DatasetSource),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tsite_wise_dataset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54798,7 +54798,7 @@ def _cloudformation_aws_io_tsite_wise_gateway_impl(ctx):
         "GatewayVersion": ctx.attr.GatewayVersion,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tsite_wise_gateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54854,7 +54854,7 @@ def _cloudformation_aws_io_tsite_wise_portal_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tsite_wise_portal.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54920,7 +54920,7 @@ def _cloudformation_aws_io_tsite_wise_project_impl(ctx):
         "ProjectName": ctx.attr.ProjectName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tsite_wise_project.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -54968,7 +54968,7 @@ def _cloudformation_aws_io_tthings_graph_flow_template_impl(ctx):
         "CompatibleNamespaceVersion": parse_json_or_none(ctx.attr.CompatibleNamespaceVersion),
         "Definition": parse_json_or_none(ctx.attr.Definition),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tthings_graph_flow_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55015,7 +55015,7 @@ def _cloudformation_aws_io_ttwin_maker_component_type_impl(ctx):
         "Tags": ctx.attr.Tags,
         "WorkspaceId": ctx.attr.WorkspaceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_ttwin_maker_component_type.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55084,7 +55084,7 @@ def _cloudformation_aws_io_ttwin_maker_entity_impl(ctx):
         "Tags": ctx.attr.Tags,
         "WorkspaceId": ctx.attr.WorkspaceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_ttwin_maker_entity.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55143,7 +55143,7 @@ def _cloudformation_aws_io_ttwin_maker_metadata_transfer_job_impl(ctx):
         "MetadataTransferJobId": ctx.attr.MetadataTransferJobId,
         "Sources": parse_json_or_none(ctx.attr.Sources),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_ttwin_maker_metadata_transfer_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55193,7 +55193,7 @@ def _cloudformation_aws_io_ttwin_maker_scene_impl(ctx):
         "Tags": ctx.attr.Tags,
         "WorkspaceId": ctx.attr.WorkspaceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_ttwin_maker_scene.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55249,7 +55249,7 @@ def _cloudformation_aws_io_ttwin_maker_sync_job_impl(ctx):
         "Tags": ctx.attr.Tags,
         "WorkspaceId": ctx.attr.WorkspaceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_ttwin_maker_sync_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55297,7 +55297,7 @@ def _cloudformation_aws_io_ttwin_maker_workspace_impl(ctx):
         "Tags": ctx.attr.Tags,
         "WorkspaceId": ctx.attr.WorkspaceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_ttwin_maker_workspace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55349,7 +55349,7 @@ def _cloudformation_aws_io_twireless_destination_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_twireless_destination.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55401,7 +55401,7 @@ def _cloudformation_aws_io_twireless_device_profile_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_twireless_device_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55451,7 +55451,7 @@ def _cloudformation_aws_io_twireless_fuota_task_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_twireless_fuota_task.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55518,7 +55518,7 @@ def _cloudformation_aws_io_twireless_multicast_group_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_twireless_multicast_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55573,7 +55573,7 @@ def _cloudformation_aws_io_twireless_network_analyzer_configuration_impl(ctx):
         "WirelessDevices": parse_json_or_none(ctx.attr.WirelessDevices),
         "WirelessGateways": parse_json_or_none(ctx.attr.WirelessGateways),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_twireless_network_analyzer_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55629,7 +55629,7 @@ def _cloudformation_aws_io_twireless_partner_account_impl(ctx):
         "SidewalkUpdate": parse_json_or_none(ctx.attr.SidewalkUpdate),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_twireless_partner_account.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55684,7 +55684,7 @@ def _cloudformation_aws_io_twireless_service_profile_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_twireless_service_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55730,7 +55730,7 @@ def _cloudformation_aws_io_twireless_task_definition_impl(ctx):
         "TaskDefinitionType": ctx.attr.TaskDefinitionType,
         "Update": parse_json_or_none(ctx.attr.Update),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_twireless_task_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55788,7 +55788,7 @@ def _cloudformation_aws_io_twireless_wireless_device_impl(ctx):
         "ThingArn": ctx.attr.ThingArn,
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_twireless_wireless_device.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55849,7 +55849,7 @@ def _cloudformation_aws_io_twireless_wireless_device_import_task_impl(ctx):
         "Sidewalk": parse_json_or_none(ctx.attr.Sidewalk),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_twireless_wireless_device_import_task.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55896,7 +55896,7 @@ def _cloudformation_aws_io_twireless_wireless_gateway_impl(ctx):
         "ThingArn": ctx.attr.ThingArn,
         "ThingName": ctx.attr.ThingName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_twireless_wireless_gateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -55958,7 +55958,7 @@ def _cloudformation_aws_ivs_channel_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ivs_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56023,7 +56023,7 @@ def _cloudformation_aws_ivs_composition_impl(ctx):
         "StageArn": ctx.attr.StageArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ivs_composition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56069,7 +56069,7 @@ def _cloudformation_aws_ivs_encoder_configuration_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Video": parse_json_or_none(ctx.attr.Video),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ivs_encoder_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56115,7 +56115,7 @@ def _cloudformation_aws_ivs_ingest_configuration_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UserId": ctx.attr.UserId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ivs_ingest_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56167,7 +56167,7 @@ def _cloudformation_aws_ivs_playback_key_pair_impl(ctx):
         "PublicKeyMaterial": ctx.attr.PublicKeyMaterial,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ivs_playback_key_pair.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56212,7 +56212,7 @@ def _cloudformation_aws_ivs_playback_restriction_policy_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ivs_playback_restriction_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56261,7 +56261,7 @@ def _cloudformation_aws_ivs_public_key_impl(ctx):
         "PublicKeyMaterial": ctx.attr.PublicKeyMaterial,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ivs_public_key.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56307,7 +56307,7 @@ def _cloudformation_aws_ivs_recording_configuration_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "ThumbnailConfiguration": parse_json_or_none(ctx.attr.ThumbnailConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ivs_recording_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56359,7 +56359,7 @@ def _cloudformation_aws_ivs_stage_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ivs_stage.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56402,7 +56402,7 @@ def _cloudformation_aws_ivs_storage_configuration_impl(ctx):
         "S3": parse_json_or_none(ctx.attr.S3),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ivs_storage_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56444,7 +56444,7 @@ def _cloudformation_aws_ivs_stream_key_impl(ctx):
         "ChannelArn": ctx.attr.ChannelArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ivs_stream_key.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56484,7 +56484,7 @@ def _cloudformation_aws_ivschat_logging_configuration_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ivschat_logging_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56530,7 +56530,7 @@ def _cloudformation_aws_ivschat_room_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ivschat_room.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56593,7 +56593,7 @@ def _cloudformation_aws_kafka_connect_connector_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WorkerConfiguration": parse_json_or_none(ctx.attr.WorkerConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kafka_connect_connector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56666,7 +56666,7 @@ def _cloudformation_aws_kafka_connect_connector_operation_impl(ctx):
     item_name = ctx.attr.aws_kafka_connect_connector_operation_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kafka_connect_connector_operation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56702,7 +56702,7 @@ def _cloudformation_aws_kafka_connect_custom_plugin_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kafka_connect_custom_plugin.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56752,7 +56752,7 @@ def _cloudformation_aws_kafka_connect_worker_configuration_impl(ctx):
         "PropertiesFileContent": ctx.attr.PropertiesFileContent,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kafka_connect_worker_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56805,7 +56805,7 @@ def _cloudformation_aws_kendra_data_source_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kendra_data_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56874,7 +56874,7 @@ def _cloudformation_aws_kendra_faq_impl(ctx):
         "S3Path": parse_json_or_none(ctx.attr.S3Path),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kendra_faq.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -56939,7 +56939,7 @@ def _cloudformation_aws_kendra_index_impl(ctx):
         "UserContextPolicy": ctx.attr.UserContextPolicy,
         "UserTokenConfigurations": parse_json_or_none(ctx.attr.UserTokenConfigurations),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kendra_index.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57004,7 +57004,7 @@ def _cloudformation_aws_kendra_ranking_execution_plan_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kendra_ranking_execution_plan.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57051,7 +57051,7 @@ def _cloudformation_aws_kinesis_analytics_application_impl(ctx):
         "ApplicationName": ctx.attr.ApplicationName,
         "Inputs": parse_json_or_none(ctx.attr.Inputs),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kinesis_analytics_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57096,7 +57096,7 @@ def _cloudformation_aws_kinesis_analytics_application_output_impl(ctx):
         "ApplicationName": ctx.attr.ApplicationName,
         "Output": parse_json_or_none(ctx.attr.Output),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kinesis_analytics_application_output.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57135,7 +57135,7 @@ def _cloudformation_aws_kinesis_analytics_application_reference_data_source_impl
         "ApplicationName": ctx.attr.ApplicationName,
         "ReferenceDataSource": parse_json_or_none(ctx.attr.ReferenceDataSource),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kinesis_analytics_application_reference_data_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57181,7 +57181,7 @@ def _cloudformation_aws_kinesis_analytics_v2_application_impl(ctx):
         "ServiceExecutionRole": ctx.attr.ServiceExecutionRole,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kinesis_analytics_v2_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57241,7 +57241,7 @@ def _cloudformation_aws_kinesis_analytics_v2_application_cloud_watch_logging_opt
         "ApplicationName": ctx.attr.ApplicationName,
         "CloudWatchLoggingOption": parse_json_or_none(ctx.attr.CloudWatchLoggingOption),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kinesis_analytics_v2_application_cloud_watch_logging_option.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57280,7 +57280,7 @@ def _cloudformation_aws_kinesis_analytics_v2_application_output_impl(ctx):
         "ApplicationName": ctx.attr.ApplicationName,
         "Output": parse_json_or_none(ctx.attr.Output),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kinesis_analytics_v2_application_output.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57319,7 +57319,7 @@ def _cloudformation_aws_kinesis_analytics_v2_application_reference_data_source_i
         "ApplicationName": ctx.attr.ApplicationName,
         "ReferenceDataSource": parse_json_or_none(ctx.attr.ReferenceDataSource),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kinesis_analytics_v2_application_reference_data_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57374,7 +57374,7 @@ def _cloudformation_aws_kinesis_firehose_delivery_stream_impl(ctx):
         "SplunkDestinationConfiguration": parse_json_or_none(ctx.attr.SplunkDestinationConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kinesis_firehose_delivery_stream.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57461,7 +57461,7 @@ def _cloudformation_aws_kinesis_resource_policy_impl(ctx):
         "ResourceArn": ctx.attr.ResourceArn,
         "ResourcePolicy": parse_json_or_none(ctx.attr.ResourcePolicy),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kinesis_resource_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57507,7 +57507,7 @@ def _cloudformation_aws_kinesis_stream_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WarmThroughputMiBps": parse_json_or_none(ctx.attr.WarmThroughputMiBps),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kinesis_stream.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57568,7 +57568,7 @@ def _cloudformation_aws_kinesis_stream_consumer_impl(ctx):
         "StreamARN": ctx.attr.StreamARN,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kinesis_stream_consumer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57612,7 +57612,7 @@ def _cloudformation_aws_kinesis_video_signaling_channel_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kinesis_video_signaling_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57662,7 +57662,7 @@ def _cloudformation_aws_kinesis_video_stream_impl(ctx):
         "StreamStorageConfiguration": parse_json_or_none(ctx.attr.StreamStorageConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kinesis_video_stream.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57716,7 +57716,7 @@ def _cloudformation_aws_kms_alias_impl(ctx):
         "AliasName": ctx.attr.AliasName,
         "TargetKeyId": ctx.attr.TargetKeyId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kms_alias.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57765,7 +57765,7 @@ def _cloudformation_aws_kms_key_impl(ctx):
         "RotationPeriodInDays": parse_json_or_none(ctx.attr.RotationPeriodInDays),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kms_key.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57838,7 +57838,7 @@ def _cloudformation_aws_kms_replica_key_impl(ctx):
         "PrimaryKeyArn": ctx.attr.PrimaryKeyArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_kms_replica_key.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57894,7 +57894,7 @@ def _cloudformation_aws_lake_formation_data_cells_filter_impl(ctx):
         "TableCatalogId": ctx.attr.TableCatalogId,
         "TableName": ctx.attr.TableName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lake_formation_data_cells_filter.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -57957,7 +57957,7 @@ def _cloudformation_aws_lake_formation_data_lake_settings_impl(ctx):
         "ReadOnlyAdmins": parse_json_or_none(ctx.attr.ReadOnlyAdmins),
         "TrustedResourceOwners": parse_json_or_none(ctx.attr.TrustedResourceOwners),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lake_formation_data_lake_settings.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -58025,7 +58025,7 @@ def _cloudformation_aws_lake_formation_permissions_impl(ctx):
         "PermissionsWithGrantOption": parse_json_or_none(ctx.attr.PermissionsWithGrantOption),
         "Resource": parse_json_or_none(ctx.attr.Resource),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lake_formation_permissions.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -58073,7 +58073,7 @@ def _cloudformation_aws_lake_formation_principal_permissions_impl(ctx):
         "Principal": parse_json_or_none(ctx.attr.Principal),
         "Resource": parse_json_or_none(ctx.attr.Resource),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lake_formation_principal_permissions.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -58124,7 +58124,7 @@ def _cloudformation_aws_lake_formation_resource_impl(ctx):
         "UseServiceLinkedRole": parse_json_or_none(ctx.attr.UseServiceLinkedRole),
         "WithFederation": parse_json_or_none(ctx.attr.WithFederation),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lake_formation_resource.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -58173,7 +58173,7 @@ def _cloudformation_aws_lake_formation_tag_impl(ctx):
         "TagKey": ctx.attr.TagKey,
         "TagValues": parse_json_or_none(ctx.attr.TagValues),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lake_formation_tag.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -58215,7 +58215,7 @@ def _cloudformation_aws_lake_formation_tag_association_impl(ctx):
         "LFTags": parse_json_or_none(ctx.attr.LFTags),
         "Resource": parse_json_or_none(ctx.attr.Resource),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lake_formation_tag_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -58258,7 +58258,7 @@ def _cloudformation_aws_lambda_alias_impl(ctx):
         "ProvisionedConcurrencyConfig": parse_json_or_none(ctx.attr.ProvisionedConcurrencyConfig),
         "RoutingConfig": parse_json_or_none(ctx.attr.RoutingConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lambda_alias.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -58316,7 +58316,7 @@ def _cloudformation_aws_lambda_capacity_provider_impl(ctx):
         "TelemetryConfig": parse_json_or_none(ctx.attr.TelemetryConfig),
         "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lambda_capacity_provider.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -58378,7 +58378,7 @@ def _cloudformation_aws_lambda_code_signing_config_impl(ctx):
         "Description": ctx.attr.Description,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lambda_code_signing_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -58426,7 +58426,7 @@ def _cloudformation_aws_lambda_event_invoke_config_impl(ctx):
         "MaximumRetryAttempts": parse_json_or_none(ctx.attr.MaximumRetryAttempts),
         "Qualifier": ctx.attr.Qualifier,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lambda_event_invoke_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -58500,7 +58500,7 @@ def _cloudformation_aws_lambda_event_source_mapping_impl(ctx):
         "Topics": parse_json_or_none(ctx.attr.Topics),
         "TumblingWindowInSeconds": parse_json_or_none(ctx.attr.TumblingWindowInSeconds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lambda_event_source_mapping.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -58646,7 +58646,7 @@ def _cloudformation_aws_lambda_function_impl(ctx):
         "TracingConfig": parse_json_or_none(ctx.attr.TracingConfig),
         "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lambda_function.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -58776,7 +58776,7 @@ def _cloudformation_aws_lambda_layer_version_impl(ctx):
         "LayerName": ctx.attr.LayerName,
         "LicenseInfo": ctx.attr.LicenseInfo,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lambda_layer_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -58829,7 +58829,7 @@ def _cloudformation_aws_lambda_layer_version_permission_impl(ctx):
         "OrganizationId": ctx.attr.OrganizationId,
         "Principal": ctx.attr.Principal,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lambda_layer_version_permission.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -58886,7 +58886,7 @@ def _cloudformation_aws_lambda_microvm_image_impl(ctx):
         "Resources": parse_json_or_none(ctx.attr.Resources),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lambda_microvm_image.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -58963,7 +58963,7 @@ def _cloudformation_aws_lambda_network_connector_impl(ctx):
         "OperatorRole": ctx.attr.OperatorRole,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lambda_network_connector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59015,7 +59015,7 @@ def _cloudformation_aws_lambda_permission_impl(ctx):
         "SourceAccount": ctx.attr.SourceAccount,
         "SourceArn": ctx.attr.SourceArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lambda_permission.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59078,7 +59078,7 @@ def _cloudformation_aws_lambda_url_impl(ctx):
         "Qualifier": ctx.attr.Qualifier,
         "TargetFunctionArn": ctx.attr.TargetFunctionArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lambda_url.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59130,7 +59130,7 @@ def _cloudformation_aws_lambda_version_impl(ctx):
         "ProvisionedConcurrencyConfig": parse_json_or_none(ctx.attr.ProvisionedConcurrencyConfig),
         "RuntimePolicy": parse_json_or_none(ctx.attr.RuntimePolicy),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lambda_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59184,7 +59184,7 @@ def _cloudformation_aws_launch_wizard_deployment_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WorkloadName": ctx.attr.WorkloadName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_launch_wizard_deployment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59245,7 +59245,7 @@ def _cloudformation_aws_lex_bot_impl(ctx):
         "TestBotAliasSettings": parse_json_or_none(ctx.attr.TestBotAliasSettings),
         "TestBotAliasTags": parse_json_or_none(ctx.attr.TestBotAliasTags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lex_bot.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59329,7 +59329,7 @@ def _cloudformation_aws_lex_bot_alias_impl(ctx):
         "Description": ctx.attr.Description,
         "SentimentAnalysisSettings": parse_json_or_none(ctx.attr.SentimentAnalysisSettings),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lex_bot_alias.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59387,7 +59387,7 @@ def _cloudformation_aws_lex_bot_version_impl(ctx):
         "BotVersionLocaleSpecification": parse_json_or_none(ctx.attr.BotVersionLocaleSpecification),
         "Description": ctx.attr.Description,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lex_bot_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59429,7 +59429,7 @@ def _cloudformation_aws_lex_resource_policy_impl(ctx):
         "Policy": parse_json_or_none(ctx.attr.Policy),
         "ResourceArn": ctx.attr.ResourceArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lex_resource_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59473,7 +59473,7 @@ def _cloudformation_aws_license_manager_grant_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_license_manager_grant.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59537,7 +59537,7 @@ def _cloudformation_aws_license_manager_license_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Validity": parse_json_or_none(ctx.attr.Validity),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_license_manager_license.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59608,7 +59608,7 @@ def _cloudformation_aws_license_manager_license_asset_rule_set_impl(ctx):
         "Rules": parse_json_or_none(ctx.attr.Rules),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_license_manager_license_asset_rule_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59662,7 +59662,7 @@ def _cloudformation_aws_lightsail_alarm_impl(ctx):
         "Threshold": parse_json_or_none(ctx.attr.Threshold),
         "TreatMissingData": ctx.attr.TreatMissingData,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_alarm.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59733,7 +59733,7 @@ def _cloudformation_aws_lightsail_bucket_impl(ctx):
         "ResourcesReceivingAccess": parse_json_or_none(ctx.attr.ResourcesReceivingAccess),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_bucket.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59789,7 +59789,7 @@ def _cloudformation_aws_lightsail_certificate_impl(ctx):
         "SubjectAlternativeNames": parse_json_or_none(ctx.attr.SubjectAlternativeNames),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_certificate.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59840,7 +59840,7 @@ def _cloudformation_aws_lightsail_container_impl(ctx):
         "ServiceName": ctx.attr.ServiceName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_container.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59910,7 +59910,7 @@ def _cloudformation_aws_lightsail_database_impl(ctx):
         "RotateMasterUserPassword": parse_json_or_none(ctx.attr.RotateMasterUserPassword),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_database.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -59989,7 +59989,7 @@ def _cloudformation_aws_lightsail_database_snapshot_impl(ctx):
         "RelationalDatabaseSnapshotName": ctx.attr.RelationalDatabaseSnapshotName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_database_snapshot.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60035,7 +60035,7 @@ def _cloudformation_aws_lightsail_disk_impl(ctx):
         "SizeInGb": parse_json_or_none(ctx.attr.SizeInGb),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_disk.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60087,7 +60087,7 @@ def _cloudformation_aws_lightsail_disk_snapshot_impl(ctx):
         "DiskSnapshotName": ctx.attr.DiskSnapshotName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_disk_snapshot.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60137,7 +60137,7 @@ def _cloudformation_aws_lightsail_distribution_impl(ctx):
         "Origin": parse_json_or_none(ctx.attr.Origin),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_distribution.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60201,7 +60201,7 @@ def _cloudformation_aws_lightsail_domain_impl(ctx):
         "DomainName": ctx.attr.DomainName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_domain.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60241,7 +60241,7 @@ def _cloudformation_aws_lightsail_export_snapshot_record_impl(ctx):
     item_name = ctx.attr.aws_lightsail_export_snapshot_record_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_export_snapshot_record.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60284,7 +60284,7 @@ def _cloudformation_aws_lightsail_instance_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UserData": ctx.attr.UserData,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60354,7 +60354,7 @@ def _cloudformation_aws_lightsail_instance_snapshot_impl(ctx):
         "InstanceSnapshotName": ctx.attr.InstanceSnapshotName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_instance_snapshot.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60403,7 +60403,7 @@ def _cloudformation_aws_lightsail_load_balancer_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TlsPolicyName": ctx.attr.TlsPolicyName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_load_balancer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60467,7 +60467,7 @@ def _cloudformation_aws_lightsail_load_balancer_tls_certificate_impl(ctx):
         "IsAttached": parse_json_or_none(ctx.attr.IsAttached),
         "LoadBalancerName": ctx.attr.LoadBalancerName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_load_balancer_tls_certificate.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60518,7 +60518,7 @@ def _cloudformation_aws_lightsail_static_ip_impl(ctx):
         "AttachedTo": ctx.attr.AttachedTo,
         "StaticIpName": ctx.attr.StaticIpName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_static_ip.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60563,7 +60563,7 @@ def _cloudformation_aws_location_apikey_impl(ctx):
         "Restrictions": parse_json_or_none(ctx.attr.Restrictions),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_location_apikey.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60622,7 +60622,7 @@ def _cloudformation_aws_location_geofence_collection_impl(ctx):
         "KmsKeyId": ctx.attr.KmsKeyId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_location_geofence_collection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60672,7 +60672,7 @@ def _cloudformation_aws_location_job_impl(ctx):
         "OutputOptions": parse_json_or_none(ctx.attr.OutputOptions),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_location_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60729,7 +60729,7 @@ def _cloudformation_aws_location_map_impl(ctx):
         "PricingPlan": ctx.attr.PricingPlan,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_location_map.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60781,7 +60781,7 @@ def _cloudformation_aws_location_place_index_impl(ctx):
         "PricingPlan": ctx.attr.PricingPlan,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_location_place_index.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60835,7 +60835,7 @@ def _cloudformation_aws_location_route_calculator_impl(ctx):
         "PricingPlan": ctx.attr.PricingPlan,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_location_route_calculator.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60888,7 +60888,7 @@ def _cloudformation_aws_location_tracker_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TrackerName": ctx.attr.TrackerName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_location_tracker.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60942,7 +60942,7 @@ def _cloudformation_aws_location_tracker_consumer_impl(ctx):
         "ConsumerArn": ctx.attr.ConsumerArn,
         "TrackerName": ctx.attr.TrackerName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_location_tracker_consumer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -60984,7 +60984,7 @@ def _cloudformation_aws_logs_account_policy_impl(ctx):
         "Scope": ctx.attr.Scope,
         "SelectionCriteria": ctx.attr.SelectionCriteria,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_logs_account_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61037,7 +61037,7 @@ def _cloudformation_aws_logs_delivery_impl(ctx):
         "S3SuffixPath": ctx.attr.S3SuffixPath,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_logs_delivery.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61095,7 +61095,7 @@ def _cloudformation_aws_logs_delivery_destination_impl(ctx):
         "OutputFormat": ctx.attr.OutputFormat,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_logs_delivery_destination.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61149,7 +61149,7 @@ def _cloudformation_aws_logs_delivery_source_impl(ctx):
         "ResourceArn": ctx.attr.ResourceArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_logs_delivery_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61200,7 +61200,7 @@ def _cloudformation_aws_logs_destination_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetArn": ctx.attr.TargetArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_logs_destination.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61249,7 +61249,7 @@ def _cloudformation_aws_logs_integration_impl(ctx):
         "IntegrationType": ctx.attr.IntegrationType,
         "ResourceConfig": parse_json_or_none(ctx.attr.ResourceConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_logs_integration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61296,7 +61296,7 @@ def _cloudformation_aws_logs_log_anomaly_detector_impl(ctx):
         "KmsKeyId": ctx.attr.KmsKeyId,
         "LogGroupArnList": parse_json_or_none(ctx.attr.LogGroupArnList),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_logs_log_anomaly_detector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61358,7 +61358,7 @@ def _cloudformation_aws_logs_log_group_impl(ctx):
         "RetentionInDays": parse_json_or_none(ctx.attr.RetentionInDays),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_logs_log_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61421,7 +61421,7 @@ def _cloudformation_aws_logs_log_stream_impl(ctx):
         "LogGroupName": ctx.attr.LogGroupName,
         "LogStreamName": ctx.attr.LogStreamName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_logs_log_stream.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61465,7 +61465,7 @@ def _cloudformation_aws_logs_metric_filter_impl(ctx):
         "LogGroupName": ctx.attr.LogGroupName,
         "MetricTransformations": parse_json_or_none(ctx.attr.MetricTransformations),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_logs_metric_filter.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61522,7 +61522,7 @@ def _cloudformation_aws_logs_query_definition_impl(ctx):
         "QueryLanguage": ctx.attr.QueryLanguage,
         "QueryString": ctx.attr.QueryString,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_logs_query_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61570,7 +61570,7 @@ def _cloudformation_aws_logs_resource_policy_impl(ctx):
         "PolicyDocument": parse_json_or_none(ctx.attr.PolicyDocument),
         "PolicyName": ctx.attr.PolicyName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_logs_resource_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61621,7 +61621,7 @@ def _cloudformation_aws_logs_scheduled_query_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Timezone": ctx.attr.Timezone,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_logs_scheduled_query.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61703,7 +61703,7 @@ def _cloudformation_aws_logs_subscription_filter_impl(ctx):
         "LogGroupName": ctx.attr.LogGroupName,
         "RoleArn": ctx.attr.RoleArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_logs_subscription_filter.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61763,7 +61763,7 @@ def _cloudformation_aws_logs_transformer_impl(ctx):
         "LogGroupIdentifier": ctx.attr.LogGroupIdentifier,
         "TransformerConfig": parse_json_or_none(ctx.attr.TransformerConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_logs_transformer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61809,7 +61809,7 @@ def _cloudformation_aws_lookout_equipment_inference_scheduler_impl(ctx):
         "ServerSideKmsKeyId": ctx.attr.ServerSideKmsKeyId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lookout_equipment_inference_scheduler.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61868,7 +61868,7 @@ def _cloudformation_aws_lookout_vision_project_impl(ctx):
     payload = {
         "ProjectName": ctx.attr.ProjectName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_lookout_vision_project.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61909,7 +61909,7 @@ def _cloudformation_aws_m2_application_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_m2_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -61964,7 +61964,7 @@ def _cloudformation_aws_m2_deployment_impl(ctx):
         "ApplicationVersion": parse_json_or_none(ctx.attr.ApplicationVersion),
         "EnvironmentId": ctx.attr.EnvironmentId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_m2_deployment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62018,7 +62018,7 @@ def _cloudformation_aws_m2_environment_impl(ctx):
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_m2_environment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62100,7 +62100,7 @@ def _cloudformation_aws_macie2_classification_job_impl(ctx):
         "ScheduleFrequency": parse_json_or_none(ctx.attr.ScheduleFrequency),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_macie2_classification_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62162,7 +62162,7 @@ def _cloudformation_aws_macie_allow_list_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_macie_allow_list.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62212,7 +62212,7 @@ def _cloudformation_aws_macie_custom_data_identifier_impl(ctx):
         "Regex": ctx.attr.Regex,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_macie_custom_data_identifier.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62270,7 +62270,7 @@ def _cloudformation_aws_macie_findings_filter_impl(ctx):
         "Position": parse_json_or_none(ctx.attr.Position),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_macie_findings_filter.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62321,7 +62321,7 @@ def _cloudformation_aws_macie_session_impl(ctx):
         "FindingPublishingFrequency": ctx.attr.FindingPublishingFrequency,
         "Status": ctx.attr.Status,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_macie_session.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62361,7 +62361,7 @@ def _cloudformation_aws_managed_blockchain_accessor_impl(ctx):
         "NetworkType": ctx.attr.NetworkType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_managed_blockchain_accessor.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62405,7 +62405,7 @@ def _cloudformation_aws_managed_blockchain_member_impl(ctx):
         "NetworkConfiguration": parse_json_or_none(ctx.attr.NetworkConfiguration),
         "NetworkId": ctx.attr.NetworkId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_managed_blockchain_member.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62451,7 +62451,7 @@ def _cloudformation_aws_managed_blockchain_node_impl(ctx):
         "NetworkId": ctx.attr.NetworkId,
         "NodeConfiguration": parse_json_or_none(ctx.attr.NodeConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_managed_blockchain_node.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62498,7 +62498,7 @@ def _cloudformation_aws_media_connect_bridge_impl(ctx):
         "SourceFailoverConfig": parse_json_or_none(ctx.attr.SourceFailoverConfig),
         "Sources": parse_json_or_none(ctx.attr.Sources),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_bridge.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62553,7 +62553,7 @@ def _cloudformation_aws_media_connect_bridge_output_impl(ctx):
         "Name": ctx.attr.Name,
         "NetworkOutput": parse_json_or_none(ctx.attr.NetworkOutput),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_bridge_output.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62597,7 +62597,7 @@ def _cloudformation_aws_media_connect_bridge_source_impl(ctx):
         "Name": ctx.attr.Name,
         "NetworkSource": parse_json_or_none(ctx.attr.NetworkSource),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_bridge_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62652,7 +62652,7 @@ def _cloudformation_aws_media_connect_flow_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcInterfaces": parse_json_or_none(ctx.attr.VpcInterfaces),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_flow.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62727,7 +62727,7 @@ def _cloudformation_aws_media_connect_flow_entitlement_impl(ctx):
         "Subscribers": parse_json_or_none(ctx.attr.Subscribers),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_flow_entitlement.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62804,7 +62804,7 @@ def _cloudformation_aws_media_connect_flow_output_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcInterfaceAttachment": parse_json_or_none(ctx.attr.VpcInterfaceAttachment),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_flow_output.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -62917,7 +62917,7 @@ def _cloudformation_aws_media_connect_flow_source_impl(ctx):
         "VpcInterfaceName": ctx.attr.VpcInterfaceName,
         "WhitelistCidr": ctx.attr.WhitelistCidr,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_flow_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63002,7 +63002,7 @@ def _cloudformation_aws_media_connect_flow_vpc_interface_impl(ctx):
         "SubnetId": ctx.attr.SubnetId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_flow_vpc_interface.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63054,7 +63054,7 @@ def _cloudformation_aws_media_connect_gateway_impl(ctx):
         "Name": ctx.attr.Name,
         "Networks": parse_json_or_none(ctx.attr.Networks),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_gateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63094,7 +63094,7 @@ def _cloudformation_aws_media_connect_offering_impl(ctx):
     item_name = ctx.attr.aws_media_connect_offering_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_offering.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63125,7 +63125,7 @@ def _cloudformation_aws_media_connect_reservation_impl(ctx):
     item_name = ctx.attr.aws_media_connect_reservation_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_reservation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63167,7 +63167,7 @@ def _cloudformation_aws_media_connect_router_input_impl(ctx):
         "Tier": ctx.attr.Tier,
         "TransitEncryption": parse_json_or_none(ctx.attr.TransitEncryption),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_router_input.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63235,7 +63235,7 @@ def _cloudformation_aws_media_connect_router_network_interface_impl(ctx):
         "RegionName": ctx.attr.RegionName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_router_network_interface.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63287,7 +63287,7 @@ def _cloudformation_aws_media_connect_router_output_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Tier": ctx.attr.Tier,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_router_output.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63355,7 +63355,7 @@ def _cloudformation_aws_media_convert_job_template_impl(ctx):
         "StatusUpdateInterval": ctx.attr.StatusUpdateInterval,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_convert_job_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63421,7 +63421,7 @@ def _cloudformation_aws_media_convert_preset_impl(ctx):
         "SettingsJson": parse_json_or_none(ctx.attr.SettingsJson),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_convert_preset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63474,7 +63474,7 @@ def _cloudformation_aws_media_convert_queue_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_convert_queue.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63544,7 +63544,7 @@ def _cloudformation_aws_media_live_channel_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Vpc": parse_json_or_none(ctx.attr.Vpc),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63633,7 +63633,7 @@ def _cloudformation_aws_media_live_channel_placement_group_impl(ctx):
         "Nodes": parse_json_or_none(ctx.attr.Nodes),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_channel_placement_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63689,7 +63689,7 @@ def _cloudformation_aws_media_live_cloud_watch_alarm_template_impl(ctx):
         "Threshold": parse_json_or_none(ctx.attr.Threshold),
         "TreatMissingData": ctx.attr.TreatMissingData,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_cloud_watch_alarm_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63762,7 +63762,7 @@ def _cloudformation_aws_media_live_cloud_watch_alarm_template_group_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_cloud_watch_alarm_template_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63807,7 +63807,7 @@ def _cloudformation_aws_media_live_cluster_impl(ctx):
         "NetworkSettings": parse_json_or_none(ctx.attr.NetworkSettings),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63859,7 +63859,7 @@ def _cloudformation_aws_media_live_event_bridge_rule_template_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_event_bridge_rule_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63911,7 +63911,7 @@ def _cloudformation_aws_media_live_event_bridge_rule_template_group_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_event_bridge_rule_template_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -63967,7 +63967,7 @@ def _cloudformation_aws_media_live_input_impl(ctx):
         "Type": ctx.attr.Type,
         "Vpc": parse_json_or_none(ctx.attr.Vpc),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_input.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64048,7 +64048,7 @@ def _cloudformation_aws_media_live_input_security_group_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WhitelistRules": parse_json_or_none(ctx.attr.WhitelistRules),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_input_security_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64090,7 +64090,7 @@ def _cloudformation_aws_media_live_multiplex_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_multiplex.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64142,7 +64142,7 @@ def _cloudformation_aws_media_live_multiplexprogram_impl(ctx):
         "PreferredChannelPipeline": ctx.attr.PreferredChannelPipeline,
         "ProgramName": ctx.attr.ProgramName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_multiplexprogram.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64195,7 +64195,7 @@ def _cloudformation_aws_media_live_network_impl(ctx):
         "Routes": parse_json_or_none(ctx.attr.Routes),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_network.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64244,7 +64244,7 @@ def _cloudformation_aws_media_live_node_impl(ctx):
         "SdiSourceMappings": parse_json_or_none(ctx.attr.SdiSourceMappings),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_node.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64293,7 +64293,7 @@ def _cloudformation_aws_media_live_offering_impl(ctx):
     item_name = ctx.attr.aws_media_live_offering_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_offering.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64328,7 +64328,7 @@ def _cloudformation_aws_media_live_sdi_source_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_sdi_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64378,7 +64378,7 @@ def _cloudformation_aws_media_live_signal_map_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_signal_map.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64437,7 +64437,7 @@ def _cloudformation_aws_media_package_asset_impl(ctx):
         "SourceRoleArn": ctx.attr.SourceRoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_package_asset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64495,7 +64495,7 @@ def _cloudformation_aws_media_package_channel_impl(ctx):
         "IngressAccessLogs": parse_json_or_none(ctx.attr.IngressAccessLogs),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_package_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64549,7 +64549,7 @@ def _cloudformation_aws_media_package_harvest_job_impl(ctx):
         "S3Destination": parse_json_or_none(ctx.attr.S3Destination),
         "StartTime": ctx.attr.StartTime,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_package_harvest_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64609,7 +64609,7 @@ def _cloudformation_aws_media_package_origin_endpoint_impl(ctx):
         "TimeDelaySeconds": parse_json_or_none(ctx.attr.TimeDelaySeconds),
         "Whitelist": parse_json_or_none(ctx.attr.Whitelist),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_package_origin_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64689,7 +64689,7 @@ def _cloudformation_aws_media_package_packaging_configuration_impl(ctx):
         "PackagingGroupId": ctx.attr.PackagingGroupId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_package_packaging_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64745,7 +64745,7 @@ def _cloudformation_aws_media_package_packaging_group_impl(ctx):
         "Id": ctx.attr.Id,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_package_packaging_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64796,7 +64796,7 @@ def _cloudformation_aws_media_package_v2_channel_impl(ctx):
         "OutputLockingMode": ctx.attr.OutputLockingMode,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_package_v2_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64854,7 +64854,7 @@ def _cloudformation_aws_media_package_v2_channel_group_impl(ctx):
         "Description": ctx.attr.Description,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_package_v2_channel_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64897,7 +64897,7 @@ def _cloudformation_aws_media_package_v2_channel_policy_impl(ctx):
         "ChannelName": ctx.attr.ChannelName,
         "Policy": parse_json_or_none(ctx.attr.Policy),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_package_v2_channel_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -64946,7 +64946,7 @@ def _cloudformation_aws_media_package_v2_harvest_job_impl(ctx):
         "ScheduleConfiguration": parse_json_or_none(ctx.attr.ScheduleConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_package_v2_harvest_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65018,7 +65018,7 @@ def _cloudformation_aws_media_package_v2_origin_endpoint_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UriSeparator": ctx.attr.UriSeparator,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_package_v2_origin_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65096,7 +65096,7 @@ def _cloudformation_aws_media_package_v2_origin_endpoint_policy_impl(ctx):
         "OriginEndpointName": ctx.attr.OriginEndpointName,
         "Policy": parse_json_or_none(ctx.attr.Policy),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_package_v2_origin_endpoint_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65149,7 +65149,7 @@ def _cloudformation_aws_media_store_container_impl(ctx):
         "Policy": ctx.attr.Policy,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_store_container.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65210,7 +65210,7 @@ def _cloudformation_aws_media_tailor_channel_impl(ctx):
         "Tier": ctx.attr.Tier,
         "TimeShiftConfiguration": parse_json_or_none(ctx.attr.TimeShiftConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_tailor_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65270,7 +65270,7 @@ def _cloudformation_aws_media_tailor_channel_policy_impl(ctx):
         "ChannelName": ctx.attr.ChannelName,
         "Policy": parse_json_or_none(ctx.attr.Policy),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_tailor_channel_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65314,7 +65314,7 @@ def _cloudformation_aws_media_tailor_function_impl(ctx):
         "SequentialExecutorConfiguration": parse_json_or_none(ctx.attr.SequentialExecutorConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_tailor_function.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65370,7 +65370,7 @@ def _cloudformation_aws_media_tailor_live_source_impl(ctx):
         "SourceLocationName": ctx.attr.SourceLocationName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_tailor_live_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65435,7 +65435,7 @@ def _cloudformation_aws_media_tailor_playback_configuration_impl(ctx):
         "TranscodeProfileName": ctx.attr.TranscodeProfileName,
         "VideoContentSourceUrl": ctx.attr.VideoContentSourceUrl,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_tailor_playback_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65538,7 +65538,7 @@ def _cloudformation_aws_media_tailor_source_location_impl(ctx):
         "SourceLocationName": ctx.attr.SourceLocationName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_tailor_source_location.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65591,7 +65591,7 @@ def _cloudformation_aws_media_tailor_vod_source_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VodSourceName": ctx.attr.VodSourceName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_tailor_vod_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65635,7 +65635,7 @@ def _cloudformation_aws_medical_imaging_image_set_impl(ctx):
     payload = {
         "DatastoreId": ctx.attr.DatastoreId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_medical_imaging_image_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65672,7 +65672,7 @@ def _cloudformation_aws_memory_db_acl_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UserNames": parse_json_or_none(ctx.attr.UserNames),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_memory_db_acl.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65741,7 +65741,7 @@ def _cloudformation_aws_memory_db_cluster_impl(ctx):
         "TLSEnabled": parse_json_or_none(ctx.attr.TLSEnabled),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_memory_db_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65869,7 +65869,7 @@ def _cloudformation_aws_memory_db_multi_region_cluster_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UpdateStrategy": ctx.attr.UpdateStrategy,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_memory_db_multi_region_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65930,7 +65930,7 @@ def _cloudformation_aws_memory_db_multi_region_parameter_group_impl(ctx):
     item_name = ctx.attr.aws_memory_db_multi_region_parameter_group_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_memory_db_multi_region_parameter_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -65966,7 +65966,7 @@ def _cloudformation_aws_memory_db_parameter_group_impl(ctx):
         "Parameters": parse_json_or_none(ctx.attr.Parameters),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_memory_db_parameter_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66012,7 +66012,7 @@ def _cloudformation_aws_memory_db_reserved_node_impl(ctx):
     item_name = ctx.attr.aws_memory_db_reserved_node_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_memory_db_reserved_node.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66047,7 +66047,7 @@ def _cloudformation_aws_memory_db_subnet_group_impl(ctx):
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_memory_db_subnet_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66094,7 +66094,7 @@ def _cloudformation_aws_memory_db_user_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UserName": ctx.attr.UserName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_memory_db_user.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66143,7 +66143,7 @@ def _cloudformation_aws_mpa_approval_team_impl(ctx):
         "Policies": parse_json_or_none(ctx.attr.Policies),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_mpa_approval_team.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66194,7 +66194,7 @@ def _cloudformation_aws_mpa_identity_source_impl(ctx):
         "IdentitySourceParameters": parse_json_or_none(ctx.attr.IdentitySourceParameters),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_mpa_identity_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66233,7 +66233,7 @@ def _cloudformation_aws_msk_batch_scram_secret_impl(ctx):
         "ClusterArn": ctx.attr.ClusterArn,
         "SecretArnList": parse_json_or_none(ctx.attr.SecretArnList),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_msk_batch_scram_secret.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66278,7 +66278,7 @@ def _cloudformation_aws_msk_channel_impl(ctx):
         "Tags": ctx.attr.Tags,
         "TopicConfigurationList": parse_json_or_none(ctx.attr.TopicConfigurationList),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_msk_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66347,7 +66347,7 @@ def _cloudformation_aws_msk_cluster_impl(ctx):
         "Tags": ctx.attr.Tags,
         "ZookeeperAccess": parse_json_or_none(ctx.attr.ZookeeperAccess),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_msk_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66422,7 +66422,7 @@ def _cloudformation_aws_msk_cluster_policy_impl(ctx):
         "ClusterArn": ctx.attr.ClusterArn,
         "Policy": parse_json_or_none(ctx.attr.Policy),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_msk_cluster_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66464,7 +66464,7 @@ def _cloudformation_aws_msk_configuration_impl(ctx):
         "Name": ctx.attr.Name,
         "ServerProperties": ctx.attr.ServerProperties,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_msk_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66517,7 +66517,7 @@ def _cloudformation_aws_msk_replicator_impl(ctx):
         "ServiceExecutionRoleArn": ctx.attr.ServiceExecutionRoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_msk_replicator.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66573,7 +66573,7 @@ def _cloudformation_aws_msk_serverless_cluster_impl(ctx):
         "Tags": ctx.attr.Tags,
         "VpcConfigs": parse_json_or_none(ctx.attr.VpcConfigs),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_msk_serverless_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66621,7 +66621,7 @@ def _cloudformation_aws_msk_topic_impl(ctx):
         "ReplicationFactor": parse_json_or_none(ctx.attr.ReplicationFactor),
         "TopicName": ctx.attr.TopicName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_msk_topic.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66673,7 +66673,7 @@ def _cloudformation_aws_msk_vpc_connection_impl(ctx):
         "TargetClusterArn": ctx.attr.TargetClusterArn,
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_msk_vpc_connection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66748,7 +66748,7 @@ def _cloudformation_aws_mwaa_environment_impl(ctx):
         "WeeklyMaintenanceWindowStart": ctx.attr.WeeklyMaintenanceWindowStart,
         "WorkerReplacementStrategy": ctx.attr.WorkerReplacementStrategy,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_mwaa_environment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66866,7 +66866,7 @@ def _cloudformation_aws_mwaaserverless_workflow_impl(ctx):
         "Tags": ctx.attr.Tags,
         "TriggerMode": ctx.attr.TriggerMode,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_mwaaserverless_workflow.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -66951,7 +66951,7 @@ def _cloudformation_aws_neptune_dbcluster_impl(ctx):
         "UseLatestRestorableTime": parse_json_or_none(ctx.attr.UseLatestRestorableTime),
         "VpcSecurityGroupIds": parse_json_or_none(ctx.attr.VpcSecurityGroupIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_neptune_dbcluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67068,7 +67068,7 @@ def _cloudformation_aws_neptune_dbcluster_parameter_group_impl(ctx):
         "Parameters": parse_json_or_none(ctx.attr.Parameters),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_neptune_dbcluster_parameter_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67125,7 +67125,7 @@ def _cloudformation_aws_neptune_dbinstance_impl(ctx):
         "PubliclyAccessible": parse_json_or_none(ctx.attr.PubliclyAccessible),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_neptune_dbinstance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67194,7 +67194,7 @@ def _cloudformation_aws_neptune_dbparameter_group_impl(ctx):
         "Parameters": parse_json_or_none(ctx.attr.Parameters),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_neptune_dbparameter_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67244,7 +67244,7 @@ def _cloudformation_aws_neptune_dbsubnet_group_impl(ctx):
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_neptune_dbsubnet_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67294,7 +67294,7 @@ def _cloudformation_aws_neptune_event_subscription_impl(ctx):
         "SubscriptionName": ctx.attr.SubscriptionName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_neptune_event_subscription.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67353,7 +67353,7 @@ def _cloudformation_aws_neptune_global_cluster_impl(ctx):
         "StorageEncrypted": parse_json_or_none(ctx.attr.StorageEncrypted),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_neptune_global_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67413,7 +67413,7 @@ def _cloudformation_aws_neptune_graph_export_task_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_neptune_graph_export_task.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67476,7 +67476,7 @@ def _cloudformation_aws_neptune_graph_graph_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VectorSearchConfiguration": parse_json_or_none(ctx.attr.VectorSearchConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_neptune_graph_graph.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67534,7 +67534,7 @@ def _cloudformation_aws_neptune_graph_graph_snapshot_impl(ctx):
         "SnapshotName": ctx.attr.SnapshotName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_neptune_graph_graph_snapshot.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67578,7 +67578,7 @@ def _cloudformation_aws_neptune_graph_private_graph_endpoint_impl(ctx):
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_neptune_graph_private_graph_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67634,7 +67634,7 @@ def _cloudformation_aws_network_firewall_firewall_impl(ctx):
         "TransitGatewayId": ctx.attr.TransitGatewayId,
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_firewall_firewall.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67708,7 +67708,7 @@ def _cloudformation_aws_network_firewall_firewall_policy_impl(ctx):
         "FirewallPolicyName": ctx.attr.FirewallPolicyName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_firewall_firewall_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67755,7 +67755,7 @@ def _cloudformation_aws_network_firewall_logging_configuration_impl(ctx):
         "FirewallName": ctx.attr.FirewallName,
         "LoggingConfiguration": parse_json_or_none(ctx.attr.LoggingConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_firewall_logging_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67805,7 +67805,7 @@ def _cloudformation_aws_network_firewall_rule_group_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_firewall_rule_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67861,7 +67861,7 @@ def _cloudformation_aws_network_firewall_tlsinspection_configuration_impl(ctx):
         "TLSInspectionConfigurationName": ctx.attr.TLSInspectionConfigurationName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_firewall_tlsinspection_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67909,7 +67909,7 @@ def _cloudformation_aws_network_firewall_vpc_endpoint_association_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_firewall_vpc_endpoint_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -67960,7 +67960,7 @@ def _cloudformation_aws_network_flow_monitor_monitor_impl(ctx):
         "ScopeArn": ctx.attr.ScopeArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_flow_monitor_monitor.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68015,7 +68015,7 @@ def _cloudformation_aws_network_manager_connect_attachment_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TransportAttachmentId": ctx.attr.TransportAttachmentId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_connect_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68080,7 +68080,7 @@ def _cloudformation_aws_network_manager_connect_peer_impl(ctx):
         "SubnetArn": ctx.attr.SubnetArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_connect_peer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68136,7 +68136,7 @@ def _cloudformation_aws_network_manager_core_network_impl(ctx):
         "PolicyDocument": parse_json_or_none(ctx.attr.PolicyDocument),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_core_network.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68182,7 +68182,7 @@ def _cloudformation_aws_network_manager_core_network_prefix_list_association_imp
         "PrefixListAlias": ctx.attr.PrefixListAlias,
         "PrefixListArn": ctx.attr.PrefixListArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_core_network_prefix_list_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68226,7 +68226,7 @@ def _cloudformation_aws_network_manager_customer_gateway_association_impl(ctx):
         "GlobalNetworkId": ctx.attr.GlobalNetworkId,
         "LinkId": ctx.attr.LinkId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_customer_gateway_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68279,7 +68279,7 @@ def _cloudformation_aws_network_manager_device_impl(ctx):
         "Type": ctx.attr.Type,
         "Vendor": ctx.attr.Vendor,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_device.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68347,7 +68347,7 @@ def _cloudformation_aws_network_manager_direct_connect_gateway_attachment_impl(c
         "RoutingPolicyLabel": ctx.attr.RoutingPolicyLabel,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_direct_connect_gateway_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68403,7 +68403,7 @@ def _cloudformation_aws_network_manager_global_network_impl(ctx):
         "State": ctx.attr.State,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_global_network.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68453,7 +68453,7 @@ def _cloudformation_aws_network_manager_link_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_link.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68508,7 +68508,7 @@ def _cloudformation_aws_network_manager_link_association_impl(ctx):
         "GlobalNetworkId": ctx.attr.GlobalNetworkId,
         "LinkId": ctx.attr.LinkId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_link_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68552,7 +68552,7 @@ def _cloudformation_aws_network_manager_site_impl(ctx):
         "Location": parse_json_or_none(ctx.attr.Location),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_site.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68602,7 +68602,7 @@ def _cloudformation_aws_network_manager_site_to_site_vpn_attachment_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpnConnectionArn": ctx.attr.VpnConnectionArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_site_to_site_vpn_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68657,7 +68657,7 @@ def _cloudformation_aws_network_manager_transit_gateway_peering_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TransitGatewayArn": ctx.attr.TransitGatewayArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_transit_gateway_peering.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68699,7 +68699,7 @@ def _cloudformation_aws_network_manager_transit_gateway_registration_impl(ctx):
         "GlobalNetworkId": ctx.attr.GlobalNetworkId,
         "TransitGatewayArn": ctx.attr.TransitGatewayArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_transit_gateway_registration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68743,7 +68743,7 @@ def _cloudformation_aws_network_manager_transit_gateway_route_table_attachment_i
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TransitGatewayRouteTableArn": ctx.attr.TransitGatewayRouteTableArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_transit_gateway_route_table_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68803,7 +68803,7 @@ def _cloudformation_aws_network_manager_vpc_attachment_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcArn": ctx.attr.VpcArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_manager_vpc_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68860,7 +68860,7 @@ def _cloudformation_aws_notifications_channel_association_impl(ctx):
         "Arn": ctx.attr.Arn,
         "NotificationConfigurationArn": ctx.attr.NotificationConfigurationArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_notifications_channel_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68900,7 +68900,7 @@ def _cloudformation_aws_notifications_contacts_email_contact_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_notifications_contacts_email_contact.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68945,7 +68945,7 @@ def _cloudformation_aws_notifications_event_rule_impl(ctx):
         "Regions": parse_json_or_none(ctx.attr.Regions),
         "Source": ctx.attr.Source,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_notifications_event_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -68993,7 +68993,7 @@ def _cloudformation_aws_notifications_managed_notification_account_contact_assoc
         "ContactIdentifier": ctx.attr.ContactIdentifier,
         "ManagedNotificationConfigurationArn": ctx.attr.ManagedNotificationConfigurationArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_notifications_managed_notification_account_contact_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69032,7 +69032,7 @@ def _cloudformation_aws_notifications_managed_notification_additional_channel_as
         "ChannelArn": ctx.attr.ChannelArn,
         "ManagedNotificationConfigurationArn": ctx.attr.ManagedNotificationConfigurationArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_notifications_managed_notification_additional_channel_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69073,7 +69073,7 @@ def _cloudformation_aws_notifications_notification_configuration_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_notifications_notification_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69117,7 +69117,7 @@ def _cloudformation_aws_notifications_notification_hub_impl(ctx):
     payload = {
         "Region": ctx.attr.Region,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_notifications_notification_hub.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69153,7 +69153,7 @@ def _cloudformation_aws_notifications_organizational_unit_association_impl(ctx):
         "NotificationConfigurationArn": ctx.attr.NotificationConfigurationArn,
         "OrganizationalUnitId": ctx.attr.OrganizationalUnitId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_notifications_organizational_unit_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69193,7 +69193,7 @@ def _cloudformation_aws_nova_act_workflow_definition_impl(ctx):
         "ExportConfig": parse_json_or_none(ctx.attr.ExportConfig),
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_nova_act_workflow_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69236,7 +69236,7 @@ def _cloudformation_aws_nova_act_workflow_run_impl(ctx):
         "ModelId": ctx.attr.ModelId,
         "WorkflowDefinitionName": ctx.attr.WorkflowDefinitionName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_nova_act_workflow_run.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69281,7 +69281,7 @@ def _cloudformation_aws_oam_link_impl(ctx):
         "SinkIdentifier": ctx.attr.SinkIdentifier,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_oam_link.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69330,7 +69330,7 @@ def _cloudformation_aws_oam_sink_impl(ctx):
         "Policy": parse_json_or_none(ctx.attr.Policy),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_oam_sink.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69373,7 +69373,7 @@ def _cloudformation_aws_observability_admin_organization_centralization_rule_imp
         "RuleName": ctx.attr.RuleName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_observability_admin_organization_centralization_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69416,7 +69416,7 @@ def _cloudformation_aws_observability_admin_organization_telemetry_rule_impl(ctx
         "RuleName": ctx.attr.RuleName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_observability_admin_organization_telemetry_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69460,7 +69460,7 @@ def _cloudformation_aws_observability_admin_s3_table_integration_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_observability_admin_s3_table_integration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69504,7 +69504,7 @@ def _cloudformation_aws_observability_admin_telemetry_enrichment_impl(ctx):
     payload = {
         "Scope": ctx.attr.Scope,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_observability_admin_telemetry_enrichment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69541,7 +69541,7 @@ def _cloudformation_aws_observability_admin_telemetry_pipelines_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_observability_admin_telemetry_pipelines.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69584,7 +69584,7 @@ def _cloudformation_aws_observability_admin_telemetry_rule_impl(ctx):
         "RuleName": ctx.attr.RuleName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_observability_admin_telemetry_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69641,7 +69641,7 @@ def _cloudformation_aws_odb_cloud_autonomous_vm_cluster_impl(ctx):
         "TimeZone": ctx.attr.TimeZone,
         "TotalContainerDatabases": parse_json_or_none(ctx.attr.TotalContainerDatabases),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_odb_cloud_autonomous_vm_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69734,7 +69734,7 @@ def _cloudformation_aws_odb_cloud_exadata_infrastructure_impl(ctx):
         "StorageServerType": ctx.attr.StorageServerType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_odb_cloud_exadata_infrastructure.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69820,7 +69820,7 @@ def _cloudformation_aws_odb_cloud_vm_cluster_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TimeZone": ctx.attr.TimeZone,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_odb_cloud_vm_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -69934,7 +69934,7 @@ def _cloudformation_aws_odb_odb_network_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "ZeroEtlAccess": ctx.attr.ZeroEtlAccess,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_odb_odb_network.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70022,7 +70022,7 @@ def _cloudformation_aws_odb_odb_peering_connection_impl(ctx):
         "PeerNetworkRouteTableIds": parse_json_or_none(ctx.attr.PeerNetworkRouteTableIds),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_odb_odb_peering_connection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70078,7 +70078,7 @@ def _cloudformation_aws_omics_annotation_store_impl(ctx):
         "StoreOptions": parse_json_or_none(ctx.attr.StoreOptions),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_annotation_store.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70134,7 +70134,7 @@ def _cloudformation_aws_omics_configuration_impl(ctx):
         "RunConfigurations": parse_json_or_none(ctx.attr.RunConfigurations),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70184,7 +70184,7 @@ def _cloudformation_aws_omics_read_set_impl(ctx):
         "SequenceStoreId": ctx.attr.SequenceStoreId,
         "SubjectId": ctx.attr.SubjectId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_read_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70240,7 +70240,7 @@ def _cloudformation_aws_omics_reference_impl(ctx):
         "ReferenceStoreId": ctx.attr.ReferenceStoreId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_reference.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70287,7 +70287,7 @@ def _cloudformation_aws_omics_reference_store_impl(ctx):
         "SseConfig": parse_json_or_none(ctx.attr.SseConfig),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_reference_store.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70346,7 +70346,7 @@ def _cloudformation_aws_omics_run_impl(ctx):
         "WorkflowOwnerId": ctx.attr.WorkflowOwnerId,
         "WorkflowType": ctx.attr.WorkflowType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_run.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70431,7 +70431,7 @@ def _cloudformation_aws_omics_run_group_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_run_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70489,7 +70489,7 @@ def _cloudformation_aws_omics_sequence_store_impl(ctx):
         "SseConfig": parse_json_or_none(ctx.attr.SseConfig),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_sequence_store.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70548,7 +70548,7 @@ def _cloudformation_aws_omics_task_impl(ctx):
     payload = {
         "RunId": ctx.attr.RunId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_task.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70587,7 +70587,7 @@ def _cloudformation_aws_omics_variant_store_impl(ctx):
         "SseConfig": parse_json_or_none(ctx.attr.SseConfig),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_variant_store.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70651,7 +70651,7 @@ def _cloudformation_aws_omics_workflow_impl(ctx):
         "readmePath": ctx.attr.readmePath,
         "readmeUri": ctx.attr.readmeUri,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_workflow.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70755,7 +70755,7 @@ def _cloudformation_aws_omics_workflow_version_impl(ctx):
         "readmePath": ctx.attr.readmePath,
         "readmeUri": ctx.attr.readmeUri,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_workflow_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70847,7 +70847,7 @@ def _cloudformation_aws_open_search_data_source_impl(ctx):
         "DomainName": ctx.attr.DomainName,
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_open_search_data_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70894,7 +70894,7 @@ def _cloudformation_aws_open_search_serverless_access_policy_impl(ctx):
         "Policy": ctx.attr.Policy,
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_open_search_serverless_access_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -70946,7 +70946,7 @@ def _cloudformation_aws_open_search_serverless_collection_impl(ctx):
         "Type": ctx.attr.Type,
         "VectorOptions": parse_json_or_none(ctx.attr.VectorOptions),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_open_search_serverless_collection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -71010,7 +71010,7 @@ def _cloudformation_aws_open_search_serverless_collection_group_impl(ctx):
         "StandbyReplicas": ctx.attr.StandbyReplicas,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_open_search_serverless_collection_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -71062,7 +71062,7 @@ def _cloudformation_aws_open_search_serverless_collection_index_impl(ctx):
         "IndexName": ctx.attr.IndexName,
         "IndexSchema": ctx.attr.IndexSchema,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_open_search_serverless_collection_index.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -71106,7 +71106,7 @@ def _cloudformation_aws_open_search_serverless_index_impl(ctx):
         "Mappings": parse_json_or_none(ctx.attr.Mappings),
         "Settings": parse_json_or_none(ctx.attr.Settings),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_open_search_serverless_index.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -71153,7 +71153,7 @@ def _cloudformation_aws_open_search_serverless_lifecycle_policy_impl(ctx):
         "Policy": ctx.attr.Policy,
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_open_search_serverless_lifecycle_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -71202,7 +71202,7 @@ def _cloudformation_aws_open_search_serverless_security_config_impl(ctx):
         "SamlOptions": parse_json_or_none(ctx.attr.SamlOptions),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_open_search_serverless_security_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -71255,7 +71255,7 @@ def _cloudformation_aws_open_search_serverless_security_policy_impl(ctx):
         "Policy": ctx.attr.Policy,
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_open_search_serverless_security_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -71302,7 +71302,7 @@ def _cloudformation_aws_open_search_serverless_vpc_endpoint_impl(ctx):
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_open_search_serverless_vpc_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -71352,7 +71352,7 @@ def _cloudformation_aws_open_search_service_application_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_open_search_service_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -71429,7 +71429,7 @@ def _cloudformation_aws_open_search_service_domain_impl(ctx):
         "UseCase": ctx.attr.UseCase,
         "VPCOptions": parse_json_or_none(ctx.attr.VPCOptions),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_open_search_service_domain.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -71547,7 +71547,7 @@ def _cloudformation_aws_ops_works_app_impl(ctx):
         "StackId": ctx.attr.StackId,
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ops_works_app.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -71616,7 +71616,7 @@ def _cloudformation_aws_ops_works_elastic_load_balancer_attachment_impl(ctx):
         "ElasticLoadBalancerName": ctx.attr.ElasticLoadBalancerName,
         "LayerId": ctx.attr.LayerId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ops_works_elastic_load_balancer_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -71674,7 +71674,7 @@ def _cloudformation_aws_ops_works_instance_impl(ctx):
         "VirtualizationType": ctx.attr.VirtualizationType,
         "Volumes": parse_json_or_none(ctx.attr.Volumes),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ops_works_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -71787,7 +71787,7 @@ def _cloudformation_aws_ops_works_layer_impl(ctx):
         "UseEbsOptimizedInstances": parse_json_or_none(ctx.attr.UseEbsOptimizedInstances),
         "VolumeConfigurations": parse_json_or_none(ctx.attr.VolumeConfigurations),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ops_works_layer.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -71900,7 +71900,7 @@ def _cloudformation_aws_ops_works_stack_impl(ctx):
         "UseOpsworksSecurityGroups": parse_json_or_none(ctx.attr.UseOpsworksSecurityGroups),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ops_works_stack.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72010,7 +72010,7 @@ def _cloudformation_aws_ops_works_user_profile_impl(ctx):
         "SshPublicKey": ctx.attr.SshPublicKey,
         "SshUsername": ctx.attr.SshUsername,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ops_works_user_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72057,7 +72057,7 @@ def _cloudformation_aws_ops_works_volume_impl(ctx):
         "Name": ctx.attr.Name,
         "StackId": ctx.attr.StackId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ops_works_volume.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72105,7 +72105,7 @@ def _cloudformation_aws_organizations_account_impl(ctx):
         "RoleName": ctx.attr.RoleName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_organizations_account.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72152,7 +72152,7 @@ def _cloudformation_aws_organizations_organization_impl(ctx):
     payload = {
         "FeatureSet": ctx.attr.FeatureSet,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_organizations_organization.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72189,7 +72189,7 @@ def _cloudformation_aws_organizations_organizational_unit_impl(ctx):
         "ParentId": ctx.attr.ParentId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_organizations_organizational_unit.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72235,7 +72235,7 @@ def _cloudformation_aws_organizations_policy_impl(ctx):
         "TargetIds": parse_json_or_none(ctx.attr.TargetIds),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_organizations_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72286,7 +72286,7 @@ def _cloudformation_aws_organizations_resource_policy_impl(ctx):
         "Content": parse_json_or_none(ctx.attr.Content),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_organizations_resource_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72334,7 +72334,7 @@ def _cloudformation_aws_osis_pipeline_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcOptions": parse_json_or_none(ctx.attr.VpcOptions),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_osis_pipeline.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72399,7 +72399,7 @@ def _cloudformation_aws_osis_pipeline_blueprint_impl(ctx):
     payload = {
         "BlueprintName": ctx.attr.BlueprintName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_osis_pipeline_blueprint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72440,7 +72440,7 @@ def _cloudformation_aws_outposts_site_impl(ctx):
         "ShippingAddress": parse_json_or_none(ctx.attr.ShippingAddress),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_outposts_site.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72500,7 +72500,7 @@ def _cloudformation_aws_panorama_application_instance_impl(ctx):
         "RuntimeRoleArn": ctx.attr.RuntimeRoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_panorama_application_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72558,7 +72558,7 @@ def _cloudformation_aws_panorama_package_impl(ctx):
         "StorageLocation": parse_json_or_none(ctx.attr.StorageLocation),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_panorama_package.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72604,7 +72604,7 @@ def _cloudformation_aws_panorama_package_version_impl(ctx):
         "PatchVersion": ctx.attr.PatchVersion,
         "UpdatedLatestPatchVersion": ctx.attr.UpdatedLatestPatchVersion,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_panorama_package_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72654,7 +72654,7 @@ def _cloudformation_aws_partner_central_connection_preferences_impl(ctx):
     payload = {
         "Catalog": ctx.attr.Catalog,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_partner_central_connection_preferences.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72690,7 +72690,7 @@ def _cloudformation_aws_partner_central_partner_impl(ctx):
         "Catalog": ctx.attr.Catalog,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_partner_central_partner.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72729,7 +72729,7 @@ def _cloudformation_aws_payment_cryptography_alias_impl(ctx):
         "AliasName": ctx.attr.AliasName,
         "KeyArn": ctx.attr.KeyArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_payment_cryptography_alias.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72774,7 +72774,7 @@ def _cloudformation_aws_payment_cryptography_key_impl(ctx):
         "ReplicationRegions": parse_json_or_none(ctx.attr.ReplicationRegions),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_payment_cryptography_key.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72833,7 +72833,7 @@ def _cloudformation_aws_pcaconnector_ad_connector_impl(ctx):
         "Tags": ctx.attr.Tags,
         "VpcInformation": parse_json_or_none(ctx.attr.VpcInformation),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pcaconnector_ad_connector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72878,7 +72878,7 @@ def _cloudformation_aws_pcaconnector_ad_directory_registration_impl(ctx):
         "DirectoryId": ctx.attr.DirectoryId,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pcaconnector_ad_directory_registration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72917,7 +72917,7 @@ def _cloudformation_aws_pcaconnector_ad_service_principal_name_impl(ctx):
         "ConnectorArn": ctx.attr.ConnectorArn,
         "DirectoryRegistrationArn": ctx.attr.DirectoryRegistrationArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pcaconnector_ad_service_principal_name.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -72959,7 +72959,7 @@ def _cloudformation_aws_pcaconnector_ad_template_impl(ctx):
         "ReenrollAllCertificateHolders": parse_json_or_none(ctx.attr.ReenrollAllCertificateHolders),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pcaconnector_ad_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73009,7 +73009,7 @@ def _cloudformation_aws_pcaconnector_ad_template_group_access_control_entry_impl
         "GroupSecurityIdentifier": ctx.attr.GroupSecurityIdentifier,
         "TemplateArn": ctx.attr.TemplateArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pcaconnector_ad_template_group_access_control_entry.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73054,7 +73054,7 @@ def _cloudformation_aws_pcaconnector_scep_challenge_impl(ctx):
         "ConnectorArn": ctx.attr.ConnectorArn,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pcaconnector_scep_challenge.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73095,7 +73095,7 @@ def _cloudformation_aws_pcaconnector_scep_connector_impl(ctx):
         "Tags": ctx.attr.Tags,
         "VpcEndpointId": ctx.attr.VpcEndpointId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pcaconnector_scep_connector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73144,7 +73144,7 @@ def _cloudformation_aws_pcs_cluster_impl(ctx):
         "SlurmConfiguration": parse_json_or_none(ctx.attr.SlurmConfiguration),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pcs_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73206,7 +73206,7 @@ def _cloudformation_aws_pcs_compute_node_group_impl(ctx):
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pcs_compute_node_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73281,7 +73281,7 @@ def _cloudformation_aws_pcs_queue_impl(ctx):
         "SlurmConfiguration": parse_json_or_none(ctx.attr.SlurmConfiguration),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pcs_queue.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73334,7 +73334,7 @@ def _cloudformation_aws_personalize_batch_segment_job_impl(ctx):
         "SolutionVersionArn": ctx.attr.SolutionVersionArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_personalize_batch_segment_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73390,7 +73390,7 @@ def _cloudformation_aws_personalize_data_deletion_job_impl(ctx):
         "JobName": ctx.attr.JobName,
         "RoleArn": ctx.attr.RoleArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_personalize_data_deletion_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73438,7 +73438,7 @@ def _cloudformation_aws_personalize_dataset_impl(ctx):
         "Name": ctx.attr.Name,
         "SchemaArn": ctx.attr.SchemaArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_personalize_dataset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73488,7 +73488,7 @@ def _cloudformation_aws_personalize_dataset_group_impl(ctx):
         "Name": ctx.attr.Name,
         "RoleArn": ctx.attr.RoleArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_personalize_dataset_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73534,7 +73534,7 @@ def _cloudformation_aws_personalize_event_tracker_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_personalize_event_tracker.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73575,7 +73575,7 @@ def _cloudformation_aws_personalize_recipe_impl(ctx):
     payload = {
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_personalize_recipe.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73612,7 +73612,7 @@ def _cloudformation_aws_personalize_schema_impl(ctx):
         "Name": ctx.attr.Name,
         "Schema": ctx.attr.Schema,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_personalize_schema.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73659,7 +73659,7 @@ def _cloudformation_aws_personalize_solution_impl(ctx):
         "RecipeArn": ctx.attr.RecipeArn,
         "SolutionConfig": parse_json_or_none(ctx.attr.SolutionConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_personalize_solution.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73715,7 +73715,7 @@ def _cloudformation_aws_pinpoint_admchannel_impl(ctx):
         "ClientSecret": ctx.attr.ClientSecret,
         "Enabled": parse_json_or_none(ctx.attr.Enabled),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_admchannel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73767,7 +73767,7 @@ def _cloudformation_aws_pinpoint_apnschannel_impl(ctx):
         "TokenKey": ctx.attr.TokenKey,
         "TokenKeyId": ctx.attr.TokenKeyId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_apnschannel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73834,7 +73834,7 @@ def _cloudformation_aws_pinpoint_apnssandbox_channel_impl(ctx):
         "TokenKey": ctx.attr.TokenKey,
         "TokenKeyId": ctx.attr.TokenKeyId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_apnssandbox_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73901,7 +73901,7 @@ def _cloudformation_aws_pinpoint_apnsvoip_channel_impl(ctx):
         "TokenKey": ctx.attr.TokenKey,
         "TokenKeyId": ctx.attr.TokenKeyId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_apnsvoip_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -73968,7 +73968,7 @@ def _cloudformation_aws_pinpoint_apnsvoip_sandbox_channel_impl(ctx):
         "TokenKey": ctx.attr.TokenKey,
         "TokenKeyId": ctx.attr.TokenKeyId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_apnsvoip_sandbox_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74028,7 +74028,7 @@ def _cloudformation_aws_pinpoint_app_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_app.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74070,7 +74070,7 @@ def _cloudformation_aws_pinpoint_application_settings_impl(ctx):
         "Limits": parse_json_or_none(ctx.attr.Limits),
         "QuietTime": parse_json_or_none(ctx.attr.QuietTime),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_application_settings.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74120,7 +74120,7 @@ def _cloudformation_aws_pinpoint_baidu_channel_impl(ctx):
         "Enabled": parse_json_or_none(ctx.attr.Enabled),
         "SecretKey": ctx.attr.SecretKey,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_baidu_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74181,7 +74181,7 @@ def _cloudformation_aws_pinpoint_campaign_impl(ctx):
         "TreatmentDescription": ctx.attr.TreatmentDescription,
         "TreatmentName": ctx.attr.TreatmentName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_campaign.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74273,7 +74273,7 @@ def _cloudformation_aws_pinpoint_email_channel_impl(ctx):
         "OrchestrationSendingRoleArn": ctx.attr.OrchestrationSendingRoleArn,
         "RoleArn": ctx.attr.RoleArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_email_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74331,7 +74331,7 @@ def _cloudformation_aws_pinpoint_email_configuration_set_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TrackingOptions": parse_json_or_none(ctx.attr.TrackingOptions),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_email_configuration_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74383,7 +74383,7 @@ def _cloudformation_aws_pinpoint_email_configuration_set_event_destination_impl(
         "EventDestination": parse_json_or_none(ctx.attr.EventDestination),
         "EventDestinationName": ctx.attr.EventDestinationName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_email_configuration_set_event_destination.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74425,7 +74425,7 @@ def _cloudformation_aws_pinpoint_email_dedicated_ip_pool_impl(ctx):
         "PoolName": ctx.attr.PoolName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_email_dedicated_ip_pool.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74467,7 +74467,7 @@ def _cloudformation_aws_pinpoint_email_identity_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_email_identity.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74520,7 +74520,7 @@ def _cloudformation_aws_pinpoint_email_template_impl(ctx):
         "TemplateName": ctx.attr.TemplateName,
         "TextPart": ctx.attr.TextPart,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_email_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74575,7 +74575,7 @@ def _cloudformation_aws_pinpoint_event_stream_impl(ctx):
         "DestinationStreamArn": ctx.attr.DestinationStreamArn,
         "RoleArn": ctx.attr.RoleArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_event_stream.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74620,7 +74620,7 @@ def _cloudformation_aws_pinpoint_gcmchannel_impl(ctx):
         "Enabled": parse_json_or_none(ctx.attr.Enabled),
         "ServiceJson": ctx.attr.ServiceJson,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_gcmchannel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74672,7 +74672,7 @@ def _cloudformation_aws_pinpoint_in_app_template_impl(ctx):
         "TemplateDescription": ctx.attr.TemplateDescription,
         "TemplateName": ctx.attr.TemplateName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_in_app_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74730,7 +74730,7 @@ def _cloudformation_aws_pinpoint_push_template_impl(ctx):
         "TemplateDescription": ctx.attr.TemplateDescription,
         "TemplateName": ctx.attr.TemplateName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_push_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74793,7 +74793,7 @@ def _cloudformation_aws_pinpoint_segment_impl(ctx):
         "SegmentGroups": parse_json_or_none(ctx.attr.SegmentGroups),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_segment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74844,7 +74844,7 @@ def _cloudformation_aws_pinpoint_sms_template_impl(ctx):
         "TemplateDescription": ctx.attr.TemplateDescription,
         "TemplateName": ctx.attr.TemplateName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_sms_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74894,7 +74894,7 @@ def _cloudformation_aws_pinpoint_smschannel_impl(ctx):
         "SenderId": ctx.attr.SenderId,
         "ShortCode": ctx.attr.ShortCode,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_smschannel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74939,7 +74939,7 @@ def _cloudformation_aws_pinpoint_voice_channel_impl(ctx):
         "ApplicationId": ctx.attr.ApplicationId,
         "Enabled": parse_json_or_none(ctx.attr.Enabled),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pinpoint_voice_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -74989,7 +74989,7 @@ def _cloudformation_aws_pipes_pipe_impl(ctx):
         "Target": ctx.attr.Target,
         "TargetParameters": parse_json_or_none(ctx.attr.TargetParameters),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_pipes_pipe.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -75066,7 +75066,7 @@ def _cloudformation_aws_proton_environment_account_connection_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_proton_environment_account_connection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -75124,7 +75124,7 @@ def _cloudformation_aws_proton_environment_template_impl(ctx):
         "Provisioning": ctx.attr.Provisioning,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_proton_environment_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -75179,7 +75179,7 @@ def _cloudformation_aws_proton_service_template_impl(ctx):
         "PipelineProvisioning": ctx.attr.PipelineProvisioning,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_proton_service_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -75242,7 +75242,7 @@ def _cloudformation_aws_qbusiness_application_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_qbusiness_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -75321,7 +75321,7 @@ def _cloudformation_aws_qbusiness_data_accessor_impl(ctx):
         "Principal": ctx.attr.Principal,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_qbusiness_data_accessor.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -75381,7 +75381,7 @@ def _cloudformation_aws_qbusiness_data_source_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcConfiguration": parse_json_or_none(ctx.attr.VpcConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_qbusiness_data_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -75452,7 +75452,7 @@ def _cloudformation_aws_qbusiness_index_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_qbusiness_index.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -75509,7 +75509,7 @@ def _cloudformation_aws_qbusiness_permission_impl(ctx):
         "Principal": ctx.attr.Principal,
         "StatementId": ctx.attr.StatementId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_qbusiness_permission.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -75563,7 +75563,7 @@ def _cloudformation_aws_qbusiness_plugin_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_qbusiness_plugin.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -75624,7 +75624,7 @@ def _cloudformation_aws_qbusiness_retriever_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_qbusiness_retriever.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -75684,7 +75684,7 @@ def _cloudformation_aws_qbusiness_web_experience_impl(ctx):
         "Title": ctx.attr.Title,
         "WelcomeMessage": ctx.attr.WelcomeMessage,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_qbusiness_web_experience.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -75753,7 +75753,7 @@ def _cloudformation_aws_qldb_ledger_impl(ctx):
         "PermissionsMode": ctx.attr.PermissionsMode,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_qldb_ledger.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -75806,7 +75806,7 @@ def _cloudformation_aws_qldb_stream_impl(ctx):
         "StreamName": ctx.attr.StreamName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_qldb_stream.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -75867,7 +75867,7 @@ def _cloudformation_aws_quick_sight_action_connector_impl(ctx):
         "Type": ctx.attr.Type,
         "VpcConnectionArn": ctx.attr.VpcConnectionArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_action_connector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -75937,7 +75937,7 @@ def _cloudformation_aws_quick_sight_agent_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WelcomeMessage": ctx.attr.WelcomeMessage,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_agent.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -76018,7 +76018,7 @@ def _cloudformation_aws_quick_sight_analysis_impl(ctx):
         "ThemeArn": ctx.attr.ThemeArn,
         "ValidationStrategy": parse_json_or_none(ctx.attr.ValidationStrategy),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_analysis.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -76098,7 +76098,7 @@ def _cloudformation_aws_quick_sight_approval_policy_impl(ctx):
         "Name": ctx.attr.Name,
         "PolicyId": ctx.attr.PolicyId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_approval_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -76159,7 +76159,7 @@ def _cloudformation_aws_quick_sight_asset_bundle_export_job_impl(ctx):
         "IncludeTags": parse_json_or_none(ctx.attr.IncludeTags),
         "ResourceArns": parse_json_or_none(ctx.attr.ResourceArns),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_asset_bundle_export_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -76222,7 +76222,7 @@ def _cloudformation_aws_quick_sight_asset_bundle_import_job_impl(ctx):
         "FailureAction": ctx.attr.FailureAction,
         "OverrideValidationStrategy": parse_json_or_none(ctx.attr.OverrideValidationStrategy),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_asset_bundle_import_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -76272,7 +76272,7 @@ def _cloudformation_aws_quick_sight_custom_permissions_impl(ctx):
         "CustomPermissionsName": ctx.attr.CustomPermissionsName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_custom_permissions.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -76330,7 +76330,7 @@ def _cloudformation_aws_quick_sight_dashboard_impl(ctx):
         "ValidationStrategy": parse_json_or_none(ctx.attr.ValidationStrategy),
         "VersionDescription": ctx.attr.VersionDescription,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_dashboard.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -76425,7 +76425,7 @@ def _cloudformation_aws_quick_sight_data_set_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UseAs": ctx.attr.UseAs,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_data_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -76526,7 +76526,7 @@ def _cloudformation_aws_quick_sight_data_source_impl(ctx):
         "Type": ctx.attr.Type,
         "VpcConnectionProperties": parse_json_or_none(ctx.attr.VpcConnectionProperties),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_data_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -76604,7 +76604,7 @@ def _cloudformation_aws_quick_sight_dlpsetting_impl(ctx):
         "ProviderType": ctx.attr.ProviderType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_dlpsetting.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -76664,7 +76664,7 @@ def _cloudformation_aws_quick_sight_flow_impl(ctx):
         "Name": ctx.attr.Name,
         "Permissions": parse_json_or_none(ctx.attr.Permissions),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_flow.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -76718,7 +76718,7 @@ def _cloudformation_aws_quick_sight_folder_impl(ctx):
         "SharingModel": ctx.attr.SharingModel,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_folder.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -76785,7 +76785,7 @@ def _cloudformation_aws_quick_sight_knowledge_base_impl(ctx):
         "PrimaryOwnerArn": ctx.attr.PrimaryOwnerArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_knowledge_base.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -76863,7 +76863,7 @@ def _cloudformation_aws_quick_sight_oauth_client_application_impl(ctx):
         "OAuthTokenEndpointUrl": ctx.attr.OAuthTokenEndpointUrl,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_oauth_client_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -76930,7 +76930,7 @@ def _cloudformation_aws_quick_sight_refresh_schedule_impl(ctx):
         "DataSetId": ctx.attr.DataSetId,
         "Schedule": parse_json_or_none(ctx.attr.Schedule),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_refresh_schedule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -76977,7 +76977,7 @@ def _cloudformation_aws_quick_sight_space_impl(ctx):
         "SpaceId": ctx.attr.SpaceId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_space.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -77038,7 +77038,7 @@ def _cloudformation_aws_quick_sight_template_impl(ctx):
         "ValidationStrategy": parse_json_or_none(ctx.attr.ValidationStrategy),
         "VersionDescription": ctx.attr.VersionDescription,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -77104,7 +77104,7 @@ def _cloudformation_aws_quick_sight_theme_impl(ctx):
         "ThemeId": ctx.attr.ThemeId,
         "VersionDescription": ctx.attr.VersionDescription,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_theme.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -77169,7 +77169,7 @@ def _cloudformation_aws_quick_sight_topic_impl(ctx):
         "TopicId": ctx.attr.TopicId,
         "UserExperienceVersion": ctx.attr.UserExperienceVersion,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_topic.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -77240,7 +77240,7 @@ def _cloudformation_aws_quick_sight_topic_v2_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TopicId": ctx.attr.TopicId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_topic_v2.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -77310,7 +77310,7 @@ def _cloudformation_aws_quick_sight_vpcconnection_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VPCConnectionId": ctx.attr.VPCConnectionId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_vpcconnection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -77372,7 +77372,7 @@ def _cloudformation_aws_ram_permission_impl(ctx):
         "ResourceType": ctx.attr.ResourceType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ram_permission.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -77423,7 +77423,7 @@ def _cloudformation_aws_ram_resource_share_impl(ctx):
         "Sources": parse_json_or_none(ctx.attr.Sources),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ram_resource_share.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -77486,7 +77486,7 @@ def _cloudformation_aws_rbin_rule_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rbin_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -77554,7 +77554,7 @@ def _cloudformation_aws_rds_custom_dbengine_version_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UseAwsProvidedLatestImage": parse_json_or_none(ctx.attr.UseAwsProvidedLatestImage),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_custom_dbengine_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -77685,7 +77685,7 @@ def _cloudformation_aws_rds_dbcluster_impl(ctx):
         "UseLatestRestorableTime": parse_json_or_none(ctx.attr.UseLatestRestorableTime),
         "VpcSecurityGroupIds": parse_json_or_none(ctx.attr.VpcSecurityGroupIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_dbcluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -77904,7 +77904,7 @@ def _cloudformation_aws_rds_dbcluster_parameter_group_impl(ctx):
         "Parameters": parse_json_or_none(ctx.attr.Parameters),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_dbcluster_parameter_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -78031,7 +78031,7 @@ def _cloudformation_aws_rds_dbinstance_impl(ctx):
         "UseLatestRestorableTime": parse_json_or_none(ctx.attr.UseLatestRestorableTime),
         "VPCSecurityGroups": parse_json_or_none(ctx.attr.VPCSecurityGroups),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_dbinstance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -78310,7 +78310,7 @@ def _cloudformation_aws_rds_dbparameter_group_impl(ctx):
         "Parameters": parse_json_or_none(ctx.attr.Parameters),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_dbparameter_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -78369,7 +78369,7 @@ def _cloudformation_aws_rds_dbproxy_impl(ctx):
         "VpcSecurityGroupIds": parse_json_or_none(ctx.attr.VpcSecurityGroupIds),
         "VpcSubnetIds": parse_json_or_none(ctx.attr.VpcSubnetIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_dbproxy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -78446,7 +78446,7 @@ def _cloudformation_aws_rds_dbproxy_endpoint_impl(ctx):
         "VpcSecurityGroupIds": parse_json_or_none(ctx.attr.VpcSecurityGroupIds),
         "VpcSubnetIds": parse_json_or_none(ctx.attr.VpcSubnetIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_dbproxy_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -78503,7 +78503,7 @@ def _cloudformation_aws_rds_dbproxy_target_group_impl(ctx):
         "DBProxyName": ctx.attr.DBProxyName,
         "TargetGroupName": ctx.attr.TargetGroupName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_dbproxy_target_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -78553,7 +78553,7 @@ def _cloudformation_aws_rds_dbsecurity_group_impl(ctx):
         "GroupDescription": ctx.attr.GroupDescription,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_dbsecurity_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -78601,7 +78601,7 @@ def _cloudformation_aws_rds_dbsecurity_group_ingress_impl(ctx):
         "EC2SecurityGroupName": ctx.attr.EC2SecurityGroupName,
         "EC2SecurityGroupOwnerId": ctx.attr.EC2SecurityGroupOwnerId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_dbsecurity_group_ingress.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -78654,7 +78654,7 @@ def _cloudformation_aws_rds_dbshard_group_impl(ctx):
         "PubliclyAccessible": parse_json_or_none(ctx.attr.PubliclyAccessible),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_dbshard_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -78710,7 +78710,7 @@ def _cloudformation_aws_rds_dbsubnet_group_impl(ctx):
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_dbsubnet_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -78760,7 +78760,7 @@ def _cloudformation_aws_rds_event_subscription_impl(ctx):
         "SubscriptionName": ctx.attr.SubscriptionName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_event_subscription.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -78820,7 +78820,7 @@ def _cloudformation_aws_rds_global_cluster_impl(ctx):
         "StorageEncrypted": parse_json_or_none(ctx.attr.StorageEncrypted),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_global_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -78883,7 +78883,7 @@ def _cloudformation_aws_rds_integration_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetArn": ctx.attr.TargetArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_integration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -78944,7 +78944,7 @@ def _cloudformation_aws_rds_option_group_impl(ctx):
         "OptionGroupName": ctx.attr.OptionGroupName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_option_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -78994,7 +78994,7 @@ def _cloudformation_aws_rds_reserved_dbinstance_impl(ctx):
     payload = {
         "DBInstanceCount": parse_json_or_none(ctx.attr.DBInstanceCount),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_reserved_dbinstance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -79080,7 +79080,7 @@ def _cloudformation_aws_redshift_cluster_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcSecurityGroupIds": parse_json_or_none(ctx.attr.VpcSecurityGroupIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -79272,7 +79272,7 @@ def _cloudformation_aws_redshift_cluster_parameter_group_impl(ctx):
         "Parameters": parse_json_or_none(ctx.attr.Parameters),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_cluster_parameter_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -79320,7 +79320,7 @@ def _cloudformation_aws_redshift_cluster_security_group_impl(ctx):
         "Description": ctx.attr.Description,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_cluster_security_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -79361,7 +79361,7 @@ def _cloudformation_aws_redshift_cluster_security_group_ingress_impl(ctx):
         "EC2SecurityGroupName": ctx.attr.EC2SecurityGroupName,
         "EC2SecurityGroupOwnerId": ctx.attr.EC2SecurityGroupOwnerId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_cluster_security_group_ingress.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -79407,7 +79407,7 @@ def _cloudformation_aws_redshift_cluster_subnet_group_impl(ctx):
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_cluster_subnet_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -79447,7 +79447,7 @@ def _cloudformation_aws_redshift_data_share_impl(ctx):
     item_name = ctx.attr.aws_redshift_data_share_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_data_share.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -79483,7 +79483,7 @@ def _cloudformation_aws_redshift_endpoint_access_impl(ctx):
         "SubnetGroupName": ctx.attr.SubnetGroupName,
         "VpcSecurityGroupIds": parse_json_or_none(ctx.attr.VpcSecurityGroupIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_endpoint_access.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -79533,7 +79533,7 @@ def _cloudformation_aws_redshift_endpoint_authorization_impl(ctx):
         "Force": parse_json_or_none(ctx.attr.Force),
         "VpcIds": parse_json_or_none(ctx.attr.VpcIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_endpoint_authorization.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -79584,7 +79584,7 @@ def _cloudformation_aws_redshift_event_subscription_impl(ctx):
         "SubscriptionName": ctx.attr.SubscriptionName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_event_subscription.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -79645,7 +79645,7 @@ def _cloudformation_aws_redshift_integration_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetArn": ctx.attr.TargetArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_integration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -79702,7 +79702,7 @@ def _cloudformation_aws_redshift_scheduled_action_impl(ctx):
         "StartTime": ctx.attr.StartTime,
         "TargetAction": parse_json_or_none(ctx.attr.TargetAction),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_scheduled_action.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -79773,7 +79773,7 @@ def _cloudformation_aws_redshift_serverless_namespace_impl(ctx):
         "SnapshotCopyConfigurations": parse_json_or_none(ctx.attr.SnapshotCopyConfigurations),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_serverless_namespace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -79853,7 +79853,7 @@ def _cloudformation_aws_redshift_serverless_recovery_point_impl(ctx):
     payload = {
         "NamespaceName": ctx.attr.NamespaceName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_serverless_recovery_point.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -79891,7 +79891,7 @@ def _cloudformation_aws_redshift_serverless_snapshot_impl(ctx):
         "SnapshotName": ctx.attr.SnapshotName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_serverless_snapshot.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -79952,7 +79952,7 @@ def _cloudformation_aws_redshift_serverless_workgroup_impl(ctx):
         "Workgroup": parse_json_or_none(ctx.attr.Workgroup),
         "WorkgroupName": ctx.attr.WorkgroupName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_serverless_workgroup.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80041,7 +80041,7 @@ def _cloudformation_aws_redshift_snapshot_schedule_impl(ctx):
         "ScheduleIdentifier": ctx.attr.ScheduleIdentifier,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_snapshot_schedule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80090,7 +80090,7 @@ def _cloudformation_aws_refactor_spaces_application_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_refactor_spaces_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80143,7 +80143,7 @@ def _cloudformation_aws_refactor_spaces_environment_impl(ctx):
         "NetworkFabricType": ctx.attr.NetworkFabricType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_refactor_spaces_environment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80193,7 +80193,7 @@ def _cloudformation_aws_refactor_spaces_route_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UriPathRoute": parse_json_or_none(ctx.attr.UriPathRoute),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_refactor_spaces_route.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80254,7 +80254,7 @@ def _cloudformation_aws_refactor_spaces_service_impl(ctx):
         "UrlEndpoint": parse_json_or_none(ctx.attr.UrlEndpoint),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_refactor_spaces_service.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80314,7 +80314,7 @@ def _cloudformation_aws_rekognition_collection_impl(ctx):
         "CollectionId": ctx.attr.CollectionId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rekognition_collection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80354,7 +80354,7 @@ def _cloudformation_aws_rekognition_dataset_impl(ctx):
         "ProjectArn": ctx.attr.ProjectArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rekognition_dataset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80396,7 +80396,7 @@ def _cloudformation_aws_rekognition_project_impl(ctx):
         "ProjectName": ctx.attr.ProjectName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rekognition_project.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80446,7 +80446,7 @@ def _cloudformation_aws_rekognition_stream_processor_impl(ctx):
         "S3Destination": parse_json_or_none(ctx.attr.S3Destination),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rekognition_stream_processor.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80525,7 +80525,7 @@ def _cloudformation_aws_resilience_hub_app_impl(ctx):
         "ResourceMappings": parse_json_or_none(ctx.attr.ResourceMappings),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_resilience_hub_app.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80589,7 +80589,7 @@ def _cloudformation_aws_resilience_hub_resiliency_policy_impl(ctx):
         "Tags": ctx.attr.Tags,
         "Tier": ctx.attr.Tier,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_resilience_hub_resiliency_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80646,7 +80646,7 @@ def _cloudformation_aws_resilience_hub_v2_policy_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_resilience_hub_v2_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80713,7 +80713,7 @@ def _cloudformation_aws_resilience_hub_v2_service_impl(ctx):
         "ReportConfiguration": parse_json_or_none(ctx.attr.ReportConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_resilience_hub_v2_service.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80784,7 +80784,7 @@ def _cloudformation_aws_resilience_hub_v2_service_function_impl(ctx):
         "Name": ctx.attr.Name,
         "ServiceArn": ctx.attr.ServiceArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_resilience_hub_v2_service_function.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80832,7 +80832,7 @@ def _cloudformation_aws_resilience_hub_v2_system_impl(ctx):
         "SharingEnabled": parse_json_or_none(ctx.attr.SharingEnabled),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_resilience_hub_v2_system.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80882,7 +80882,7 @@ def _cloudformation_aws_resilience_hub_v2_user_journey_impl(ctx):
         "PolicyArn": ctx.attr.PolicyArn,
         "SystemIdentifier": ctx.attr.SystemIdentifier,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_resilience_hub_v2_user_journey.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80926,7 +80926,7 @@ def _cloudformation_aws_resource_explorer2_default_view_association_impl(ctx):
     payload = {
         "ViewArn": ctx.attr.ViewArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_resource_explorer2_default_view_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -80962,7 +80962,7 @@ def _cloudformation_aws_resource_explorer2_index_impl(ctx):
         "Tags": ctx.attr.Tags,
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_resource_explorer2_index.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81004,7 +81004,7 @@ def _cloudformation_aws_resource_explorer2_view_impl(ctx):
         "Tags": ctx.attr.Tags,
         "ViewName": ctx.attr.ViewName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_resource_explorer2_view.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81056,7 +81056,7 @@ def _cloudformation_aws_resource_groups_group_impl(ctx):
         "Resources": parse_json_or_none(ctx.attr.Resources),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_resource_groups_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81109,7 +81109,7 @@ def _cloudformation_aws_resource_groups_tag_sync_task_impl(ctx):
         "TagKey": ctx.attr.TagKey,
         "TagValue": ctx.attr.TagValue,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_resource_groups_tag_sync_task.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81154,7 +81154,7 @@ def _cloudformation_aws_robo_maker_fleet_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_robo_maker_fleet.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81196,7 +81196,7 @@ def _cloudformation_aws_robo_maker_robot_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_robo_maker_robot.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81248,7 +81248,7 @@ def _cloudformation_aws_robo_maker_robot_application_impl(ctx):
         "Sources": parse_json_or_none(ctx.attr.Sources),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_robo_maker_robot_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81299,7 +81299,7 @@ def _cloudformation_aws_robo_maker_robot_application_version_impl(ctx):
         "Application": ctx.attr.Application,
         "CurrentRevisionId": ctx.attr.CurrentRevisionId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_robo_maker_robot_application_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81344,7 +81344,7 @@ def _cloudformation_aws_robo_maker_simulation_application_impl(ctx):
         "Sources": parse_json_or_none(ctx.attr.Sources),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_robo_maker_simulation_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81401,7 +81401,7 @@ def _cloudformation_aws_robo_maker_simulation_application_version_impl(ctx):
         "Application": ctx.attr.Application,
         "CurrentRevisionId": ctx.attr.CurrentRevisionId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_robo_maker_simulation_application_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81443,7 +81443,7 @@ def _cloudformation_aws_roles_anywhere_crl_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TrustAnchorArn": ctx.attr.TrustAnchorArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_roles_anywhere_crl.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81499,7 +81499,7 @@ def _cloudformation_aws_roles_anywhere_profile_impl(ctx):
         "SessionPolicy": ctx.attr.SessionPolicy,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_roles_anywhere_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81565,7 +81565,7 @@ def _cloudformation_aws_roles_anywhere_trust_anchor_impl(ctx):
         "Source": parse_json_or_none(ctx.attr.Source),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_roles_anywhere_trust_anchor.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81613,7 +81613,7 @@ def _cloudformation_aws_route53_cidr_collection_impl(ctx):
         "Locations": parse_json_or_none(ctx.attr.Locations),
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_cidr_collection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81651,7 +81651,7 @@ def _cloudformation_aws_route53_dnssec_impl(ctx):
     payload = {
         "HostedZoneId": ctx.attr.HostedZoneId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_dnssec.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81692,7 +81692,7 @@ def _cloudformation_aws_route53_global_resolver_access_source_impl(ctx):
         "Protocol": ctx.attr.Protocol,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_global_resolver_access_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81749,7 +81749,7 @@ def _cloudformation_aws_route53_global_resolver_access_token_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_global_resolver_access_token.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81803,7 +81803,7 @@ def _cloudformation_aws_route53_global_resolver_dns_view_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_global_resolver_dns_view.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81865,7 +81865,7 @@ def _cloudformation_aws_route53_global_resolver_firewall_domain_list_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_global_resolver_firewall_domain_list.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -81931,7 +81931,7 @@ def _cloudformation_aws_route53_global_resolver_firewall_rule_impl(ctx):
         "Priority": parse_json_or_none(ctx.attr.Priority),
         "QType": ctx.attr.QType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_global_resolver_firewall_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82011,7 +82011,7 @@ def _cloudformation_aws_route53_global_resolver_global_resolver_impl(ctx):
         "Regions": parse_json_or_none(ctx.attr.Regions),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_global_resolver_global_resolver.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82066,7 +82066,7 @@ def _cloudformation_aws_route53_global_resolver_hosted_zone_association_impl(ctx
         "Name": ctx.attr.Name,
         "ResourceArn": ctx.attr.ResourceArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_global_resolver_hosted_zone_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82108,7 +82108,7 @@ def _cloudformation_aws_route53_health_check_impl(ctx):
         "HealthCheckConfig": parse_json_or_none(ctx.attr.HealthCheckConfig),
         "HealthCheckTags": parse_json_or_none(ctx.attr.HealthCheckTags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_health_check.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82151,7 +82151,7 @@ def _cloudformation_aws_route53_hosted_zone_impl(ctx):
         "QueryLoggingConfig": parse_json_or_none(ctx.attr.QueryLoggingConfig),
         "VPCs": parse_json_or_none(ctx.attr.VPCs),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_hosted_zone.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82204,7 +82204,7 @@ def _cloudformation_aws_route53_key_signing_key_impl(ctx):
         "Name": ctx.attr.Name,
         "Status": ctx.attr.Status,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_key_signing_key.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82249,7 +82249,7 @@ def _cloudformation_aws_route53_profiles_profile_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_profiles_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82291,7 +82291,7 @@ def _cloudformation_aws_route53_profiles_profile_association_impl(ctx):
         "ResourceId": ctx.attr.ResourceId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_profiles_profile_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82341,7 +82341,7 @@ def _cloudformation_aws_route53_profiles_profile_resource_association_impl(ctx):
         "ResourceArn": ctx.attr.ResourceArn,
         "ResourceProperties": ctx.attr.ResourceProperties,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_profiles_profile_resource_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82401,7 +82401,7 @@ def _cloudformation_aws_route53_record_set_impl(ctx):
         "Type": ctx.attr.Type,
         "Weight": parse_json_or_none(ctx.attr.Weight),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_record_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82487,7 +82487,7 @@ def _cloudformation_aws_route53_record_set_group_impl(ctx):
         "HostedZoneName": ctx.attr.HostedZoneName,
         "RecordSets": parse_json_or_none(ctx.attr.RecordSets),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_record_set_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82533,7 +82533,7 @@ def _cloudformation_aws_route53_recovery_control_cluster_impl(ctx):
         "NetworkType": ctx.attr.NetworkType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_recovery_control_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82576,7 +82576,7 @@ def _cloudformation_aws_route53_recovery_control_control_panel_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_recovery_control_control_panel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82619,7 +82619,7 @@ def _cloudformation_aws_route53_recovery_control_routing_control_impl(ctx):
         "ControlPanelArn": ctx.attr.ControlPanelArn,
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_recovery_control_routing_control.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82665,7 +82665,7 @@ def _cloudformation_aws_route53_recovery_control_safety_rule_impl(ctx):
         "RuleConfig": parse_json_or_none(ctx.attr.RuleConfig),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_recovery_control_safety_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82717,7 +82717,7 @@ def _cloudformation_aws_route53_recovery_readiness_cell_impl(ctx):
         "Cells": parse_json_or_none(ctx.attr.Cells),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_recovery_readiness_cell.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82760,7 +82760,7 @@ def _cloudformation_aws_route53_recovery_readiness_readiness_check_impl(ctx):
         "ResourceSetName": ctx.attr.ResourceSetName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_recovery_readiness_readiness_check.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82803,7 +82803,7 @@ def _cloudformation_aws_route53_recovery_readiness_recovery_group_impl(ctx):
         "RecoveryGroupName": ctx.attr.RecoveryGroupName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_recovery_readiness_recovery_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82847,7 +82847,7 @@ def _cloudformation_aws_route53_recovery_readiness_resource_set_impl(ctx):
         "Resources": parse_json_or_none(ctx.attr.Resources),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_recovery_readiness_resource_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82892,7 +82892,7 @@ def _cloudformation_aws_route53_resolver_firewall_config_impl(ctx):
         "FirewallFailOpen": ctx.attr.FirewallFailOpen,
         "ResourceId": ctx.attr.ResourceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_resolver_firewall_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82933,7 +82933,7 @@ def _cloudformation_aws_route53_resolver_firewall_domain_list_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_resolver_firewall_domain_list.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -82979,7 +82979,7 @@ def _cloudformation_aws_route53_resolver_firewall_rule_group_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_resolver_firewall_rule_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83025,7 +83025,7 @@ def _cloudformation_aws_route53_resolver_firewall_rule_group_association_impl(ct
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_resolver_firewall_rule_group_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83079,7 +83079,7 @@ def _cloudformation_aws_route53_resolver_outpost_resolver_impl(ctx):
         "PreferredInstanceType": ctx.attr.PreferredInstanceType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_resolver_outpost_resolver.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83127,7 +83127,7 @@ def _cloudformation_aws_route53_resolver_resolver_config_impl(ctx):
         "AutodefinedReverseFlag": ctx.attr.AutodefinedReverseFlag,
         "ResourceId": ctx.attr.ResourceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_resolver_resolver_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83165,7 +83165,7 @@ def _cloudformation_aws_route53_resolver_resolver_dnssecconfig_impl(ctx):
     payload = {
         "ResourceId": ctx.attr.ResourceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_resolver_resolver_dnssecconfig.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83212,7 +83212,7 @@ def _cloudformation_aws_route53_resolver_resolver_endpoint_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetNameServerMetricsEnabled": parse_json_or_none(ctx.attr.TargetNameServerMetricsEnabled),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_resolver_resolver_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83285,7 +83285,7 @@ def _cloudformation_aws_route53_resolver_resolver_query_logging_config_impl(ctx)
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_resolver_resolver_query_logging_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83327,7 +83327,7 @@ def _cloudformation_aws_route53_resolver_resolver_query_logging_config_associati
         "ResolverQueryLogConfigId": ctx.attr.ResolverQueryLogConfigId,
         "ResourceId": ctx.attr.ResourceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_resolver_resolver_query_logging_config_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83371,7 +83371,7 @@ def _cloudformation_aws_route53_resolver_resolver_rule_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetIps": parse_json_or_none(ctx.attr.TargetIps),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_resolver_resolver_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83426,7 +83426,7 @@ def _cloudformation_aws_route53_resolver_resolver_rule_association_impl(ctx):
         "ResolverRuleId": ctx.attr.ResolverRuleId,
         "VPCId": ctx.attr.VPCId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_resolver_resolver_rule_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83470,7 +83470,7 @@ def _cloudformation_aws_rtbfabric_inbound_external_link_impl(ctx):
         "LinkLogSettings": parse_json_or_none(ctx.attr.LinkLogSettings),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rtbfabric_inbound_external_link.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83520,7 +83520,7 @@ def _cloudformation_aws_rtbfabric_link_impl(ctx):
         "PeerGatewayId": ctx.attr.PeerGatewayId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rtbfabric_link.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83577,7 +83577,7 @@ def _cloudformation_aws_rtbfabric_link_routing_rule_impl(ctx):
         "Priority": parse_json_or_none(ctx.attr.Priority),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rtbfabric_link_routing_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83628,7 +83628,7 @@ def _cloudformation_aws_rtbfabric_outbound_external_link_impl(ctx):
         "PublicEndpoint": ctx.attr.PublicEndpoint,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rtbfabric_outbound_external_link.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83679,7 +83679,7 @@ def _cloudformation_aws_rtbfabric_requester_gateway_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rtbfabric_requester_gateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83738,7 +83738,7 @@ def _cloudformation_aws_rtbfabric_responder_gateway_impl(ctx):
         "TrustStoreConfiguration": parse_json_or_none(ctx.attr.TrustStoreConfiguration),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rtbfabric_responder_gateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83818,7 +83818,7 @@ def _cloudformation_aws_rum_app_monitor_impl(ctx):
         "ResourcePolicy": parse_json_or_none(ctx.attr.ResourcePolicy),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_rum_app_monitor.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83886,7 +83886,7 @@ def _cloudformation_aws_s3_access_grant_impl(ctx):
         "S3PrefixType": ctx.attr.S3PrefixType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_access_grant.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83940,7 +83940,7 @@ def _cloudformation_aws_s3_access_grants_instance_impl(ctx):
         "IdentityCenterArn": ctx.attr.IdentityCenterArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_access_grants_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -83980,7 +83980,7 @@ def _cloudformation_aws_s3_access_grants_location_impl(ctx):
         "LocationScope": ctx.attr.LocationScope,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_access_grants_location.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84027,7 +84027,7 @@ def _cloudformation_aws_s3_access_point_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcConfiguration": parse_json_or_none(ctx.attr.VpcConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_access_point.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84104,7 +84104,7 @@ def _cloudformation_aws_s3_bucket_impl(ctx):
         "VersioningConfiguration": parse_json_or_none(ctx.attr.VersioningConfiguration),
         "WebsiteConfiguration": parse_json_or_none(ctx.attr.WebsiteConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_bucket.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84212,7 +84212,7 @@ def _cloudformation_aws_s3_bucket_policy_impl(ctx):
         "Bucket": ctx.attr.Bucket,
         "PolicyDocument": parse_json_or_none(ctx.attr.PolicyDocument),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_bucket_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84257,7 +84257,7 @@ def _cloudformation_aws_s3_express_access_point_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcConfiguration": parse_json_or_none(ctx.attr.VpcConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_express_access_point.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84314,7 +84314,7 @@ def _cloudformation_aws_s3_express_bucket_policy_impl(ctx):
         "Bucket": ctx.attr.Bucket,
         "PolicyDocument": parse_json_or_none(ctx.attr.PolicyDocument),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_express_bucket_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84359,7 +84359,7 @@ def _cloudformation_aws_s3_express_directory_bucket_impl(ctx):
         "MetricsConfigurations": parse_json_or_none(ctx.attr.MetricsConfigurations),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_express_directory_bucket.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84419,7 +84419,7 @@ def _cloudformation_aws_s3_files_access_point_impl(ctx):
         "RootDirectory": parse_json_or_none(ctx.attr.RootDirectory),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_files_access_point.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84473,7 +84473,7 @@ def _cloudformation_aws_s3_files_file_system_impl(ctx):
         "SynchronizationConfiguration": parse_json_or_none(ctx.attr.SynchronizationConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_files_file_system.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84530,7 +84530,7 @@ def _cloudformation_aws_s3_files_file_system_policy_impl(ctx):
         "FileSystemId": ctx.attr.FileSystemId,
         "Policy": parse_json_or_none(ctx.attr.Policy),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_files_file_system_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84573,7 +84573,7 @@ def _cloudformation_aws_s3_files_mount_target_impl(ctx):
         "SecurityGroups": parse_json_or_none(ctx.attr.SecurityGroups),
         "SubnetId": ctx.attr.SubnetId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_files_mount_target.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84625,7 +84625,7 @@ def _cloudformation_aws_s3_multi_region_access_point_impl(ctx):
         "PublicAccessBlockConfiguration": parse_json_or_none(ctx.attr.PublicAccessBlockConfiguration),
         "Regions": parse_json_or_none(ctx.attr.Regions),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_multi_region_access_point.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84667,7 +84667,7 @@ def _cloudformation_aws_s3_multi_region_access_point_policy_impl(ctx):
         "MrapName": ctx.attr.MrapName,
         "Policy": parse_json_or_none(ctx.attr.Policy),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_multi_region_access_point_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84706,7 +84706,7 @@ def _cloudformation_aws_s3_object_lambda_access_point_impl(ctx):
         "Name": ctx.attr.Name,
         "ObjectLambdaConfiguration": parse_json_or_none(ctx.attr.ObjectLambdaConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_object_lambda_access_point.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84745,7 +84745,7 @@ def _cloudformation_aws_s3_object_lambda_access_point_policy_impl(ctx):
         "ObjectLambdaAccessPoint": ctx.attr.ObjectLambdaAccessPoint,
         "PolicyDocument": parse_json_or_none(ctx.attr.PolicyDocument),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_object_lambda_access_point_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84786,7 +84786,7 @@ def _cloudformation_aws_s3_outposts_access_point_impl(ctx):
         "Policy": parse_json_or_none(ctx.attr.Policy),
         "VpcConfiguration": parse_json_or_none(ctx.attr.VpcConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_outposts_access_point.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84833,7 +84833,7 @@ def _cloudformation_aws_s3_outposts_bucket_impl(ctx):
         "OutpostId": ctx.attr.OutpostId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_outposts_bucket.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84878,7 +84878,7 @@ def _cloudformation_aws_s3_outposts_bucket_policy_impl(ctx):
         "Bucket": ctx.attr.Bucket,
         "PolicyDocument": parse_json_or_none(ctx.attr.PolicyDocument),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_outposts_bucket_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84921,7 +84921,7 @@ def _cloudformation_aws_s3_outposts_endpoint_impl(ctx):
         "SecurityGroupId": ctx.attr.SecurityGroupId,
         "SubnetId": ctx.attr.SubnetId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_outposts_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -84972,7 +84972,7 @@ def _cloudformation_aws_s3_storage_lens_impl(ctx):
         "StorageLensConfiguration": parse_json_or_none(ctx.attr.StorageLensConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_storage_lens.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85012,7 +85012,7 @@ def _cloudformation_aws_s3_storage_lens_group_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_storage_lens_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85054,7 +85054,7 @@ def _cloudformation_aws_s3_tables_namespace_impl(ctx):
         "Namespace": ctx.attr.Namespace,
         "TableBucketARN": ctx.attr.TableBucketARN,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_tables_namespace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85101,7 +85101,7 @@ def _cloudformation_aws_s3_tables_table_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WithoutMetadata": ctx.attr.WithoutMetadata,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_tables_table.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85169,7 +85169,7 @@ def _cloudformation_aws_s3_tables_table_bucket_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UnreferencedFileRemoval": parse_json_or_none(ctx.attr.UnreferencedFileRemoval),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_tables_table_bucket.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85223,7 +85223,7 @@ def _cloudformation_aws_s3_tables_table_bucket_policy_impl(ctx):
         "ResourcePolicy": parse_json_or_none(ctx.attr.ResourcePolicy),
         "TableBucketARN": ctx.attr.TableBucketARN,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_tables_table_bucket_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85262,7 +85262,7 @@ def _cloudformation_aws_s3_tables_table_policy_impl(ctx):
         "ResourcePolicy": parse_json_or_none(ctx.attr.ResourcePolicy),
         "TableARN": ctx.attr.TableARN,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_tables_table_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85308,7 +85308,7 @@ def _cloudformation_aws_s3_vectors_index_impl(ctx):
         "VectorBucketArn": ctx.attr.VectorBucketArn,
         "VectorBucketName": ctx.attr.VectorBucketName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_vectors_index.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85369,7 +85369,7 @@ def _cloudformation_aws_s3_vectors_vector_bucket_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VectorBucketName": ctx.attr.VectorBucketName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_vectors_vector_bucket.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85412,7 +85412,7 @@ def _cloudformation_aws_s3_vectors_vector_bucket_policy_impl(ctx):
         "VectorBucketArn": ctx.attr.VectorBucketArn,
         "VectorBucketName": ctx.attr.VectorBucketName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_s3_vectors_vector_bucket_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85460,7 +85460,7 @@ def _cloudformation_aws_sage_maker_action_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_action.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85521,7 +85521,7 @@ def _cloudformation_aws_sage_maker_algorithm_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TrainingSpecification": parse_json_or_none(ctx.attr.TrainingSpecification),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_algorithm.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85577,7 +85577,7 @@ def _cloudformation_aws_sage_maker_app_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UserProfileName": ctx.attr.UserProfileName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_app.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85634,7 +85634,7 @@ def _cloudformation_aws_sage_maker_app_image_config_impl(ctx):
         "KernelGatewayImageConfig": parse_json_or_none(ctx.attr.KernelGatewayImageConfig),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_app_image_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85686,7 +85686,7 @@ def _cloudformation_aws_sage_maker_artifact_impl(ctx):
         "Source": parse_json_or_none(ctx.attr.Source),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_artifact.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85743,7 +85743,7 @@ def _cloudformation_aws_sage_maker_auto_mljob_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_auto_mljob.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85810,7 +85810,7 @@ def _cloudformation_aws_sage_maker_cluster_impl(ctx):
         "TieredStorageConfig": parse_json_or_none(ctx.attr.TieredStorageConfig),
         "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_cluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85880,7 +85880,7 @@ def _cloudformation_aws_sage_maker_code_repository_impl(ctx):
         "GitConfig": parse_json_or_none(ctx.attr.GitConfig),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_code_repository.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85926,7 +85926,7 @@ def _cloudformation_aws_sage_maker_context_impl(ctx):
         "Source": parse_json_or_none(ctx.attr.Source),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_context.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -85986,7 +85986,7 @@ def _cloudformation_aws_sage_maker_data_quality_job_definition_impl(ctx):
         "StoppingCondition": parse_json_or_none(ctx.attr.StoppingCondition),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_data_quality_job_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86053,7 +86053,7 @@ def _cloudformation_aws_sage_maker_device_impl(ctx):
         "DeviceFleetName": ctx.attr.DeviceFleetName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_device.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86098,7 +86098,7 @@ def _cloudformation_aws_sage_maker_device_fleet_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_device_fleet.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86157,7 +86157,7 @@ def _cloudformation_aws_sage_maker_domain_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_domain.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86233,7 +86233,7 @@ def _cloudformation_aws_sage_maker_endpoint_impl(ctx):
         "RetainDeploymentConfig": parse_json_or_none(ctx.attr.RetainDeploymentConfig),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86293,7 +86293,7 @@ def _cloudformation_aws_sage_maker_endpoint_config_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_endpoint_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86361,7 +86361,7 @@ def _cloudformation_aws_sage_maker_experiment_impl(ctx):
         "ExperimentName": ctx.attr.ExperimentName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_experiment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86414,7 +86414,7 @@ def _cloudformation_aws_sage_maker_feature_group_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "ThroughputConfig": parse_json_or_none(ctx.attr.ThroughputConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_feature_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86481,7 +86481,7 @@ def _cloudformation_aws_sage_maker_hub_impl(ctx):
         "S3StorageConfig": parse_json_or_none(ctx.attr.S3StorageConfig),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_hub.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86533,7 +86533,7 @@ def _cloudformation_aws_sage_maker_human_task_ui_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UiTemplate": parse_json_or_none(ctx.attr.UiTemplate),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_human_task_ui.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86578,7 +86578,7 @@ def _cloudformation_aws_sage_maker_image_impl(ctx):
         "ImageRoleArn": ctx.attr.ImageRoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_image.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86635,7 +86635,7 @@ def _cloudformation_aws_sage_maker_image_version_impl(ctx):
         "ReleaseNotes": ctx.attr.ReleaseNotes,
         "VendorGuidance": ctx.attr.VendorGuidance,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_image_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86707,7 +86707,7 @@ def _cloudformation_aws_sage_maker_inference_component_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VariantName": ctx.attr.VariantName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_inference_component.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86775,7 +86775,7 @@ def _cloudformation_aws_sage_maker_inference_experiment_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_inference_experiment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86851,7 +86851,7 @@ def _cloudformation_aws_sage_maker_mlflow_app_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WeeklyMaintenanceWindowStart": ctx.attr.WeeklyMaintenanceWindowStart,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_mlflow_app.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86908,7 +86908,7 @@ def _cloudformation_aws_sage_maker_mlflow_tracking_server_impl(ctx):
         "TrackingServerSize": ctx.attr.TrackingServerSize,
         "WeeklyMaintenanceWindowStart": ctx.attr.WeeklyMaintenanceWindowStart,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_mlflow_tracking_server.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -86971,7 +86971,7 @@ def _cloudformation_aws_sage_maker_model_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_model.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -87037,7 +87037,7 @@ def _cloudformation_aws_sage_maker_model_bias_job_definition_impl(ctx):
         "StoppingCondition": parse_json_or_none(ctx.attr.StoppingCondition),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_model_bias_job_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -87108,7 +87108,7 @@ def _cloudformation_aws_sage_maker_model_card_impl(ctx):
         "SecurityConfig": parse_json_or_none(ctx.attr.SecurityConfig),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_model_card.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -87164,7 +87164,7 @@ def _cloudformation_aws_sage_maker_model_card_export_job_impl(ctx):
         "ModelCardVersion": parse_json_or_none(ctx.attr.ModelCardVersion),
         "OutputConfig": parse_json_or_none(ctx.attr.OutputConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_model_card_export_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -87218,7 +87218,7 @@ def _cloudformation_aws_sage_maker_model_explainability_job_definition_impl(ctx)
         "StoppingCondition": parse_json_or_none(ctx.attr.StoppingCondition),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_model_explainability_job_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -87308,7 +87308,7 @@ def _cloudformation_aws_sage_maker_model_package_impl(ctx):
         "Task": ctx.attr.Task,
         "ValidationSpecification": parse_json_or_none(ctx.attr.ValidationSpecification),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_model_package.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -87421,7 +87421,7 @@ def _cloudformation_aws_sage_maker_model_package_group_impl(ctx):
         "ModelPackageGroupPolicy": parse_json_or_none(ctx.attr.ModelPackageGroupPolicy),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_model_package_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -87475,7 +87475,7 @@ def _cloudformation_aws_sage_maker_model_quality_job_definition_impl(ctx):
         "StoppingCondition": parse_json_or_none(ctx.attr.StoppingCondition),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_model_quality_job_definition.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -87546,7 +87546,7 @@ def _cloudformation_aws_sage_maker_monitoring_schedule_impl(ctx):
         "MonitoringScheduleStatus": ctx.attr.MonitoringScheduleStatus,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_monitoring_schedule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -87602,7 +87602,7 @@ def _cloudformation_aws_sage_maker_monitoring_schedule_alert_impl(ctx):
         "MonitoringAlertName": ctx.attr.MonitoringAlertName,
         "MonitoringScheduleName": ctx.attr.MonitoringScheduleName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_monitoring_schedule_alert.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -87661,7 +87661,7 @@ def _cloudformation_aws_sage_maker_notebook_instance_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VolumeSizeInGB": parse_json_or_none(ctx.attr.VolumeSizeInGB),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_notebook_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -87743,7 +87743,7 @@ def _cloudformation_aws_sage_maker_notebook_instance_lifecycle_config_impl(ctx):
         "OnCreate": parse_json_or_none(ctx.attr.OnCreate),
         "OnStart": parse_json_or_none(ctx.attr.OnStart),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_notebook_instance_lifecycle_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -87795,7 +87795,7 @@ def _cloudformation_aws_sage_maker_partner_app_impl(ctx):
         "Tier": ctx.attr.Tier,
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_partner_app.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -87869,7 +87869,7 @@ def _cloudformation_aws_sage_maker_pipeline_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_pipeline.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -87921,7 +87921,7 @@ def _cloudformation_aws_sage_maker_pipeline_execution_impl(ctx):
     item_name = ctx.attr.aws_sage_maker_pipeline_execution_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_pipeline_execution.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -87963,7 +87963,7 @@ def _cloudformation_aws_sage_maker_processing_job_impl(ctx):
         "StoppingCondition": parse_json_or_none(ctx.attr.StoppingCondition),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_processing_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88033,7 +88033,7 @@ def _cloudformation_aws_sage_maker_project_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TemplateProviderDetails": parse_json_or_none(ctx.attr.TemplateProviderDetails),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_project.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88089,7 +88089,7 @@ def _cloudformation_aws_sage_maker_space_impl(ctx):
         "SpaceSharingSettings": parse_json_or_none(ctx.attr.SpaceSharingSettings),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_space.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88145,7 +88145,7 @@ def _cloudformation_aws_sage_maker_studio_lifecycle_config_impl(ctx):
         "StudioLifecycleConfigName": ctx.attr.StudioLifecycleConfigName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_studio_lifecycle_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88212,7 +88212,7 @@ def _cloudformation_aws_sage_maker_training_job_impl(ctx):
         "TrainingJobName": ctx.attr.TrainingJobName,
         "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_training_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88328,7 +88328,7 @@ def _cloudformation_aws_sage_maker_transform_job_impl(ctx):
         "TransformOutput": parse_json_or_none(ctx.attr.TransformOutput),
         "TransformResources": parse_json_or_none(ctx.attr.TransformResources),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_transform_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88406,7 +88406,7 @@ def _cloudformation_aws_sage_maker_trial_component_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TrialComponentName": ctx.attr.TrialComponentName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_trial_component.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88467,7 +88467,7 @@ def _cloudformation_aws_sage_maker_user_profile_impl(ctx):
         "UserProfileName": ctx.attr.UserProfileName,
         "UserSettings": parse_json_or_none(ctx.attr.UserSettings),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_user_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88523,7 +88523,7 @@ def _cloudformation_aws_sage_maker_workforce_impl(ctx):
         "WorkforceName": ctx.attr.WorkforceName,
         "WorkforceVpcConfig": parse_json_or_none(ctx.attr.WorkforceVpcConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_workforce.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88581,7 +88581,7 @@ def _cloudformation_aws_sage_maker_workteam_impl(ctx):
         "WorkforceName": ctx.attr.WorkforceName,
         "WorkteamName": ctx.attr.WorkteamName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_workteam.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88630,7 +88630,7 @@ def _cloudformation_aws_savings_plans_savings_plan_impl(ctx):
     item_name = ctx.attr.aws_savings_plans_savings_plan_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_savings_plans_savings_plan.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88672,7 +88672,7 @@ def _cloudformation_aws_scheduler_schedule_impl(ctx):
         "State": ctx.attr.State,
         "Target": parse_json_or_none(ctx.attr.Target),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_scheduler_schedule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88738,7 +88738,7 @@ def _cloudformation_aws_scheduler_schedule_group_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_scheduler_schedule_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88782,7 +88782,7 @@ def _cloudformation_aws_scn_dataset_impl(ctx):
         "Schema": parse_json_or_none(ctx.attr.Schema),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_scn_dataset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88838,7 +88838,7 @@ def _cloudformation_aws_scn_namespace_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_scn_namespace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88882,7 +88882,7 @@ def _cloudformation_aws_sdb_domain_impl(ctx):
     payload = {
         "Description": ctx.attr.Description,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sdb_domain.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88919,7 +88919,7 @@ def _cloudformation_aws_secrets_manager_resource_policy_impl(ctx):
         "ResourcePolicy": parse_json_or_none(ctx.attr.ResourcePolicy),
         "SecretId": ctx.attr.SecretId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_secrets_manager_resource_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -88966,7 +88966,7 @@ def _cloudformation_aws_secrets_manager_rotation_schedule_impl(ctx):
         "RotationRules": parse_json_or_none(ctx.attr.RotationRules),
         "SecretId": ctx.attr.SecretId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_secrets_manager_rotation_schedule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89026,7 +89026,7 @@ def _cloudformation_aws_secrets_manager_secret_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_secrets_manager_secret.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89084,7 +89084,7 @@ def _cloudformation_aws_secrets_manager_secret_target_attachment_impl(ctx):
         "TargetId": ctx.attr.TargetId,
         "TargetType": ctx.attr.TargetType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_secrets_manager_secret_target_attachment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89132,7 +89132,7 @@ def _cloudformation_aws_security_agent_agent_space_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetDomainIds": parse_json_or_none(ctx.attr.TargetDomainIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_agent_agent_space.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89191,7 +89191,7 @@ def _cloudformation_aws_security_agent_application_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_agent_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89238,7 +89238,7 @@ def _cloudformation_aws_security_agent_artifact_impl(ctx):
         "ArtifactType": ctx.attr.ArtifactType,
         "FileName": ctx.attr.FileName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_agent_artifact.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89292,7 +89292,7 @@ def _cloudformation_aws_security_agent_pentest_impl(ctx):
         "Title": ctx.attr.Title,
         "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_agent_pentest.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89357,7 +89357,7 @@ def _cloudformation_aws_security_agent_pentest_task_impl(ctx):
     payload = {
         "AgentSpaceId": ctx.attr.AgentSpaceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_agent_pentest_task.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89397,7 +89397,7 @@ def _cloudformation_aws_security_agent_security_requirement_pack_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_agent_security_requirement_pack.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89449,7 +89449,7 @@ def _cloudformation_aws_security_agent_target_domain_impl(ctx):
         "TargetDomainName": ctx.attr.TargetDomainName,
         "VerificationMethod": ctx.attr.VerificationMethod,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_agent_target_domain.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89492,7 +89492,7 @@ def _cloudformation_aws_security_hub_aggregator_v2_impl(ctx):
         "RegionLinkingMode": ctx.attr.RegionLinkingMode,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_aggregator_v2.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89540,7 +89540,7 @@ def _cloudformation_aws_security_hub_automation_rule_impl(ctx):
         "RuleStatus": ctx.attr.RuleStatus,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_automation_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89602,7 +89602,7 @@ def _cloudformation_aws_security_hub_automation_rule_v2_impl(ctx):
         "RuleStatus": ctx.attr.RuleStatus,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_automation_rule_v2.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89658,7 +89658,7 @@ def _cloudformation_aws_security_hub_configuration_policy_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_configuration_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89705,7 +89705,7 @@ def _cloudformation_aws_security_hub_connector_impl(ctx):
         "Provider": parse_json_or_none(ctx.attr.Provider),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_connector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89753,7 +89753,7 @@ def _cloudformation_aws_security_hub_connector_v2_impl(ctx):
         "Provider": parse_json_or_none(ctx.attr.Provider),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_connector_v2.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89800,7 +89800,7 @@ def _cloudformation_aws_security_hub_delegated_admin_impl(ctx):
     payload = {
         "AdminAccountId": ctx.attr.AdminAccountId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_delegated_admin.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89836,7 +89836,7 @@ def _cloudformation_aws_security_hub_finding_aggregator_impl(ctx):
         "RegionLinkingMode": ctx.attr.RegionLinkingMode,
         "Regions": parse_json_or_none(ctx.attr.Regions),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_finding_aggregator.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89877,7 +89877,7 @@ def _cloudformation_aws_security_hub_hub_impl(ctx):
         "EnableDefaultStandards": parse_json_or_none(ctx.attr.EnableDefaultStandards),
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_hub.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89921,7 +89921,7 @@ def _cloudformation_aws_security_hub_hub_v2_impl(ctx):
     payload = {
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_hub_v2.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -89958,7 +89958,7 @@ def _cloudformation_aws_security_hub_insight_impl(ctx):
         "GroupByAttribute": ctx.attr.GroupByAttribute,
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_insight.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90001,7 +90001,7 @@ def _cloudformation_aws_security_hub_organization_configuration_impl(ctx):
         "AutoEnableStandards": ctx.attr.AutoEnableStandards,
         "ConfigurationType": ctx.attr.ConfigurationType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_organization_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90044,7 +90044,7 @@ def _cloudformation_aws_security_hub_policy_association_impl(ctx):
         "TargetId": ctx.attr.TargetId,
         "TargetType": ctx.attr.TargetType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_policy_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90085,7 +90085,7 @@ def _cloudformation_aws_security_hub_product_subscription_impl(ctx):
     payload = {
         "ProductArn": ctx.attr.ProductArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_product_subscription.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90123,7 +90123,7 @@ def _cloudformation_aws_security_hub_security_control_impl(ctx):
         "SecurityControlArn": ctx.attr.SecurityControlArn,
         "SecurityControlId": ctx.attr.SecurityControlId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_security_control.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90168,7 +90168,7 @@ def _cloudformation_aws_security_hub_standard_impl(ctx):
         "DisabledStandardsControls": parse_json_or_none(ctx.attr.DisabledStandardsControls),
         "StandardsArn": ctx.attr.StandardsArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_standard.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90209,7 +90209,7 @@ def _cloudformation_aws_security_lake_aws_log_source_impl(ctx):
         "SourceName": ctx.attr.SourceName,
         "SourceVersion": ctx.attr.SourceVersion,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_lake_aws_log_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90257,7 +90257,7 @@ def _cloudformation_aws_security_lake_data_lake_impl(ctx):
         "ReplicationConfiguration": parse_json_or_none(ctx.attr.ReplicationConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_lake_data_lake.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90310,7 +90310,7 @@ def _cloudformation_aws_security_lake_subscriber_impl(ctx):
         "SubscriberName": ctx.attr.SubscriberName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_lake_subscriber.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90364,7 +90364,7 @@ def _cloudformation_aws_security_lake_subscriber_notification_impl(ctx):
         "NotificationConfiguration": parse_json_or_none(ctx.attr.NotificationConfiguration),
         "SubscriberArn": ctx.attr.SubscriberArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_lake_subscriber_notification.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90412,7 +90412,7 @@ def _cloudformation_aws_serverless_repo_application_impl(ctx):
         "SpdxLicenseId": ctx.attr.SpdxLicenseId,
         "TemplateBody": ctx.attr.TemplateBody,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_serverless_repo_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90478,7 +90478,7 @@ def _cloudformation_aws_service_catalog_accepted_portfolio_share_impl(ctx):
         "AcceptLanguage": ctx.attr.AcceptLanguage,
         "PortfolioId": ctx.attr.PortfolioId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_accepted_portfolio_share.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90518,7 +90518,7 @@ def _cloudformation_aws_service_catalog_app_registry_application_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_app_registry_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90562,7 +90562,7 @@ def _cloudformation_aws_service_catalog_app_registry_attribute_group_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_app_registry_attribute_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90607,7 +90607,7 @@ def _cloudformation_aws_service_catalog_app_registry_attribute_group_association
         "Application": ctx.attr.Application,
         "AttributeGroup": ctx.attr.AttributeGroup,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_app_registry_attribute_group_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90647,7 +90647,7 @@ def _cloudformation_aws_service_catalog_app_registry_resource_association_impl(c
         "Resource": ctx.attr.Resource,
         "ResourceType": ctx.attr.ResourceType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_app_registry_resource_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90700,7 +90700,7 @@ def _cloudformation_aws_service_catalog_cloud_formation_product_impl(ctx):
         "SupportUrl": ctx.attr.SupportUrl,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_cloud_formation_product.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90782,7 +90782,7 @@ def _cloudformation_aws_service_catalog_cloud_formation_provisioned_product_impl
         "ProvisioningPreferences": parse_json_or_none(ctx.attr.ProvisioningPreferences),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_cloud_formation_provisioned_product.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90854,7 +90854,7 @@ def _cloudformation_aws_service_catalog_launch_notification_constraint_impl(ctx)
         "PortfolioId": ctx.attr.PortfolioId,
         "ProductId": ctx.attr.ProductId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_launch_notification_constraint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90906,7 +90906,7 @@ def _cloudformation_aws_service_catalog_launch_role_constraint_impl(ctx):
         "ProductId": ctx.attr.ProductId,
         "RoleArn": ctx.attr.RoleArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_launch_role_constraint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -90960,7 +90960,7 @@ def _cloudformation_aws_service_catalog_launch_template_constraint_impl(ctx):
         "ProductId": ctx.attr.ProductId,
         "Rules": ctx.attr.Rules,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_launch_template_constraint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91011,7 +91011,7 @@ def _cloudformation_aws_service_catalog_portfolio_impl(ctx):
         "ProviderName": ctx.attr.ProviderName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_portfolio.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91061,7 +91061,7 @@ def _cloudformation_aws_service_catalog_portfolio_principal_association_impl(ctx
         "PrincipalARN": ctx.attr.PrincipalARN,
         "PrincipalType": ctx.attr.PrincipalType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_portfolio_principal_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91108,7 +91108,7 @@ def _cloudformation_aws_service_catalog_portfolio_product_association_impl(ctx):
         "ProductId": ctx.attr.ProductId,
         "SourcePortfolioId": ctx.attr.SourcePortfolioId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_portfolio_product_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91155,7 +91155,7 @@ def _cloudformation_aws_service_catalog_portfolio_share_impl(ctx):
         "PortfolioId": ctx.attr.PortfolioId,
         "ShareTagOptions": parse_json_or_none(ctx.attr.ShareTagOptions),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_portfolio_share.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91203,7 +91203,7 @@ def _cloudformation_aws_service_catalog_resource_update_constraint_impl(ctx):
         "ProductId": ctx.attr.ProductId,
         "TagUpdateOnProvisionedProduct": ctx.attr.TagUpdateOnProvisionedProduct,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_resource_update_constraint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91254,7 +91254,7 @@ def _cloudformation_aws_service_catalog_service_action_impl(ctx):
         "Description": ctx.attr.Description,
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_service_action.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91303,7 +91303,7 @@ def _cloudformation_aws_service_catalog_service_action_association_impl(ctx):
         "ProvisioningArtifactId": ctx.attr.ProvisioningArtifactId,
         "ServiceActionId": ctx.attr.ServiceActionId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_service_action_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91352,7 +91352,7 @@ def _cloudformation_aws_service_catalog_stack_set_constraint_impl(ctx):
         "RegionList": parse_json_or_none(ctx.attr.RegionList),
         "StackInstanceControl": ctx.attr.StackInstanceControl,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_stack_set_constraint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91413,7 +91413,7 @@ def _cloudformation_aws_service_catalog_tag_option_impl(ctx):
         "Key": ctx.attr.Key,
         "Value": ctx.attr.Value,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_tag_option.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91455,7 +91455,7 @@ def _cloudformation_aws_service_catalog_tag_option_association_impl(ctx):
         "ResourceId": ctx.attr.ResourceId,
         "TagOptionId": ctx.attr.TagOptionId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_catalog_tag_option_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91495,7 +91495,7 @@ def _cloudformation_aws_service_discovery_http_namespace_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_discovery_http_namespace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91538,7 +91538,7 @@ def _cloudformation_aws_service_discovery_instance_impl(ctx):
         "InstanceId": ctx.attr.InstanceId,
         "ServiceId": ctx.attr.ServiceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_discovery_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91583,7 +91583,7 @@ def _cloudformation_aws_service_discovery_private_dns_namespace_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Vpc": ctx.attr.Vpc,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_discovery_private_dns_namespace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91633,7 +91633,7 @@ def _cloudformation_aws_service_discovery_public_dns_namespace_impl(ctx):
         "Properties": parse_json_or_none(ctx.attr.Properties),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_discovery_public_dns_namespace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91685,7 +91685,7 @@ def _cloudformation_aws_service_discovery_service_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_service_discovery_service.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91752,7 +91752,7 @@ def _cloudformation_aws_ses_configuration_set_impl(ctx):
         "TrackingOptions": parse_json_or_none(ctx.attr.TrackingOptions),
         "VdmOptions": parse_json_or_none(ctx.attr.VdmOptions),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_configuration_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91812,7 +91812,7 @@ def _cloudformation_aws_ses_configuration_set_event_destination_impl(ctx):
         "ConfigurationSetName": ctx.attr.ConfigurationSetName,
         "EventDestination": parse_json_or_none(ctx.attr.EventDestination),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_configuration_set_event_destination.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91853,7 +91853,7 @@ def _cloudformation_aws_ses_contact_list_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Topics": parse_json_or_none(ctx.attr.Topics),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_contact_list.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91903,7 +91903,7 @@ def _cloudformation_aws_ses_custom_verification_email_template_impl(ctx):
         "TemplateName": ctx.attr.TemplateName,
         "TemplateSubject": ctx.attr.TemplateSubject,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_custom_verification_email_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -91958,7 +91958,7 @@ def _cloudformation_aws_ses_dedicated_ip_pool_impl(ctx):
         "ScalingMode": ctx.attr.ScalingMode,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_dedicated_ip_pool.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92005,7 +92005,7 @@ def _cloudformation_aws_ses_email_identity_impl(ctx):
         "MailFromAttributes": parse_json_or_none(ctx.attr.MailFromAttributes),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_email_identity.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92059,7 +92059,7 @@ def _cloudformation_aws_ses_mail_manager_addon_instance_impl(ctx):
         "AddonSubscriptionId": ctx.attr.AddonSubscriptionId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_mail_manager_addon_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92098,7 +92098,7 @@ def _cloudformation_aws_ses_mail_manager_addon_subscription_impl(ctx):
         "AddonName": ctx.attr.AddonName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_mail_manager_addon_subscription.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92137,7 +92137,7 @@ def _cloudformation_aws_ses_mail_manager_address_list_impl(ctx):
         "AddressListName": ctx.attr.AddressListName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_mail_manager_address_list.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92178,7 +92178,7 @@ def _cloudformation_aws_ses_mail_manager_archive_impl(ctx):
         "Retention": parse_json_or_none(ctx.attr.Retention),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_mail_manager_archive.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92230,7 +92230,7 @@ def _cloudformation_aws_ses_mail_manager_ingress_point_impl(ctx):
         "TrafficPolicyId": ctx.attr.TrafficPolicyId,
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_mail_manager_ingress_point.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92293,7 +92293,7 @@ def _cloudformation_aws_ses_mail_manager_relay_impl(ctx):
         "ServerPort": parse_json_or_none(ctx.attr.ServerPort),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_mail_manager_relay.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92342,7 +92342,7 @@ def _cloudformation_aws_ses_mail_manager_rule_set_impl(ctx):
         "Rules": parse_json_or_none(ctx.attr.Rules),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_mail_manager_rule_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92387,7 +92387,7 @@ def _cloudformation_aws_ses_mail_manager_traffic_policy_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TrafficPolicyName": ctx.attr.TrafficPolicyName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_mail_manager_traffic_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92436,7 +92436,7 @@ def _cloudformation_aws_ses_multi_region_endpoint_impl(ctx):
         "EndpointName": ctx.attr.EndpointName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_multi_region_endpoint.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92477,7 +92477,7 @@ def _cloudformation_aws_ses_receipt_filter_impl(ctx):
     payload = {
         "Filter": parse_json_or_none(ctx.attr.Filter),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_receipt_filter.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92514,7 +92514,7 @@ def _cloudformation_aws_ses_receipt_rule_impl(ctx):
         "Rule": parse_json_or_none(ctx.attr.Rule),
         "RuleSetName": ctx.attr.RuleSetName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_receipt_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92555,7 +92555,7 @@ def _cloudformation_aws_ses_receipt_rule_set_impl(ctx):
     payload = {
         "RuleSetName": ctx.attr.RuleSetName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_receipt_rule_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92591,7 +92591,7 @@ def _cloudformation_aws_ses_template_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Template": parse_json_or_none(ctx.attr.Template),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92631,7 +92631,7 @@ def _cloudformation_aws_ses_tenant_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TenantName": ctx.attr.TenantName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_tenant.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92673,7 +92673,7 @@ def _cloudformation_aws_ses_vdm_attributes_impl(ctx):
         "DashboardAttributes": parse_json_or_none(ctx.attr.DashboardAttributes),
         "GuardianAttributes": parse_json_or_none(ctx.attr.GuardianAttributes),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ses_vdm_attributes.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92712,7 +92712,7 @@ def _cloudformation_aws_shield_drtaccess_impl(ctx):
         "LogBucketList": parse_json_or_none(ctx.attr.LogBucketList),
         "RoleArn": ctx.attr.RoleArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_shield_drtaccess.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92751,7 +92751,7 @@ def _cloudformation_aws_shield_proactive_engagement_impl(ctx):
         "EmergencyContactList": parse_json_or_none(ctx.attr.EmergencyContactList),
         "ProactiveEngagementStatus": ctx.attr.ProactiveEngagementStatus,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_shield_proactive_engagement.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92793,7 +92793,7 @@ def _cloudformation_aws_shield_protection_impl(ctx):
         "ResourceArn": ctx.attr.ResourceArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_shield_protection.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92845,7 +92845,7 @@ def _cloudformation_aws_shield_protection_group_impl(ctx):
         "ResourceType": ctx.attr.ResourceType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_shield_protection_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92899,7 +92899,7 @@ def _cloudformation_aws_signer_profile_permission_impl(ctx):
         "ProfileVersion": ctx.attr.ProfileVersion,
         "StatementId": ctx.attr.StatementId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_signer_profile_permission.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92946,7 +92946,7 @@ def _cloudformation_aws_signer_signing_job_impl(ctx):
     payload = {
         "ProfileName": ctx.attr.ProfileName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_signer_signing_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -92983,7 +92983,7 @@ def _cloudformation_aws_signer_signing_profile_impl(ctx):
         "SignatureValidityPeriod": parse_json_or_none(ctx.attr.SignatureValidityPeriod),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_signer_signing_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93028,7 +93028,7 @@ def _cloudformation_aws_sim_space_weaver_simulation_impl(ctx):
         "SchemaS3Location": parse_json_or_none(ctx.attr.SchemaS3Location),
         "SnapshotS3Location": parse_json_or_none(ctx.attr.SnapshotS3Location),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sim_space_weaver_simulation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93080,7 +93080,7 @@ def _cloudformation_aws_smsvoice_configuration_set_impl(ctx):
         "ProtectConfigurationId": ctx.attr.ProtectConfigurationId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_smsvoice_configuration_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93131,7 +93131,7 @@ def _cloudformation_aws_smsvoice_opt_out_list_impl(ctx):
         "OptOutListName": ctx.attr.OptOutListName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_smsvoice_opt_out_list.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93178,7 +93178,7 @@ def _cloudformation_aws_smsvoice_phone_number_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TwoWay": parse_json_or_none(ctx.attr.TwoWay),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_smsvoice_phone_number.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93248,7 +93248,7 @@ def _cloudformation_aws_smsvoice_pool_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TwoWay": parse_json_or_none(ctx.attr.TwoWay),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_smsvoice_pool.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93309,7 +93309,7 @@ def _cloudformation_aws_smsvoice_protect_configuration_impl(ctx):
         "DeletionProtectionEnabled": parse_json_or_none(ctx.attr.DeletionProtectionEnabled),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_smsvoice_protect_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93351,7 +93351,7 @@ def _cloudformation_aws_smsvoice_registration_impl(ctx):
         "RegistrationType": ctx.attr.RegistrationType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_smsvoice_registration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93390,7 +93390,7 @@ def _cloudformation_aws_smsvoice_resource_policy_impl(ctx):
         "PolicyDocument": parse_json_or_none(ctx.attr.PolicyDocument),
         "ResourceArn": ctx.attr.ResourceArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_smsvoice_resource_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93431,7 +93431,7 @@ def _cloudformation_aws_smsvoice_sender_id_impl(ctx):
         "SenderId": ctx.attr.SenderId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_smsvoice_sender_id.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93485,7 +93485,7 @@ def _cloudformation_aws_sns_subscription_impl(ctx):
         "SubscriptionRoleArn": ctx.attr.SubscriptionRoleArn,
         "TopicArn": ctx.attr.TopicArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sns_subscription.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93562,7 +93562,7 @@ def _cloudformation_aws_sns_topic_impl(ctx):
         "TopicName": ctx.attr.TopicName,
         "TracingConfig": ctx.attr.TracingConfig,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sns_topic.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93634,7 +93634,7 @@ def _cloudformation_aws_sns_topic_inline_policy_impl(ctx):
         "PolicyDocument": parse_json_or_none(ctx.attr.PolicyDocument),
         "TopicArn": ctx.attr.TopicArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sns_topic_inline_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93673,7 +93673,7 @@ def _cloudformation_aws_sns_topic_policy_impl(ctx):
         "PolicyDocument": parse_json_or_none(ctx.attr.PolicyDocument),
         "Topics": parse_json_or_none(ctx.attr.Topics),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sns_topic_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93726,7 +93726,7 @@ def _cloudformation_aws_sqs_queue_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VisibilityTimeout": parse_json_or_none(ctx.attr.VisibilityTimeout),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sqs_queue.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93807,7 +93807,7 @@ def _cloudformation_aws_sqs_queue_inline_policy_impl(ctx):
         "PolicyDocument": parse_json_or_none(ctx.attr.PolicyDocument),
         "Queue": ctx.attr.Queue,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sqs_queue_inline_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93846,7 +93846,7 @@ def _cloudformation_aws_sqs_queue_policy_impl(ctx):
         "PolicyDocument": parse_json_or_none(ctx.attr.PolicyDocument),
         "Queues": parse_json_or_none(ctx.attr.Queues),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sqs_queue_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93902,7 +93902,7 @@ def _cloudformation_aws_ssm_association_impl(ctx):
         "Targets": parse_json_or_none(ctx.attr.Targets),
         "WaitForSuccessTimeoutSeconds": parse_json_or_none(ctx.attr.WaitForSuccessTimeoutSeconds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -93992,7 +93992,7 @@ def _cloudformation_aws_ssm_automation_execution_impl(ctx):
         "DocumentName": ctx.attr.DocumentName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_automation_execution.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94035,7 +94035,7 @@ def _cloudformation_aws_ssm_cloud_connector_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_cloud_connector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94094,7 +94094,7 @@ def _cloudformation_aws_ssm_document_impl(ctx):
         "UpdateMethod": ctx.attr.UpdateMethod,
         "VersionName": ctx.attr.VersionName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_document.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94166,7 +94166,7 @@ def _cloudformation_aws_ssm_maintenance_window_impl(ctx):
         "StartDate": ctx.attr.StartDate,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_maintenance_window.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94236,7 +94236,7 @@ def _cloudformation_aws_ssm_maintenance_window_target_impl(ctx):
         "Targets": parse_json_or_none(ctx.attr.Targets),
         "WindowId": ctx.attr.WindowId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_maintenance_window_target.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94299,7 +94299,7 @@ def _cloudformation_aws_ssm_maintenance_window_task_impl(ctx):
         "TaskType": ctx.attr.TaskType,
         "WindowId": ctx.attr.WindowId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_maintenance_window_task.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94373,7 +94373,7 @@ def _cloudformation_aws_ssm_managed_instance_impl(ctx):
     payload = {
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_managed_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94414,7 +94414,7 @@ def _cloudformation_aws_ssm_ops_item_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Title": ctx.attr.Title,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_ops_item.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94475,7 +94475,7 @@ def _cloudformation_aws_ssm_parameter_impl(ctx):
         "Type": ctx.attr.Type,
         "Value": ctx.attr.Value,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_parameter.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94548,7 +94548,7 @@ def _cloudformation_aws_ssm_patch_baseline_impl(ctx):
         "Sources": parse_json_or_none(ctx.attr.Sources),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_patch_baseline.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94633,7 +94633,7 @@ def _cloudformation_aws_ssm_resource_data_sync_impl(ctx):
         "SyncSource": parse_json_or_none(ctx.attr.SyncSource),
         "SyncType": ctx.attr.SyncType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_resource_data_sync.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94693,7 +94693,7 @@ def _cloudformation_aws_ssm_resource_policy_impl(ctx):
         "Policy": parse_json_or_none(ctx.attr.Policy),
         "ResourceArn": ctx.attr.ResourceArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_resource_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94732,7 +94732,7 @@ def _cloudformation_aws_ssm_service_setting_impl(ctx):
         "SettingId": ctx.attr.SettingId,
         "SettingValue": ctx.attr.SettingValue,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_service_setting.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94771,7 +94771,7 @@ def _cloudformation_aws_ssm_session_impl(ctx):
         "Reason": ctx.attr.Reason,
         "Target": ctx.attr.Target,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_session.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94813,7 +94813,7 @@ def _cloudformation_aws_ssmcontacts_contact_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssmcontacts_contact.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94864,7 +94864,7 @@ def _cloudformation_aws_ssmcontacts_contact_channel_impl(ctx):
         "ContactId": ctx.attr.ContactId,
         "DeferActivation": parse_json_or_none(ctx.attr.DeferActivation),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssmcontacts_contact_channel.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94913,7 +94913,7 @@ def _cloudformation_aws_ssmcontacts_plan_impl(ctx):
         "RotationIds": parse_json_or_none(ctx.attr.RotationIds),
         "Stages": parse_json_or_none(ctx.attr.Stages),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssmcontacts_plan.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -94959,7 +94959,7 @@ def _cloudformation_aws_ssmcontacts_rotation_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TimeZoneId": ctx.attr.TimeZoneId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssmcontacts_rotation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95009,7 +95009,7 @@ def _cloudformation_aws_ssmgui_connect_preferences_impl(ctx):
     payload = {
         "ConnectionRecordingPreferences": parse_json_or_none(ctx.attr.ConnectionRecordingPreferences),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssmgui_connect_preferences.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95046,7 +95046,7 @@ def _cloudformation_aws_ssmincidents_replication_set_impl(ctx):
         "Regions": parse_json_or_none(ctx.attr.Regions),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssmincidents_replication_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95094,7 +95094,7 @@ def _cloudformation_aws_ssmincidents_response_plan_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssmincidents_response_plan.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95153,7 +95153,7 @@ def _cloudformation_aws_ssmquick_setup_configuration_manager_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssmquick_setup_configuration_manager.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95200,7 +95200,7 @@ def _cloudformation_aws_ssmquick_setup_lifecycle_automation_impl(ctx):
         "ResourceKey": ctx.attr.ResourceKey,
         "Tags": ctx.attr.Tags,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssmquick_setup_lifecycle_automation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95250,7 +95250,7 @@ def _cloudformation_aws_sso_application_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sso_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95305,7 +95305,7 @@ def _cloudformation_aws_sso_application_assignment_impl(ctx):
         "PrincipalId": ctx.attr.PrincipalId,
         "PrincipalType": ctx.attr.PrincipalType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sso_application_assignment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95345,7 +95345,7 @@ def _cloudformation_aws_sso_application_provider_impl(ctx):
     item_name = ctx.attr.aws_sso_application_provider_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sso_application_provider.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95382,7 +95382,7 @@ def _cloudformation_aws_sso_assignment_impl(ctx):
         "TargetId": ctx.attr.TargetId,
         "TargetType": ctx.attr.TargetType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sso_assignment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95433,7 +95433,7 @@ def _cloudformation_aws_sso_instance_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sso_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95472,7 +95472,7 @@ def _cloudformation_aws_sso_instance_access_control_attribute_configuration_impl
         "AccessControlAttributes": parse_json_or_none(ctx.attr.AccessControlAttributes),
         "InstanceArn": ctx.attr.InstanceArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sso_instance_access_control_attribute_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95519,7 +95519,7 @@ def _cloudformation_aws_sso_permission_set_impl(ctx):
         "SessionDuration": ctx.attr.SessionDuration,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_sso_permission_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95583,7 +95583,7 @@ def _cloudformation_aws_states_execution_impl(ctx):
         "Name": ctx.attr.Name,
         "StateMachineArn": ctx.attr.StateMachineArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_states_execution.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95626,7 +95626,7 @@ def _cloudformation_aws_step_functions_activity_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_step_functions_activity.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95667,7 +95667,7 @@ def _cloudformation_aws_step_functions_map_run_impl(ctx):
     payload = {
         "ExecutionArn": ctx.attr.ExecutionArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_step_functions_map_run.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95712,7 +95712,7 @@ def _cloudformation_aws_step_functions_state_machine_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TracingConfiguration": parse_json_or_none(ctx.attr.TracingConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_step_functions_state_machine.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95781,7 +95781,7 @@ def _cloudformation_aws_step_functions_state_machine_alias_impl(ctx):
         "RoutingConfiguration": parse_json_or_none(ctx.attr.RoutingConfiguration),
         "StateMachineArn": ctx.attr.StateMachineArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_step_functions_state_machine_alias.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95830,7 +95830,7 @@ def _cloudformation_aws_step_functions_state_machine_version_impl(ctx):
         "StateMachineArn": ctx.attr.StateMachineArn,
         "StateMachineRevisionId": ctx.attr.StateMachineRevisionId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_step_functions_state_machine_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95875,7 +95875,7 @@ def _cloudformation_aws_storage_gateway_tape_pool_impl(ctx):
         "StorageClass": ctx.attr.StorageClass,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_storage_gateway_tape_pool.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95922,7 +95922,7 @@ def _cloudformation_aws_support_app_account_alias_impl(ctx):
     payload = {
         "AccountAlias": ctx.attr.AccountAlias,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_support_app_account_alias.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -95964,7 +95964,7 @@ def _cloudformation_aws_support_app_slack_channel_configuration_impl(ctx):
         "NotifyOnResolveCase": parse_json_or_none(ctx.attr.NotifyOnResolveCase),
         "TeamId": ctx.attr.TeamId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_support_app_slack_channel_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -96021,7 +96021,7 @@ def _cloudformation_aws_support_app_slack_workspace_configuration_impl(ctx):
         "TeamId": ctx.attr.TeamId,
         "VersionId": ctx.attr.VersionId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_support_app_slack_workspace_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -96078,7 +96078,7 @@ def _cloudformation_aws_synthetics_canary_impl(ctx):
         "VPCConfig": parse_json_or_none(ctx.attr.VPCConfig),
         "VisualReferences": parse_json_or_none(ctx.attr.VisualReferences),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_synthetics_canary.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -96172,7 +96172,7 @@ def _cloudformation_aws_synthetics_group_impl(ctx):
         "ResourceArns": parse_json_or_none(ctx.attr.ResourceArns),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_synthetics_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -96221,7 +96221,7 @@ def _cloudformation_aws_systems_manager_sap_application_impl(ctx):
         "Sid": ctx.attr.Sid,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_systems_manager_sap_application.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -96280,7 +96280,7 @@ def _cloudformation_aws_thin_client_software_set_impl(ctx):
     payload = {
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_thin_client_software_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -96317,7 +96317,7 @@ def _cloudformation_aws_timestream_database_impl(ctx):
         "KmsKeyId": ctx.attr.KmsKeyId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_timestream_database.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -96376,7 +96376,7 @@ def _cloudformation_aws_timestream_influx_dbcluster_impl(ctx):
         "VpcSecurityGroupIds": parse_json_or_none(ctx.attr.VpcSecurityGroupIds),
         "VpcSubnetIds": parse_json_or_none(ctx.attr.VpcSubnetIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_timestream_influx_dbcluster.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -96482,7 +96482,7 @@ def _cloudformation_aws_timestream_influx_dbinstance_impl(ctx):
         "VpcSecurityGroupIds": parse_json_or_none(ctx.attr.VpcSecurityGroupIds),
         "VpcSubnetIds": parse_json_or_none(ctx.attr.VpcSubnetIds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_timestream_influx_dbinstance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -96577,7 +96577,7 @@ def _cloudformation_aws_timestream_scheduled_query_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetConfiguration": parse_json_or_none(ctx.attr.TargetConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_timestream_scheduled_query.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -96644,7 +96644,7 @@ def _cloudformation_aws_timestream_table_impl(ctx):
         "TableName": ctx.attr.TableName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_timestream_table.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -96699,7 +96699,7 @@ def _cloudformation_aws_transcribe_medical_scribe_job_impl(ctx):
         "Settings": parse_json_or_none(ctx.attr.Settings),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_transcribe_medical_scribe_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -96757,7 +96757,7 @@ def _cloudformation_aws_transcribe_medical_transcription_job_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_transcribe_medical_transcription_job.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -96821,7 +96821,7 @@ def _cloudformation_aws_transcribe_vocabulary_filter_impl(ctx):
         "VocabularyFilterName": ctx.attr.VocabularyFilterName,
         "Words": parse_json_or_none(ctx.attr.Words),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_transcribe_vocabulary_filter.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -96881,7 +96881,7 @@ def _cloudformation_aws_transfer_agreement_impl(ctx):
         "Status": ctx.attr.Status,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_transfer_agreement.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -96953,7 +96953,7 @@ def _cloudformation_aws_transfer_certificate_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Usage": ctx.attr.Usage,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_transfer_certificate.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97018,7 +97018,7 @@ def _cloudformation_aws_transfer_connector_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Url": ctx.attr.Url,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_transfer_connector.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97083,7 +97083,7 @@ def _cloudformation_aws_transfer_host_key_impl(ctx):
         "ServerId": ctx.attr.ServerId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_transfer_host_key.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97130,7 +97130,7 @@ def _cloudformation_aws_transfer_profile_impl(ctx):
         "ProfileType": ctx.attr.ProfileType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_transfer_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97190,7 +97190,7 @@ def _cloudformation_aws_transfer_server_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WorkflowDetails": parse_json_or_none(ctx.attr.WorkflowDetails),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_transfer_server.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97282,7 +97282,7 @@ def _cloudformation_aws_transfer_user_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UserName": ctx.attr.UserName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_transfer_user.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97350,7 +97350,7 @@ def _cloudformation_aws_transfer_web_app_impl(ctx):
         "WebAppEndpointPolicy": ctx.attr.WebAppEndpointPolicy,
         "WebAppUnits": parse_json_or_none(ctx.attr.WebAppUnits),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_transfer_web_app.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97406,7 +97406,7 @@ def _cloudformation_aws_transfer_workflow_impl(ctx):
         "Steps": parse_json_or_none(ctx.attr.Steps),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_transfer_workflow.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97451,7 +97451,7 @@ def _cloudformation_aws_user_notifications_managed_notification_configuration_im
         "Category": ctx.attr.Category,
         "SubCategory": ctx.attr.SubCategory,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_user_notifications_managed_notification_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97488,7 +97488,7 @@ def _cloudformation_aws_user_notifications_notification_event_impl(ctx):
     item_name = ctx.attr.aws_user_notifications_notification_event_name or ctx.label.name
     payload = {
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_user_notifications_notification_event.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97522,7 +97522,7 @@ def _cloudformation_aws_uxc_account_customization_impl(ctx):
         "VisibleRegions": parse_json_or_none(ctx.attr.VisibleRegions),
         "VisibleServices": parse_json_or_none(ctx.attr.VisibleServices),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_uxc_account_customization.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97565,7 +97565,7 @@ def _cloudformation_aws_verified_permissions_identity_source_impl(ctx):
         "PolicyStoreId": ctx.attr.PolicyStoreId,
         "PrincipalEntityType": ctx.attr.PrincipalEntityType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_verified_permissions_identity_source.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97608,7 +97608,7 @@ def _cloudformation_aws_verified_permissions_policy_impl(ctx):
         "Name": ctx.attr.Name,
         "PolicyStoreId": ctx.attr.PolicyStoreId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_verified_permissions_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97654,7 +97654,7 @@ def _cloudformation_aws_verified_permissions_policy_store_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "ValidationSettings": parse_json_or_none(ctx.attr.ValidationSettings),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_verified_permissions_policy_store.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97705,7 +97705,7 @@ def _cloudformation_aws_verified_permissions_policy_store_alias_impl(ctx):
         "AliasName": ctx.attr.AliasName,
         "PolicyStoreId": ctx.attr.PolicyStoreId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_verified_permissions_policy_store_alias.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97746,7 +97746,7 @@ def _cloudformation_aws_verified_permissions_policy_template_impl(ctx):
         "PolicyStoreId": ctx.attr.PolicyStoreId,
         "Statement": ctx.attr.Statement,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_verified_permissions_policy_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97793,7 +97793,7 @@ def _cloudformation_aws_voice_id_domain_impl(ctx):
         "ServerSideEncryptionConfiguration": parse_json_or_none(ctx.attr.ServerSideEncryptionConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_voice_id_domain.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97840,7 +97840,7 @@ def _cloudformation_aws_vpc_lattice_access_log_subscription_impl(ctx):
         "ServiceNetworkLogType": ctx.attr.ServiceNetworkLogType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_vpc_lattice_access_log_subscription.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97885,7 +97885,7 @@ def _cloudformation_aws_vpc_lattice_auth_policy_impl(ctx):
         "Policy": parse_json_or_none(ctx.attr.Policy),
         "ResourceIdentifier": ctx.attr.ResourceIdentifier,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_vpc_lattice_auth_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97924,7 +97924,7 @@ def _cloudformation_aws_vpc_lattice_domain_verification_impl(ctx):
         "DomainName": ctx.attr.DomainName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_vpc_lattice_domain_verification.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -97967,7 +97967,7 @@ def _cloudformation_aws_vpc_lattice_listener_impl(ctx):
         "ServiceIdentifier": ctx.attr.ServiceIdentifier,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_vpc_lattice_listener.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98029,7 +98029,7 @@ def _cloudformation_aws_vpc_lattice_resource_configuration_impl(ctx):
         "ResourceGatewayId": ctx.attr.ResourceGatewayId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_vpc_lattice_resource_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98107,7 +98107,7 @@ def _cloudformation_aws_vpc_lattice_resource_gateway_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcIdentifier": ctx.attr.VpcIdentifier,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_vpc_lattice_resource_gateway.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98164,7 +98164,7 @@ def _cloudformation_aws_vpc_lattice_resource_policy_impl(ctx):
         "Policy": parse_json_or_none(ctx.attr.Policy),
         "ResourceArn": ctx.attr.ResourceArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_vpc_lattice_resource_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98208,7 +98208,7 @@ def _cloudformation_aws_vpc_lattice_rule_impl(ctx):
         "ServiceIdentifier": ctx.attr.ServiceIdentifier,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_vpc_lattice_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98267,7 +98267,7 @@ def _cloudformation_aws_vpc_lattice_service_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_vpc_lattice_service.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98323,7 +98323,7 @@ def _cloudformation_aws_vpc_lattice_service_network_impl(ctx):
         "SharingConfig": parse_json_or_none(ctx.attr.SharingConfig),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_vpc_lattice_service_network.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98370,7 +98370,7 @@ def _cloudformation_aws_vpc_lattice_service_network_resource_association_impl(ct
         "ServiceNetworkId": ctx.attr.ServiceNetworkId,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_vpc_lattice_service_network_resource_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98417,7 +98417,7 @@ def _cloudformation_aws_vpc_lattice_service_network_service_association_impl(ctx
         "ServiceNetworkIdentifier": ctx.attr.ServiceNetworkIdentifier,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_vpc_lattice_service_network_service_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98466,7 +98466,7 @@ def _cloudformation_aws_vpc_lattice_service_network_vpc_association_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcIdentifier": ctx.attr.VpcIdentifier,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_vpc_lattice_service_network_vpc_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98520,7 +98520,7 @@ def _cloudformation_aws_vpc_lattice_target_group_impl(ctx):
         "Targets": parse_json_or_none(ctx.attr.Targets),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_vpc_lattice_target_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98568,7 +98568,7 @@ def _cloudformation_aws_waf_byte_match_set_impl(ctx):
         "ByteMatchTuples": parse_json_or_none(ctx.attr.ByteMatchTuples),
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_waf_byte_match_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98607,7 +98607,7 @@ def _cloudformation_aws_waf_ipset_impl(ctx):
         "IPSetDescriptors": parse_json_or_none(ctx.attr.IPSetDescriptors),
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_waf_ipset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98647,7 +98647,7 @@ def _cloudformation_aws_waf_rule_impl(ctx):
         "Name": ctx.attr.Name,
         "Predicates": parse_json_or_none(ctx.attr.Predicates),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_waf_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98689,7 +98689,7 @@ def _cloudformation_aws_waf_size_constraint_set_impl(ctx):
         "Name": ctx.attr.Name,
         "SizeConstraints": parse_json_or_none(ctx.attr.SizeConstraints),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_waf_size_constraint_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98728,7 +98728,7 @@ def _cloudformation_aws_waf_sql_injection_match_set_impl(ctx):
         "Name": ctx.attr.Name,
         "SqlInjectionMatchTuples": parse_json_or_none(ctx.attr.SqlInjectionMatchTuples),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_waf_sql_injection_match_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98769,7 +98769,7 @@ def _cloudformation_aws_waf_web_acl_impl(ctx):
         "Name": ctx.attr.Name,
         "Rules": parse_json_or_none(ctx.attr.Rules),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_waf_web_acl.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98814,7 +98814,7 @@ def _cloudformation_aws_waf_xss_match_set_impl(ctx):
         "Name": ctx.attr.Name,
         "XssMatchTuples": parse_json_or_none(ctx.attr.XssMatchTuples),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_waf_xss_match_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98853,7 +98853,7 @@ def _cloudformation_aws_wafregional_byte_match_set_impl(ctx):
         "ByteMatchTuples": parse_json_or_none(ctx.attr.ByteMatchTuples),
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafregional_byte_match_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98892,7 +98892,7 @@ def _cloudformation_aws_wafregional_geo_match_set_impl(ctx):
         "GeoMatchConstraints": parse_json_or_none(ctx.attr.GeoMatchConstraints),
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafregional_geo_match_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98931,7 +98931,7 @@ def _cloudformation_aws_wafregional_ipset_impl(ctx):
         "IPSetDescriptors": parse_json_or_none(ctx.attr.IPSetDescriptors),
         "Name": ctx.attr.Name,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafregional_ipset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -98973,7 +98973,7 @@ def _cloudformation_aws_wafregional_rate_based_rule_impl(ctx):
         "RateKey": ctx.attr.RateKey,
         "RateLimit": parse_json_or_none(ctx.attr.RateLimit),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafregional_rate_based_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99021,7 +99021,7 @@ def _cloudformation_aws_wafregional_regex_pattern_set_impl(ctx):
         "Name": ctx.attr.Name,
         "RegexPatternStrings": parse_json_or_none(ctx.attr.RegexPatternStrings),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafregional_regex_pattern_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99061,7 +99061,7 @@ def _cloudformation_aws_wafregional_rule_impl(ctx):
         "Name": ctx.attr.Name,
         "Predicates": parse_json_or_none(ctx.attr.Predicates),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafregional_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99103,7 +99103,7 @@ def _cloudformation_aws_wafregional_size_constraint_set_impl(ctx):
         "Name": ctx.attr.Name,
         "SizeConstraints": parse_json_or_none(ctx.attr.SizeConstraints),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafregional_size_constraint_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99142,7 +99142,7 @@ def _cloudformation_aws_wafregional_sql_injection_match_set_impl(ctx):
         "Name": ctx.attr.Name,
         "SqlInjectionMatchTuples": parse_json_or_none(ctx.attr.SqlInjectionMatchTuples),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafregional_sql_injection_match_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99183,7 +99183,7 @@ def _cloudformation_aws_wafregional_web_acl_impl(ctx):
         "Name": ctx.attr.Name,
         "Rules": parse_json_or_none(ctx.attr.Rules),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafregional_web_acl.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99228,7 +99228,7 @@ def _cloudformation_aws_wafregional_web_aclassociation_impl(ctx):
         "ResourceArn": ctx.attr.ResourceArn,
         "WebACLId": ctx.attr.WebACLId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafregional_web_aclassociation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99267,7 +99267,7 @@ def _cloudformation_aws_wafregional_xss_match_set_impl(ctx):
         "Name": ctx.attr.Name,
         "XssMatchTuples": parse_json_or_none(ctx.attr.XssMatchTuples),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafregional_xss_match_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99310,7 +99310,7 @@ def _cloudformation_aws_wafv2_ipset_impl(ctx):
         "Scope": ctx.attr.Scope,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafv2_ipset.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99363,7 +99363,7 @@ def _cloudformation_aws_wafv2_logging_configuration_impl(ctx):
         "RedactedFields": parse_json_or_none(ctx.attr.RedactedFields),
         "ResourceArn": ctx.attr.ResourceArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafv2_logging_configuration.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99411,7 +99411,7 @@ def _cloudformation_aws_wafv2_regex_pattern_set_impl(ctx):
         "Scope": ctx.attr.Scope,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafv2_regex_pattern_set.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99468,7 +99468,7 @@ def _cloudformation_aws_wafv2_rule_group_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VisibilityConfig": parse_json_or_none(ctx.attr.VisibilityConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafv2_rule_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99548,7 +99548,7 @@ def _cloudformation_aws_wafv2_web_acl_impl(ctx):
         "TokenDomains": parse_json_or_none(ctx.attr.TokenDomains),
         "VisibilityConfig": parse_json_or_none(ctx.attr.VisibilityConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafv2_web_acl.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99629,7 +99629,7 @@ def _cloudformation_aws_wafv2_web_aclassociation_impl(ctx):
         "ResourceArn": ctx.attr.ResourceArn,
         "WebACLArn": ctx.attr.WebACLArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wafv2_web_aclassociation.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99669,7 +99669,7 @@ def _cloudformation_aws_well_architected_lens_impl(ctx):
         "LensVersion": ctx.attr.LensVersion,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_well_architected_lens.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99713,7 +99713,7 @@ def _cloudformation_aws_well_architected_profile_impl(ctx):
         "ProfileQuestions": parse_json_or_none(ctx.attr.ProfileQuestions),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_well_architected_profile.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99761,7 +99761,7 @@ def _cloudformation_aws_well_architected_review_template_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TemplateName": ctx.attr.TemplateName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_well_architected_review_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99809,7 +99809,7 @@ def _cloudformation_aws_wickr_network_impl(ctx):
         "AccessLevel": ctx.attr.AccessLevel,
         "NetworkName": ctx.attr.NetworkName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wickr_network.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99852,7 +99852,7 @@ def _cloudformation_aws_wisdom_aiagent_impl(ctx):
         "Tags": ctx.attr.Tags,
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wisdom_aiagent.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99904,7 +99904,7 @@ def _cloudformation_aws_wisdom_aiagent_version_impl(ctx):
         "AssistantId": ctx.attr.AssistantId,
         "ModifiedTimeSeconds": parse_json_or_none(ctx.attr.ModifiedTimeSeconds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wisdom_aiagent_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -99955,7 +99955,7 @@ def _cloudformation_aws_wisdom_aiguardrail_impl(ctx):
         "TopicPolicyConfig": parse_json_or_none(ctx.attr.TopicPolicyConfig),
         "WordPolicyConfig": parse_json_or_none(ctx.attr.WordPolicyConfig),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wisdom_aiguardrail.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100022,7 +100022,7 @@ def _cloudformation_aws_wisdom_aiguardrail_version_impl(ctx):
         "AssistantId": ctx.attr.AssistantId,
         "ModifiedTimeSeconds": parse_json_or_none(ctx.attr.ModifiedTimeSeconds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wisdom_aiguardrail_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100071,7 +100071,7 @@ def _cloudformation_aws_wisdom_aiprompt_impl(ctx):
         "TemplateType": ctx.attr.TemplateType,
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wisdom_aiprompt.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100132,7 +100132,7 @@ def _cloudformation_aws_wisdom_aiprompt_version_impl(ctx):
         "AssistantId": ctx.attr.AssistantId,
         "ModifiedTimeSeconds": parse_json_or_none(ctx.attr.ModifiedTimeSeconds),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wisdom_aiprompt_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100177,7 +100177,7 @@ def _cloudformation_aws_wisdom_assistant_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wisdom_assistant.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100227,7 +100227,7 @@ def _cloudformation_aws_wisdom_assistant_association_impl(ctx):
         "AssociationType": ctx.attr.AssociationType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wisdom_assistant_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100278,7 +100278,7 @@ def _cloudformation_aws_wisdom_knowledge_base_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VectorIngestionConfiguration": parse_json_or_none(ctx.attr.VectorIngestionConfiguration),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wisdom_knowledge_base.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100343,7 +100343,7 @@ def _cloudformation_aws_wisdom_message_template_impl(ctx):
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wisdom_message_template.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100406,7 +100406,7 @@ def _cloudformation_aws_wisdom_message_template_version_impl(ctx):
         "MessageTemplateArn": ctx.attr.MessageTemplateArn,
         "MessageTemplateContentSha256": ctx.attr.MessageTemplateContentSha256,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wisdom_message_template_version.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100454,7 +100454,7 @@ def _cloudformation_aws_wisdom_quick_response_impl(ctx):
         "ShortcutKey": ctx.attr.ShortcutKey,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_wisdom_quick_response.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100520,7 +100520,7 @@ def _cloudformation_aws_work_spaces_connection_alias_impl(ctx):
         "ConnectionString": ctx.attr.ConnectionString,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_connection_alias.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100567,7 +100567,7 @@ def _cloudformation_aws_work_spaces_thin_client_environment_impl(ctx):
         "SoftwareSetUpdateSchedule": ctx.attr.SoftwareSetUpdateSchedule,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_thin_client_environment.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100633,7 +100633,7 @@ def _cloudformation_aws_work_spaces_web_browser_settings_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "WebContentFilteringPolicy": parse_json_or_none(ctx.attr.WebContentFilteringPolicy),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_web_browser_settings.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100685,7 +100685,7 @@ def _cloudformation_aws_work_spaces_web_data_protection_settings_impl(ctx):
         "InlineRedactionConfiguration": parse_json_or_none(ctx.attr.InlineRedactionConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_web_data_protection_settings.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100739,7 +100739,7 @@ def _cloudformation_aws_work_spaces_web_identity_provider_impl(ctx):
         "PortalArn": ctx.attr.PortalArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_web_identity_provider.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100791,7 +100791,7 @@ def _cloudformation_aws_work_spaces_web_ip_access_settings_impl(ctx):
         "IpRules": parse_json_or_none(ctx.attr.IpRules),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_web_ip_access_settings.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100844,7 +100844,7 @@ def _cloudformation_aws_work_spaces_web_network_settings_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcId": ctx.attr.VpcId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_web_network_settings.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100903,7 +100903,7 @@ def _cloudformation_aws_work_spaces_web_portal_impl(ctx):
         "UserAccessLoggingSettingsArn": ctx.attr.UserAccessLoggingSettingsArn,
         "UserSettingsArn": ctx.attr.UserSettingsArn,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_web_portal.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -100988,7 +100988,7 @@ def _cloudformation_aws_work_spaces_web_session_logger_impl(ctx):
         "LogConfiguration": parse_json_or_none(ctx.attr.LogConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_web_session_logger.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -101039,7 +101039,7 @@ def _cloudformation_aws_work_spaces_web_trust_store_impl(ctx):
         "CertificateList": parse_json_or_none(ctx.attr.CertificateList),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_web_trust_store.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -101078,7 +101078,7 @@ def _cloudformation_aws_work_spaces_web_user_access_logging_settings_impl(ctx):
         "KinesisStreamArn": ctx.attr.KinesisStreamArn,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_web_user_access_logging_settings.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -101130,7 +101130,7 @@ def _cloudformation_aws_work_spaces_web_user_settings_impl(ctx):
         "UploadAllowed": ctx.attr.UploadAllowed,
         "WebAuthnAllowed": ctx.attr.WebAuthnAllowed,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_web_user_settings.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -101214,7 +101214,7 @@ def _cloudformation_aws_work_spaces_workspace_impl(ctx):
         "VolumeEncryptionKey": ctx.attr.VolumeEncryptionKey,
         "WorkspaceProperties": parse_json_or_none(ctx.attr.WorkspaceProperties),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_workspace.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -101273,7 +101273,7 @@ def _cloudformation_aws_work_spaces_workspace_ip_group_impl(ctx):
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UserRules": parse_json_or_none(ctx.attr.UserRules),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_workspace_ip_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -101324,7 +101324,7 @@ def _cloudformation_aws_work_spaces_workspaces_pool_impl(ctx):
         "RunningMode": ctx.attr.RunningMode,
         "TimeoutSettings": parse_json_or_none(ctx.attr.TimeoutSettings),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_workspaces_pool.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -101388,7 +101388,7 @@ def _cloudformation_aws_workspaces_instances_volume_impl(ctx):
         "Throughput": parse_json_or_none(ctx.attr.Throughput),
         "VolumeType": ctx.attr.VolumeType,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_workspaces_instances_volume.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -101450,7 +101450,7 @@ def _cloudformation_aws_workspaces_instances_volume_association_impl(ctx):
         "VolumeId": ctx.attr.VolumeId,
         "WorkspaceInstanceId": ctx.attr.WorkspaceInstanceId,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_workspaces_instances_volume_association.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -101495,7 +101495,7 @@ def _cloudformation_aws_workspaces_instances_workspace_instance_impl(ctx):
         "ManagedInstance": parse_json_or_none(ctx.attr.ManagedInstance),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_workspaces_instances_workspace_instance.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -101536,7 +101536,7 @@ def _cloudformation_aws_xray_group_impl(ctx):
         "InsightsConfiguration": parse_json_or_none(ctx.attr.InsightsConfiguration),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_xray_group.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -101582,7 +101582,7 @@ def _cloudformation_aws_xray_resource_policy_impl(ctx):
         "PolicyDocument": ctx.attr.PolicyDocument,
         "PolicyName": ctx.attr.PolicyName,
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_xray_resource_policy.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -101624,7 +101624,7 @@ def _cloudformation_aws_xray_sampling_rule_impl(ctx):
         "SamplingRule": parse_json_or_none(ctx.attr.SamplingRule),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_xray_sampling_rule.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
@@ -101662,7 +101662,7 @@ def _cloudformation_aws_xray_transaction_search_config_impl(ctx):
     payload = {
         "IndexingPercentage": parse_json_or_none(ctx.attr.IndexingPercentage),
     }
-    payload = strip_empty(payload)
+    payload = strip_unset(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_xray_transaction_search_config.json")
     ctx.actions.write(shard, json.encode(payload))
     return [
