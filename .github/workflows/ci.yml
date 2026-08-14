@@ -13,7 +13,77 @@ concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# ⛔ INLINED FROM fastverk/.github, NOT CALLED. This repo's CI had NEVER run — every
+# workflow run since the repo was created failed in 0.0s with `{"jobs": [], "total": 0}`,
+# no steps and no annotations to read. See #5.
+#
+# ⭐ The cause is the CROSS-ORG REUSABLE-WORKFLOW REFERENCE ITSELF:
+#
+#     uses: fastverk/.github/.github/workflows/reusable-rules-ci.yml@main
+#
+# caller `tomato-bazel`, callee `fastverk`. Proven by bisection, not by argument — with
+# that job present the ENTIRE workflow is rejected before any job is materialized, and a
+# trivial inline job in the SAME file never ran either. Delete that one job and the same
+# file goes green. A separate minimal workflow in this repo also ran fine, so the repo,
+# the org, and GitHub-hosted runners were never the problem.
+#
+# ⚠ THE FAILURE POISONS SIBLING JOBS, which is what makes it so hard to read: an inline
+# job failing alongside it looks like "this repo cannot run CI at all" and sends you to
+# billing. It is not billing — this repo is public, and bazel-registry runs the same
+# `ubuntu-latest` on the same org.
+#
+# ⚠ ROOT CAUSE NOT ESTABLISHED. Ruled out by measurement: `secrets: inherit` (removed,
+# still failed), repo/org Actions policy (`allowed_actions: all`), visibility (both repos
+# public), the ref (the file IS present at @main), callee YAML validity, and a
+# permissions mismatch (both declare exactly `contents: read`). Something about the
+# cross-org reference is rejected without ever surfacing a message.
+#
+# Inlining removes the dependency rather than explaining it. If the reusable workflow is
+# ever wanted again, host it in the tomato-bazel org — do not re-point across orgs
+# without first proving on a scratch branch that jobs materialize.
 jobs:
-  ci:
-    uses: fastverk/.github/.github/workflows/reusable-rules-ci.yml@main
-    secrets: inherit
+  test:
+    name: bazel test //...
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bazel-contrib/setup-bazel@0.10.0
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}-${{ matrix.os }}
+          repository-cache: true
+      - run: bazel test //... --test_output=errors
+
+  buildifier:
+    name: buildifier lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: install buildifier
+        run: |
+          curl -fsSL -o /usr/local/bin/buildifier \
+            https://github.com/bazelbuild/buildtools/releases/download/v7.3.1/buildifier-linux-amd64
+          chmod +x /usr/local/bin/buildifier
+      # ⛔ GENERATED FILES ARE EXCLUDED, and this is not laziness. `defs.bzl` and
+      # `cfn_types.bzl` are emitted by //cloudformation:update, and the generator
+      # does not produce buildifier-clean Starlark. Reformatting them would make
+      # //cloudformation:defs_up_to_date fail on the next run — the lint gate and
+      # the drift gate would demand opposite bytes, and the repo could never be
+      # green. Format the generator's output upstream if this ever matters.
+      - run: |
+          # buildifier has no exclude flag, so enumerate explicitly.
+          #
+          # ⚠ `canonical-repository` is OFF, and that is a property of this repo
+          # rather than a dodge: `@@cfn:ref:` and friends in stack.bzl are the
+          # INTRINSIC SENTINEL prefixes that stack_aggregator.py rewrites into CFN
+          # dicts. The comment there says `@@` was chosen precisely because it
+          # collides with nothing in AWS's string conventions. buildifier reads any
+          # `@@` as a Bazel canonical repository reference; renaming to satisfy it
+          # would change the wire format every shard and the aggregator agree on.
+          find . \( -name '*.bzl' -o -name 'BUILD.bazel' -o -name 'MODULE.bazel' \) \
+            | grep -vE 'cloudformation/(defs|cfn_types)\.bzl$' \
+            | xargs buildifier --mode=check --lint=warn -warnings=-canonical-repository

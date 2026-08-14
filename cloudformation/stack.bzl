@@ -25,16 +25,16 @@ Deploy wrappers (`bazel run` driving `aws cloudformation deploy`)
 ride on a later phase.
 """
 
+load("//cloudformation:cfn_types.bzl", "CFN_TYPES")
+load("//cloudformation:condition.bzl", "CloudformationConditionInfo")
 load(
     "//cloudformation:intrinsics.bzl",
     "CloudformationAwsCloudformationInitInfo",
     "CloudformationAwsCloudformationInterfaceInfo",
 )
-load("//cloudformation:parameter.bzl", "CloudformationParameterInfo")
-load("//cloudformation:output.bzl", "CloudformationOutputInfo")
-load("//cloudformation:condition.bzl", "CloudformationConditionInfo")
 load("//cloudformation:mapping.bzl", "CloudformationMappingInfo")
-load("//cloudformation:cfn_types.bzl", "CFN_TYPES")
+load("//cloudformation:output.bzl", "CloudformationOutputInfo")
+load("//cloudformation:parameter.bzl", "CloudformationParameterInfo")
 
 # Sentinel prefixes for cross-resource references. The aggregator
 # (cloudformation/private/stack_aggregator.py) deep-walks each
@@ -432,6 +432,7 @@ def _cloudformation_stack_impl(ctx):
         if len(files) != 1:
             fail("cloudformation_stack: dep {} produced {} files (expected 1)".format(dep.label, len(files)))
         shard = files[0]
+
         # The contributing rule's label.name is the CFN logical id.
         # We approximate via the shard filename's `<label.name>.` prefix.
         # (Bazel doesn't expose dep label.name in a way that's robust

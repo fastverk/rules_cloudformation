@@ -62,7 +62,6 @@ cfn_sources = use_extension(
 use_repo(
     cfn_sources,
     "cfn_resource_spec",
-    "cfn_endpoint_aws_s3_bucket",
 )
 
 # rules_python drives the docstring-overlay Python script
@@ -75,7 +74,10 @@ python = use_extension(
     "python",
     dev_dependency = True,
 )
-python.toolchain(python_version = "3.12", is_default = True)
+python.toolchain(
+    is_default = True,
+    python_version = "3.12",
+)
 
 # rules_shell underpins the default aws CLI toolchain (a thin sh_binary
 # around system `aws`) used by cloudformation_up / cloudformation_down.

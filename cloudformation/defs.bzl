@@ -58,6 +58,127 @@ cloudformation_aws_access_analyzer_analyzer = rule(
     },
 )
 
+CloudformationAwsAccessAnalyzerArchiveRuleInfo = provider(
+    doc = "A aws_access_analyzer_archive_rule contributed by a target. Shard JSON matches the aws_access_analyzer_archive_rule schema.",
+    fields = {
+        "aws_access_analyzer_archive_rule_name": "string: top-level key for this aws_access_analyzer_archive_rule in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_access_analyzer_archive_rule_impl(ctx):
+    item_name = ctx.attr.aws_access_analyzer_archive_rule_name or ctx.label.name
+    payload = {
+        "AnalyzerName": ctx.attr.AnalyzerName,
+        "Filter": parse_json_or_none(ctx.attr.Filter),
+        "RuleName": ctx.attr.RuleName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_access_analyzer_archive_rule.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsAccessAnalyzerArchiveRuleInfo(aws_access_analyzer_archive_rule_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_access_analyzer_archive_rule = rule(
+    implementation = _cloudformation_aws_access_analyzer_archive_rule_impl,
+    doc = "Schema-derived rule for one `aws_access_analyzer_archive_rule` entry.",
+    provides = [CloudformationAwsAccessAnalyzerArchiveRuleInfo],
+    attrs = {
+        "aws_access_analyzer_archive_rule_name": attr.string(
+            doc = "Top-level key for this aws_access_analyzer_archive_rule in the rendered project. Defaults to the rule name.",
+        ),
+        "AnalyzerName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-accessanalyzer-archiverule.html#cfn-accessanalyzer-archiverule-analyzername",
+        ),
+        "Filter": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-accessanalyzer-archiverule.html#cfn-accessanalyzer-archiverule-filter (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "RuleName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-accessanalyzer-archiverule.html#cfn-accessanalyzer-archiverule-rulename",
+        ),
+    },
+)
+
+CloudformationAwsAccountAccessApplicationInfo = provider(
+    doc = "A aws_account_access_application contributed by a target. Shard JSON matches the aws_account_access_application schema.",
+    fields = {
+        "aws_account_access_application_name": "string: top-level key for this aws_account_access_application in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_account_access_application_impl(ctx):
+    item_name = ctx.attr.aws_account_access_application_name or ctx.label.name
+    payload = {
+        "IdentitySource": parse_json_or_none(ctx.attr.IdentitySource),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_account_access_application.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsAccountAccessApplicationInfo(aws_account_access_application_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_account_access_application = rule(
+    implementation = _cloudformation_aws_account_access_application_impl,
+    doc = "Schema-derived rule for one `aws_account_access_application` entry.",
+    provides = [CloudformationAwsAccountAccessApplicationInfo],
+    attrs = {
+        "aws_account_access_application_name": attr.string(
+            doc = "Top-level key for this aws_account_access_application in the rendered project. Defaults to the rule name.",
+        ),
+        "IdentitySource": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-accountaccess-application.html#cfn-accountaccess-application-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsAccountAccessEntitlementInfo = provider(
+    doc = "A aws_account_access_entitlement contributed by a target. Shard JSON matches the aws_account_access_entitlement schema.",
+    fields = {
+        "aws_account_access_entitlement_name": "string: top-level key for this aws_account_access_entitlement in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_account_access_entitlement_impl(ctx):
+    item_name = ctx.attr.aws_account_access_entitlement_name or ctx.label.name
+    payload = {
+        "ApplicationArn": ctx.attr.ApplicationArn,
+        "Entitlement": parse_json_or_none(ctx.attr.Entitlement),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_account_access_entitlement.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsAccountAccessEntitlementInfo(aws_account_access_entitlement_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_account_access_entitlement = rule(
+    implementation = _cloudformation_aws_account_access_entitlement_impl,
+    doc = "Schema-derived rule for one `aws_account_access_entitlement` entry.",
+    provides = [CloudformationAwsAccountAccessEntitlementInfo],
+    attrs = {
+        "aws_account_access_entitlement_name": attr.string(
+            doc = "Top-level key for this aws_account_access_entitlement in the rendered project. Defaults to the rule name.",
+        ),
+        "ApplicationArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-accountaccess-entitlement.html#cfn-accountaccess-entitlement-applicationarn",
+        ),
+        "Entitlement": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
 CloudformationAwsAcmpcaCertificateInfo = provider(
     doc = "A aws_acmpca_certificate contributed by a target. Shard JSON matches the aws_acmpca_certificate schema.",
     fields = {
@@ -375,7 +496,9 @@ def _cloudformation_aws_amazon_mq_broker_impl(ctx):
         "Logs": parse_json_or_none(ctx.attr.Logs),
         "MaintenanceWindowStartTime": parse_json_or_none(ctx.attr.MaintenanceWindowStartTime),
         "PubliclyAccessible": parse_json_or_none(ctx.attr.PubliclyAccessible),
+        "ResourceShareArns": parse_json_or_none(ctx.attr.ResourceShareArns),
         "SecurityGroups": parse_json_or_none(ctx.attr.SecurityGroups),
+        "StorageSize": parse_json_or_none(ctx.attr.StorageSize),
         "StorageType": ctx.attr.StorageType,
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
         "Tags": parse_json_or_none(ctx.attr.Tags),
@@ -442,8 +565,14 @@ cloudformation_aws_amazon_mq_broker = rule(
         "PubliclyAccessible": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-publiclyaccessible (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
+        "ResourceShareArns": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-resourcesharearns (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
         "SecurityGroups": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-securitygroups (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "StorageSize": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-storagesize (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "StorageType": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amazonmq-broker.html#cfn-amazonmq-broker-storagetype",
@@ -811,6 +940,96 @@ cloudformation_aws_amplify_domain = rule(
         ),
         "SubDomainSettings": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amplify-domain.html#cfn-amplify-domain-subdomainsettings (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsAmplifyJobsInfo = provider(
+    doc = "A aws_amplify_jobs contributed by a target. Shard JSON matches the aws_amplify_jobs schema.",
+    fields = {
+        "aws_amplify_jobs_name": "string: top-level key for this aws_amplify_jobs in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_amplify_jobs_impl(ctx):
+    item_name = ctx.attr.aws_amplify_jobs_name or ctx.label.name
+    payload = {
+        "AppId": ctx.attr.AppId,
+        "BranchName": ctx.attr.BranchName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_amplify_jobs.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsAmplifyJobsInfo(aws_amplify_jobs_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_amplify_jobs = rule(
+    implementation = _cloudformation_aws_amplify_jobs_impl,
+    doc = "Schema-derived rule for one `aws_amplify_jobs` entry.",
+    provides = [CloudformationAwsAmplifyJobsInfo],
+    attrs = {
+        "aws_amplify_jobs_name": attr.string(
+            doc = "Top-level key for this aws_amplify_jobs in the rendered project. Defaults to the rule name.",
+        ),
+        "AppId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amplify-jobs.html#cfn-amplify-jobs-appid",
+        ),
+        "BranchName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amplify-jobs.html#cfn-amplify-jobs-branchname",
+        ),
+    },
+)
+
+CloudformationAwsAmplifyUibuilderCodegenJobInfo = provider(
+    doc = "A aws_amplify_uibuilder_codegen_job contributed by a target. Shard JSON matches the aws_amplify_uibuilder_codegen_job schema.",
+    fields = {
+        "aws_amplify_uibuilder_codegen_job_name": "string: top-level key for this aws_amplify_uibuilder_codegen_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_amplify_uibuilder_codegen_job_impl(ctx):
+    item_name = ctx.attr.aws_amplify_uibuilder_codegen_job_name or ctx.label.name
+    payload = {
+        "AppId": ctx.attr.AppId,
+        "AutoGenerateForms": parse_json_or_none(ctx.attr.AutoGenerateForms),
+        "EnvironmentName": ctx.attr.EnvironmentName,
+        "Features": parse_json_or_none(ctx.attr.Features),
+        "RenderConfig": parse_json_or_none(ctx.attr.RenderConfig),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_amplify_uibuilder_codegen_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsAmplifyUibuilderCodegenJobInfo(aws_amplify_uibuilder_codegen_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_amplify_uibuilder_codegen_job = rule(
+    implementation = _cloudformation_aws_amplify_uibuilder_codegen_job_impl,
+    doc = "Schema-derived rule for one `aws_amplify_uibuilder_codegen_job` entry.",
+    provides = [CloudformationAwsAmplifyUibuilderCodegenJobInfo],
+    attrs = {
+        "aws_amplify_uibuilder_codegen_job_name": attr.string(
+            doc = "Top-level key for this aws_amplify_uibuilder_codegen_job in the rendered project. Defaults to the rule name.",
+        ),
+        "AppId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amplifyuibuilder-codegenjob.html#cfn-amplifyuibuilder-codegenjob-appid",
+        ),
+        "AutoGenerateForms": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amplifyuibuilder-codegenjob.html#cfn-amplifyuibuilder-codegenjob-autogenerateforms (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "EnvironmentName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amplifyuibuilder-codegenjob.html#cfn-amplifyuibuilder-codegenjob-environmentname",
+        ),
+        "Features": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "RenderConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
     },
 )
@@ -2798,6 +3017,49 @@ cloudformation_aws_api_gateway_v2_model = rule(
     },
 )
 
+CloudformationAwsApiGatewayV2PortalProductInfo = provider(
+    doc = "A aws_api_gateway_v2_portal_product contributed by a target. Shard JSON matches the aws_api_gateway_v2_portal_product schema.",
+    fields = {
+        "aws_api_gateway_v2_portal_product_name": "string: top-level key for this aws_api_gateway_v2_portal_product in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_api_gateway_v2_portal_product_impl(ctx):
+    item_name = ctx.attr.aws_api_gateway_v2_portal_product_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "DisplayName": ctx.attr.DisplayName,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_api_gateway_v2_portal_product.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsApiGatewayV2PortalProductInfo(aws_api_gateway_v2_portal_product_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_api_gateway_v2_portal_product = rule(
+    implementation = _cloudformation_aws_api_gateway_v2_portal_product_impl,
+    doc = "Schema-derived rule for one `aws_api_gateway_v2_portal_product` entry.",
+    provides = [CloudformationAwsApiGatewayV2PortalProductInfo],
+    attrs = {
+        "aws_api_gateway_v2_portal_product_name": attr.string(
+            doc = "Top-level key for this aws_api_gateway_v2_portal_product in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-portalproduct.html#cfn-apigatewayv2-portalproduct-description",
+        ),
+        "DisplayName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-portalproduct.html#cfn-apigatewayv2-portalproduct-displayname",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-portalproduct.html#cfn-apigatewayv2-portalproduct-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsApiGatewayV2RouteInfo = provider(
     doc = "A aws_api_gateway_v2_route contributed by a target. Shard JSON matches the aws_api_gateway_v2_route schema.",
     fields = {
@@ -3443,6 +3705,85 @@ cloudformation_aws_app_config_environment = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-environment.html#cfn-appconfig-environment-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsAppConfigExperimentDefinitionInfo = provider(
+    doc = "A aws_app_config_experiment_definition contributed by a target. Shard JSON matches the aws_app_config_experiment_definition schema.",
+    fields = {
+        "aws_app_config_experiment_definition_name": "string: top-level key for this aws_app_config_experiment_definition in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_app_config_experiment_definition_impl(ctx):
+    item_name = ctx.attr.aws_app_config_experiment_definition_name or ctx.label.name
+    payload = {
+        "ApplicationIdentifier": ctx.attr.ApplicationIdentifier,
+        "AudienceDescription": ctx.attr.AudienceDescription,
+        "AudienceRule": ctx.attr.AudienceRule,
+        "ConfigurationProfileIdentifier": ctx.attr.ConfigurationProfileIdentifier,
+        "Control": parse_json_or_none(ctx.attr.Control),
+        "EnvironmentIdentifier": ctx.attr.EnvironmentIdentifier,
+        "FlagKey": ctx.attr.FlagKey,
+        "Hypothesis": ctx.attr.Hypothesis,
+        "LaunchCriteria": ctx.attr.LaunchCriteria,
+        "Name": ctx.attr.Name,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "Treatments": parse_json_or_none(ctx.attr.Treatments),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_app_config_experiment_definition.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsAppConfigExperimentDefinitionInfo(aws_app_config_experiment_definition_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_app_config_experiment_definition = rule(
+    implementation = _cloudformation_aws_app_config_experiment_definition_impl,
+    doc = "Schema-derived rule for one `aws_app_config_experiment_definition` entry.",
+    provides = [CloudformationAwsAppConfigExperimentDefinitionInfo],
+    attrs = {
+        "aws_app_config_experiment_definition_name": attr.string(
+            doc = "Top-level key for this aws_app_config_experiment_definition in the rendered project. Defaults to the rule name.",
+        ),
+        "ApplicationIdentifier": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-experimentdefinition.html#cfn-appconfig-experimentdefinition-applicationidentifier",
+        ),
+        "AudienceDescription": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-experimentdefinition.html#cfn-appconfig-experimentdefinition-audiencedescription",
+        ),
+        "AudienceRule": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-experimentdefinition.html#cfn-appconfig-experimentdefinition-audiencerule",
+        ),
+        "ConfigurationProfileIdentifier": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-experimentdefinition.html#cfn-appconfig-experimentdefinition-configurationprofileidentifier",
+        ),
+        "Control": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "EnvironmentIdentifier": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-experimentdefinition.html#cfn-appconfig-experimentdefinition-environmentidentifier",
+        ),
+        "FlagKey": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-experimentdefinition.html#cfn-appconfig-experimentdefinition-flagkey",
+        ),
+        "Hypothesis": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-experimentdefinition.html#cfn-appconfig-experimentdefinition-hypothesis",
+        ),
+        "LaunchCriteria": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-experimentdefinition.html#cfn-appconfig-experimentdefinition-launchcriteria",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-experimentdefinition.html#cfn-appconfig-experimentdefinition-name",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-experimentdefinition.html#cfn-appconfig-experimentdefinition-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Treatments": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-experimentdefinition.html#cfn-appconfig-experimentdefinition-treatments (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -5217,8 +5558,10 @@ def _cloudformation_aws_app_stream_stack_impl(ctx):
     item_name = ctx.attr.aws_app_stream_stack_name or ctx.label.name
     payload = {
         "AccessEndpoints": parse_json_or_none(ctx.attr.AccessEndpoints),
+        "AgentAccessConfig": parse_json_or_none(ctx.attr.AgentAccessConfig),
         "ApplicationSettings": parse_json_or_none(ctx.attr.ApplicationSettings),
         "AttributesToDelete": parse_json_or_none(ctx.attr.AttributesToDelete),
+        "ContentRedirection": parse_json_or_none(ctx.attr.ContentRedirection),
         "DeleteStorageConnectors": parse_json_or_none(ctx.attr.DeleteStorageConnectors),
         "Description": ctx.attr.Description,
         "DisplayName": ctx.attr.DisplayName,
@@ -5250,11 +5593,17 @@ cloudformation_aws_app_stream_stack = rule(
         "AccessEndpoints": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-stack.html#cfn-appstream-stack-accessendpoints (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
+        "AgentAccessConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
         "ApplicationSettings": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "AttributesToDelete": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-stack.html#cfn-appstream-stack-attributestodelete (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "ContentRedirection": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "DeleteStorageConnectors": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-stack.html#cfn-appstream-stack-deletestorageconnectors (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -6994,6 +7343,37 @@ cloudformation_aws_arczonal_shift_zonal_autoshift_configuration = rule(
     },
 )
 
+CloudformationAwsArtifactReportInfo = provider(
+    doc = "A aws_artifact_report contributed by a target. Shard JSON matches the aws_artifact_report schema.",
+    fields = {
+        "aws_artifact_report_name": "string: top-level key for this aws_artifact_report in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_artifact_report_impl(ctx):
+    item_name = ctx.attr.aws_artifact_report_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_artifact_report.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsArtifactReportInfo(aws_artifact_report_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_artifact_report = rule(
+    implementation = _cloudformation_aws_artifact_report_impl,
+    doc = "Schema-derived rule for one `aws_artifact_report` entry.",
+    provides = [CloudformationAwsArtifactReportInfo],
+    attrs = {
+        "aws_artifact_report_name": attr.string(
+            doc = "Top-level key for this aws_artifact_report in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsAthenaCapacityReservationInfo = provider(
     doc = "A aws_athena_capacity_reservation contributed by a target. Shard JSON matches the aws_athena_capacity_reservation schema.",
     fields = {
@@ -7202,6 +7582,49 @@ cloudformation_aws_athena_prepared_statement = rule(
     },
 )
 
+CloudformationAwsAthenaSessionInfo = provider(
+    doc = "A aws_athena_session contributed by a target. Shard JSON matches the aws_athena_session schema.",
+    fields = {
+        "aws_athena_session_name": "string: top-level key for this aws_athena_session in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_athena_session_impl(ctx):
+    item_name = ctx.attr.aws_athena_session_name or ctx.label.name
+    payload = {
+        "EngineConfiguration": parse_json_or_none(ctx.attr.EngineConfiguration),
+        "ExecutionRole": ctx.attr.ExecutionRole,
+        "WorkGroup": ctx.attr.WorkGroup,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_athena_session.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsAthenaSessionInfo(aws_athena_session_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_athena_session = rule(
+    implementation = _cloudformation_aws_athena_session_impl,
+    doc = "Schema-derived rule for one `aws_athena_session` entry.",
+    provides = [CloudformationAwsAthenaSessionInfo],
+    attrs = {
+        "aws_athena_session_name": attr.string(
+            doc = "Top-level key for this aws_athena_session in the rendered project. Defaults to the rule name.",
+        ),
+        "EngineConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "ExecutionRole": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-athena-session.html#cfn-athena-session-executionrole",
+        ),
+        "WorkGroup": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-athena-session.html#cfn-athena-session-workgroup",
+        ),
+    },
+)
+
 CloudformationAwsAthenaWorkGroupInfo = provider(
     doc = "A aws_athena_work_group contributed by a target. Shard JSON matches the aws_athena_work_group schema.",
     fields = {
@@ -7324,6 +7747,57 @@ cloudformation_aws_audit_manager_assessment = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-auditmanager-assessment.html#cfn-auditmanager-assessment-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsAuditManagerAssessmentFrameworkInfo = provider(
+    doc = "A aws_audit_manager_assessment_framework contributed by a target. Shard JSON matches the aws_audit_manager_assessment_framework schema.",
+    fields = {
+        "aws_audit_manager_assessment_framework_name": "string: top-level key for this aws_audit_manager_assessment_framework in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_audit_manager_assessment_framework_impl(ctx):
+    item_name = ctx.attr.aws_audit_manager_assessment_framework_name or ctx.label.name
+    payload = {
+        "ComplianceType": ctx.attr.ComplianceType,
+        "ControlSets": parse_json_or_none(ctx.attr.ControlSets),
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_audit_manager_assessment_framework.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsAuditManagerAssessmentFrameworkInfo(aws_audit_manager_assessment_framework_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_audit_manager_assessment_framework = rule(
+    implementation = _cloudformation_aws_audit_manager_assessment_framework_impl,
+    doc = "Schema-derived rule for one `aws_audit_manager_assessment_framework` entry.",
+    provides = [CloudformationAwsAuditManagerAssessmentFrameworkInfo],
+    attrs = {
+        "aws_audit_manager_assessment_framework_name": attr.string(
+            doc = "Top-level key for this aws_audit_manager_assessment_framework in the rendered project. Defaults to the rule name.",
+        ),
+        "ComplianceType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-auditmanager-assessmentframework.html#cfn-auditmanager-assessmentframework-compliancetype",
+        ),
+        "ControlSets": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-auditmanager-assessmentframework.html#cfn-auditmanager-assessmentframework-controlsets (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-auditmanager-assessmentframework.html#cfn-auditmanager-assessmentframework-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-auditmanager-assessmentframework.html#cfn-auditmanager-assessmentframework-name",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-auditmanager-assessmentframework.html#cfn-auditmanager-assessmentframework-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -7905,6 +8379,49 @@ cloudformation_aws_auto_scaling_warm_pool = rule(
     },
 )
 
+CloudformationAwsAwsexternalAnthropicWorkspaceInfo = provider(
+    doc = "A aws_awsexternal_anthropic_workspace contributed by a target. Shard JSON matches the aws_awsexternal_anthropic_workspace schema.",
+    fields = {
+        "aws_awsexternal_anthropic_workspace_name": "string: top-level key for this aws_awsexternal_anthropic_workspace in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_awsexternal_anthropic_workspace_impl(ctx):
+    item_name = ctx.attr.aws_awsexternal_anthropic_workspace_name or ctx.label.name
+    payload = {
+        "DataResidency": parse_json_or_none(ctx.attr.DataResidency),
+        "Name": ctx.attr.Name,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_awsexternal_anthropic_workspace.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsAwsexternalAnthropicWorkspaceInfo(aws_awsexternal_anthropic_workspace_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_awsexternal_anthropic_workspace = rule(
+    implementation = _cloudformation_aws_awsexternal_anthropic_workspace_impl,
+    doc = "Schema-derived rule for one `aws_awsexternal_anthropic_workspace` entry.",
+    provides = [CloudformationAwsAwsexternalAnthropicWorkspaceInfo],
+    attrs = {
+        "aws_awsexternal_anthropic_workspace_name": attr.string(
+            doc = "Top-level key for this aws_awsexternal_anthropic_workspace in the rendered project. Defaults to the rule name.",
+        ),
+        "DataResidency": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-awsexternalanthropic-workspace.html#cfn-awsexternalanthropic-workspace-name",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-awsexternalanthropic-workspace.html#cfn-awsexternalanthropic-workspace-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsB2BiCapabilityInfo = provider(
     doc = "A aws_b2_bi_capability contributed by a target. Shard JSON matches the aws_b2_bi_capability schema.",
     fields = {
@@ -8368,6 +8885,53 @@ cloudformation_aws_backup_gateway_hypervisor = rule(
     },
 )
 
+CloudformationAwsBackupLegalHoldInfo = provider(
+    doc = "A aws_backup_legal_hold contributed by a target. Shard JSON matches the aws_backup_legal_hold schema.",
+    fields = {
+        "aws_backup_legal_hold_name": "string: top-level key for this aws_backup_legal_hold in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_backup_legal_hold_impl(ctx):
+    item_name = ctx.attr.aws_backup_legal_hold_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "RecoveryPointSelection": parse_json_or_none(ctx.attr.RecoveryPointSelection),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "Title": ctx.attr.Title,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_backup_legal_hold.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBackupLegalHoldInfo(aws_backup_legal_hold_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_backup_legal_hold = rule(
+    implementation = _cloudformation_aws_backup_legal_hold_impl,
+    doc = "Schema-derived rule for one `aws_backup_legal_hold` entry.",
+    provides = [CloudformationAwsBackupLegalHoldInfo],
+    attrs = {
+        "aws_backup_legal_hold_name": attr.string(
+            doc = "Top-level key for this aws_backup_legal_hold in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backup-legalhold.html#cfn-backup-legalhold-description",
+        ),
+        "RecoveryPointSelection": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backup-legalhold.html#cfn-backup-legalhold-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Title": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backup-legalhold.html#cfn-backup-legalhold-title",
+        ),
+    },
+)
+
 CloudformationAwsBackupLogicallyAirGappedBackupVaultInfo = provider(
     doc = "A aws_backup_logically_air_gapped_backup_vault contributed by a target. Shard JSON matches the aws_backup_logically_air_gapped_backup_vault schema.",
     fields = {
@@ -8596,6 +9160,49 @@ cloudformation_aws_backup_restore_testing_selection = rule(
         ),
         "ValidationWindowHours": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backup-restoretestingselection.html#cfn-backup-restoretestingselection-validationwindowhours (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsBackupSearchSearchJobInfo = provider(
+    doc = "A aws_backup_search_search_job contributed by a target. Shard JSON matches the aws_backup_search_search_job schema.",
+    fields = {
+        "aws_backup_search_search_job_name": "string: top-level key for this aws_backup_search_search_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_backup_search_search_job_impl(ctx):
+    item_name = ctx.attr.aws_backup_search_search_job_name or ctx.label.name
+    payload = {
+        "Name": ctx.attr.Name,
+        "SearchScope": parse_json_or_none(ctx.attr.SearchScope),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_backup_search_search_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBackupSearchSearchJobInfo(aws_backup_search_search_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_backup_search_search_job = rule(
+    implementation = _cloudformation_aws_backup_search_search_job_impl,
+    doc = "Schema-derived rule for one `aws_backup_search_search_job` entry.",
+    provides = [CloudformationAwsBackupSearchSearchJobInfo],
+    attrs = {
+        "aws_backup_search_search_job_name": attr.string(
+            doc = "Top-level key for this aws_backup_search_search_job in the rendered project. Defaults to the rule name.",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backupsearch-searchjob.html#cfn-backupsearch-searchjob-name",
+        ),
+        "SearchScope": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backupsearch-searchjob.html#cfn-backupsearch-searchjob-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -9084,6 +9691,53 @@ cloudformation_aws_batch_service_environment = rule(
     },
 )
 
+CloudformationAwsBcmDashboardInfo = provider(
+    doc = "A aws_bcm_dashboard contributed by a target. Shard JSON matches the aws_bcm_dashboard schema.",
+    fields = {
+        "aws_bcm_dashboard_name": "string: top-level key for this aws_bcm_dashboard in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bcm_dashboard_impl(ctx):
+    item_name = ctx.attr.aws_bcm_dashboard_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "Widgets": parse_json_or_none(ctx.attr.Widgets),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bcm_dashboard.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBcmDashboardInfo(aws_bcm_dashboard_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bcm_dashboard = rule(
+    implementation = _cloudformation_aws_bcm_dashboard_impl,
+    doc = "Schema-derived rule for one `aws_bcm_dashboard` entry.",
+    provides = [CloudformationAwsBcmDashboardInfo],
+    attrs = {
+        "aws_bcm_dashboard_name": attr.string(
+            doc = "Top-level key for this aws_bcm_dashboard in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bcm-dashboard.html#cfn-bcm-dashboard-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bcm-dashboard.html#cfn-bcm-dashboard-name",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bcm-dashboard.html#cfn-bcm-dashboard-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Widgets": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bcm-dashboard.html#cfn-bcm-dashboard-widgets (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsBcmPricingCalculatorBillScenarioInfo = provider(
     doc = "A aws_bcm_pricing_calculator_bill_scenario contributed by a target. Shard JSON matches the aws_bcm_pricing_calculator_bill_scenario schema.",
     fields = {
@@ -9170,6 +9824,41 @@ cloudformation_aws_bcmdata_exports_export = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bcmdataexports-export.html#cfn-bcmdataexports-export-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsBcmdataExportsTableInfo = provider(
+    doc = "A aws_bcmdata_exports_table contributed by a target. Shard JSON matches the aws_bcmdata_exports_table schema.",
+    fields = {
+        "aws_bcmdata_exports_table_name": "string: top-level key for this aws_bcmdata_exports_table in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bcmdata_exports_table_impl(ctx):
+    item_name = ctx.attr.aws_bcmdata_exports_table_name or ctx.label.name
+    payload = {
+        "TableName": ctx.attr.TableName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bcmdata_exports_table.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBcmdataExportsTableInfo(aws_bcmdata_exports_table_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bcmdata_exports_table = rule(
+    implementation = _cloudformation_aws_bcmdata_exports_table_impl,
+    doc = "Schema-derived rule for one `aws_bcmdata_exports_table` entry.",
+    provides = [CloudformationAwsBcmdataExportsTableInfo],
+    attrs = {
+        "aws_bcmdata_exports_table_name": attr.string(
+            doc = "Top-level key for this aws_bcmdata_exports_table in the rendered project. Defaults to the rule name.",
+        ),
+        "TableName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bcmdataexports-table.html#cfn-bcmdataexports-table-tablename",
         ),
     },
 )
@@ -9348,6 +10037,8 @@ def _cloudformation_aws_bedrock_agent_core_api_key_credential_provider_impl(ctx)
     item_name = ctx.attr.aws_bedrock_agent_core_api_key_credential_provider_name or ctx.label.name
     payload = {
         "ApiKey": ctx.attr.ApiKey,
+        "ApiKeySecretConfig": parse_json_or_none(ctx.attr.ApiKeySecretConfig),
+        "ApiKeySecretSource": ctx.attr.ApiKeySecretSource,
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
@@ -9370,11 +10061,48 @@ cloudformation_aws_bedrock_agent_core_api_key_credential_provider = rule(
         "ApiKey": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-apikeycredentialprovider.html#cfn-bedrockagentcore-apikeycredentialprovider-apikey",
         ),
+        "ApiKeySecretConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "ApiKeySecretSource": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-apikeycredentialprovider.html#cfn-bedrockagentcore-apikeycredentialprovider-apikeysecretsource",
+        ),
         "Name": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-apikeycredentialprovider.html#cfn-bedrockagentcore-apikeycredentialprovider-name",
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-apikeycredentialprovider.html#cfn-bedrockagentcore-apikeycredentialprovider-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAgentCoreBrowserInfo = provider(
+    doc = "A aws_bedrock_agent_core_browser contributed by a target. Shard JSON matches the aws_bedrock_agent_core_browser schema.",
+    fields = {
+        "aws_bedrock_agent_core_browser_name": "string: top-level key for this aws_bedrock_agent_core_browser in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_browser_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_browser_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_browser.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCoreBrowserInfo(aws_bedrock_agent_core_browser_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_browser = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_browser_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_browser` entry.",
+    provides = [CloudformationAwsBedrockAgentCoreBrowserInfo],
+    attrs = {
+        "aws_bedrock_agent_core_browser_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_browser in the rendered project. Defaults to the rule name.",
         ),
     },
 )
@@ -9489,6 +10217,88 @@ cloudformation_aws_bedrock_agent_core_browser_profile = rule(
     },
 )
 
+CloudformationAwsBedrockAgentCoreCapacityProviderInfo = provider(
+    doc = "A aws_bedrock_agent_core_capacity_provider contributed by a target. Shard JSON matches the aws_bedrock_agent_core_capacity_provider schema.",
+    fields = {
+        "aws_bedrock_agent_core_capacity_provider_name": "string: top-level key for this aws_bedrock_agent_core_capacity_provider in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_capacity_provider_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_capacity_provider_name or ctx.label.name
+    payload = {
+        "ComputeConfiguration": parse_json_or_none(ctx.attr.ComputeConfiguration),
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+        "PermissionsConfiguration": parse_json_or_none(ctx.attr.PermissionsConfiguration),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_capacity_provider.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCoreCapacityProviderInfo(aws_bedrock_agent_core_capacity_provider_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_capacity_provider = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_capacity_provider_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_capacity_provider` entry.",
+    provides = [CloudformationAwsBedrockAgentCoreCapacityProviderInfo],
+    attrs = {
+        "aws_bedrock_agent_core_capacity_provider_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_capacity_provider in the rendered project. Defaults to the rule name.",
+        ),
+        "ComputeConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-capacityprovider.html#cfn-bedrockagentcore-capacityprovider-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-capacityprovider.html#cfn-bedrockagentcore-capacityprovider-name",
+        ),
+        "PermissionsConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-capacityprovider.html#cfn-bedrockagentcore-capacityprovider-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAgentCoreCodeInterpreterInfo = provider(
+    doc = "A aws_bedrock_agent_core_code_interpreter contributed by a target. Shard JSON matches the aws_bedrock_agent_core_code_interpreter schema.",
+    fields = {
+        "aws_bedrock_agent_core_code_interpreter_name": "string: top-level key for this aws_bedrock_agent_core_code_interpreter in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_code_interpreter_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_code_interpreter_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_code_interpreter.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCoreCodeInterpreterInfo(aws_bedrock_agent_core_code_interpreter_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_code_interpreter = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_code_interpreter_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_code_interpreter` entry.",
+    provides = [CloudformationAwsBedrockAgentCoreCodeInterpreterInfo],
+    attrs = {
+        "aws_bedrock_agent_core_code_interpreter_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_code_interpreter in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsBedrockAgentCoreCodeInterpreterCustomInfo = provider(
     doc = "A aws_bedrock_agent_core_code_interpreter_custom contributed by a target. Shard JSON matches the aws_bedrock_agent_core_code_interpreter_custom schema.",
     fields = {
@@ -9540,6 +10350,171 @@ cloudformation_aws_bedrock_agent_core_code_interpreter_custom = rule(
         ),
         "Tags": attr.string_dict(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-codeinterpretercustom.html#cfn-bedrockagentcore-codeinterpretercustom-tags",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAgentCoreConfigurationBundleInfo = provider(
+    doc = "A aws_bedrock_agent_core_configuration_bundle contributed by a target. Shard JSON matches the aws_bedrock_agent_core_configuration_bundle schema.",
+    fields = {
+        "aws_bedrock_agent_core_configuration_bundle_name": "string: top-level key for this aws_bedrock_agent_core_configuration_bundle in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_configuration_bundle_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_configuration_bundle_name or ctx.label.name
+    payload = {
+        "BranchName": ctx.attr.BranchName,
+        "BundleName": ctx.attr.BundleName,
+        "CommitMessage": ctx.attr.CommitMessage,
+        "Components": parse_json_or_none(ctx.attr.Components),
+        "CreatedBy": parse_json_or_none(ctx.attr.CreatedBy),
+        "Description": ctx.attr.Description,
+        "KmsKeyArn": ctx.attr.KmsKeyArn,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_configuration_bundle.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCoreConfigurationBundleInfo(aws_bedrock_agent_core_configuration_bundle_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_configuration_bundle = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_configuration_bundle_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_configuration_bundle` entry.",
+    provides = [CloudformationAwsBedrockAgentCoreConfigurationBundleInfo],
+    attrs = {
+        "aws_bedrock_agent_core_configuration_bundle_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_configuration_bundle in the rendered project. Defaults to the rule name.",
+        ),
+        "BranchName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-configurationbundle.html#cfn-bedrockagentcore-configurationbundle-branchname",
+        ),
+        "BundleName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-configurationbundle.html#cfn-bedrockagentcore-configurationbundle-bundlename",
+        ),
+        "CommitMessage": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-configurationbundle.html#cfn-bedrockagentcore-configurationbundle-commitmessage",
+        ),
+        "Components": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-configurationbundle.html#cfn-bedrockagentcore-configurationbundle-components (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "CreatedBy": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-configurationbundle.html#cfn-bedrockagentcore-configurationbundle-description",
+        ),
+        "KmsKeyArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-configurationbundle.html#cfn-bedrockagentcore-configurationbundle-kmskeyarn",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-configurationbundle.html#cfn-bedrockagentcore-configurationbundle-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAgentCoreConfigurationBundleVersionInfo = provider(
+    doc = "A aws_bedrock_agent_core_configuration_bundle_version contributed by a target. Shard JSON matches the aws_bedrock_agent_core_configuration_bundle_version schema.",
+    fields = {
+        "aws_bedrock_agent_core_configuration_bundle_version_name": "string: top-level key for this aws_bedrock_agent_core_configuration_bundle_version in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_configuration_bundle_version_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_configuration_bundle_version_name or ctx.label.name
+    payload = {
+        "BranchName": ctx.attr.BranchName,
+        "CommitMessage": ctx.attr.CommitMessage,
+        "Components": parse_json_or_none(ctx.attr.Components),
+        "CreatedBy": parse_json_or_none(ctx.attr.CreatedBy),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_configuration_bundle_version.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCoreConfigurationBundleVersionInfo(aws_bedrock_agent_core_configuration_bundle_version_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_configuration_bundle_version = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_configuration_bundle_version_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_configuration_bundle_version` entry.",
+    provides = [CloudformationAwsBedrockAgentCoreConfigurationBundleVersionInfo],
+    attrs = {
+        "aws_bedrock_agent_core_configuration_bundle_version_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_configuration_bundle_version in the rendered project. Defaults to the rule name.",
+        ),
+        "BranchName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-configurationbundleversion.html#cfn-bedrockagentcore-configurationbundleversion-branchname",
+        ),
+        "CommitMessage": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-configurationbundleversion.html#cfn-bedrockagentcore-configurationbundleversion-commitmessage",
+        ),
+        "Components": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-configurationbundleversion.html#cfn-bedrockagentcore-configurationbundleversion-components (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "CreatedBy": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAgentCoreDatasetInfo = provider(
+    doc = "A aws_bedrock_agent_core_dataset contributed by a target. Shard JSON matches the aws_bedrock_agent_core_dataset schema.",
+    fields = {
+        "aws_bedrock_agent_core_dataset_name": "string: top-level key for this aws_bedrock_agent_core_dataset in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_dataset_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_dataset_name or ctx.label.name
+    payload = {
+        "DatasetName": ctx.attr.DatasetName,
+        "Description": ctx.attr.Description,
+        "KmsKeyArn": ctx.attr.KmsKeyArn,
+        "SchemaType": ctx.attr.SchemaType,
+        "Source": parse_json_or_none(ctx.attr.Source),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_dataset.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCoreDatasetInfo(aws_bedrock_agent_core_dataset_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_dataset = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_dataset_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_dataset` entry.",
+    provides = [CloudformationAwsBedrockAgentCoreDatasetInfo],
+    attrs = {
+        "aws_bedrock_agent_core_dataset_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_dataset in the rendered project. Defaults to the rule name.",
+        ),
+        "DatasetName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-dataset.html#cfn-bedrockagentcore-dataset-datasetname",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-dataset.html#cfn-bedrockagentcore-dataset-description",
+        ),
+        "KmsKeyArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-dataset.html#cfn-bedrockagentcore-dataset-kmskeyarn",
+        ),
+        "SchemaType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-dataset.html#cfn-bedrockagentcore-dataset-schematype",
+        ),
+        "Source": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-dataset.html#cfn-bedrockagentcore-dataset-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -9619,7 +10594,7 @@ def _cloudformation_aws_bedrock_agent_core_gateway_impl(ctx):
         "Name": ctx.attr.Name,
         "PolicyEngineConfiguration": parse_json_or_none(ctx.attr.PolicyEngineConfiguration),
         "ProtocolConfiguration": parse_json_or_none(ctx.attr.ProtocolConfiguration),
-        "ProtocolType": ctx.attr.ProtocolType,
+        "ProtocolType": parse_json_or_none(ctx.attr.ProtocolType),
         "RoleArn": ctx.attr.RoleArn,
         "Tags": ctx.attr.Tags,
     }
@@ -9667,13 +10642,115 @@ cloudformation_aws_bedrock_agent_core_gateway = rule(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "ProtocolType": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gateway.html#cfn-bedrockagentcore-gateway-protocoltype",
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gateway.html#cfn-bedrockagentcore-gateway-protocoltype (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "RoleArn": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gateway.html#cfn-bedrockagentcore-gateway-rolearn",
         ),
         "Tags": attr.string_dict(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gateway.html#cfn-bedrockagentcore-gateway-tags",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAgentCoreGatewayRateLimitInfo = provider(
+    doc = "A aws_bedrock_agent_core_gateway_rate_limit contributed by a target. Shard JSON matches the aws_bedrock_agent_core_gateway_rate_limit schema.",
+    fields = {
+        "aws_bedrock_agent_core_gateway_rate_limit_name": "string: top-level key for this aws_bedrock_agent_core_gateway_rate_limit in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_gateway_rate_limit_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_gateway_rate_limit_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "DimensionKeys": parse_json_or_none(ctx.attr.DimensionKeys),
+        "Entries": parse_json_or_none(ctx.attr.Entries),
+        "GatewayIdentifier": ctx.attr.GatewayIdentifier,
+        "RateLimitId": ctx.attr.RateLimitId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_gateway_rate_limit.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCoreGatewayRateLimitInfo(aws_bedrock_agent_core_gateway_rate_limit_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_gateway_rate_limit = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_gateway_rate_limit_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_gateway_rate_limit` entry.",
+    provides = [CloudformationAwsBedrockAgentCoreGatewayRateLimitInfo],
+    attrs = {
+        "aws_bedrock_agent_core_gateway_rate_limit_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_gateway_rate_limit in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gatewayratelimit.html#cfn-bedrockagentcore-gatewayratelimit-description",
+        ),
+        "DimensionKeys": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gatewayratelimit.html#cfn-bedrockagentcore-gatewayratelimit-dimensionkeys (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Entries": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gatewayratelimit.html#cfn-bedrockagentcore-gatewayratelimit-entries (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "GatewayIdentifier": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gatewayratelimit.html#cfn-bedrockagentcore-gatewayratelimit-gatewayidentifier",
+        ),
+        "RateLimitId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gatewayratelimit.html#cfn-bedrockagentcore-gatewayratelimit-ratelimitid",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAgentCoreGatewayRuleInfo = provider(
+    doc = "A aws_bedrock_agent_core_gateway_rule contributed by a target. Shard JSON matches the aws_bedrock_agent_core_gateway_rule schema.",
+    fields = {
+        "aws_bedrock_agent_core_gateway_rule_name": "string: top-level key for this aws_bedrock_agent_core_gateway_rule in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_gateway_rule_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_gateway_rule_name or ctx.label.name
+    payload = {
+        "Actions": parse_json_or_none(ctx.attr.Actions),
+        "Conditions": parse_json_or_none(ctx.attr.Conditions),
+        "Description": ctx.attr.Description,
+        "GatewayIdentifier": ctx.attr.GatewayIdentifier,
+        "Priority": parse_json_or_none(ctx.attr.Priority),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_gateway_rule.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCoreGatewayRuleInfo(aws_bedrock_agent_core_gateway_rule_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_gateway_rule = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_gateway_rule_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_gateway_rule` entry.",
+    provides = [CloudformationAwsBedrockAgentCoreGatewayRuleInfo],
+    attrs = {
+        "aws_bedrock_agent_core_gateway_rule_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_gateway_rule in the rendered project. Defaults to the rule name.",
+        ),
+        "Actions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gatewayrule.html#cfn-bedrockagentcore-gatewayrule-actions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Conditions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gatewayrule.html#cfn-bedrockagentcore-gatewayrule-conditions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gatewayrule.html#cfn-bedrockagentcore-gatewayrule-description",
+        ),
+        "GatewayIdentifier": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gatewayrule.html#cfn-bedrockagentcore-gatewayrule-gatewayidentifier",
+        ),
+        "Priority": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gatewayrule.html#cfn-bedrockagentcore-gatewayrule-priority (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -9694,6 +10771,7 @@ def _cloudformation_aws_bedrock_agent_core_gateway_target_impl(ctx):
         "GatewayIdentifier": ctx.attr.GatewayIdentifier,
         "MetadataConfiguration": parse_json_or_none(ctx.attr.MetadataConfiguration),
         "Name": ctx.attr.Name,
+        "PrivateEndpoint": parse_json_or_none(ctx.attr.PrivateEndpoint),
         "TargetConfiguration": parse_json_or_none(ctx.attr.TargetConfiguration),
     }
     payload = strip_empty(payload)
@@ -9727,8 +10805,196 @@ cloudformation_aws_bedrock_agent_core_gateway_target = rule(
         "Name": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gatewaytarget.html#cfn-bedrockagentcore-gatewaytarget-name",
         ),
+        "PrivateEndpoint": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
         "TargetConfiguration": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAgentCoreHarnessInfo = provider(
+    doc = "A aws_bedrock_agent_core_harness contributed by a target. Shard JSON matches the aws_bedrock_agent_core_harness schema.",
+    fields = {
+        "aws_bedrock_agent_core_harness_name": "string: top-level key for this aws_bedrock_agent_core_harness in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_harness_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_harness_name or ctx.label.name
+    payload = {
+        "AllowedTools": parse_json_or_none(ctx.attr.AllowedTools),
+        "AuthorizerConfiguration": parse_json_or_none(ctx.attr.AuthorizerConfiguration),
+        "Environment": parse_json_or_none(ctx.attr.Environment),
+        "EnvironmentArtifact": parse_json_or_none(ctx.attr.EnvironmentArtifact),
+        "EnvironmentVariables": ctx.attr.EnvironmentVariables,
+        "ExecutionRoleArn": ctx.attr.ExecutionRoleArn,
+        "HarnessName": ctx.attr.HarnessName,
+        "MaxIterations": parse_json_or_none(ctx.attr.MaxIterations),
+        "MaxTokens": parse_json_or_none(ctx.attr.MaxTokens),
+        "Memory": parse_json_or_none(ctx.attr.Memory),
+        "Model": parse_json_or_none(ctx.attr.Model),
+        "Skills": parse_json_or_none(ctx.attr.Skills),
+        "SystemPrompt": parse_json_or_none(ctx.attr.SystemPrompt),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "TimeoutSeconds": parse_json_or_none(ctx.attr.TimeoutSeconds),
+        "Tools": parse_json_or_none(ctx.attr.Tools),
+        "Truncation": parse_json_or_none(ctx.attr.Truncation),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_harness.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCoreHarnessInfo(aws_bedrock_agent_core_harness_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_harness = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_harness_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_harness` entry.",
+    provides = [CloudformationAwsBedrockAgentCoreHarnessInfo],
+    attrs = {
+        "aws_bedrock_agent_core_harness_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_harness in the rendered project. Defaults to the rule name.",
+        ),
+        "AllowedTools": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harness.html#cfn-bedrockagentcore-harness-allowedtools (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "AuthorizerConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Environment": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "EnvironmentArtifact": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "EnvironmentVariables": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harness.html#cfn-bedrockagentcore-harness-environmentvariables",
+        ),
+        "ExecutionRoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harness.html#cfn-bedrockagentcore-harness-executionrolearn",
+        ),
+        "HarnessName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harness.html#cfn-bedrockagentcore-harness-harnessname",
+        ),
+        "MaxIterations": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harness.html#cfn-bedrockagentcore-harness-maxiterations (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "MaxTokens": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harness.html#cfn-bedrockagentcore-harness-maxtokens (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Memory": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Model": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Skills": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harness.html#cfn-bedrockagentcore-harness-skills (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "SystemPrompt": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harness.html#cfn-bedrockagentcore-harness-systemprompt (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harness.html#cfn-bedrockagentcore-harness-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TimeoutSeconds": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harness.html#cfn-bedrockagentcore-harness-timeoutseconds (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Tools": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harness.html#cfn-bedrockagentcore-harness-tools (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Truncation": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAgentCoreHarnessEndpointInfo = provider(
+    doc = "A aws_bedrock_agent_core_harness_endpoint contributed by a target. Shard JSON matches the aws_bedrock_agent_core_harness_endpoint schema.",
+    fields = {
+        "aws_bedrock_agent_core_harness_endpoint_name": "string: top-level key for this aws_bedrock_agent_core_harness_endpoint in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_harness_endpoint_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_harness_endpoint_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "EndpointName": ctx.attr.EndpointName,
+        "HarnessId": ctx.attr.HarnessId,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "TargetVersion": ctx.attr.TargetVersion,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_harness_endpoint.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCoreHarnessEndpointInfo(aws_bedrock_agent_core_harness_endpoint_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_harness_endpoint = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_harness_endpoint_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_harness_endpoint` entry.",
+    provides = [CloudformationAwsBedrockAgentCoreHarnessEndpointInfo],
+    attrs = {
+        "aws_bedrock_agent_core_harness_endpoint_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_harness_endpoint in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harnessendpoint.html#cfn-bedrockagentcore-harnessendpoint-description",
+        ),
+        "EndpointName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harnessendpoint.html#cfn-bedrockagentcore-harnessendpoint-endpointname",
+        ),
+        "HarnessId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harnessendpoint.html#cfn-bedrockagentcore-harnessendpoint-harnessid",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harnessendpoint.html#cfn-bedrockagentcore-harnessendpoint-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TargetVersion": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harnessendpoint.html#cfn-bedrockagentcore-harnessendpoint-targetversion",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAgentCoreHarnessVersionInfo = provider(
+    doc = "A aws_bedrock_agent_core_harness_version contributed by a target. Shard JSON matches the aws_bedrock_agent_core_harness_version schema.",
+    fields = {
+        "aws_bedrock_agent_core_harness_version_name": "string: top-level key for this aws_bedrock_agent_core_harness_version in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_harness_version_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_harness_version_name or ctx.label.name
+    payload = {
+        "HarnessId": ctx.attr.HarnessId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_harness_version.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCoreHarnessVersionInfo(aws_bedrock_agent_core_harness_version_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_harness_version = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_harness_version_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_harness_version` entry.",
+    provides = [CloudformationAwsBedrockAgentCoreHarnessVersionInfo],
+    attrs = {
+        "aws_bedrock_agent_core_harness_version_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_harness_version in the rendered project. Defaults to the rule name.",
+        ),
+        "HarnessId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-harnessversion.html#cfn-bedrockagentcore-harnessversion-harnessid",
         ),
     },
 )
@@ -9858,11 +11124,13 @@ CloudformationAwsBedrockAgentCoreOnlineEvaluationConfigInfo = provider(
 def _cloudformation_aws_bedrock_agent_core_online_evaluation_config_impl(ctx):
     item_name = ctx.attr.aws_bedrock_agent_core_online_evaluation_config_name or ctx.label.name
     payload = {
+        "ClusteringConfig": parse_json_or_none(ctx.attr.ClusteringConfig),
         "DataSourceConfig": parse_json_or_none(ctx.attr.DataSourceConfig),
         "Description": ctx.attr.Description,
         "EvaluationExecutionRoleArn": ctx.attr.EvaluationExecutionRoleArn,
         "Evaluators": parse_json_or_none(ctx.attr.Evaluators),
         "ExecutionStatus": ctx.attr.ExecutionStatus,
+        "Insights": parse_json_or_none(ctx.attr.Insights),
         "OnlineEvaluationConfigName": ctx.attr.OnlineEvaluationConfigName,
         "Rule": parse_json_or_none(ctx.attr.Rule),
         "Tags": parse_json_or_none(ctx.attr.Tags),
@@ -9883,6 +11151,9 @@ cloudformation_aws_bedrock_agent_core_online_evaluation_config = rule(
         "aws_bedrock_agent_core_online_evaluation_config_name": attr.string(
             doc = "Top-level key for this aws_bedrock_agent_core_online_evaluation_config in the rendered project. Defaults to the rule name.",
         ),
+        "ClusteringConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
         "DataSourceConfig": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
@@ -9898,6 +11169,9 @@ cloudformation_aws_bedrock_agent_core_online_evaluation_config = rule(
         "ExecutionStatus": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-onlineevaluationconfig.html#cfn-bedrockagentcore-onlineevaluationconfig-executionstatus",
         ),
+        "Insights": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-onlineevaluationconfig.html#cfn-bedrockagentcore-onlineevaluationconfig-insights (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
         "OnlineEvaluationConfigName": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-onlineevaluationconfig.html#cfn-bedrockagentcore-onlineevaluationconfig-onlineevaluationconfigname",
         ),
@@ -9906,6 +11180,159 @@ cloudformation_aws_bedrock_agent_core_online_evaluation_config = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-onlineevaluationconfig.html#cfn-bedrockagentcore-onlineevaluationconfig-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAgentCorePaymentConnectorInfo = provider(
+    doc = "A aws_bedrock_agent_core_payment_connector contributed by a target. Shard JSON matches the aws_bedrock_agent_core_payment_connector schema.",
+    fields = {
+        "aws_bedrock_agent_core_payment_connector_name": "string: top-level key for this aws_bedrock_agent_core_payment_connector in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_payment_connector_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_payment_connector_name or ctx.label.name
+    payload = {
+        "ConnectorName": ctx.attr.ConnectorName,
+        "ConnectorType": ctx.attr.ConnectorType,
+        "CredentialProviderConfigurations": parse_json_or_none(ctx.attr.CredentialProviderConfigurations),
+        "Description": ctx.attr.Description,
+        "PaymentManagerId": ctx.attr.PaymentManagerId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_payment_connector.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCorePaymentConnectorInfo(aws_bedrock_agent_core_payment_connector_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_payment_connector = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_payment_connector_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_payment_connector` entry.",
+    provides = [CloudformationAwsBedrockAgentCorePaymentConnectorInfo],
+    attrs = {
+        "aws_bedrock_agent_core_payment_connector_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_payment_connector in the rendered project. Defaults to the rule name.",
+        ),
+        "ConnectorName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-paymentconnector.html#cfn-bedrockagentcore-paymentconnector-connectorname",
+        ),
+        "ConnectorType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-paymentconnector.html#cfn-bedrockagentcore-paymentconnector-connectortype",
+        ),
+        "CredentialProviderConfigurations": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-paymentconnector.html#cfn-bedrockagentcore-paymentconnector-credentialproviderconfigurations (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-paymentconnector.html#cfn-bedrockagentcore-paymentconnector-description",
+        ),
+        "PaymentManagerId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-paymentconnector.html#cfn-bedrockagentcore-paymentconnector-paymentmanagerid",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAgentCorePaymentCredentialProviderInfo = provider(
+    doc = "A aws_bedrock_agent_core_payment_credential_provider contributed by a target. Shard JSON matches the aws_bedrock_agent_core_payment_credential_provider schema.",
+    fields = {
+        "aws_bedrock_agent_core_payment_credential_provider_name": "string: top-level key for this aws_bedrock_agent_core_payment_credential_provider in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_payment_credential_provider_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_payment_credential_provider_name or ctx.label.name
+    payload = {
+        "CredentialProviderVendor": ctx.attr.CredentialProviderVendor,
+        "Name": ctx.attr.Name,
+        "ProviderConfigurationInput": parse_json_or_none(ctx.attr.ProviderConfigurationInput),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_payment_credential_provider.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCorePaymentCredentialProviderInfo(aws_bedrock_agent_core_payment_credential_provider_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_payment_credential_provider = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_payment_credential_provider_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_payment_credential_provider` entry.",
+    provides = [CloudformationAwsBedrockAgentCorePaymentCredentialProviderInfo],
+    attrs = {
+        "aws_bedrock_agent_core_payment_credential_provider_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_payment_credential_provider in the rendered project. Defaults to the rule name.",
+        ),
+        "CredentialProviderVendor": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-paymentcredentialprovider.html#cfn-bedrockagentcore-paymentcredentialprovider-credentialprovidervendor",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-paymentcredentialprovider.html#cfn-bedrockagentcore-paymentcredentialprovider-name",
+        ),
+        "ProviderConfigurationInput": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-paymentcredentialprovider.html#cfn-bedrockagentcore-paymentcredentialprovider-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAgentCorePaymentManagerInfo = provider(
+    doc = "A aws_bedrock_agent_core_payment_manager contributed by a target. Shard JSON matches the aws_bedrock_agent_core_payment_manager schema.",
+    fields = {
+        "aws_bedrock_agent_core_payment_manager_name": "string: top-level key for this aws_bedrock_agent_core_payment_manager in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_payment_manager_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_payment_manager_name or ctx.label.name
+    payload = {
+        "AuthorizerConfiguration": parse_json_or_none(ctx.attr.AuthorizerConfiguration),
+        "AuthorizerType": ctx.attr.AuthorizerType,
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+        "RoleArn": ctx.attr.RoleArn,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_payment_manager.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCorePaymentManagerInfo(aws_bedrock_agent_core_payment_manager_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_payment_manager = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_payment_manager_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_payment_manager` entry.",
+    provides = [CloudformationAwsBedrockAgentCorePaymentManagerInfo],
+    attrs = {
+        "aws_bedrock_agent_core_payment_manager_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_payment_manager in the rendered project. Defaults to the rule name.",
+        ),
+        "AuthorizerConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "AuthorizerType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-paymentmanager.html#cfn-bedrockagentcore-paymentmanager-authorizertype",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-paymentmanager.html#cfn-bedrockagentcore-paymentmanager-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-paymentmanager.html#cfn-bedrockagentcore-paymentmanager-name",
+        ),
+        "RoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-paymentmanager.html#cfn-bedrockagentcore-paymentmanager-rolearn",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-paymentmanager.html#cfn-bedrockagentcore-paymentmanager-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -9923,6 +11350,7 @@ def _cloudformation_aws_bedrock_agent_core_policy_impl(ctx):
     payload = {
         "Definition": parse_json_or_none(ctx.attr.Definition),
         "Description": ctx.attr.Description,
+        "EnforcementMode": ctx.attr.EnforcementMode,
         "Name": ctx.attr.Name,
         "PolicyEngineId": ctx.attr.PolicyEngineId,
         "ValidationMode": ctx.attr.ValidationMode,
@@ -9948,6 +11376,9 @@ cloudformation_aws_bedrock_agent_core_policy = rule(
         ),
         "Description": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-policy.html#cfn-bedrockagentcore-policy-description",
+        ),
+        "EnforcementMode": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-policy.html#cfn-bedrockagentcore-policy-enforcementmode",
         ),
         "Name": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-policy.html#cfn-bedrockagentcore-policy-name",
@@ -10004,6 +11435,88 @@ cloudformation_aws_bedrock_agent_core_policy_engine = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-policyengine.html#cfn-bedrockagentcore-policyengine-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAgentCorePolicyGenerationInfo = provider(
+    doc = "A aws_bedrock_agent_core_policy_generation contributed by a target. Shard JSON matches the aws_bedrock_agent_core_policy_generation schema.",
+    fields = {
+        "aws_bedrock_agent_core_policy_generation_name": "string: top-level key for this aws_bedrock_agent_core_policy_generation in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_policy_generation_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_policy_generation_name or ctx.label.name
+    payload = {
+        "Name": ctx.attr.Name,
+        "PolicyEngineId": ctx.attr.PolicyEngineId,
+        "Resource": parse_json_or_none(ctx.attr.Resource),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_policy_generation.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCorePolicyGenerationInfo(aws_bedrock_agent_core_policy_generation_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_policy_generation = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_policy_generation_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_policy_generation` entry.",
+    provides = [CloudformationAwsBedrockAgentCorePolicyGenerationInfo],
+    attrs = {
+        "aws_bedrock_agent_core_policy_generation_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_policy_generation in the rendered project. Defaults to the rule name.",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-policygeneration.html#cfn-bedrockagentcore-policygeneration-name",
+        ),
+        "PolicyEngineId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-policygeneration.html#cfn-bedrockagentcore-policygeneration-policyengineid",
+        ),
+        "Resource": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAgentCoreResourcePolicyInfo = provider(
+    doc = "A aws_bedrock_agent_core_resource_policy contributed by a target. Shard JSON matches the aws_bedrock_agent_core_resource_policy schema.",
+    fields = {
+        "aws_bedrock_agent_core_resource_policy_name": "string: top-level key for this aws_bedrock_agent_core_resource_policy in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_resource_policy_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_resource_policy_name or ctx.label.name
+    payload = {
+        "Policy": ctx.attr.Policy,
+        "ResourceArn": ctx.attr.ResourceArn,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_resource_policy.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCoreResourcePolicyInfo(aws_bedrock_agent_core_resource_policy_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_resource_policy = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_resource_policy_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_resource_policy` entry.",
+    provides = [CloudformationAwsBedrockAgentCoreResourcePolicyInfo],
+    attrs = {
+        "aws_bedrock_agent_core_resource_policy_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_resource_policy in the rendered project. Defaults to the rule name.",
+        ),
+        "Policy": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-resourcepolicy.html#cfn-bedrockagentcore-resourcepolicy-policy",
+        ),
+        "ResourceArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-resourcepolicy.html#cfn-bedrockagentcore-resourcepolicy-resourcearn",
         ),
     },
 )
@@ -10138,6 +11651,37 @@ cloudformation_aws_bedrock_agent_core_runtime_endpoint = rule(
     },
 )
 
+CloudformationAwsBedrockAgentCoreTokenVaultInfo = provider(
+    doc = "A aws_bedrock_agent_core_token_vault contributed by a target. Shard JSON matches the aws_bedrock_agent_core_token_vault schema.",
+    fields = {
+        "aws_bedrock_agent_core_token_vault_name": "string: top-level key for this aws_bedrock_agent_core_token_vault in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_agent_core_token_vault_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_agent_core_token_vault_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_agent_core_token_vault.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAgentCoreTokenVaultInfo(aws_bedrock_agent_core_token_vault_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_agent_core_token_vault = rule(
+    implementation = _cloudformation_aws_bedrock_agent_core_token_vault_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_agent_core_token_vault` entry.",
+    provides = [CloudformationAwsBedrockAgentCoreTokenVaultInfo],
+    attrs = {
+        "aws_bedrock_agent_core_token_vault_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_agent_core_token_vault in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsBedrockAgentCoreWorkloadIdentityInfo = provider(
     doc = "A aws_bedrock_agent_core_workload_identity contributed by a target. Shard JSON matches the aws_bedrock_agent_core_workload_identity schema.",
     fields = {
@@ -10224,6 +11768,41 @@ cloudformation_aws_bedrock_application_inference_profile = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-applicationinferenceprofile.html#cfn-bedrock-applicationinferenceprofile-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsBedrockAsyncInvokeInfo = provider(
+    doc = "A aws_bedrock_async_invoke contributed by a target. Shard JSON matches the aws_bedrock_async_invoke schema.",
+    fields = {
+        "aws_bedrock_async_invoke_name": "string: top-level key for this aws_bedrock_async_invoke in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_async_invoke_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_async_invoke_name or ctx.label.name
+    payload = {
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_async_invoke.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockAsyncInvokeInfo(aws_bedrock_async_invoke_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_async_invoke = rule(
+    implementation = _cloudformation_aws_bedrock_async_invoke_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_async_invoke` entry.",
+    provides = [CloudformationAwsBedrockAsyncInvokeInfo],
+    attrs = {
+        "aws_bedrock_async_invoke_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_async_invoke in the rendered project. Defaults to the rule name.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-asyncinvoke.html#cfn-bedrock-asyncinvoke-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -10554,6 +12133,37 @@ cloudformation_aws_bedrock_data_source = rule(
     },
 )
 
+CloudformationAwsBedrockDefaultPromptRouterInfo = provider(
+    doc = "A aws_bedrock_default_prompt_router contributed by a target. Shard JSON matches the aws_bedrock_default_prompt_router schema.",
+    fields = {
+        "aws_bedrock_default_prompt_router_name": "string: top-level key for this aws_bedrock_default_prompt_router in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_default_prompt_router_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_default_prompt_router_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_default_prompt_router.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockDefaultPromptRouterInfo(aws_bedrock_default_prompt_router_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_default_prompt_router = rule(
+    implementation = _cloudformation_aws_bedrock_default_prompt_router_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_default_prompt_router` entry.",
+    provides = [CloudformationAwsBedrockDefaultPromptRouterInfo],
+    attrs = {
+        "aws_bedrock_default_prompt_router_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_default_prompt_router in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsBedrockEnforcedGuardrailConfigurationInfo = provider(
     doc = "A aws_bedrock_enforced_guardrail_configuration contributed by a target. Shard JSON matches the aws_bedrock_enforced_guardrail_configuration schema.",
     fields = {
@@ -10762,6 +12372,37 @@ cloudformation_aws_bedrock_flow_version = rule(
         ),
         "FlowArn": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-flowversion.html#cfn-bedrock-flowversion-flowarn",
+        ),
+    },
+)
+
+CloudformationAwsBedrockFoundationModelInfo = provider(
+    doc = "A aws_bedrock_foundation_model contributed by a target. Shard JSON matches the aws_bedrock_foundation_model schema.",
+    fields = {
+        "aws_bedrock_foundation_model_name": "string: top-level key for this aws_bedrock_foundation_model in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_foundation_model_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_foundation_model_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_foundation_model.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockFoundationModelInfo(aws_bedrock_foundation_model_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_foundation_model = rule(
+    implementation = _cloudformation_aws_bedrock_foundation_model_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_foundation_model` entry.",
+    provides = [CloudformationAwsBedrockFoundationModelInfo],
+    attrs = {
+        "aws_bedrock_foundation_model_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_foundation_model in the rendered project. Defaults to the rule name.",
         ),
     },
 )
@@ -10998,6 +12639,45 @@ cloudformation_aws_bedrock_knowledge_base = rule(
     },
 )
 
+CloudformationAwsBedrockKnowledgeBasePolicyInfo = provider(
+    doc = "A aws_bedrock_knowledge_base_policy contributed by a target. Shard JSON matches the aws_bedrock_knowledge_base_policy schema.",
+    fields = {
+        "aws_bedrock_knowledge_base_policy_name": "string: top-level key for this aws_bedrock_knowledge_base_policy in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_knowledge_base_policy_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_knowledge_base_policy_name or ctx.label.name
+    payload = {
+        "KnowledgeBaseId": ctx.attr.KnowledgeBaseId,
+        "PolicyDocument": parse_json_or_none(ctx.attr.PolicyDocument),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_knowledge_base_policy.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockKnowledgeBasePolicyInfo(aws_bedrock_knowledge_base_policy_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_knowledge_base_policy = rule(
+    implementation = _cloudformation_aws_bedrock_knowledge_base_policy_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_knowledge_base_policy` entry.",
+    provides = [CloudformationAwsBedrockKnowledgeBasePolicyInfo],
+    attrs = {
+        "aws_bedrock_knowledge_base_policy_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_knowledge_base_policy in the rendered project. Defaults to the rule name.",
+        ),
+        "KnowledgeBaseId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-knowledgebasepolicy.html#cfn-bedrock-knowledgebasepolicy-knowledgebaseid",
+        ),
+        "PolicyDocument": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-knowledgebasepolicy.html#cfn-bedrock-knowledgebasepolicy-policydocument (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsBedrockMantleProjectInfo = provider(
     doc = "A aws_bedrock_mantle_project contributed by a target. Shard JSON matches the aws_bedrock_mantle_project schema.",
     fields = {
@@ -11033,6 +12713,88 @@ cloudformation_aws_bedrock_mantle_project = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockmantle-project.html#cfn-bedrockmantle-project-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsBedrockModelImportJobInfo = provider(
+    doc = "A aws_bedrock_model_import_job contributed by a target. Shard JSON matches the aws_bedrock_model_import_job schema.",
+    fields = {
+        "aws_bedrock_model_import_job_name": "string: top-level key for this aws_bedrock_model_import_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_model_import_job_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_model_import_job_name or ctx.label.name
+    payload = {
+        "ImportedModelKmsKeyArn": ctx.attr.ImportedModelKmsKeyArn,
+        "ModelDataSource": parse_json_or_none(ctx.attr.ModelDataSource),
+        "RoleArn": ctx.attr.RoleArn,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_model_import_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockModelImportJobInfo(aws_bedrock_model_import_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_model_import_job = rule(
+    implementation = _cloudformation_aws_bedrock_model_import_job_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_model_import_job` entry.",
+    provides = [CloudformationAwsBedrockModelImportJobInfo],
+    attrs = {
+        "aws_bedrock_model_import_job_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_model_import_job in the rendered project. Defaults to the rule name.",
+        ),
+        "ImportedModelKmsKeyArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-modelimportjob.html#cfn-bedrock-modelimportjob-importedmodelkmskeyarn",
+        ),
+        "ModelDataSource": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "RoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-modelimportjob.html#cfn-bedrock-modelimportjob-rolearn",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-modelimportjob.html#cfn-bedrock-modelimportjob-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "VpcConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsBedrockModelInvocationJobInfo = provider(
+    doc = "A aws_bedrock_model_invocation_job contributed by a target. Shard JSON matches the aws_bedrock_model_invocation_job schema.",
+    fields = {
+        "aws_bedrock_model_invocation_job_name": "string: top-level key for this aws_bedrock_model_invocation_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_model_invocation_job_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_model_invocation_job_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_model_invocation_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockModelInvocationJobInfo(aws_bedrock_model_invocation_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_model_invocation_job = rule(
+    implementation = _cloudformation_aws_bedrock_model_invocation_job_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_model_invocation_job` entry.",
+    provides = [CloudformationAwsBedrockModelInvocationJobInfo],
+    attrs = {
+        "aws_bedrock_model_invocation_job_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_model_invocation_job in the rendered project. Defaults to the rule name.",
         ),
     },
 )
@@ -11170,6 +12932,49 @@ cloudformation_aws_bedrock_resource_policy = rule(
         ),
         "ResourceArn": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-resourcepolicy.html#cfn-bedrock-resourcepolicy-resourcearn",
+        ),
+    },
+)
+
+CloudformationAwsBedrockSessionInfo = provider(
+    doc = "A aws_bedrock_session contributed by a target. Shard JSON matches the aws_bedrock_session schema.",
+    fields = {
+        "aws_bedrock_session_name": "string: top-level key for this aws_bedrock_session in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_bedrock_session_impl(ctx):
+    item_name = ctx.attr.aws_bedrock_session_name or ctx.label.name
+    payload = {
+        "EncryptionKeyArn": ctx.attr.EncryptionKeyArn,
+        "SessionMetadata": ctx.attr.SessionMetadata,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_bedrock_session.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBedrockSessionInfo(aws_bedrock_session_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_bedrock_session = rule(
+    implementation = _cloudformation_aws_bedrock_session_impl,
+    doc = "Schema-derived rule for one `aws_bedrock_session` entry.",
+    provides = [CloudformationAwsBedrockSessionInfo],
+    attrs = {
+        "aws_bedrock_session_name": attr.string(
+            doc = "Top-level key for this aws_bedrock_session in the rendered project. Defaults to the rule name.",
+        ),
+        "EncryptionKeyArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-session.html#cfn-bedrock-session-encryptionkeyarn",
+        ),
+        "SessionMetadata": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-session.html#cfn-bedrock-session-sessionmetadata",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-session.html#cfn-bedrock-session-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -11465,6 +13270,81 @@ cloudformation_aws_billing_conductor_pricing_rule = rule(
         ),
         "UsageType": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-pricingrule.html#cfn-billingconductor-pricingrule-usagetype",
+        ),
+    },
+)
+
+CloudformationAwsBraketJobInfo = provider(
+    doc = "A aws_braket_job contributed by a target. Shard JSON matches the aws_braket_job schema.",
+    fields = {
+        "aws_braket_job_name": "string: top-level key for this aws_braket_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_braket_job_impl(ctx):
+    item_name = ctx.attr.aws_braket_job_name or ctx.label.name
+    payload = {
+        "AlgorithmSpecification": parse_json_or_none(ctx.attr.AlgorithmSpecification),
+        "CheckpointConfig": parse_json_or_none(ctx.attr.CheckpointConfig),
+        "DeviceConfig": parse_json_or_none(ctx.attr.DeviceConfig),
+        "HyperParameters": ctx.attr.HyperParameters,
+        "InputDataConfig": parse_json_or_none(ctx.attr.InputDataConfig),
+        "InstanceConfig": parse_json_or_none(ctx.attr.InstanceConfig),
+        "JobName": ctx.attr.JobName,
+        "OutputDataConfig": parse_json_or_none(ctx.attr.OutputDataConfig),
+        "RoleArn": ctx.attr.RoleArn,
+        "StoppingCondition": parse_json_or_none(ctx.attr.StoppingCondition),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_braket_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsBraketJobInfo(aws_braket_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_braket_job = rule(
+    implementation = _cloudformation_aws_braket_job_impl,
+    doc = "Schema-derived rule for one `aws_braket_job` entry.",
+    provides = [CloudformationAwsBraketJobInfo],
+    attrs = {
+        "aws_braket_job_name": attr.string(
+            doc = "Top-level key for this aws_braket_job in the rendered project. Defaults to the rule name.",
+        ),
+        "AlgorithmSpecification": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "CheckpointConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "DeviceConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "HyperParameters": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-braket-job.html#cfn-braket-job-hyperparameters",
+        ),
+        "InputDataConfig": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-braket-job.html#cfn-braket-job-inputdataconfig (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "InstanceConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "JobName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-braket-job.html#cfn-braket-job-jobname",
+        ),
+        "OutputDataConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "RoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-braket-job.html#cfn-braket-job-rolearn",
+        ),
+        "StoppingCondition": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-braket-job.html#cfn-braket-job-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -11928,6 +13808,49 @@ cloudformation_aws_cassandra_keyspace = rule(
     },
 )
 
+CloudformationAwsCassandraStreamInfo = provider(
+    doc = "A aws_cassandra_stream contributed by a target. Shard JSON matches the aws_cassandra_stream schema.",
+    fields = {
+        "aws_cassandra_stream_name": "string: top-level key for this aws_cassandra_stream in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_cassandra_stream_impl(ctx):
+    item_name = ctx.attr.aws_cassandra_stream_name or ctx.label.name
+    payload = {
+        "KeyspaceName": ctx.attr.KeyspaceName,
+        "StreamViewType": ctx.attr.StreamViewType,
+        "TableName": ctx.attr.TableName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_cassandra_stream.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCassandraStreamInfo(aws_cassandra_stream_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_cassandra_stream = rule(
+    implementation = _cloudformation_aws_cassandra_stream_impl,
+    doc = "Schema-derived rule for one `aws_cassandra_stream` entry.",
+    provides = [CloudformationAwsCassandraStreamInfo],
+    attrs = {
+        "aws_cassandra_stream_name": attr.string(
+            doc = "Top-level key for this aws_cassandra_stream in the rendered project. Defaults to the rule name.",
+        ),
+        "KeyspaceName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-stream.html#cfn-cassandra-stream-keyspacename",
+        ),
+        "StreamViewType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-stream.html#cfn-cassandra-stream-streamviewtype",
+        ),
+        "TableName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-stream.html#cfn-cassandra-stream-tablename",
+        ),
+    },
+)
+
 CloudformationAwsCassandraTableInfo = provider(
     doc = "A aws_cassandra_table contributed by a target. Shard JSON matches the aws_cassandra_table schema.",
     fields = {
@@ -12258,6 +14181,151 @@ cloudformation_aws_certificate_manager_account = rule(
         ),
         "ExpiryEventsConfiguration": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsCertificateManagerAcmeDomainValidationInfo = provider(
+    doc = "A aws_certificate_manager_acme_domain_validation contributed by a target. Shard JSON matches the aws_certificate_manager_acme_domain_validation schema.",
+    fields = {
+        "aws_certificate_manager_acme_domain_validation_name": "string: top-level key for this aws_certificate_manager_acme_domain_validation in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_certificate_manager_acme_domain_validation_impl(ctx):
+    item_name = ctx.attr.aws_certificate_manager_acme_domain_validation_name or ctx.label.name
+    payload = {
+        "AcmeEndpointArn": ctx.attr.AcmeEndpointArn,
+        "DomainName": ctx.attr.DomainName,
+        "PrevalidationOptions": parse_json_or_none(ctx.attr.PrevalidationOptions),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_certificate_manager_acme_domain_validation.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCertificateManagerAcmeDomainValidationInfo(aws_certificate_manager_acme_domain_validation_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_certificate_manager_acme_domain_validation = rule(
+    implementation = _cloudformation_aws_certificate_manager_acme_domain_validation_impl,
+    doc = "Schema-derived rule for one `aws_certificate_manager_acme_domain_validation` entry.",
+    provides = [CloudformationAwsCertificateManagerAcmeDomainValidationInfo],
+    attrs = {
+        "aws_certificate_manager_acme_domain_validation_name": attr.string(
+            doc = "Top-level key for this aws_certificate_manager_acme_domain_validation in the rendered project. Defaults to the rule name.",
+        ),
+        "AcmeEndpointArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-certificatemanager-acmedomainvalidation.html#cfn-certificatemanager-acmedomainvalidation-acmeendpointarn",
+        ),
+        "DomainName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-certificatemanager-acmedomainvalidation.html#cfn-certificatemanager-acmedomainvalidation-domainname",
+        ),
+        "PrevalidationOptions": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-certificatemanager-acmedomainvalidation.html#cfn-certificatemanager-acmedomainvalidation-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsCertificateManagerAcmeEndpointInfo = provider(
+    doc = "A aws_certificate_manager_acme_endpoint contributed by a target. Shard JSON matches the aws_certificate_manager_acme_endpoint schema.",
+    fields = {
+        "aws_certificate_manager_acme_endpoint_name": "string: top-level key for this aws_certificate_manager_acme_endpoint in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_certificate_manager_acme_endpoint_impl(ctx):
+    item_name = ctx.attr.aws_certificate_manager_acme_endpoint_name or ctx.label.name
+    payload = {
+        "AuthorizationBehavior": ctx.attr.AuthorizationBehavior,
+        "CertificateAuthority": parse_json_or_none(ctx.attr.CertificateAuthority),
+        "CertificateTags": parse_json_or_none(ctx.attr.CertificateTags),
+        "Contact": ctx.attr.Contact,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_certificate_manager_acme_endpoint.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCertificateManagerAcmeEndpointInfo(aws_certificate_manager_acme_endpoint_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_certificate_manager_acme_endpoint = rule(
+    implementation = _cloudformation_aws_certificate_manager_acme_endpoint_impl,
+    doc = "Schema-derived rule for one `aws_certificate_manager_acme_endpoint` entry.",
+    provides = [CloudformationAwsCertificateManagerAcmeEndpointInfo],
+    attrs = {
+        "aws_certificate_manager_acme_endpoint_name": attr.string(
+            doc = "Top-level key for this aws_certificate_manager_acme_endpoint in the rendered project. Defaults to the rule name.",
+        ),
+        "AuthorizationBehavior": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-certificatemanager-acmeendpoint.html#cfn-certificatemanager-acmeendpoint-authorizationbehavior",
+        ),
+        "CertificateAuthority": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "CertificateTags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-certificatemanager-acmeendpoint.html#cfn-certificatemanager-acmeendpoint-certificatetags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Contact": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-certificatemanager-acmeendpoint.html#cfn-certificatemanager-acmeendpoint-contact",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-certificatemanager-acmeendpoint.html#cfn-certificatemanager-acmeendpoint-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsCertificateManagerAcmeExternalAccountBindingInfo = provider(
+    doc = "A aws_certificate_manager_acme_external_account_binding contributed by a target. Shard JSON matches the aws_certificate_manager_acme_external_account_binding schema.",
+    fields = {
+        "aws_certificate_manager_acme_external_account_binding_name": "string: top-level key for this aws_certificate_manager_acme_external_account_binding in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_certificate_manager_acme_external_account_binding_impl(ctx):
+    item_name = ctx.attr.aws_certificate_manager_acme_external_account_binding_name or ctx.label.name
+    payload = {
+        "AcmeEndpointArn": ctx.attr.AcmeEndpointArn,
+        "Expiration": parse_json_or_none(ctx.attr.Expiration),
+        "RoleArn": ctx.attr.RoleArn,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_certificate_manager_acme_external_account_binding.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCertificateManagerAcmeExternalAccountBindingInfo(aws_certificate_manager_acme_external_account_binding_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_certificate_manager_acme_external_account_binding = rule(
+    implementation = _cloudformation_aws_certificate_manager_acme_external_account_binding_impl,
+    doc = "Schema-derived rule for one `aws_certificate_manager_acme_external_account_binding` entry.",
+    provides = [CloudformationAwsCertificateManagerAcmeExternalAccountBindingInfo],
+    attrs = {
+        "aws_certificate_manager_acme_external_account_binding_name": attr.string(
+            doc = "Top-level key for this aws_certificate_manager_acme_external_account_binding in the rendered project. Defaults to the rule name.",
+        ),
+        "AcmeEndpointArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-certificatemanager-acmeexternalaccountbinding.html#cfn-certificatemanager-acmeexternalaccountbinding-acmeendpointarn",
+        ),
+        "Expiration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "RoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-certificatemanager-acmeexternalaccountbinding.html#cfn-certificatemanager-acmeexternalaccountbinding-rolearn",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-certificatemanager-acmeexternalaccountbinding.html#cfn-certificatemanager-acmeexternalaccountbinding-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -12620,6 +14688,61 @@ cloudformation_aws_chime_app_instance_bot = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-chime-appinstancebot.html#cfn-chime-appinstancebot-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsChimeAppInstanceUserInfo = provider(
+    doc = "A aws_chime_app_instance_user contributed by a target. Shard JSON matches the aws_chime_app_instance_user schema.",
+    fields = {
+        "aws_chime_app_instance_user_name": "string: top-level key for this aws_chime_app_instance_user in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_chime_app_instance_user_impl(ctx):
+    item_name = ctx.attr.aws_chime_app_instance_user_name or ctx.label.name
+    payload = {
+        "AppInstanceArn": ctx.attr.AppInstanceArn,
+        "AppInstanceUserId": ctx.attr.AppInstanceUserId,
+        "ExpirationSettings": parse_json_or_none(ctx.attr.ExpirationSettings),
+        "Metadata": ctx.attr.Metadata,
+        "Name": ctx.attr.Name,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_chime_app_instance_user.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsChimeAppInstanceUserInfo(aws_chime_app_instance_user_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_chime_app_instance_user = rule(
+    implementation = _cloudformation_aws_chime_app_instance_user_impl,
+    doc = "Schema-derived rule for one `aws_chime_app_instance_user` entry.",
+    provides = [CloudformationAwsChimeAppInstanceUserInfo],
+    attrs = {
+        "aws_chime_app_instance_user_name": attr.string(
+            doc = "Top-level key for this aws_chime_app_instance_user in the rendered project. Defaults to the rule name.",
+        ),
+        "AppInstanceArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-chime-appinstanceuser.html#cfn-chime-appinstanceuser-appinstancearn",
+        ),
+        "AppInstanceUserId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-chime-appinstanceuser.html#cfn-chime-appinstanceuser-appinstanceuserid",
+        ),
+        "ExpirationSettings": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Metadata": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-chime-appinstanceuser.html#cfn-chime-appinstanceuser-metadata",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-chime-appinstanceuser.html#cfn-chime-appinstanceuser-name",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-chime-appinstanceuser.html#cfn-chime-appinstanceuser-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -13022,6 +15145,65 @@ cloudformation_aws_clean_rooms_id_namespace_association = rule(
     },
 )
 
+CloudformationAwsCleanRoomsIntermediateTableInfo = provider(
+    doc = "A aws_clean_rooms_intermediate_table contributed by a target. Shard JSON matches the aws_clean_rooms_intermediate_table schema.",
+    fields = {
+        "aws_clean_rooms_intermediate_table_name": "string: top-level key for this aws_clean_rooms_intermediate_table in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_clean_rooms_intermediate_table_impl(ctx):
+    item_name = ctx.attr.aws_clean_rooms_intermediate_table_name or ctx.label.name
+    payload = {
+        "AnalysisRules": parse_json_or_none(ctx.attr.AnalysisRules),
+        "Description": ctx.attr.Description,
+        "KmsKeyArn": ctx.attr.KmsKeyArn,
+        "MembershipIdentifier": ctx.attr.MembershipIdentifier,
+        "Name": ctx.attr.Name,
+        "PopulationAnalysisConfiguration": parse_json_or_none(ctx.attr.PopulationAnalysisConfiguration),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_clean_rooms_intermediate_table.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCleanRoomsIntermediateTableInfo(aws_clean_rooms_intermediate_table_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_clean_rooms_intermediate_table = rule(
+    implementation = _cloudformation_aws_clean_rooms_intermediate_table_impl,
+    doc = "Schema-derived rule for one `aws_clean_rooms_intermediate_table` entry.",
+    provides = [CloudformationAwsCleanRoomsIntermediateTableInfo],
+    attrs = {
+        "aws_clean_rooms_intermediate_table_name": attr.string(
+            doc = "Top-level key for this aws_clean_rooms_intermediate_table in the rendered project. Defaults to the rule name.",
+        ),
+        "AnalysisRules": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-intermediatetable.html#cfn-cleanrooms-intermediatetable-analysisrules (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-intermediatetable.html#cfn-cleanrooms-intermediatetable-description",
+        ),
+        "KmsKeyArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-intermediatetable.html#cfn-cleanrooms-intermediatetable-kmskeyarn",
+        ),
+        "MembershipIdentifier": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-intermediatetable.html#cfn-cleanrooms-intermediatetable-membershipidentifier",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-intermediatetable.html#cfn-cleanrooms-intermediatetable-name",
+        ),
+        "PopulationAnalysisConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-intermediatetable.html#cfn-cleanrooms-intermediatetable-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsCleanRoomsMembershipInfo = provider(
     doc = "A aws_clean_rooms_membership contributed by a target. Shard JSON matches the aws_clean_rooms_membership schema.",
     fields = {
@@ -13411,6 +15593,45 @@ cloudformation_aws_cloud_formation_custom_resource = rule(
     },
 )
 
+CloudformationAwsCloudFormationGeneratedTemplateInfo = provider(
+    doc = "A aws_cloud_formation_generated_template contributed by a target. Shard JSON matches the aws_cloud_formation_generated_template schema.",
+    fields = {
+        "aws_cloud_formation_generated_template_name": "string: top-level key for this aws_cloud_formation_generated_template in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_cloud_formation_generated_template_impl(ctx):
+    item_name = ctx.attr.aws_cloud_formation_generated_template_name or ctx.label.name
+    payload = {
+        "GeneratedTemplateName": ctx.attr.GeneratedTemplateName,
+        "TemplateConfiguration": parse_json_or_none(ctx.attr.TemplateConfiguration),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_generated_template.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCloudFormationGeneratedTemplateInfo(aws_cloud_formation_generated_template_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_cloud_formation_generated_template = rule(
+    implementation = _cloudformation_aws_cloud_formation_generated_template_impl,
+    doc = "Schema-derived rule for one `aws_cloud_formation_generated_template` entry.",
+    provides = [CloudformationAwsCloudFormationGeneratedTemplateInfo],
+    attrs = {
+        "aws_cloud_formation_generated_template_name": attr.string(
+            doc = "Top-level key for this aws_cloud_formation_generated_template in the rendered project. Defaults to the rule name.",
+        ),
+        "GeneratedTemplateName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-generatedtemplate.html#cfn-cloudformation-generatedtemplate-generatedtemplatename",
+        ),
+        "TemplateConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
 CloudformationAwsCloudFormationGuardHookInfo = provider(
     doc = "A aws_cloud_formation_guard_hook contributed by a target. Shard JSON matches the aws_cloud_formation_guard_hook schema.",
     fields = {
@@ -13631,10 +15852,12 @@ def _cloudformation_aws_cloud_formation_lambda_hook_impl(ctx):
     item_name = ctx.attr.aws_cloud_formation_lambda_hook_name or ctx.label.name
     payload = {
         "Alias": ctx.attr.Alias,
+        "AutoUpdate": parse_json_or_none(ctx.attr.AutoUpdate),
         "ExecutionRole": ctx.attr.ExecutionRole,
         "FailureMode": ctx.attr.FailureMode,
         "HookStatus": ctx.attr.HookStatus,
         "LambdaFunction": ctx.attr.LambdaFunction,
+        "LoggingConfig": parse_json_or_none(ctx.attr.LoggingConfig),
         "StackFilters": parse_json_or_none(ctx.attr.StackFilters),
         "TargetFilters": parse_json_or_none(ctx.attr.TargetFilters),
         "TargetOperations": parse_json_or_none(ctx.attr.TargetOperations),
@@ -13658,6 +15881,9 @@ cloudformation_aws_cloud_formation_lambda_hook = rule(
         "Alias": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-lambdahook.html#cfn-cloudformation-lambdahook-alias",
         ),
+        "AutoUpdate": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-lambdahook.html#cfn-cloudformation-lambdahook-autoupdate (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
         "ExecutionRole": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-lambdahook.html#cfn-cloudformation-lambdahook-executionrole",
         ),
@@ -13669,6 +15895,9 @@ cloudformation_aws_cloud_formation_lambda_hook = rule(
         ),
         "LambdaFunction": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-lambdahook.html#cfn-cloudformation-lambdahook-lambdafunction",
+        ),
+        "LoggingConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "StackFilters": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
@@ -13944,6 +16173,41 @@ cloudformation_aws_cloud_formation_resource_default_version = rule(
         ),
         "VersionId": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-resourcedefaultversion.html#cfn-cloudformation-resourcedefaultversion-versionid",
+        ),
+    },
+)
+
+CloudformationAwsCloudFormationResourceScanInfo = provider(
+    doc = "A aws_cloud_formation_resource_scan contributed by a target. Shard JSON matches the aws_cloud_formation_resource_scan schema.",
+    fields = {
+        "aws_cloud_formation_resource_scan_name": "string: top-level key for this aws_cloud_formation_resource_scan in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_cloud_formation_resource_scan_impl(ctx):
+    item_name = ctx.attr.aws_cloud_formation_resource_scan_name or ctx.label.name
+    payload = {
+        "ScanFilters": parse_json_or_none(ctx.attr.ScanFilters),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_formation_resource_scan.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCloudFormationResourceScanInfo(aws_cloud_formation_resource_scan_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_cloud_formation_resource_scan = rule(
+    implementation = _cloudformation_aws_cloud_formation_resource_scan_impl,
+    doc = "Schema-derived rule for one `aws_cloud_formation_resource_scan` entry.",
+    provides = [CloudformationAwsCloudFormationResourceScanInfo],
+    attrs = {
+        "aws_cloud_formation_resource_scan_name": attr.string(
+            doc = "Top-level key for this aws_cloud_formation_resource_scan in the rendered project. Defaults to the rule name.",
+        ),
+        "ScanFilters": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-resourcescan.html#cfn-cloudformation-resourcescan-scanfilters (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -15134,6 +17398,61 @@ cloudformation_aws_cloud_front_vpc_origin = rule(
     },
 )
 
+CloudformationAwsCloudHsmClusterInfo = provider(
+    doc = "A aws_cloud_hsm_cluster contributed by a target. Shard JSON matches the aws_cloud_hsm_cluster schema.",
+    fields = {
+        "aws_cloud_hsm_cluster_name": "string: top-level key for this aws_cloud_hsm_cluster in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_cloud_hsm_cluster_impl(ctx):
+    item_name = ctx.attr.aws_cloud_hsm_cluster_name or ctx.label.name
+    payload = {
+        "BackupRetentionPolicy": parse_json_or_none(ctx.attr.BackupRetentionPolicy),
+        "HsmType": ctx.attr.HsmType,
+        "Mode": ctx.attr.Mode,
+        "NetworkType": ctx.attr.NetworkType,
+        "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_hsm_cluster.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCloudHsmClusterInfo(aws_cloud_hsm_cluster_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_cloud_hsm_cluster = rule(
+    implementation = _cloudformation_aws_cloud_hsm_cluster_impl,
+    doc = "Schema-derived rule for one `aws_cloud_hsm_cluster` entry.",
+    provides = [CloudformationAwsCloudHsmClusterInfo],
+    attrs = {
+        "aws_cloud_hsm_cluster_name": attr.string(
+            doc = "Top-level key for this aws_cloud_hsm_cluster in the rendered project. Defaults to the rule name.",
+        ),
+        "BackupRetentionPolicy": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "HsmType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudhsm-cluster.html#cfn-cloudhsm-cluster-hsmtype",
+        ),
+        "Mode": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudhsm-cluster.html#cfn-cloudhsm-cluster-mode",
+        ),
+        "NetworkType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudhsm-cluster.html#cfn-cloudhsm-cluster-networktype",
+        ),
+        "SubnetIds": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudhsm-cluster.html#cfn-cloudhsm-cluster-subnetids (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudhsm-cluster.html#cfn-cloudhsm-cluster-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsCloudTrailChannelInfo = provider(
     doc = "A aws_cloud_trail_channel contributed by a target. Shard JSON matches the aws_cloud_trail_channel schema.",
     fields = {
@@ -15487,6 +17806,7 @@ def _cloudformation_aws_cloud_watch_alarm_impl(ctx):
         "EvaluationCriteria": parse_json_or_none(ctx.attr.EvaluationCriteria),
         "EvaluationInterval": parse_json_or_none(ctx.attr.EvaluationInterval),
         "EvaluationPeriods": parse_json_or_none(ctx.attr.EvaluationPeriods),
+        "EvaluationWindow": parse_json_or_none(ctx.attr.EvaluationWindow),
         "ExtendedStatistic": ctx.attr.ExtendedStatistic,
         "InsufficientDataActions": parse_json_or_none(ctx.attr.InsufficientDataActions),
         "MetricName": ctx.attr.MetricName,
@@ -15549,6 +17869,9 @@ cloudformation_aws_cloud_watch_alarm = rule(
         ),
         "EvaluationPeriods": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-alarm.html#cfn-cloudwatch-alarm-evaluationperiods (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "EvaluationWindow": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "ExtendedStatistic": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-alarm.html#cfn-cloudwatch-alarm-extendedstatistic",
@@ -15878,7 +18201,98 @@ cloudformation_aws_cloud_watch_insight_rule = rule(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-insightrule.html#cfn-cloudwatch-insightrule-rulestate",
         ),
         "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-insightrule.html#cfn-cloudwatch-insightrule-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsCloudWatchLogAlarmInfo = provider(
+    doc = "A aws_cloud_watch_log_alarm contributed by a target. Shard JSON matches the aws_cloud_watch_log_alarm schema.",
+    fields = {
+        "aws_cloud_watch_log_alarm_name": "string: top-level key for this aws_cloud_watch_log_alarm in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_cloud_watch_log_alarm_impl(ctx):
+    item_name = ctx.attr.aws_cloud_watch_log_alarm_name or ctx.label.name
+    payload = {
+        "ActionLogLineCount": parse_json_or_none(ctx.attr.ActionLogLineCount),
+        "ActionLogLineRoleArn": ctx.attr.ActionLogLineRoleArn,
+        "ActionsEnabled": parse_json_or_none(ctx.attr.ActionsEnabled),
+        "AlarmActions": parse_json_or_none(ctx.attr.AlarmActions),
+        "AlarmDescription": ctx.attr.AlarmDescription,
+        "AlarmName": ctx.attr.AlarmName,
+        "ComparisonOperator": ctx.attr.ComparisonOperator,
+        "InsufficientDataActions": parse_json_or_none(ctx.attr.InsufficientDataActions),
+        "OKActions": parse_json_or_none(ctx.attr.OKActions),
+        "QueryResultsToAlarm": parse_json_or_none(ctx.attr.QueryResultsToAlarm),
+        "QueryResultsToEvaluate": parse_json_or_none(ctx.attr.QueryResultsToEvaluate),
+        "ScheduledQueryConfiguration": parse_json_or_none(ctx.attr.ScheduledQueryConfiguration),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "Threshold": parse_json_or_none(ctx.attr.Threshold),
+        "TreatMissingData": ctx.attr.TreatMissingData,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_cloud_watch_log_alarm.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCloudWatchLogAlarmInfo(aws_cloud_watch_log_alarm_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_cloud_watch_log_alarm = rule(
+    implementation = _cloudformation_aws_cloud_watch_log_alarm_impl,
+    doc = "Schema-derived rule for one `aws_cloud_watch_log_alarm` entry.",
+    provides = [CloudformationAwsCloudWatchLogAlarmInfo],
+    attrs = {
+        "aws_cloud_watch_log_alarm_name": attr.string(
+            doc = "Top-level key for this aws_cloud_watch_log_alarm in the rendered project. Defaults to the rule name.",
+        ),
+        "ActionLogLineCount": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-logalarm.html#cfn-cloudwatch-logalarm-actionloglinecount (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "ActionLogLineRoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-logalarm.html#cfn-cloudwatch-logalarm-actionloglinerolearn",
+        ),
+        "ActionsEnabled": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-logalarm.html#cfn-cloudwatch-logalarm-actionsenabled (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "AlarmActions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-logalarm.html#cfn-cloudwatch-logalarm-alarmactions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "AlarmDescription": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-logalarm.html#cfn-cloudwatch-logalarm-alarmdescription",
+        ),
+        "AlarmName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-logalarm.html#cfn-cloudwatch-logalarm-alarmname",
+        ),
+        "ComparisonOperator": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-logalarm.html#cfn-cloudwatch-logalarm-comparisonoperator",
+        ),
+        "InsufficientDataActions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-logalarm.html#cfn-cloudwatch-logalarm-insufficientdataactions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "OKActions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-logalarm.html#cfn-cloudwatch-logalarm-okactions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "QueryResultsToAlarm": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-logalarm.html#cfn-cloudwatch-logalarm-queryresultstoalarm (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "QueryResultsToEvaluate": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-logalarm.html#cfn-cloudwatch-logalarm-queryresultstoevaluate (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "ScheduledQueryConfiguration": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-logalarm.html#cfn-cloudwatch-logalarm-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Threshold": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-logalarm.html#cfn-cloudwatch-logalarm-threshold (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TreatMissingData": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-logalarm.html#cfn-cloudwatch-logalarm-treatmissingdata",
         ),
     },
 )
@@ -16028,6 +18442,57 @@ cloudformation_aws_code_artifact_domain = rule(
     },
 )
 
+CloudformationAwsCodeArtifactPackageInfo = provider(
+    doc = "A aws_code_artifact_package contributed by a target. Shard JSON matches the aws_code_artifact_package schema.",
+    fields = {
+        "aws_code_artifact_package_name": "string: top-level key for this aws_code_artifact_package in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_code_artifact_package_impl(ctx):
+    item_name = ctx.attr.aws_code_artifact_package_name or ctx.label.name
+    payload = {
+        "DomainName": ctx.attr.DomainName,
+        "Format": ctx.attr.Format,
+        "Name": ctx.attr.Name,
+        "Namespace": ctx.attr.Namespace,
+        "Repository": ctx.attr.Repository,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_artifact_package.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCodeArtifactPackageInfo(aws_code_artifact_package_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_code_artifact_package = rule(
+    implementation = _cloudformation_aws_code_artifact_package_impl,
+    doc = "Schema-derived rule for one `aws_code_artifact_package` entry.",
+    provides = [CloudformationAwsCodeArtifactPackageInfo],
+    attrs = {
+        "aws_code_artifact_package_name": attr.string(
+            doc = "Top-level key for this aws_code_artifact_package in the rendered project. Defaults to the rule name.",
+        ),
+        "DomainName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codeartifact-package.html#cfn-codeartifact-package-domainname",
+        ),
+        "Format": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codeartifact-package.html#cfn-codeartifact-package-format",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codeartifact-package.html#cfn-codeartifact-package-name",
+        ),
+        "Namespace": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codeartifact-package.html#cfn-codeartifact-package-namespace",
+        ),
+        "Repository": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codeartifact-package.html#cfn-codeartifact-package-repository",
+        ),
+    },
+)
+
 CloudformationAwsCodeArtifactPackageGroupInfo = provider(
     doc = "A aws_code_artifact_package_group contributed by a target. Shard JSON matches the aws_code_artifact_package_group schema.",
     fields = {
@@ -16146,6 +18611,76 @@ cloudformation_aws_code_artifact_repository = rule(
         ),
         "Upstreams": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codeartifact-repository.html#cfn-codeartifact-repository-upstreams (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsCodeBuildBuildInfo = provider(
+    doc = "A aws_code_build_build contributed by a target. Shard JSON matches the aws_code_build_build schema.",
+    fields = {
+        "aws_code_build_build_name": "string: top-level key for this aws_code_build_build in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_code_build_build_impl(ctx):
+    item_name = ctx.attr.aws_code_build_build_name or ctx.label.name
+    payload = {
+        "ProjectName": ctx.attr.ProjectName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_build_build.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCodeBuildBuildInfo(aws_code_build_build_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_code_build_build = rule(
+    implementation = _cloudformation_aws_code_build_build_impl,
+    doc = "Schema-derived rule for one `aws_code_build_build` entry.",
+    provides = [CloudformationAwsCodeBuildBuildInfo],
+    attrs = {
+        "aws_code_build_build_name": attr.string(
+            doc = "Top-level key for this aws_code_build_build in the rendered project. Defaults to the rule name.",
+        ),
+        "ProjectName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-build.html#cfn-codebuild-build-projectname",
+        ),
+    },
+)
+
+CloudformationAwsCodeBuildBuildBatchInfo = provider(
+    doc = "A aws_code_build_build_batch contributed by a target. Shard JSON matches the aws_code_build_build_batch schema.",
+    fields = {
+        "aws_code_build_build_batch_name": "string: top-level key for this aws_code_build_build_batch in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_code_build_build_batch_impl(ctx):
+    item_name = ctx.attr.aws_code_build_build_batch_name or ctx.label.name
+    payload = {
+        "ProjectName": ctx.attr.ProjectName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_build_build_batch.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCodeBuildBuildBatchInfo(aws_code_build_build_batch_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_code_build_build_batch = rule(
+    implementation = _cloudformation_aws_code_build_build_batch_impl,
+    doc = "Schema-derived rule for one `aws_code_build_build_batch` entry.",
+    provides = [CloudformationAwsCodeBuildBuildBatchInfo],
+    attrs = {
+        "aws_code_build_build_batch_name": attr.string(
+            doc = "Top-level key for this aws_code_build_build_batch in the rendered project. Defaults to the rule name.",
+        ),
+        "ProjectName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-buildbatch.html#cfn-codebuild-buildbatch-projectname",
         ),
     },
 )
@@ -16407,6 +18942,41 @@ cloudformation_aws_code_build_report_group = rule(
         ),
         "Type": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-reportgroup.html#cfn-codebuild-reportgroup-type",
+        ),
+    },
+)
+
+CloudformationAwsCodeBuildSandboxInfo = provider(
+    doc = "A aws_code_build_sandbox contributed by a target. Shard JSON matches the aws_code_build_sandbox schema.",
+    fields = {
+        "aws_code_build_sandbox_name": "string: top-level key for this aws_code_build_sandbox in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_code_build_sandbox_impl(ctx):
+    item_name = ctx.attr.aws_code_build_sandbox_name or ctx.label.name
+    payload = {
+        "ProjectName": ctx.attr.ProjectName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_code_build_sandbox.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCodeBuildSandboxInfo(aws_code_build_sandbox_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_code_build_sandbox = rule(
+    implementation = _cloudformation_aws_code_build_sandbox_impl,
+    doc = "Schema-derived rule for one `aws_code_build_sandbox` entry.",
+    provides = [CloudformationAwsCodeBuildSandboxInfo],
+    attrs = {
+        "aws_code_build_sandbox_name": attr.string(
+            doc = "Top-level key for this aws_code_build_sandbox in the rendered project. Defaults to the rule name.",
+        ),
+        "ProjectName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-sandbox.html#cfn-codebuild-sandbox-projectname",
         ),
     },
 )
@@ -17029,6 +19599,7 @@ def _cloudformation_aws_code_pipeline_webhook_impl(ctx):
         "Filters": parse_json_or_none(ctx.attr.Filters),
         "Name": ctx.attr.Name,
         "RegisterWithThirdParty": parse_json_or_none(ctx.attr.RegisterWithThirdParty),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
         "TargetAction": ctx.attr.TargetAction,
         "TargetPipeline": ctx.attr.TargetPipeline,
         "TargetPipelineVersion": parse_json_or_none(ctx.attr.TargetPipelineVersion),
@@ -17063,6 +19634,9 @@ cloudformation_aws_code_pipeline_webhook = rule(
         ),
         "RegisterWithThirdParty": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-webhook.html#cfn-codepipeline-webhook-registerwiththirdparty (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-webhook.html#cfn-codepipeline-webhook-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "TargetAction": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-webhook.html#cfn-codepipeline-webhook-targetaction",
@@ -17634,6 +20208,49 @@ cloudformation_aws_cognito_managed_login_branding = rule(
     },
 )
 
+CloudformationAwsCognitoSyncDatasetInfo = provider(
+    doc = "A aws_cognito_sync_dataset contributed by a target. Shard JSON matches the aws_cognito_sync_dataset schema.",
+    fields = {
+        "aws_cognito_sync_dataset_name": "string: top-level key for this aws_cognito_sync_dataset in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_cognito_sync_dataset_impl(ctx):
+    item_name = ctx.attr.aws_cognito_sync_dataset_name or ctx.label.name
+    payload = {
+        "DatasetName": ctx.attr.DatasetName,
+        "IdentityId": ctx.attr.IdentityId,
+        "IdentityPoolId": ctx.attr.IdentityPoolId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_sync_dataset.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCognitoSyncDatasetInfo(aws_cognito_sync_dataset_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_cognito_sync_dataset = rule(
+    implementation = _cloudformation_aws_cognito_sync_dataset_impl,
+    doc = "Schema-derived rule for one `aws_cognito_sync_dataset` entry.",
+    provides = [CloudformationAwsCognitoSyncDatasetInfo],
+    attrs = {
+        "aws_cognito_sync_dataset_name": attr.string(
+            doc = "Top-level key for this aws_cognito_sync_dataset in the rendered project. Defaults to the rule name.",
+        ),
+        "DatasetName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognitosync-dataset.html#cfn-cognitosync-dataset-datasetname",
+        ),
+        "IdentityId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognitosync-dataset.html#cfn-cognitosync-dataset-identityid",
+        ),
+        "IdentityPoolId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognitosync-dataset.html#cfn-cognitosync-dataset-identitypoolid",
+        ),
+    },
+)
+
 CloudformationAwsCognitoTermsInfo = provider(
     doc = "A aws_cognito_terms contributed by a target. Shard JSON matches the aws_cognito_terms schema.",
     fields = {
@@ -17712,6 +20329,8 @@ def _cloudformation_aws_cognito_user_pool_impl(ctx):
         "EmailVerificationMessage": ctx.attr.EmailVerificationMessage,
         "EmailVerificationSubject": ctx.attr.EmailVerificationSubject,
         "EnabledMfas": parse_json_or_none(ctx.attr.EnabledMfas),
+        "IssuerConfiguration": parse_json_or_none(ctx.attr.IssuerConfiguration),
+        "KeyConfiguration": parse_json_or_none(ctx.attr.KeyConfiguration),
         "LambdaConfig": parse_json_or_none(ctx.attr.LambdaConfig),
         "MfaConfiguration": ctx.attr.MfaConfiguration,
         "Policies": parse_json_or_none(ctx.attr.Policies),
@@ -17782,6 +20401,12 @@ cloudformation_aws_cognito_user_pool = rule(
         ),
         "EnabledMfas": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpool.html#cfn-cognito-userpool-enabledmfas (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "IssuerConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "KeyConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "LambdaConfig": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
@@ -17977,6 +20602,7 @@ def _cloudformation_aws_cognito_user_pool_domain_impl(ctx):
         "CustomDomainConfig": parse_json_or_none(ctx.attr.CustomDomainConfig),
         "Domain": ctx.attr.Domain,
         "ManagedLoginVersion": parse_json_or_none(ctx.attr.ManagedLoginVersion),
+        "Routing": parse_json_or_none(ctx.attr.Routing),
         "UserPoolId": ctx.attr.UserPoolId,
     }
     payload = strip_empty(payload)
@@ -18003,6 +20629,9 @@ cloudformation_aws_cognito_user_pool_domain = rule(
         ),
         "ManagedLoginVersion": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpooldomain.html#cfn-cognito-userpooldomain-managedloginversion (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Routing": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "UserPoolId": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpooldomain.html#cfn-cognito-userpooldomain-userpoolid",
@@ -18112,6 +20741,104 @@ cloudformation_aws_cognito_user_pool_identity_provider = rule(
         ),
         "UserPoolId": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolidentityprovider.html#cfn-cognito-userpoolidentityprovider-userpoolid",
+        ),
+    },
+)
+
+CloudformationAwsCognitoUserPoolRegionalConfigurationAttachmentInfo = provider(
+    doc = "A aws_cognito_user_pool_regional_configuration_attachment contributed by a target. Shard JSON matches the aws_cognito_user_pool_regional_configuration_attachment schema.",
+    fields = {
+        "aws_cognito_user_pool_regional_configuration_attachment_name": "string: top-level key for this aws_cognito_user_pool_regional_configuration_attachment in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_cognito_user_pool_regional_configuration_attachment_impl(ctx):
+    item_name = ctx.attr.aws_cognito_user_pool_regional_configuration_attachment_name or ctx.label.name
+    payload = {
+        "EmailConfiguration": parse_json_or_none(ctx.attr.EmailConfiguration),
+        "LambdaConfig": parse_json_or_none(ctx.attr.LambdaConfig),
+        "SmsConfiguration": parse_json_or_none(ctx.attr.SmsConfiguration),
+        "Status": ctx.attr.Status,
+        "UserPoolId": ctx.attr.UserPoolId,
+        "UserPoolTags": ctx.attr.UserPoolTags,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_user_pool_regional_configuration_attachment.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCognitoUserPoolRegionalConfigurationAttachmentInfo(aws_cognito_user_pool_regional_configuration_attachment_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_cognito_user_pool_regional_configuration_attachment = rule(
+    implementation = _cloudformation_aws_cognito_user_pool_regional_configuration_attachment_impl,
+    doc = "Schema-derived rule for one `aws_cognito_user_pool_regional_configuration_attachment` entry.",
+    provides = [CloudformationAwsCognitoUserPoolRegionalConfigurationAttachmentInfo],
+    attrs = {
+        "aws_cognito_user_pool_regional_configuration_attachment_name": attr.string(
+            doc = "Top-level key for this aws_cognito_user_pool_regional_configuration_attachment in the rendered project. Defaults to the rule name.",
+        ),
+        "EmailConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "LambdaConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "SmsConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Status": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolregionalconfigurationattachment.html#cfn-cognito-userpoolregionalconfigurationattachment-status",
+        ),
+        "UserPoolId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolregionalconfigurationattachment.html#cfn-cognito-userpoolregionalconfigurationattachment-userpoolid",
+        ),
+        "UserPoolTags": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolregionalconfigurationattachment.html#cfn-cognito-userpoolregionalconfigurationattachment-userpooltags",
+        ),
+    },
+)
+
+CloudformationAwsCognitoUserPoolReplicaInfo = provider(
+    doc = "A aws_cognito_user_pool_replica contributed by a target. Shard JSON matches the aws_cognito_user_pool_replica schema.",
+    fields = {
+        "aws_cognito_user_pool_replica_name": "string: top-level key for this aws_cognito_user_pool_replica in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_cognito_user_pool_replica_impl(ctx):
+    item_name = ctx.attr.aws_cognito_user_pool_replica_name or ctx.label.name
+    payload = {
+        "RegionName": ctx.attr.RegionName,
+        "UserPoolId": ctx.attr.UserPoolId,
+        "UserPoolTagsAtCreate": ctx.attr.UserPoolTagsAtCreate,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_cognito_user_pool_replica.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCognitoUserPoolReplicaInfo(aws_cognito_user_pool_replica_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_cognito_user_pool_replica = rule(
+    implementation = _cloudformation_aws_cognito_user_pool_replica_impl,
+    doc = "Schema-derived rule for one `aws_cognito_user_pool_replica` entry.",
+    provides = [CloudformationAwsCognitoUserPoolReplicaInfo],
+    attrs = {
+        "aws_cognito_user_pool_replica_name": attr.string(
+            doc = "Top-level key for this aws_cognito_user_pool_replica in the rendered project. Defaults to the rule name.",
+        ),
+        "RegionName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolreplica.html#cfn-cognito-userpoolreplica-regionname",
+        ),
+        "UserPoolId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolreplica.html#cfn-cognito-userpoolreplica-userpoolid",
+        ),
+        "UserPoolTagsAtCreate": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolreplica.html#cfn-cognito-userpoolreplica-userpooltagsatcreate",
         ),
     },
 )
@@ -18363,6 +21090,57 @@ cloudformation_aws_cognito_user_pool_user_to_group_attachment = rule(
     },
 )
 
+CloudformationAwsComprehendDocumentClassificationJobInfo = provider(
+    doc = "A aws_comprehend_document_classification_job contributed by a target. Shard JSON matches the aws_comprehend_document_classification_job schema.",
+    fields = {
+        "aws_comprehend_document_classification_job_name": "string: top-level key for this aws_comprehend_document_classification_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_comprehend_document_classification_job_impl(ctx):
+    item_name = ctx.attr.aws_comprehend_document_classification_job_name or ctx.label.name
+    payload = {
+        "DataAccessRoleArn": ctx.attr.DataAccessRoleArn,
+        "DocumentClassifierArn": ctx.attr.DocumentClassifierArn,
+        "InputDataConfig": parse_json_or_none(ctx.attr.InputDataConfig),
+        "JobName": ctx.attr.JobName,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_comprehend_document_classification_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsComprehendDocumentClassificationJobInfo(aws_comprehend_document_classification_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_comprehend_document_classification_job = rule(
+    implementation = _cloudformation_aws_comprehend_document_classification_job_impl,
+    doc = "Schema-derived rule for one `aws_comprehend_document_classification_job` entry.",
+    provides = [CloudformationAwsComprehendDocumentClassificationJobInfo],
+    attrs = {
+        "aws_comprehend_document_classification_job_name": attr.string(
+            doc = "Top-level key for this aws_comprehend_document_classification_job in the rendered project. Defaults to the rule name.",
+        ),
+        "DataAccessRoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-documentclassificationjob.html#cfn-comprehend-documentclassificationjob-dataaccessrolearn",
+        ),
+        "DocumentClassifierArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-documentclassificationjob.html#cfn-comprehend-documentclassificationjob-documentclassifierarn",
+        ),
+        "InputDataConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "JobName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-documentclassificationjob.html#cfn-comprehend-documentclassificationjob-jobname",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-documentclassificationjob.html#cfn-comprehend-documentclassificationjob-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsComprehendDocumentClassifierInfo = provider(
     doc = "A aws_comprehend_document_classifier contributed by a target. Shard JSON matches the aws_comprehend_document_classifier schema.",
     fields = {
@@ -18442,6 +21220,57 @@ cloudformation_aws_comprehend_document_classifier = rule(
     },
 )
 
+CloudformationAwsComprehendEntitiesDetectionJobInfo = provider(
+    doc = "A aws_comprehend_entities_detection_job contributed by a target. Shard JSON matches the aws_comprehend_entities_detection_job schema.",
+    fields = {
+        "aws_comprehend_entities_detection_job_name": "string: top-level key for this aws_comprehend_entities_detection_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_comprehend_entities_detection_job_impl(ctx):
+    item_name = ctx.attr.aws_comprehend_entities_detection_job_name or ctx.label.name
+    payload = {
+        "DataAccessRoleArn": ctx.attr.DataAccessRoleArn,
+        "InputDataConfig": parse_json_or_none(ctx.attr.InputDataConfig),
+        "JobName": ctx.attr.JobName,
+        "LanguageCode": ctx.attr.LanguageCode,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_comprehend_entities_detection_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsComprehendEntitiesDetectionJobInfo(aws_comprehend_entities_detection_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_comprehend_entities_detection_job = rule(
+    implementation = _cloudformation_aws_comprehend_entities_detection_job_impl,
+    doc = "Schema-derived rule for one `aws_comprehend_entities_detection_job` entry.",
+    provides = [CloudformationAwsComprehendEntitiesDetectionJobInfo],
+    attrs = {
+        "aws_comprehend_entities_detection_job_name": attr.string(
+            doc = "Top-level key for this aws_comprehend_entities_detection_job in the rendered project. Defaults to the rule name.",
+        ),
+        "DataAccessRoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-entitiesdetectionjob.html#cfn-comprehend-entitiesdetectionjob-dataaccessrolearn",
+        ),
+        "InputDataConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "JobName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-entitiesdetectionjob.html#cfn-comprehend-entitiesdetectionjob-jobname",
+        ),
+        "LanguageCode": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-entitiesdetectionjob.html#cfn-comprehend-entitiesdetectionjob-languagecode",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-entitiesdetectionjob.html#cfn-comprehend-entitiesdetectionjob-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsComprehendFlywheelInfo = provider(
     doc = "A aws_comprehend_flywheel contributed by a target. Shard JSON matches the aws_comprehend_flywheel schema.",
     fields = {
@@ -18501,6 +21330,108 @@ cloudformation_aws_comprehend_flywheel = rule(
         ),
         "TaskConfig": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsComprehendFlywheelDatasetInfo = provider(
+    doc = "A aws_comprehend_flywheel_dataset contributed by a target. Shard JSON matches the aws_comprehend_flywheel_dataset schema.",
+    fields = {
+        "aws_comprehend_flywheel_dataset_name": "string: top-level key for this aws_comprehend_flywheel_dataset in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_comprehend_flywheel_dataset_impl(ctx):
+    item_name = ctx.attr.aws_comprehend_flywheel_dataset_name or ctx.label.name
+    payload = {
+        "DatasetName": ctx.attr.DatasetName,
+        "DatasetType": ctx.attr.DatasetType,
+        "Description": ctx.attr.Description,
+        "FlywheelArn": ctx.attr.FlywheelArn,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_comprehend_flywheel_dataset.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsComprehendFlywheelDatasetInfo(aws_comprehend_flywheel_dataset_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_comprehend_flywheel_dataset = rule(
+    implementation = _cloudformation_aws_comprehend_flywheel_dataset_impl,
+    doc = "Schema-derived rule for one `aws_comprehend_flywheel_dataset` entry.",
+    provides = [CloudformationAwsComprehendFlywheelDatasetInfo],
+    attrs = {
+        "aws_comprehend_flywheel_dataset_name": attr.string(
+            doc = "Top-level key for this aws_comprehend_flywheel_dataset in the rendered project. Defaults to the rule name.",
+        ),
+        "DatasetName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-flywheeldataset.html#cfn-comprehend-flywheeldataset-datasetname",
+        ),
+        "DatasetType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-flywheeldataset.html#cfn-comprehend-flywheeldataset-datasettype",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-flywheeldataset.html#cfn-comprehend-flywheeldataset-description",
+        ),
+        "FlywheelArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-flywheeldataset.html#cfn-comprehend-flywheeldataset-flywheelarn",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-flywheeldataset.html#cfn-comprehend-flywheeldataset-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsComprehendSentimentDetectionJobInfo = provider(
+    doc = "A aws_comprehend_sentiment_detection_job contributed by a target. Shard JSON matches the aws_comprehend_sentiment_detection_job schema.",
+    fields = {
+        "aws_comprehend_sentiment_detection_job_name": "string: top-level key for this aws_comprehend_sentiment_detection_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_comprehend_sentiment_detection_job_impl(ctx):
+    item_name = ctx.attr.aws_comprehend_sentiment_detection_job_name or ctx.label.name
+    payload = {
+        "DataAccessRoleArn": ctx.attr.DataAccessRoleArn,
+        "InputDataConfig": parse_json_or_none(ctx.attr.InputDataConfig),
+        "JobName": ctx.attr.JobName,
+        "LanguageCode": ctx.attr.LanguageCode,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_comprehend_sentiment_detection_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsComprehendSentimentDetectionJobInfo(aws_comprehend_sentiment_detection_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_comprehend_sentiment_detection_job = rule(
+    implementation = _cloudformation_aws_comprehend_sentiment_detection_job_impl,
+    doc = "Schema-derived rule for one `aws_comprehend_sentiment_detection_job` entry.",
+    provides = [CloudformationAwsComprehendSentimentDetectionJobInfo],
+    attrs = {
+        "aws_comprehend_sentiment_detection_job_name": attr.string(
+            doc = "Top-level key for this aws_comprehend_sentiment_detection_job in the rendered project. Defaults to the rule name.",
+        ),
+        "DataAccessRoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-sentimentdetectionjob.html#cfn-comprehend-sentimentdetectionjob-dataaccessrolearn",
+        ),
+        "InputDataConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "JobName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-sentimentdetectionjob.html#cfn-comprehend-sentimentdetectionjob-jobname",
+        ),
+        "LanguageCode": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-sentimentdetectionjob.html#cfn-comprehend-sentimentdetectionjob-languagecode",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-comprehend-sentimentdetectionjob.html#cfn-comprehend-sentimentdetectionjob-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -18791,6 +21722,7 @@ def _cloudformation_aws_config_conformance_pack_impl(ctx):
         "ConformancePackName": ctx.attr.ConformancePackName,
         "DeliveryS3Bucket": ctx.attr.DeliveryS3Bucket,
         "DeliveryS3KeyPrefix": ctx.attr.DeliveryS3KeyPrefix,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
         "TemplateBody": ctx.attr.TemplateBody,
         "TemplateS3Uri": ctx.attr.TemplateS3Uri,
         "TemplateSSMDocumentDetails": parse_json_or_none(ctx.attr.TemplateSSMDocumentDetails),
@@ -18823,6 +21755,9 @@ cloudformation_aws_config_conformance_pack = rule(
         "DeliveryS3KeyPrefix": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-conformancepack.html#cfn-config-conformancepack-deliverys3keyprefix",
         ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-conformancepack.html#cfn-config-conformancepack-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
         "TemplateBody": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-conformancepack.html#cfn-config-conformancepack-templatebody",
         ),
@@ -18831,6 +21766,45 @@ cloudformation_aws_config_conformance_pack = rule(
         ),
         "TemplateSSMDocumentDetails": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsConfigConnectorInfo = provider(
+    doc = "A aws_config_connector contributed by a target. Shard JSON matches the aws_config_connector schema.",
+    fields = {
+        "aws_config_connector_name": "string: top-level key for this aws_config_connector in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_config_connector_impl(ctx):
+    item_name = ctx.attr.aws_config_connector_name or ctx.label.name
+    payload = {
+        "ConnectorConfiguration": parse_json_or_none(ctx.attr.ConnectorConfiguration),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_config_connector.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsConfigConnectorInfo(aws_config_connector_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_config_connector = rule(
+    implementation = _cloudformation_aws_config_connector_impl,
+    doc = "Schema-derived rule for one `aws_config_connector` entry.",
+    provides = [CloudformationAwsConfigConnectorInfo],
+    attrs = {
+        "aws_config_connector_name": attr.string(
+            doc = "Top-level key for this aws_config_connector in the rendered project. Defaults to the rule name.",
+        ),
+        "ConnectorConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-connector.html#cfn-config-connector-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -18957,6 +21931,7 @@ def _cloudformation_aws_config_organization_conformance_pack_impl(ctx):
         "DeliveryS3KeyPrefix": ctx.attr.DeliveryS3KeyPrefix,
         "ExcludedAccounts": parse_json_or_none(ctx.attr.ExcludedAccounts),
         "OrganizationConformancePackName": ctx.attr.OrganizationConformancePackName,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
         "TemplateBody": ctx.attr.TemplateBody,
         "TemplateS3Uri": ctx.attr.TemplateS3Uri,
     }
@@ -18990,6 +21965,9 @@ cloudformation_aws_config_organization_conformance_pack = rule(
         ),
         "OrganizationConformancePackName": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-organizationconformancepack.html#cfn-config-organizationconformancepack-organizationconformancepackname",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-organizationconformancepack.html#cfn-config-organizationconformancepack-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "TemplateBody": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-organizationconformancepack.html#cfn-config-organizationconformancepack-templatebody",
@@ -19593,6 +22571,49 @@ cloudformation_aws_connect_contact_flow_version = rule(
     },
 )
 
+CloudformationAwsConnectDataLakeAssociationInfo = provider(
+    doc = "A aws_connect_data_lake_association contributed by a target. Shard JSON matches the aws_connect_data_lake_association schema.",
+    fields = {
+        "aws_connect_data_lake_association_name": "string: top-level key for this aws_connect_data_lake_association in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_connect_data_lake_association_impl(ctx):
+    item_name = ctx.attr.aws_connect_data_lake_association_name or ctx.label.name
+    payload = {
+        "DataSetId": ctx.attr.DataSetId,
+        "InstanceId": ctx.attr.InstanceId,
+        "TargetAccountId": ctx.attr.TargetAccountId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_data_lake_association.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsConnectDataLakeAssociationInfo(aws_connect_data_lake_association_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_connect_data_lake_association = rule(
+    implementation = _cloudformation_aws_connect_data_lake_association_impl,
+    doc = "Schema-derived rule for one `aws_connect_data_lake_association` entry.",
+    provides = [CloudformationAwsConnectDataLakeAssociationInfo],
+    attrs = {
+        "aws_connect_data_lake_association_name": attr.string(
+            doc = "Top-level key for this aws_connect_data_lake_association in the rendered project. Defaults to the rule name.",
+        ),
+        "DataSetId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datalakeassociation.html#cfn-connect-datalakeassociation-datasetid",
+        ),
+        "InstanceId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datalakeassociation.html#cfn-connect-datalakeassociation-instanceid",
+        ),
+        "TargetAccountId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datalakeassociation.html#cfn-connect-datalakeassociation-targetaccountid",
+        ),
+    },
+)
+
 CloudformationAwsConnectDataTableInfo = provider(
     doc = "A aws_connect_data_table contributed by a target. Shard JSON matches the aws_connect_data_table schema.",
     fields = {
@@ -20075,6 +23096,7 @@ def _cloudformation_aws_connect_integration_association_impl(ctx):
         "InstanceId": ctx.attr.InstanceId,
         "IntegrationArn": ctx.attr.IntegrationArn,
         "IntegrationType": ctx.attr.IntegrationType,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
     }
     payload = strip_empty(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_integration_association.json")
@@ -20100,6 +23122,9 @@ cloudformation_aws_connect_integration_association = rule(
         ),
         "IntegrationType": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-integrationassociation.html#cfn-connect-integrationassociation-integrationtype",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-integrationassociation.html#cfn-connect-integrationassociation-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -20765,6 +23790,69 @@ cloudformation_aws_connect_task_template = rule(
     },
 )
 
+CloudformationAwsConnectTestCaseInfo = provider(
+    doc = "A aws_connect_test_case contributed by a target. Shard JSON matches the aws_connect_test_case schema.",
+    fields = {
+        "aws_connect_test_case_name": "string: top-level key for this aws_connect_test_case in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_connect_test_case_impl(ctx):
+    item_name = ctx.attr.aws_connect_test_case_name or ctx.label.name
+    payload = {
+        "Content": ctx.attr.Content,
+        "Description": ctx.attr.Description,
+        "EntryPoint": parse_json_or_none(ctx.attr.EntryPoint),
+        "InitializationData": ctx.attr.InitializationData,
+        "InstanceArn": ctx.attr.InstanceArn,
+        "Name": ctx.attr.Name,
+        "Status": ctx.attr.Status,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_connect_test_case.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsConnectTestCaseInfo(aws_connect_test_case_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_connect_test_case = rule(
+    implementation = _cloudformation_aws_connect_test_case_impl,
+    doc = "Schema-derived rule for one `aws_connect_test_case` entry.",
+    provides = [CloudformationAwsConnectTestCaseInfo],
+    attrs = {
+        "aws_connect_test_case_name": attr.string(
+            doc = "Top-level key for this aws_connect_test_case in the rendered project. Defaults to the rule name.",
+        ),
+        "Content": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-testcase.html#cfn-connect-testcase-content",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-testcase.html#cfn-connect-testcase-description",
+        ),
+        "EntryPoint": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "InitializationData": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-testcase.html#cfn-connect-testcase-initializationdata",
+        ),
+        "InstanceArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-testcase.html#cfn-connect-testcase-instancearn",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-testcase.html#cfn-connect-testcase-name",
+        ),
+        "Status": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-testcase.html#cfn-connect-testcase-status",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-testcase.html#cfn-connect-testcase-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsConnectTrafficDistributionGroupInfo = provider(
     doc = "A aws_connect_traffic_distribution_group contributed by a target. Shard JSON matches the aws_connect_traffic_distribution_group schema.",
     fields = {
@@ -21162,6 +24250,99 @@ cloudformation_aws_connect_workspace = rule(
     },
 )
 
+CloudformationAwsControlCatalogCommonControlInfo = provider(
+    doc = "A aws_control_catalog_common_control contributed by a target. Shard JSON matches the aws_control_catalog_common_control schema.",
+    fields = {
+        "aws_control_catalog_common_control_name": "string: top-level key for this aws_control_catalog_common_control in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_control_catalog_common_control_impl(ctx):
+    item_name = ctx.attr.aws_control_catalog_common_control_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_control_catalog_common_control.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsControlCatalogCommonControlInfo(aws_control_catalog_common_control_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_control_catalog_common_control = rule(
+    implementation = _cloudformation_aws_control_catalog_common_control_impl,
+    doc = "Schema-derived rule for one `aws_control_catalog_common_control` entry.",
+    provides = [CloudformationAwsControlCatalogCommonControlInfo],
+    attrs = {
+        "aws_control_catalog_common_control_name": attr.string(
+            doc = "Top-level key for this aws_control_catalog_common_control in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
+CloudformationAwsControlCatalogControlInfo = provider(
+    doc = "A aws_control_catalog_control contributed by a target. Shard JSON matches the aws_control_catalog_control schema.",
+    fields = {
+        "aws_control_catalog_control_name": "string: top-level key for this aws_control_catalog_control in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_control_catalog_control_impl(ctx):
+    item_name = ctx.attr.aws_control_catalog_control_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_control_catalog_control.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsControlCatalogControlInfo(aws_control_catalog_control_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_control_catalog_control = rule(
+    implementation = _cloudformation_aws_control_catalog_control_impl,
+    doc = "Schema-derived rule for one `aws_control_catalog_control` entry.",
+    provides = [CloudformationAwsControlCatalogControlInfo],
+    attrs = {
+        "aws_control_catalog_control_name": attr.string(
+            doc = "Top-level key for this aws_control_catalog_control in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
+CloudformationAwsControlCatalogObjectiveInfo = provider(
+    doc = "A aws_control_catalog_objective contributed by a target. Shard JSON matches the aws_control_catalog_objective schema.",
+    fields = {
+        "aws_control_catalog_objective_name": "string: top-level key for this aws_control_catalog_objective in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_control_catalog_objective_impl(ctx):
+    item_name = ctx.attr.aws_control_catalog_objective_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_control_catalog_objective.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsControlCatalogObjectiveInfo(aws_control_catalog_objective_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_control_catalog_objective = rule(
+    implementation = _cloudformation_aws_control_catalog_objective_impl,
+    doc = "Schema-derived rule for one `aws_control_catalog_objective` entry.",
+    provides = [CloudformationAwsControlCatalogObjectiveInfo],
+    attrs = {
+        "aws_control_catalog_objective_name": attr.string(
+            doc = "Top-level key for this aws_control_catalog_objective in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsControlTowerEnabledBaselineInfo = provider(
     doc = "A aws_control_tower_enabled_baseline contributed by a target. Shard JSON matches the aws_control_tower_enabled_baseline schema.",
     fields = {
@@ -21516,6 +24697,61 @@ cloudformation_aws_customer_profiles_domain = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-customerprofiles-domain.html#cfn-customerprofiles-domain-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsCustomerProfilesDomainObjectTypeInfo = provider(
+    doc = "A aws_customer_profiles_domain_object_type contributed by a target. Shard JSON matches the aws_customer_profiles_domain_object_type schema.",
+    fields = {
+        "aws_customer_profiles_domain_object_type_name": "string: top-level key for this aws_customer_profiles_domain_object_type in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_customer_profiles_domain_object_type_impl(ctx):
+    item_name = ctx.attr.aws_customer_profiles_domain_object_type_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "DomainName": ctx.attr.DomainName,
+        "EncryptionKey": ctx.attr.EncryptionKey,
+        "Fields": parse_json_or_none(ctx.attr.Fields),
+        "ObjectTypeName": ctx.attr.ObjectTypeName,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_customer_profiles_domain_object_type.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsCustomerProfilesDomainObjectTypeInfo(aws_customer_profiles_domain_object_type_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_customer_profiles_domain_object_type = rule(
+    implementation = _cloudformation_aws_customer_profiles_domain_object_type_impl,
+    doc = "Schema-derived rule for one `aws_customer_profiles_domain_object_type` entry.",
+    provides = [CloudformationAwsCustomerProfilesDomainObjectTypeInfo],
+    attrs = {
+        "aws_customer_profiles_domain_object_type_name": attr.string(
+            doc = "Top-level key for this aws_customer_profiles_domain_object_type in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-customerprofiles-domainobjecttype.html#cfn-customerprofiles-domainobjecttype-description",
+        ),
+        "DomainName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-customerprofiles-domainobjecttype.html#cfn-customerprofiles-domainobjecttype-domainname",
+        ),
+        "EncryptionKey": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-customerprofiles-domainobjecttype.html#cfn-customerprofiles-domainobjecttype-encryptionkey",
+        ),
+        "Fields": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-customerprofiles-domainobjecttype.html#cfn-customerprofiles-domainobjecttype-fields (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "ObjectTypeName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-customerprofiles-domainobjecttype.html#cfn-customerprofiles-domainobjecttype-objecttypename",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-customerprofiles-domainobjecttype.html#cfn-customerprofiles-domainobjecttype-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -22260,6 +25496,170 @@ cloudformation_aws_data_brew_schedule = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-schedule.html#cfn-databrew-schedule-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsDataExchangeAssetsInfo = provider(
+    doc = "A aws_data_exchange_assets contributed by a target. Shard JSON matches the aws_data_exchange_assets schema.",
+    fields = {
+        "aws_data_exchange_assets_name": "string: top-level key for this aws_data_exchange_assets in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_data_exchange_assets_impl(ctx):
+    item_name = ctx.attr.aws_data_exchange_assets_name or ctx.label.name
+    payload = {
+        "DataSetId": ctx.attr.DataSetId,
+        "Name": ctx.attr.Name,
+        "RevisionId": ctx.attr.RevisionId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_exchange_assets.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsDataExchangeAssetsInfo(aws_data_exchange_assets_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_data_exchange_assets = rule(
+    implementation = _cloudformation_aws_data_exchange_assets_impl,
+    doc = "Schema-derived rule for one `aws_data_exchange_assets` entry.",
+    provides = [CloudformationAwsDataExchangeAssetsInfo],
+    attrs = {
+        "aws_data_exchange_assets_name": attr.string(
+            doc = "Top-level key for this aws_data_exchange_assets in the rendered project. Defaults to the rule name.",
+        ),
+        "DataSetId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dataexchange-assets.html#cfn-dataexchange-assets-datasetid",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dataexchange-assets.html#cfn-dataexchange-assets-name",
+        ),
+        "RevisionId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dataexchange-assets.html#cfn-dataexchange-assets-revisionid",
+        ),
+    },
+)
+
+CloudformationAwsDataExchangeDataSetInfo = provider(
+    doc = "A aws_data_exchange_data_set contributed by a target. Shard JSON matches the aws_data_exchange_data_set schema.",
+    fields = {
+        "aws_data_exchange_data_set_name": "string: top-level key for this aws_data_exchange_data_set in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_data_exchange_data_set_impl(ctx):
+    item_name = ctx.attr.aws_data_exchange_data_set_name or ctx.label.name
+    payload = {
+        "AssetType": ctx.attr.AssetType,
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_exchange_data_set.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsDataExchangeDataSetInfo(aws_data_exchange_data_set_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_data_exchange_data_set = rule(
+    implementation = _cloudformation_aws_data_exchange_data_set_impl,
+    doc = "Schema-derived rule for one `aws_data_exchange_data_set` entry.",
+    provides = [CloudformationAwsDataExchangeDataSetInfo],
+    attrs = {
+        "aws_data_exchange_data_set_name": attr.string(
+            doc = "Top-level key for this aws_data_exchange_data_set in the rendered project. Defaults to the rule name.",
+        ),
+        "AssetType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dataexchange-dataset.html#cfn-dataexchange-dataset-assettype",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dataexchange-dataset.html#cfn-dataexchange-dataset-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dataexchange-dataset.html#cfn-dataexchange-dataset-name",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dataexchange-dataset.html#cfn-dataexchange-dataset-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsDataExchangeEntitledDataSetsInfo = provider(
+    doc = "A aws_data_exchange_entitled_data_sets contributed by a target. Shard JSON matches the aws_data_exchange_entitled_data_sets schema.",
+    fields = {
+        "aws_data_exchange_entitled_data_sets_name": "string: top-level key for this aws_data_exchange_entitled_data_sets in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_data_exchange_entitled_data_sets_impl(ctx):
+    item_name = ctx.attr.aws_data_exchange_entitled_data_sets_name or ctx.label.name
+    payload = {
+        "AssetType": ctx.attr.AssetType,
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_exchange_entitled_data_sets.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsDataExchangeEntitledDataSetsInfo(aws_data_exchange_entitled_data_sets_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_data_exchange_entitled_data_sets = rule(
+    implementation = _cloudformation_aws_data_exchange_entitled_data_sets_impl,
+    doc = "Schema-derived rule for one `aws_data_exchange_entitled_data_sets` entry.",
+    provides = [CloudformationAwsDataExchangeEntitledDataSetsInfo],
+    attrs = {
+        "aws_data_exchange_entitled_data_sets_name": attr.string(
+            doc = "Top-level key for this aws_data_exchange_entitled_data_sets in the rendered project. Defaults to the rule name.",
+        ),
+        "AssetType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dataexchange-entitleddatasets.html#cfn-dataexchange-entitleddatasets-assettype",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dataexchange-entitleddatasets.html#cfn-dataexchange-entitleddatasets-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dataexchange-entitleddatasets.html#cfn-dataexchange-entitleddatasets-name",
+        ),
+    },
+)
+
+CloudformationAwsDataExchangeJobInfo = provider(
+    doc = "A aws_data_exchange_job contributed by a target. Shard JSON matches the aws_data_exchange_job schema.",
+    fields = {
+        "aws_data_exchange_job_name": "string: top-level key for this aws_data_exchange_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_data_exchange_job_impl(ctx):
+    item_name = ctx.attr.aws_data_exchange_job_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_data_exchange_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsDataExchangeJobInfo(aws_data_exchange_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_data_exchange_job = rule(
+    implementation = _cloudformation_aws_data_exchange_job_impl,
+    doc = "Schema-derived rule for one `aws_data_exchange_job` entry.",
+    provides = [CloudformationAwsDataExchangeJobInfo],
+    attrs = {
+        "aws_data_exchange_job_name": attr.string(
+            doc = "Top-level key for this aws_data_exchange_job in the rendered project. Defaults to the rule name.",
         ),
     },
 )
@@ -25147,6 +28547,57 @@ cloudformation_aws_dev_ops_agent_agent_space = rule(
     },
 )
 
+CloudformationAwsDevOpsAgentAssetInfo = provider(
+    doc = "A aws_dev_ops_agent_asset contributed by a target. Shard JSON matches the aws_dev_ops_agent_asset schema.",
+    fields = {
+        "aws_dev_ops_agent_asset_name": "string: top-level key for this aws_dev_ops_agent_asset in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_dev_ops_agent_asset_impl(ctx):
+    item_name = ctx.attr.aws_dev_ops_agent_asset_name or ctx.label.name
+    payload = {
+        "AgentSpaceId": ctx.attr.AgentSpaceId,
+        "AssetType": ctx.attr.AssetType,
+        "Files": parse_json_or_none(ctx.attr.Files),
+        "Metadata": parse_json_or_none(ctx.attr.Metadata),
+        "Zip": ctx.attr.Zip,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_dev_ops_agent_asset.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsDevOpsAgentAssetInfo(aws_dev_ops_agent_asset_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_dev_ops_agent_asset = rule(
+    implementation = _cloudformation_aws_dev_ops_agent_asset_impl,
+    doc = "Schema-derived rule for one `aws_dev_ops_agent_asset` entry.",
+    provides = [CloudformationAwsDevOpsAgentAssetInfo],
+    attrs = {
+        "aws_dev_ops_agent_asset_name": attr.string(
+            doc = "Top-level key for this aws_dev_ops_agent_asset in the rendered project. Defaults to the rule name.",
+        ),
+        "AgentSpaceId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-asset.html#cfn-devopsagent-asset-agentspaceid",
+        ),
+        "AssetType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-asset.html#cfn-devopsagent-asset-assettype",
+        ),
+        "Files": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-asset.html#cfn-devopsagent-asset-files (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Metadata": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-asset.html#cfn-devopsagent-asset-metadata (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Zip": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-asset.html#cfn-devopsagent-asset-zip",
+        ),
+    },
+)
+
 CloudformationAwsDevOpsAgentAssociationInfo = provider(
     doc = "A aws_dev_ops_agent_association contributed by a target. Shard JSON matches the aws_dev_ops_agent_association schema.",
     fields = {
@@ -25252,10 +28703,13 @@ CloudformationAwsDevOpsAgentServiceInfo = provider(
 def _cloudformation_aws_dev_ops_agent_service_impl(ctx):
     item_name = ctx.attr.aws_dev_ops_agent_service_name or ctx.label.name
     payload = {
+        "ExchangeUrlPrivateConnectionName": ctx.attr.ExchangeUrlPrivateConnectionName,
         "KmsKeyArn": ctx.attr.KmsKeyArn,
+        "PrivateConnectionName": ctx.attr.PrivateConnectionName,
         "ServiceDetails": parse_json_or_none(ctx.attr.ServiceDetails),
         "ServiceType": ctx.attr.ServiceType,
         "Tags": parse_json_or_none(ctx.attr.Tags),
+        "TargetUrlPrivateConnectionName": ctx.attr.TargetUrlPrivateConnectionName,
     }
     payload = strip_empty(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_dev_ops_agent_service.json")
@@ -25273,8 +28727,14 @@ cloudformation_aws_dev_ops_agent_service = rule(
         "aws_dev_ops_agent_service_name": attr.string(
             doc = "Top-level key for this aws_dev_ops_agent_service in the rendered project. Defaults to the rule name.",
         ),
+        "ExchangeUrlPrivateConnectionName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-service.html#cfn-devopsagent-service-exchangeurlprivateconnectionname",
+        ),
         "KmsKeyArn": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-service.html#cfn-devopsagent-service-kmskeyarn",
+        ),
+        "PrivateConnectionName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-service.html#cfn-devopsagent-service-privateconnectionname",
         ),
         "ServiceDetails": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
@@ -25284,6 +28744,60 @@ cloudformation_aws_dev_ops_agent_service = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-service.html#cfn-devopsagent-service-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TargetUrlPrivateConnectionName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-service.html#cfn-devopsagent-service-targeturlprivateconnectionname",
+        ),
+    },
+)
+
+CloudformationAwsDevOpsAgentTriggerInfo = provider(
+    doc = "A aws_dev_ops_agent_trigger contributed by a target. Shard JSON matches the aws_dev_ops_agent_trigger schema.",
+    fields = {
+        "aws_dev_ops_agent_trigger_name": "string: top-level key for this aws_dev_ops_agent_trigger in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_dev_ops_agent_trigger_impl(ctx):
+    item_name = ctx.attr.aws_dev_ops_agent_trigger_name or ctx.label.name
+    payload = {
+        "Action": parse_json_or_none(ctx.attr.Action),
+        "AgentSpaceId": ctx.attr.AgentSpaceId,
+        "Condition": parse_json_or_none(ctx.attr.Condition),
+        "Status": ctx.attr.Status,
+        "Type": ctx.attr.Type,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_dev_ops_agent_trigger.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsDevOpsAgentTriggerInfo(aws_dev_ops_agent_trigger_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_dev_ops_agent_trigger = rule(
+    implementation = _cloudformation_aws_dev_ops_agent_trigger_impl,
+    doc = "Schema-derived rule for one `aws_dev_ops_agent_trigger` entry.",
+    provides = [CloudformationAwsDevOpsAgentTriggerInfo],
+    attrs = {
+        "aws_dev_ops_agent_trigger_name": attr.string(
+            doc = "Top-level key for this aws_dev_ops_agent_trigger in the rendered project. Defaults to the rule name.",
+        ),
+        "Action": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-trigger.html#cfn-devopsagent-trigger-action (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "AgentSpaceId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-trigger.html#cfn-devopsagent-trigger-agentspaceid",
+        ),
+        "Condition": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Status": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-trigger.html#cfn-devopsagent-trigger-status",
+        ),
+        "Type": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devopsagent-trigger.html#cfn-devopsagent-trigger-type",
         ),
     },
 )
@@ -25614,6 +29128,7 @@ def _cloudformation_aws_direct_connect_private_virtual_interface_impl(ctx):
         "DirectConnectGatewayId": ctx.attr.DirectConnectGatewayId,
         "EnableSiteLink": parse_json_or_none(ctx.attr.EnableSiteLink),
         "Mtu": parse_json_or_none(ctx.attr.Mtu),
+        "RateLimit": ctx.attr.RateLimit,
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VirtualGatewayId": ctx.attr.VirtualGatewayId,
         "VirtualInterfaceName": ctx.attr.VirtualInterfaceName,
@@ -25653,6 +29168,9 @@ cloudformation_aws_direct_connect_private_virtual_interface = rule(
         "Mtu": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directconnect-privatevirtualinterface.html#cfn-directconnect-privatevirtualinterface-mtu (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
+        "RateLimit": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directconnect-privatevirtualinterface.html#cfn-directconnect-privatevirtualinterface-ratelimit",
+        ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directconnect-privatevirtualinterface.html#cfn-directconnect-privatevirtualinterface-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
@@ -25682,6 +29200,7 @@ def _cloudformation_aws_direct_connect_public_virtual_interface_impl(ctx):
         "AllocatePublicVirtualInterfaceRoleArn": ctx.attr.AllocatePublicVirtualInterfaceRoleArn,
         "BgpPeers": parse_json_or_none(ctx.attr.BgpPeers),
         "ConnectionId": ctx.attr.ConnectionId,
+        "RateLimit": ctx.attr.RateLimit,
         "RouteFilterPrefixes": parse_json_or_none(ctx.attr.RouteFilterPrefixes),
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VirtualInterfaceName": ctx.attr.VirtualInterfaceName,
@@ -25711,6 +29230,9 @@ cloudformation_aws_direct_connect_public_virtual_interface = rule(
         ),
         "ConnectionId": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directconnect-publicvirtualinterface.html#cfn-directconnect-publicvirtualinterface-connectionid",
+        ),
+        "RateLimit": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directconnect-publicvirtualinterface.html#cfn-directconnect-publicvirtualinterface-ratelimit",
         ),
         "RouteFilterPrefixes": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directconnect-publicvirtualinterface.html#cfn-directconnect-publicvirtualinterface-routefilterprefixes (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -25744,6 +29266,7 @@ def _cloudformation_aws_direct_connect_transit_virtual_interface_impl(ctx):
         "DirectConnectGatewayId": ctx.attr.DirectConnectGatewayId,
         "EnableSiteLink": parse_json_or_none(ctx.attr.EnableSiteLink),
         "Mtu": parse_json_or_none(ctx.attr.Mtu),
+        "RateLimit": ctx.attr.RateLimit,
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "VirtualInterfaceName": ctx.attr.VirtualInterfaceName,
         "Vlan": parse_json_or_none(ctx.attr.Vlan),
@@ -25781,6 +29304,9 @@ cloudformation_aws_direct_connect_transit_virtual_interface = rule(
         ),
         "Mtu": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directconnect-transitvirtualinterface.html#cfn-directconnect-transitvirtualinterface-mtu (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "RateLimit": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directconnect-transitvirtualinterface.html#cfn-directconnect-transitvirtualinterface-ratelimit",
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directconnect-transitvirtualinterface.html#cfn-directconnect-transitvirtualinterface-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -27345,6 +30871,37 @@ cloudformation_aws_doc_dbelastic_cluster = rule(
     },
 )
 
+CloudformationAwsDrsRecoveryInstanceInfo = provider(
+    doc = "A aws_drs_recovery_instance contributed by a target. Shard JSON matches the aws_drs_recovery_instance schema.",
+    fields = {
+        "aws_drs_recovery_instance_name": "string: top-level key for this aws_drs_recovery_instance in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_drs_recovery_instance_impl(ctx):
+    item_name = ctx.attr.aws_drs_recovery_instance_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_drs_recovery_instance.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsDrsRecoveryInstanceInfo(aws_drs_recovery_instance_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_drs_recovery_instance = rule(
+    implementation = _cloudformation_aws_drs_recovery_instance_impl,
+    doc = "Schema-derived rule for one `aws_drs_recovery_instance` entry.",
+    provides = [CloudformationAwsDrsRecoveryInstanceInfo],
+    attrs = {
+        "aws_drs_recovery_instance_name": attr.string(
+            doc = "Top-level key for this aws_drs_recovery_instance in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsDsqlClusterInfo = provider(
     doc = "A aws_dsql_cluster contributed by a target. Shard JSON matches the aws_dsql_cluster schema.",
     fields = {
@@ -27392,6 +30949,65 @@ cloudformation_aws_dsql_cluster = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dsql-cluster.html#cfn-dsql-cluster-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsDynamoDbExportInfo = provider(
+    doc = "A aws_dynamo_db_export contributed by a target. Shard JSON matches the aws_dynamo_db_export schema.",
+    fields = {
+        "aws_dynamo_db_export_name": "string: top-level key for this aws_dynamo_db_export in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_dynamo_db_export_impl(ctx):
+    item_name = ctx.attr.aws_dynamo_db_export_name or ctx.label.name
+    payload = {
+        "ExportFormat": ctx.attr.ExportFormat,
+        "ExportType": ctx.attr.ExportType,
+        "S3Bucket": ctx.attr.S3Bucket,
+        "S3BucketOwner": ctx.attr.S3BucketOwner,
+        "S3Prefix": ctx.attr.S3Prefix,
+        "S3SseAlgorithm": ctx.attr.S3SseAlgorithm,
+        "TableArn": ctx.attr.TableArn,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_dynamo_db_export.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsDynamoDbExportInfo(aws_dynamo_db_export_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_dynamo_db_export = rule(
+    implementation = _cloudformation_aws_dynamo_db_export_impl,
+    doc = "Schema-derived rule for one `aws_dynamo_db_export` entry.",
+    provides = [CloudformationAwsDynamoDbExportInfo],
+    attrs = {
+        "aws_dynamo_db_export_name": attr.string(
+            doc = "Top-level key for this aws_dynamo_db_export in the rendered project. Defaults to the rule name.",
+        ),
+        "ExportFormat": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-export.html#cfn-dynamodb-export-exportformat",
+        ),
+        "ExportType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-export.html#cfn-dynamodb-export-exporttype",
+        ),
+        "S3Bucket": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-export.html#cfn-dynamodb-export-s3bucket",
+        ),
+        "S3BucketOwner": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-export.html#cfn-dynamodb-export-s3bucketowner",
+        ),
+        "S3Prefix": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-export.html#cfn-dynamodb-export-s3prefix",
+        ),
+        "S3SseAlgorithm": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-export.html#cfn-dynamodb-export-s3ssealgorithm",
+        ),
+        "TableArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-export.html#cfn-dynamodb-export-tablearn",
         ),
     },
 )
@@ -27495,6 +31111,45 @@ cloudformation_aws_dynamo_db_global_table = rule(
         ),
         "WriteProvisionedThroughputSettings": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsDynamoDbStreamInfo = provider(
+    doc = "A aws_dynamo_db_stream contributed by a target. Shard JSON matches the aws_dynamo_db_stream schema.",
+    fields = {
+        "aws_dynamo_db_stream_name": "string: top-level key for this aws_dynamo_db_stream in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_dynamo_db_stream_impl(ctx):
+    item_name = ctx.attr.aws_dynamo_db_stream_name or ctx.label.name
+    payload = {
+        "StreamViewType": ctx.attr.StreamViewType,
+        "TableName": ctx.attr.TableName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_dynamo_db_stream.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsDynamoDbStreamInfo(aws_dynamo_db_stream_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_dynamo_db_stream = rule(
+    implementation = _cloudformation_aws_dynamo_db_stream_impl,
+    doc = "Schema-derived rule for one `aws_dynamo_db_stream` entry.",
+    provides = [CloudformationAwsDynamoDbStreamInfo],
+    attrs = {
+        "aws_dynamo_db_stream_name": attr.string(
+            doc = "Top-level key for this aws_dynamo_db_stream in the rendered project. Defaults to the rule name.",
+        ),
+        "StreamViewType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-stream.html#cfn-dynamodb-stream-streamviewtype",
+        ),
+        "TableName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-stream.html#cfn-dynamodb-stream-tablename",
         ),
     },
 )
@@ -28507,6 +32162,57 @@ cloudformation_aws_ec2_enclave_certificate_iam_role_association = rule(
     },
 )
 
+CloudformationAwsEc2ExportInstanceTaskInfo = provider(
+    doc = "A aws_ec2_export_instance_task contributed by a target. Shard JSON matches the aws_ec2_export_instance_task schema.",
+    fields = {
+        "aws_ec2_export_instance_task_name": "string: top-level key for this aws_ec2_export_instance_task in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_ec2_export_instance_task_impl(ctx):
+    item_name = ctx.attr.aws_ec2_export_instance_task_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "ExportToS3Task": parse_json_or_none(ctx.attr.ExportToS3Task),
+        "InstanceId": ctx.attr.InstanceId,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "TargetEnvironment": ctx.attr.TargetEnvironment,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_export_instance_task.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsEc2ExportInstanceTaskInfo(aws_ec2_export_instance_task_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_ec2_export_instance_task = rule(
+    implementation = _cloudformation_aws_ec2_export_instance_task_impl,
+    doc = "Schema-derived rule for one `aws_ec2_export_instance_task` entry.",
+    provides = [CloudformationAwsEc2ExportInstanceTaskInfo],
+    attrs = {
+        "aws_ec2_export_instance_task_name": attr.string(
+            doc = "Top-level key for this aws_ec2_export_instance_task in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-exportinstancetask.html#cfn-ec2-exportinstancetask-description",
+        ),
+        "ExportToS3Task": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "InstanceId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-exportinstancetask.html#cfn-ec2-exportinstancetask-instanceid",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-exportinstancetask.html#cfn-ec2-exportinstancetask-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TargetEnvironment": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-exportinstancetask.html#cfn-ec2-exportinstancetask-targetenvironment",
+        ),
+    },
+)
+
 CloudformationAwsEc2FlowLogInfo = provider(
     doc = "A aws_ec2_flow_log contributed by a target. Shard JSON matches the aws_ec2_flow_log schema.",
     fields = {
@@ -28528,6 +32234,7 @@ def _cloudformation_aws_ec2_flow_log_impl(ctx):
         "MaxAggregationInterval": parse_json_or_none(ctx.attr.MaxAggregationInterval),
         "ResourceId": ctx.attr.ResourceId,
         "ResourceType": ctx.attr.ResourceType,
+        "TagFieldSpecifications": parse_json_or_none(ctx.attr.TagFieldSpecifications),
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TrafficType": ctx.attr.TrafficType,
     }
@@ -28576,6 +32283,9 @@ cloudformation_aws_ec2_flow_log = rule(
         ),
         "ResourceType": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-flowlog.html#cfn-ec2-flowlog-resourcetype",
+        ),
+        "TagFieldSpecifications": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-flowlog.html#cfn-ec2-flowlog-tagfieldspecifications (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-flowlog.html#cfn-ec2-flowlog-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -30523,6 +34233,7 @@ CloudformationAwsEc2PlacementGroupInfo = provider(
 def _cloudformation_aws_ec2_placement_group_impl(ctx):
     item_name = ctx.attr.aws_ec2_placement_group_name or ctx.label.name
     payload = {
+        "ParentGroupId": ctx.attr.ParentGroupId,
         "PartitionCount": parse_json_or_none(ctx.attr.PartitionCount),
         "SpreadLevel": ctx.attr.SpreadLevel,
         "Strategy": ctx.attr.Strategy,
@@ -30543,6 +34254,9 @@ cloudformation_aws_ec2_placement_group = rule(
     attrs = {
         "aws_ec2_placement_group_name": attr.string(
             doc = "Top-level key for this aws_ec2_placement_group in the rendered project. Defaults to the rule name.",
+        ),
+        "ParentGroupId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-placementgroup.html#cfn-ec2-placementgroup-parentgroupid",
         ),
         "PartitionCount": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-placementgroup.html#cfn-ec2-placementgroup-partitioncount (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -30632,6 +34346,7 @@ def _cloudformation_aws_ec2_route_impl(ctx):
         "LocalGatewayId": ctx.attr.LocalGatewayId,
         "NatGatewayId": ctx.attr.NatGatewayId,
         "NetworkInterfaceId": ctx.attr.NetworkInterfaceId,
+        "OdbNetworkArn": ctx.attr.OdbNetworkArn,
         "RouteTableId": ctx.attr.RouteTableId,
         "TransitGatewayId": ctx.attr.TransitGatewayId,
         "VpcEndpointId": ctx.attr.VpcEndpointId,
@@ -30685,6 +34400,9 @@ cloudformation_aws_ec2_route = rule(
         ),
         "NetworkInterfaceId": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html#cfn-ec2-route-networkinterfaceid",
+        ),
+        "OdbNetworkArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html#cfn-ec2-route-odbnetworkarn",
         ),
         "RouteTableId": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html#cfn-ec2-route-routetableid",
@@ -32341,6 +36059,131 @@ cloudformation_aws_ec2_transit_gateway_peering_attachment = rule(
     },
 )
 
+CloudformationAwsEc2TransitGatewayPolicyTableInfo = provider(
+    doc = "A aws_ec2_transit_gateway_policy_table contributed by a target. Shard JSON matches the aws_ec2_transit_gateway_policy_table schema.",
+    fields = {
+        "aws_ec2_transit_gateway_policy_table_name": "string: top-level key for this aws_ec2_transit_gateway_policy_table in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_ec2_transit_gateway_policy_table_impl(ctx):
+    item_name = ctx.attr.aws_ec2_transit_gateway_policy_table_name or ctx.label.name
+    payload = {
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "TransitGatewayId": ctx.attr.TransitGatewayId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_policy_table.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsEc2TransitGatewayPolicyTableInfo(aws_ec2_transit_gateway_policy_table_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_ec2_transit_gateway_policy_table = rule(
+    implementation = _cloudformation_aws_ec2_transit_gateway_policy_table_impl,
+    doc = "Schema-derived rule for one `aws_ec2_transit_gateway_policy_table` entry.",
+    provides = [CloudformationAwsEc2TransitGatewayPolicyTableInfo],
+    attrs = {
+        "aws_ec2_transit_gateway_policy_table_name": attr.string(
+            doc = "Top-level key for this aws_ec2_transit_gateway_policy_table in the rendered project. Defaults to the rule name.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-transitgatewaypolicytable.html#cfn-ec2-transitgatewaypolicytable-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TransitGatewayId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-transitgatewaypolicytable.html#cfn-ec2-transitgatewaypolicytable-transitgatewayid",
+        ),
+    },
+)
+
+CloudformationAwsEc2TransitGatewayPolicyTableAssociationInfo = provider(
+    doc = "A aws_ec2_transit_gateway_policy_table_association contributed by a target. Shard JSON matches the aws_ec2_transit_gateway_policy_table_association schema.",
+    fields = {
+        "aws_ec2_transit_gateway_policy_table_association_name": "string: top-level key for this aws_ec2_transit_gateway_policy_table_association in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_ec2_transit_gateway_policy_table_association_impl(ctx):
+    item_name = ctx.attr.aws_ec2_transit_gateway_policy_table_association_name or ctx.label.name
+    payload = {
+        "TransitGatewayAttachmentId": ctx.attr.TransitGatewayAttachmentId,
+        "TransitGatewayPolicyTableId": ctx.attr.TransitGatewayPolicyTableId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_policy_table_association.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsEc2TransitGatewayPolicyTableAssociationInfo(aws_ec2_transit_gateway_policy_table_association_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_ec2_transit_gateway_policy_table_association = rule(
+    implementation = _cloudformation_aws_ec2_transit_gateway_policy_table_association_impl,
+    doc = "Schema-derived rule for one `aws_ec2_transit_gateway_policy_table_association` entry.",
+    provides = [CloudformationAwsEc2TransitGatewayPolicyTableAssociationInfo],
+    attrs = {
+        "aws_ec2_transit_gateway_policy_table_association_name": attr.string(
+            doc = "Top-level key for this aws_ec2_transit_gateway_policy_table_association in the rendered project. Defaults to the rule name.",
+        ),
+        "TransitGatewayAttachmentId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-transitgatewaypolicytableassociation.html#cfn-ec2-transitgatewaypolicytableassociation-transitgatewayattachmentid",
+        ),
+        "TransitGatewayPolicyTableId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-transitgatewaypolicytableassociation.html#cfn-ec2-transitgatewaypolicytableassociation-transitgatewaypolicytableid",
+        ),
+    },
+)
+
+CloudformationAwsEc2TransitGatewayPolicyTableEntryInfo = provider(
+    doc = "A aws_ec2_transit_gateway_policy_table_entry contributed by a target. Shard JSON matches the aws_ec2_transit_gateway_policy_table_entry schema.",
+    fields = {
+        "aws_ec2_transit_gateway_policy_table_entry_name": "string: top-level key for this aws_ec2_transit_gateway_policy_table_entry in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_ec2_transit_gateway_policy_table_entry_impl(ctx):
+    item_name = ctx.attr.aws_ec2_transit_gateway_policy_table_entry_name or ctx.label.name
+    payload = {
+        "PolicyRule": parse_json_or_none(ctx.attr.PolicyRule),
+        "PolicyRuleNumber": ctx.attr.PolicyRuleNumber,
+        "TargetRouteTableId": ctx.attr.TargetRouteTableId,
+        "TransitGatewayPolicyTableId": ctx.attr.TransitGatewayPolicyTableId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_transit_gateway_policy_table_entry.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsEc2TransitGatewayPolicyTableEntryInfo(aws_ec2_transit_gateway_policy_table_entry_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_ec2_transit_gateway_policy_table_entry = rule(
+    implementation = _cloudformation_aws_ec2_transit_gateway_policy_table_entry_impl,
+    doc = "Schema-derived rule for one `aws_ec2_transit_gateway_policy_table_entry` entry.",
+    provides = [CloudformationAwsEc2TransitGatewayPolicyTableEntryInfo],
+    attrs = {
+        "aws_ec2_transit_gateway_policy_table_entry_name": attr.string(
+            doc = "Top-level key for this aws_ec2_transit_gateway_policy_table_entry in the rendered project. Defaults to the rule name.",
+        ),
+        "PolicyRule": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "PolicyRuleNumber": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-transitgatewaypolicytableentry.html#cfn-ec2-transitgatewaypolicytableentry-policyrulenumber",
+        ),
+        "TargetRouteTableId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-transitgatewaypolicytableentry.html#cfn-ec2-transitgatewaypolicytableentry-targetroutetableid",
+        ),
+        "TransitGatewayPolicyTableId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-transitgatewaypolicytableentry.html#cfn-ec2-transitgatewaypolicytableentry-transitgatewaypolicytableid",
+        ),
+    },
+)
+
 CloudformationAwsEc2TransitGatewayRouteInfo = provider(
     doc = "A aws_ec2_transit_gateway_route contributed by a target. Shard JSON matches the aws_ec2_transit_gateway_route schema.",
     fields = {
@@ -33000,6 +36843,7 @@ def _cloudformation_aws_ec2_vpc_impl(ctx):
         "Ipv4IpamPoolId": ctx.attr.Ipv4IpamPoolId,
         "Ipv4NetmaskLength": parse_json_or_none(ctx.attr.Ipv4NetmaskLength),
         "Tags": parse_json_or_none(ctx.attr.Tags),
+        "VpcEncryptionControl": parse_json_or_none(ctx.attr.VpcEncryptionControl),
     }
     payload = strip_empty(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_ec2_vpc.json")
@@ -33037,6 +36881,9 @@ cloudformation_aws_ec2_vpc = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc.html#cfn-ec2-vpc-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "VpcEncryptionControl": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
     },
 )
@@ -34332,6 +38179,37 @@ cloudformation_aws_ecr_signing_configuration = rule(
     },
 )
 
+CloudformationAwsEcrpublicRegistryInfo = provider(
+    doc = "A aws_ecrpublic_registry contributed by a target. Shard JSON matches the aws_ecrpublic_registry schema.",
+    fields = {
+        "aws_ecrpublic_registry_name": "string: top-level key for this aws_ecrpublic_registry in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_ecrpublic_registry_impl(ctx):
+    item_name = ctx.attr.aws_ecrpublic_registry_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecrpublic_registry.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsEcrpublicRegistryInfo(aws_ecrpublic_registry_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_ecrpublic_registry = rule(
+    implementation = _cloudformation_aws_ecrpublic_registry_impl,
+    doc = "Schema-derived rule for one `aws_ecrpublic_registry` entry.",
+    provides = [CloudformationAwsEcrpublicRegistryInfo],
+    attrs = {
+        "aws_ecrpublic_registry_name": attr.string(
+            doc = "Top-level key for this aws_ecrpublic_registry in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsEcsCapacityProviderInfo = provider(
     doc = "A aws_ecs_capacity_provider contributed by a target. Shard JSON matches the aws_ecs_capacity_provider schema.",
     fields = {
@@ -34485,6 +38363,37 @@ cloudformation_aws_ecs_cluster_capacity_provider_associations = rule(
     },
 )
 
+CloudformationAwsEcsContainerInstanceInfo = provider(
+    doc = "A aws_ecs_container_instance contributed by a target. Shard JSON matches the aws_ecs_container_instance schema.",
+    fields = {
+        "aws_ecs_container_instance_name": "string: top-level key for this aws_ecs_container_instance in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_ecs_container_instance_impl(ctx):
+    item_name = ctx.attr.aws_ecs_container_instance_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecs_container_instance.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsEcsContainerInstanceInfo(aws_ecs_container_instance_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_ecs_container_instance = rule(
+    implementation = _cloudformation_aws_ecs_container_instance_impl,
+    doc = "Schema-derived rule for one `aws_ecs_container_instance` entry.",
+    provides = [CloudformationAwsEcsContainerInstanceInfo],
+    attrs = {
+        "aws_ecs_container_instance_name": attr.string(
+            doc = "Top-level key for this aws_ecs_container_instance in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsEcsDaemonInfo = provider(
     doc = "A aws_ecs_daemon contributed by a target. Shard JSON matches the aws_ecs_daemon schema.",
     fields = {
@@ -34567,7 +38476,9 @@ def _cloudformation_aws_ecs_daemon_task_definition_impl(ctx):
         "Cpu": ctx.attr.Cpu,
         "ExecutionRoleArn": ctx.attr.ExecutionRoleArn,
         "Family": ctx.attr.Family,
+        "IpcMode": ctx.attr.IpcMode,
         "Memory": ctx.attr.Memory,
+        "PidMode": ctx.attr.PidMode,
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TaskRoleArn": ctx.attr.TaskRoleArn,
         "Volumes": parse_json_or_none(ctx.attr.Volumes),
@@ -34600,8 +38511,14 @@ cloudformation_aws_ecs_daemon_task_definition = rule(
         "Family": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-daemontaskdefinition.html#cfn-ecs-daemontaskdefinition-family",
         ),
+        "IpcMode": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-daemontaskdefinition.html#cfn-ecs-daemontaskdefinition-ipcmode",
+        ),
         "Memory": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-daemontaskdefinition.html#cfn-ecs-daemontaskdefinition-memory",
+        ),
+        "PidMode": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-daemontaskdefinition.html#cfn-ecs-daemontaskdefinition-pidmode",
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-daemontaskdefinition.html#cfn-ecs-daemontaskdefinition-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -34637,6 +38554,7 @@ def _cloudformation_aws_ecs_express_gateway_service_impl(ctx):
         "ScalingTarget": parse_json_or_none(ctx.attr.ScalingTarget),
         "ServiceName": ctx.attr.ServiceName,
         "Tags": parse_json_or_none(ctx.attr.Tags),
+        "TaskDefinitionArn": ctx.attr.TaskDefinitionArn,
         "TaskRoleArn": ctx.attr.TaskRoleArn,
     }
     payload = strip_empty(payload)
@@ -34687,6 +38605,9 @@ cloudformation_aws_ecs_express_gateway_service = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TaskDefinitionArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-taskdefinitionarn",
         ),
         "TaskRoleArn": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-taskrolearn",
@@ -34760,6 +38681,7 @@ def _cloudformation_aws_ecs_service_impl(ctx):
         "HealthCheckGracePeriodSeconds": parse_json_or_none(ctx.attr.HealthCheckGracePeriodSeconds),
         "LaunchType": ctx.attr.LaunchType,
         "LoadBalancers": parse_json_or_none(ctx.attr.LoadBalancers),
+        "Monitoring": parse_json_or_none(ctx.attr.Monitoring),
         "NetworkConfiguration": parse_json_or_none(ctx.attr.NetworkConfiguration),
         "PlacementConstraints": parse_json_or_none(ctx.attr.PlacementConstraints),
         "PlacementStrategies": parse_json_or_none(ctx.attr.PlacementStrategies),
@@ -34827,6 +38749,9 @@ cloudformation_aws_ecs_service = rule(
         "LoadBalancers": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-loadbalancers (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
+        "Monitoring": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
         "NetworkConfiguration": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
@@ -34868,6 +38793,37 @@ cloudformation_aws_ecs_service = rule(
         ),
         "VpcLatticeConfigurations": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-vpclatticeconfigurations (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsEcsTaskInfo = provider(
+    doc = "A aws_ecs_task contributed by a target. Shard JSON matches the aws_ecs_task schema.",
+    fields = {
+        "aws_ecs_task_name": "string: top-level key for this aws_ecs_task in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_ecs_task_impl(ctx):
+    item_name = ctx.attr.aws_ecs_task_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_ecs_task.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsEcsTaskInfo(aws_ecs_task_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_ecs_task = rule(
+    implementation = _cloudformation_aws_ecs_task_impl,
+    doc = "Schema-derived rule for one `aws_ecs_task` entry.",
+    provides = [CloudformationAwsEcsTaskInfo],
+    attrs = {
+        "aws_ecs_task_name": attr.string(
+            doc = "Top-level key for this aws_ecs_task in the rendered project. Defaults to the rule name.",
         ),
     },
 )
@@ -35446,6 +39402,9 @@ def _cloudformation_aws_eks_cluster_impl(ctx):
         "DeletionProtection": parse_json_or_none(ctx.attr.DeletionProtection),
         "EncryptionConfig": parse_json_or_none(ctx.attr.EncryptionConfig),
         "Force": parse_json_or_none(ctx.attr.Force),
+        "KubeApiServerConfig": parse_json_or_none(ctx.attr.KubeApiServerConfig),
+        "KubeControllerManagerConfig": parse_json_or_none(ctx.attr.KubeControllerManagerConfig),
+        "KubeSchedulerConfig": parse_json_or_none(ctx.attr.KubeSchedulerConfig),
         "KubernetesNetworkConfig": parse_json_or_none(ctx.attr.KubernetesNetworkConfig),
         "Logging": parse_json_or_none(ctx.attr.Logging),
         "Name": ctx.attr.Name,
@@ -35453,6 +39412,7 @@ def _cloudformation_aws_eks_cluster_impl(ctx):
         "RemoteNetworkConfig": parse_json_or_none(ctx.attr.RemoteNetworkConfig),
         "ResourcesVpcConfig": parse_json_or_none(ctx.attr.ResourcesVpcConfig),
         "RoleArn": ctx.attr.RoleArn,
+        "RollbackConfig": parse_json_or_none(ctx.attr.RollbackConfig),
         "StorageConfig": parse_json_or_none(ctx.attr.StorageConfig),
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "UpgradePolicy": parse_json_or_none(ctx.attr.UpgradePolicy),
@@ -35496,6 +39456,15 @@ cloudformation_aws_eks_cluster = rule(
         "Force": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-force (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
+        "KubeApiServerConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "KubeControllerManagerConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "KubeSchedulerConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
         "KubernetesNetworkConfig": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
@@ -35516,6 +39485,9 @@ cloudformation_aws_eks_cluster = rule(
         ),
         "RoleArn": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-rolearn",
+        ),
+        "RollbackConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "StorageConfig": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
@@ -36080,6 +40052,7 @@ def _cloudformation_aws_elasti_cache_replication_group_impl(ctx):
         "CacheSubnetGroupName": ctx.attr.CacheSubnetGroupName,
         "ClusterMode": ctx.attr.ClusterMode,
         "DataTieringEnabled": parse_json_or_none(ctx.attr.DataTieringEnabled),
+        "Durability": ctx.attr.Durability,
         "Engine": ctx.attr.Engine,
         "EngineVersion": ctx.attr.EngineVersion,
         "GlobalReplicationGroupId": ctx.attr.GlobalReplicationGroupId,
@@ -36152,6 +40125,9 @@ cloudformation_aws_elasti_cache_replication_group = rule(
         ),
         "DataTieringEnabled": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-replicationgroup.html#cfn-elasticache-replicationgroup-datatieringenabled (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Durability": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-replicationgroup.html#cfn-elasticache-replicationgroup-durability",
         ),
         "Engine": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-replicationgroup.html#cfn-elasticache-replicationgroup-engine",
@@ -36239,6 +40215,37 @@ cloudformation_aws_elasti_cache_replication_group = rule(
         ),
         "UserGroupIds": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-replicationgroup.html#cfn-elasticache-replicationgroup-usergroupids (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsElastiCacheReservedCacheNodeInfo = provider(
+    doc = "A aws_elasti_cache_reserved_cache_node contributed by a target. Shard JSON matches the aws_elasti_cache_reserved_cache_node schema.",
+    fields = {
+        "aws_elasti_cache_reserved_cache_node_name": "string: top-level key for this aws_elasti_cache_reserved_cache_node in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_elasti_cache_reserved_cache_node_impl(ctx):
+    item_name = ctx.attr.aws_elasti_cache_reserved_cache_node_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_elasti_cache_reserved_cache_node.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsElastiCacheReservedCacheNodeInfo(aws_elasti_cache_reserved_cache_node_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_elasti_cache_reserved_cache_node = rule(
+    implementation = _cloudformation_aws_elasti_cache_reserved_cache_node_impl,
+    doc = "Schema-derived rule for one `aws_elasti_cache_reserved_cache_node` entry.",
+    provides = [CloudformationAwsElastiCacheReservedCacheNodeInfo],
+    attrs = {
+        "aws_elasti_cache_reserved_cache_node_name": attr.string(
+            doc = "Top-level key for this aws_elasti_cache_reserved_cache_node in the rendered project. Defaults to the rule name.",
         ),
     },
 )
@@ -36416,6 +40423,53 @@ cloudformation_aws_elasti_cache_serverless_cache = rule(
         ),
         "UserGroupId": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscache.html#cfn-elasticache-serverlesscache-usergroupid",
+        ),
+    },
+)
+
+CloudformationAwsElastiCacheServerlessCacheSnapshotInfo = provider(
+    doc = "A aws_elasti_cache_serverless_cache_snapshot contributed by a target. Shard JSON matches the aws_elasti_cache_serverless_cache_snapshot schema.",
+    fields = {
+        "aws_elasti_cache_serverless_cache_snapshot_name": "string: top-level key for this aws_elasti_cache_serverless_cache_snapshot in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_elasti_cache_serverless_cache_snapshot_impl(ctx):
+    item_name = ctx.attr.aws_elasti_cache_serverless_cache_snapshot_name or ctx.label.name
+    payload = {
+        "KmsKeyId": ctx.attr.KmsKeyId,
+        "ServerlessCacheName": ctx.attr.ServerlessCacheName,
+        "ServerlessCacheSnapshotName": ctx.attr.ServerlessCacheSnapshotName,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_elasti_cache_serverless_cache_snapshot.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsElastiCacheServerlessCacheSnapshotInfo(aws_elasti_cache_serverless_cache_snapshot_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_elasti_cache_serverless_cache_snapshot = rule(
+    implementation = _cloudformation_aws_elasti_cache_serverless_cache_snapshot_impl,
+    doc = "Schema-derived rule for one `aws_elasti_cache_serverless_cache_snapshot` entry.",
+    provides = [CloudformationAwsElastiCacheServerlessCacheSnapshotInfo],
+    attrs = {
+        "aws_elasti_cache_serverless_cache_snapshot_name": attr.string(
+            doc = "Top-level key for this aws_elasti_cache_serverless_cache_snapshot in the rendered project. Defaults to the rule name.",
+        ),
+        "KmsKeyId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscachesnapshot.html#cfn-elasticache-serverlesscachesnapshot-kmskeyid",
+        ),
+        "ServerlessCacheName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscachesnapshot.html#cfn-elasticache-serverlesscachesnapshot-serverlesscachename",
+        ),
+        "ServerlessCacheSnapshotName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscachesnapshot.html#cfn-elasticache-serverlesscachesnapshot-serverlesscachesnapshotname",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscachesnapshot.html#cfn-elasticache-serverlesscachesnapshot-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -36849,10 +40903,10 @@ cloudformation_aws_elastic_load_balancing_load_balancer = rule(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "AppCookieStickinessPolicy": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-appcookiestickinesspolicy (JSON-encoded; the Rust shard reader parses this verbatim.)",
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancing-loadbalancer.html#cfn-elasticloadbalancing-loadbalancer-appcookiestickinesspolicy (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "AvailabilityZones": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-availabilityzones (JSON-encoded; the Rust shard reader parses this verbatim.)",
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancing-loadbalancer.html#cfn-elasticloadbalancing-loadbalancer-availabilityzones (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "ConnectionDrainingPolicy": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
@@ -36861,37 +40915,37 @@ cloudformation_aws_elastic_load_balancing_load_balancer = rule(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "CrossZone": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-crosszone (JSON-encoded; the Rust shard reader parses this verbatim.)",
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancing-loadbalancer.html#cfn-elasticloadbalancing-loadbalancer-crosszone (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "HealthCheck": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "Instances": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-instances (JSON-encoded; the Rust shard reader parses this verbatim.)",
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancing-loadbalancer.html#cfn-elasticloadbalancing-loadbalancer-instances (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "LBCookieStickinessPolicy": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-lbcookiestickinesspolicy (JSON-encoded; the Rust shard reader parses this verbatim.)",
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancing-loadbalancer.html#cfn-elasticloadbalancing-loadbalancer-lbcookiestickinesspolicy (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "Listeners": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-listeners (JSON-encoded; the Rust shard reader parses this verbatim.)",
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancing-loadbalancer.html#cfn-elasticloadbalancing-loadbalancer-listeners (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "LoadBalancerName": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-elbname",
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancing-loadbalancer.html#cfn-elasticloadbalancing-loadbalancer-loadbalancername",
         ),
         "Policies": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-policies (JSON-encoded; the Rust shard reader parses this verbatim.)",
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancing-loadbalancer.html#cfn-elasticloadbalancing-loadbalancer-policies (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "Scheme": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-scheme",
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancing-loadbalancer.html#cfn-elasticloadbalancing-loadbalancer-scheme",
         ),
         "SecurityGroups": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-securitygroups (JSON-encoded; the Rust shard reader parses this verbatim.)",
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancing-loadbalancer.html#cfn-elasticloadbalancing-loadbalancer-securitygroups (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "Subnets": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-ec2-elb-subnets (JSON-encoded; the Rust shard reader parses this verbatim.)",
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancing-loadbalancer.html#cfn-elasticloadbalancing-loadbalancer-subnets (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "Tags": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-elb.html#cfn-elasticloadbalancing-loadbalancer-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancing-loadbalancer.html#cfn-elasticloadbalancing-loadbalancer-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -36916,6 +40970,7 @@ def _cloudformation_aws_elastic_load_balancing_v2_listener_impl(ctx):
         "Port": parse_json_or_none(ctx.attr.Port),
         "Protocol": ctx.attr.Protocol,
         "SslPolicy": ctx.attr.SslPolicy,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
     }
     payload = strip_empty(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_elastic_load_balancing_v2_listener.json")
@@ -36959,6 +41014,9 @@ cloudformation_aws_elastic_load_balancing_v2_listener = rule(
         ),
         "SslPolicy": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html#cfn-elasticloadbalancingv2-listener-sslpolicy",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html#cfn-elasticloadbalancingv2-listener-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -37017,6 +41075,7 @@ def _cloudformation_aws_elastic_load_balancing_v2_listener_rule_impl(ctx):
         "Conditions": parse_json_or_none(ctx.attr.Conditions),
         "ListenerArn": ctx.attr.ListenerArn,
         "Priority": parse_json_or_none(ctx.attr.Priority),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
         "Transforms": parse_json_or_none(ctx.attr.Transforms),
     }
     payload = strip_empty(payload)
@@ -37046,6 +41105,9 @@ cloudformation_aws_elastic_load_balancing_v2_listener_rule = rule(
         ),
         "Priority": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listenerrule.html#cfn-elasticloadbalancingv2-listenerrule-priority (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listenerrule.html#cfn-elasticloadbalancingv2-listenerrule-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "Transforms": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listenerrule.html#cfn-elasticloadbalancingv2-listenerrule-transforms (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -37432,6 +41494,53 @@ cloudformation_aws_elasticsearch_domain = rule(
     },
 )
 
+CloudformationAwsElementalInferenceDictionaryInfo = provider(
+    doc = "A aws_elemental_inference_dictionary contributed by a target. Shard JSON matches the aws_elemental_inference_dictionary schema.",
+    fields = {
+        "aws_elemental_inference_dictionary_name": "string: top-level key for this aws_elemental_inference_dictionary in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_elemental_inference_dictionary_impl(ctx):
+    item_name = ctx.attr.aws_elemental_inference_dictionary_name or ctx.label.name
+    payload = {
+        "Entries": ctx.attr.Entries,
+        "Language": ctx.attr.Language,
+        "Name": ctx.attr.Name,
+        "Tags": ctx.attr.Tags,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_elemental_inference_dictionary.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsElementalInferenceDictionaryInfo(aws_elemental_inference_dictionary_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_elemental_inference_dictionary = rule(
+    implementation = _cloudformation_aws_elemental_inference_dictionary_impl,
+    doc = "Schema-derived rule for one `aws_elemental_inference_dictionary` entry.",
+    provides = [CloudformationAwsElementalInferenceDictionaryInfo],
+    attrs = {
+        "aws_elemental_inference_dictionary_name": attr.string(
+            doc = "Top-level key for this aws_elemental_inference_dictionary in the rendered project. Defaults to the rule name.",
+        ),
+        "Entries": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elementalinference-dictionary.html#cfn-elementalinference-dictionary-entries",
+        ),
+        "Language": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elementalinference-dictionary.html#cfn-elementalinference-dictionary-language",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elementalinference-dictionary.html#cfn-elementalinference-dictionary-name",
+        ),
+        "Tags": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elementalinference-dictionary.html#cfn-elementalinference-dictionary-tags",
+        ),
+    },
+)
+
 CloudformationAwsElementalInferenceFeedInfo = provider(
     doc = "A aws_elemental_inference_feed contributed by a target. Shard JSON matches the aws_elemental_inference_feed schema.",
     fields = {
@@ -37752,6 +41861,69 @@ cloudformation_aws_emr_instance_group_config = rule(
     },
 )
 
+CloudformationAwsEmrNotebookExecutionInfo = provider(
+    doc = "A aws_emr_notebook_execution contributed by a target. Shard JSON matches the aws_emr_notebook_execution schema.",
+    fields = {
+        "aws_emr_notebook_execution_name": "string: top-level key for this aws_emr_notebook_execution in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_emr_notebook_execution_impl(ctx):
+    item_name = ctx.attr.aws_emr_notebook_execution_name or ctx.label.name
+    payload = {
+        "EnvironmentVariables": ctx.attr.EnvironmentVariables,
+        "ExecutionEngine": parse_json_or_none(ctx.attr.ExecutionEngine),
+        "NotebookExecutionName": ctx.attr.NotebookExecutionName,
+        "NotebookParams": ctx.attr.NotebookParams,
+        "NotebookS3Location": parse_json_or_none(ctx.attr.NotebookS3Location),
+        "OutputNotebookFormat": ctx.attr.OutputNotebookFormat,
+        "OutputNotebookS3Location": parse_json_or_none(ctx.attr.OutputNotebookS3Location),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_emr_notebook_execution.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsEmrNotebookExecutionInfo(aws_emr_notebook_execution_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_emr_notebook_execution = rule(
+    implementation = _cloudformation_aws_emr_notebook_execution_impl,
+    doc = "Schema-derived rule for one `aws_emr_notebook_execution` entry.",
+    provides = [CloudformationAwsEmrNotebookExecutionInfo],
+    attrs = {
+        "aws_emr_notebook_execution_name": attr.string(
+            doc = "Top-level key for this aws_emr_notebook_execution in the rendered project. Defaults to the rule name.",
+        ),
+        "EnvironmentVariables": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-notebookexecution.html#cfn-emr-notebookexecution-environmentvariables",
+        ),
+        "ExecutionEngine": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "NotebookExecutionName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-notebookexecution.html#cfn-emr-notebookexecution-notebookexecutionname",
+        ),
+        "NotebookParams": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-notebookexecution.html#cfn-emr-notebookexecution-notebookparams",
+        ),
+        "NotebookS3Location": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "OutputNotebookFormat": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-notebookexecution.html#cfn-emr-notebookexecution-outputnotebookformat",
+        ),
+        "OutputNotebookS3Location": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-notebookexecution.html#cfn-emr-notebookexecution-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsEmrSecurityConfigurationInfo = provider(
     doc = "A aws_emr_security_configuration contributed by a target. Shard JSON matches the aws_emr_security_configuration schema.",
     fields = {
@@ -38046,6 +42218,7 @@ def _cloudformation_aws_emrcontainers_endpoint_impl(ctx):
         "ExecutionRoleArn": ctx.attr.ExecutionRoleArn,
         "Name": ctx.attr.Name,
         "ReleaseLabel": ctx.attr.ReleaseLabel,
+        "SessionIdleTimeoutInMinutes": parse_json_or_none(ctx.attr.SessionIdleTimeoutInMinutes),
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
         "VirtualClusterId": ctx.attr.VirtualClusterId,
@@ -38077,6 +42250,9 @@ cloudformation_aws_emrcontainers_endpoint = rule(
         ),
         "ReleaseLabel": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrcontainers-endpoint.html#cfn-emrcontainers-endpoint-releaselabel",
+        ),
+        "SessionIdleTimeoutInMinutes": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrcontainers-endpoint.html#cfn-emrcontainers-endpoint-sessionidletimeoutinminutes (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrcontainers-endpoint.html#cfn-emrcontainers-endpoint-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -38151,6 +42327,7 @@ def _cloudformation_aws_emrcontainers_virtual_cluster_impl(ctx):
         "ContainerProvider": parse_json_or_none(ctx.attr.ContainerProvider),
         "Name": ctx.attr.Name,
         "SecurityConfigurationId": ctx.attr.SecurityConfigurationId,
+        "SessionEnabled": parse_json_or_none(ctx.attr.SessionEnabled),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
     payload = strip_empty(payload)
@@ -38177,6 +42354,9 @@ cloudformation_aws_emrcontainers_virtual_cluster = rule(
         ),
         "SecurityConfigurationId": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrcontainers-virtualcluster.html#cfn-emrcontainers-virtualcluster-securityconfigurationid",
+        ),
+        "SessionEnabled": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrcontainers-virtualcluster.html#cfn-emrcontainers-virtualcluster-sessionenabled (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emrcontainers-virtualcluster.html#cfn-emrcontainers-virtualcluster-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -39084,6 +43264,57 @@ cloudformation_aws_events_event_bus_policy = rule(
     },
 )
 
+CloudformationAwsEventsReplayInfo = provider(
+    doc = "A aws_events_replay contributed by a target. Shard JSON matches the aws_events_replay schema.",
+    fields = {
+        "aws_events_replay_name": "string: top-level key for this aws_events_replay in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_events_replay_impl(ctx):
+    item_name = ctx.attr.aws_events_replay_name or ctx.label.name
+    payload = {
+        "Destination": parse_json_or_none(ctx.attr.Destination),
+        "EventEndTime": ctx.attr.EventEndTime,
+        "EventSourceArn": ctx.attr.EventSourceArn,
+        "EventStartTime": ctx.attr.EventStartTime,
+        "ReplayName": ctx.attr.ReplayName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_events_replay.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsEventsReplayInfo(aws_events_replay_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_events_replay = rule(
+    implementation = _cloudformation_aws_events_replay_impl,
+    doc = "Schema-derived rule for one `aws_events_replay` entry.",
+    provides = [CloudformationAwsEventsReplayInfo],
+    attrs = {
+        "aws_events_replay_name": attr.string(
+            doc = "Top-level key for this aws_events_replay in the rendered project. Defaults to the rule name.",
+        ),
+        "Destination": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "EventEndTime": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-replay.html#cfn-events-replay-eventendtime",
+        ),
+        "EventSourceArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-replay.html#cfn-events-replay-eventsourcearn",
+        ),
+        "EventStartTime": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-replay.html#cfn-events-replay-eventstarttime",
+        ),
+        "ReplayName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-replay.html#cfn-events-replay-replayname",
+        ),
+    },
+)
+
 CloudformationAwsEventsRuleInfo = provider(
     doc = "A aws_events_rule contributed by a target. Shard JSON matches the aws_events_rule schema.",
     fields = {
@@ -39604,6 +43835,45 @@ cloudformation_aws_fin_space_environment = rule(
     },
 )
 
+CloudformationAwsFisExperimentInfo = provider(
+    doc = "A aws_fis_experiment contributed by a target. Shard JSON matches the aws_fis_experiment schema.",
+    fields = {
+        "aws_fis_experiment_name": "string: top-level key for this aws_fis_experiment in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_fis_experiment_impl(ctx):
+    item_name = ctx.attr.aws_fis_experiment_name or ctx.label.name
+    payload = {
+        "ExperimentOptions": parse_json_or_none(ctx.attr.ExperimentOptions),
+        "ExperimentTemplateId": ctx.attr.ExperimentTemplateId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_fis_experiment.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsFisExperimentInfo(aws_fis_experiment_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_fis_experiment = rule(
+    implementation = _cloudformation_aws_fis_experiment_impl,
+    doc = "Schema-derived rule for one `aws_fis_experiment` entry.",
+    provides = [CloudformationAwsFisExperimentInfo],
+    attrs = {
+        "aws_fis_experiment_name": attr.string(
+            doc = "Top-level key for this aws_fis_experiment in the rendered project. Defaults to the rule name.",
+        ),
+        "ExperimentOptions": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "ExperimentTemplateId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fis-experiment.html#cfn-fis-experiment-experimenttemplateid",
+        ),
+    },
+)
+
 CloudformationAwsFisExperimentTemplateInfo = provider(
     doc = "A aws_fis_experiment_template contributed by a target. Shard JSON matches the aws_fis_experiment_template schema.",
     fields = {
@@ -39667,6 +43937,41 @@ cloudformation_aws_fis_experiment_template = rule(
         ),
         "Targets": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fis-experimenttemplate.html#cfn-fis-experimenttemplate-targets (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsFisSafetyLeverInfo = provider(
+    doc = "A aws_fis_safety_lever contributed by a target. Shard JSON matches the aws_fis_safety_lever schema.",
+    fields = {
+        "aws_fis_safety_lever_name": "string: top-level key for this aws_fis_safety_lever in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_fis_safety_lever_impl(ctx):
+    item_name = ctx.attr.aws_fis_safety_lever_name or ctx.label.name
+    payload = {
+        "Id": ctx.attr.Id,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_fis_safety_lever.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsFisSafetyLeverInfo(aws_fis_safety_lever_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_fis_safety_lever = rule(
+    implementation = _cloudformation_aws_fis_safety_lever_impl,
+    doc = "Schema-derived rule for one `aws_fis_safety_lever` entry.",
+    provides = [CloudformationAwsFisSafetyLeverInfo],
+    attrs = {
+        "aws_fis_safety_lever_name": attr.string(
+            doc = "Top-level key for this aws_fis_safety_lever in the rendered project. Defaults to the rule name.",
+        ),
+        "Id": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fis-safetylever.html#cfn-fis-safetylever-id",
         ),
     },
 )
@@ -41505,6 +45810,9 @@ def _cloudformation_aws_global_accelerator_accelerator_impl(ctx):
     item_name = ctx.attr.aws_global_accelerator_accelerator_name or ctx.label.name
     payload = {
         "Enabled": parse_json_or_none(ctx.attr.Enabled),
+        "FlowLogsEnabled": parse_json_or_none(ctx.attr.FlowLogsEnabled),
+        "FlowLogsS3Bucket": ctx.attr.FlowLogsS3Bucket,
+        "FlowLogsS3Prefix": ctx.attr.FlowLogsS3Prefix,
         "IpAddressType": ctx.attr.IpAddressType,
         "IpAddresses": parse_json_or_none(ctx.attr.IpAddresses),
         "Name": ctx.attr.Name,
@@ -41528,6 +45836,15 @@ cloudformation_aws_global_accelerator_accelerator = rule(
         ),
         "Enabled": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-globalaccelerator-accelerator.html#cfn-globalaccelerator-accelerator-enabled (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "FlowLogsEnabled": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-globalaccelerator-accelerator.html#cfn-globalaccelerator-accelerator-flowlogsenabled (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "FlowLogsS3Bucket": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-globalaccelerator-accelerator.html#cfn-globalaccelerator-accelerator-flowlogss3bucket",
+        ),
+        "FlowLogsS3Prefix": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-globalaccelerator-accelerator.html#cfn-globalaccelerator-accelerator-flowlogss3prefix",
         ),
         "IpAddressType": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-globalaccelerator-accelerator.html#cfn-globalaccelerator-accelerator-ipaddresstype",
@@ -41705,6 +46022,53 @@ cloudformation_aws_global_accelerator_listener = rule(
         ),
         "Protocol": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-globalaccelerator-listener.html#cfn-globalaccelerator-listener-protocol",
+        ),
+    },
+)
+
+CloudformationAwsGlueBlueprintInfo = provider(
+    doc = "A aws_glue_blueprint contributed by a target. Shard JSON matches the aws_glue_blueprint schema.",
+    fields = {
+        "aws_glue_blueprint_name": "string: top-level key for this aws_glue_blueprint in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_glue_blueprint_impl(ctx):
+    item_name = ctx.attr.aws_glue_blueprint_name or ctx.label.name
+    payload = {
+        "BlueprintLocation": ctx.attr.BlueprintLocation,
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_blueprint.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsGlueBlueprintInfo(aws_glue_blueprint_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_glue_blueprint = rule(
+    implementation = _cloudformation_aws_glue_blueprint_impl,
+    doc = "Schema-derived rule for one `aws_glue_blueprint` entry.",
+    provides = [CloudformationAwsGlueBlueprintInfo],
+    attrs = {
+        "aws_glue_blueprint_name": attr.string(
+            doc = "Top-level key for this aws_glue_blueprint in the rendered project. Defaults to the rule name.",
+        ),
+        "BlueprintLocation": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-blueprint.html#cfn-glue-blueprint-blueprintlocation",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-blueprint.html#cfn-glue-blueprint-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-blueprint.html#cfn-glue-blueprint-name",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-blueprint.html#cfn-glue-blueprint-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -42058,7 +46422,7 @@ def _cloudformation_aws_glue_data_quality_ruleset_impl(ctx):
         "Description": ctx.attr.Description,
         "Name": ctx.attr.Name,
         "Ruleset": ctx.attr.Ruleset,
-        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "Tags": ctx.attr.Tags,
         "TargetTable": parse_json_or_none(ctx.attr.TargetTable),
     }
     payload = strip_empty(payload)
@@ -42089,8 +46453,8 @@ cloudformation_aws_glue_data_quality_ruleset = rule(
         "Ruleset": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-dataqualityruleset.html#cfn-glue-dataqualityruleset-ruleset",
         ),
-        "Tags": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-dataqualityruleset.html#cfn-glue-dataqualityruleset-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        "Tags": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-dataqualityruleset.html#cfn-glue-dataqualityruleset-tags",
         ),
         "TargetTable": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
@@ -42971,6 +47335,45 @@ cloudformation_aws_glue_table_optimizer = rule(
     },
 )
 
+CloudformationAwsGlueTableVersionInfo = provider(
+    doc = "A aws_glue_table_version contributed by a target. Shard JSON matches the aws_glue_table_version schema.",
+    fields = {
+        "aws_glue_table_version_name": "string: top-level key for this aws_glue_table_version in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_glue_table_version_impl(ctx):
+    item_name = ctx.attr.aws_glue_table_version_name or ctx.label.name
+    payload = {
+        "DatabaseName": ctx.attr.DatabaseName,
+        "TableName": ctx.attr.TableName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_table_version.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsGlueTableVersionInfo(aws_glue_table_version_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_glue_table_version = rule(
+    implementation = _cloudformation_aws_glue_table_version_impl,
+    doc = "Schema-derived rule for one `aws_glue_table_version` entry.",
+    provides = [CloudformationAwsGlueTableVersionInfo],
+    attrs = {
+        "aws_glue_table_version_name": attr.string(
+            doc = "Top-level key for this aws_glue_table_version in the rendered project. Defaults to the rule name.",
+        ),
+        "DatabaseName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-tableversion.html#cfn-glue-tableversion-databasename",
+        ),
+        "TableName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-tableversion.html#cfn-glue-tableversion-tablename",
+        ),
+    },
+)
+
 CloudformationAwsGlueTriggerInfo = provider(
     doc = "A aws_glue_trigger contributed by a target. Shard JSON matches the aws_glue_trigger schema.",
     fields = {
@@ -43089,6 +47492,65 @@ cloudformation_aws_glue_usage_profile = rule(
     },
 )
 
+CloudformationAwsGlueUserDefinedFunctionInfo = provider(
+    doc = "A aws_glue_user_defined_function contributed by a target. Shard JSON matches the aws_glue_user_defined_function schema.",
+    fields = {
+        "aws_glue_user_defined_function_name": "string: top-level key for this aws_glue_user_defined_function in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_glue_user_defined_function_impl(ctx):
+    item_name = ctx.attr.aws_glue_user_defined_function_name or ctx.label.name
+    payload = {
+        "ClassName": ctx.attr.ClassName,
+        "DatabaseName": ctx.attr.DatabaseName,
+        "FunctionName": ctx.attr.FunctionName,
+        "FunctionType": ctx.attr.FunctionType,
+        "OwnerName": ctx.attr.OwnerName,
+        "OwnerType": ctx.attr.OwnerType,
+        "ResourceUris": parse_json_or_none(ctx.attr.ResourceUris),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_glue_user_defined_function.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsGlueUserDefinedFunctionInfo(aws_glue_user_defined_function_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_glue_user_defined_function = rule(
+    implementation = _cloudformation_aws_glue_user_defined_function_impl,
+    doc = "Schema-derived rule for one `aws_glue_user_defined_function` entry.",
+    provides = [CloudformationAwsGlueUserDefinedFunctionInfo],
+    attrs = {
+        "aws_glue_user_defined_function_name": attr.string(
+            doc = "Top-level key for this aws_glue_user_defined_function in the rendered project. Defaults to the rule name.",
+        ),
+        "ClassName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-userdefinedfunction.html#cfn-glue-userdefinedfunction-classname",
+        ),
+        "DatabaseName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-userdefinedfunction.html#cfn-glue-userdefinedfunction-databasename",
+        ),
+        "FunctionName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-userdefinedfunction.html#cfn-glue-userdefinedfunction-functionname",
+        ),
+        "FunctionType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-userdefinedfunction.html#cfn-glue-userdefinedfunction-functiontype",
+        ),
+        "OwnerName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-userdefinedfunction.html#cfn-glue-userdefinedfunction-ownername",
+        ),
+        "OwnerType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-userdefinedfunction.html#cfn-glue-userdefinedfunction-ownertype",
+        ),
+        "ResourceUris": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-userdefinedfunction.html#cfn-glue-userdefinedfunction-resourceuris (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsGlueWorkflowInfo = provider(
     doc = "A aws_glue_workflow contributed by a target. Shard JSON matches the aws_glue_workflow schema.",
     fields = {
@@ -43167,6 +47629,7 @@ def _cloudformation_aws_grafana_workspace_impl(ctx):
         "RoleArn": ctx.attr.RoleArn,
         "SamlConfiguration": parse_json_or_none(ctx.attr.SamlConfiguration),
         "StackSetName": ctx.attr.StackSetName,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
         "VpcConfiguration": parse_json_or_none(ctx.attr.VpcConfiguration),
     }
     payload = strip_empty(payload)
@@ -43232,6 +47695,9 @@ cloudformation_aws_grafana_workspace = rule(
         ),
         "StackSetName": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-grafana-workspace.html#cfn-grafana-workspace-stacksetname",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-grafana-workspace.html#cfn-grafana-workspace-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "VpcConfiguration": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
@@ -43927,6 +48393,45 @@ cloudformation_aws_greengrass_subscription_definition_version = rule(
     },
 )
 
+CloudformationAwsGreengrassV2ComponentInfo = provider(
+    doc = "A aws_greengrass_v2_component contributed by a target. Shard JSON matches the aws_greengrass_v2_component schema.",
+    fields = {
+        "aws_greengrass_v2_component_name": "string: top-level key for this aws_greengrass_v2_component in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_greengrass_v2_component_impl(ctx):
+    item_name = ctx.attr.aws_greengrass_v2_component_name or ctx.label.name
+    payload = {
+        "ComponentName": ctx.attr.ComponentName,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_v2_component.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsGreengrassV2ComponentInfo(aws_greengrass_v2_component_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_greengrass_v2_component = rule(
+    implementation = _cloudformation_aws_greengrass_v2_component_impl,
+    doc = "Schema-derived rule for one `aws_greengrass_v2_component` entry.",
+    provides = [CloudformationAwsGreengrassV2ComponentInfo],
+    attrs = {
+        "aws_greengrass_v2_component_name": attr.string(
+            doc = "Top-level key for this aws_greengrass_v2_component in the rendered project. Defaults to the rule name.",
+        ),
+        "ComponentName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrassv2-component.html#cfn-greengrassv2-component-componentname",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrassv2-component.html#cfn-greengrassv2-component-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsGreengrassV2ComponentVersionInfo = provider(
     doc = "A aws_greengrass_v2_component_version contributed by a target. Shard JSON matches the aws_greengrass_v2_component_version schema.",
     fields = {
@@ -43966,6 +48471,41 @@ cloudformation_aws_greengrass_v2_component_version = rule(
         ),
         "Tags": attr.string_dict(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrassv2-componentversion.html#cfn-greengrassv2-componentversion-tags",
+        ),
+    },
+)
+
+CloudformationAwsGreengrassV2CoreDeviceInfo = provider(
+    doc = "A aws_greengrass_v2_core_device contributed by a target. Shard JSON matches the aws_greengrass_v2_core_device schema.",
+    fields = {
+        "aws_greengrass_v2_core_device_name": "string: top-level key for this aws_greengrass_v2_core_device in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_greengrass_v2_core_device_impl(ctx):
+    item_name = ctx.attr.aws_greengrass_v2_core_device_name or ctx.label.name
+    payload = {
+        "CoreDeviceThingName": ctx.attr.CoreDeviceThingName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_greengrass_v2_core_device.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsGreengrassV2CoreDeviceInfo(aws_greengrass_v2_core_device_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_greengrass_v2_core_device = rule(
+    implementation = _cloudformation_aws_greengrass_v2_core_device_impl,
+    doc = "Schema-derived rule for one `aws_greengrass_v2_core_device` entry.",
+    provides = [CloudformationAwsGreengrassV2CoreDeviceInfo],
+    attrs = {
+        "aws_greengrass_v2_core_device_name": attr.string(
+            doc = "Top-level key for this aws_greengrass_v2_core_device in the rendered project. Defaults to the rule name.",
+        ),
+        "CoreDeviceThingName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrassv2-coredevice.html#cfn-greengrassv2-coredevice-coredevicethingname",
         ),
     },
 )
@@ -44818,6 +49358,61 @@ cloudformation_aws_health_imaging_datastore = rule(
     },
 )
 
+CloudformationAwsHealthLakeDataTransformationProfileInfo = provider(
+    doc = "A aws_health_lake_data_transformation_profile contributed by a target. Shard JSON matches the aws_health_lake_data_transformation_profile schema.",
+    fields = {
+        "aws_health_lake_data_transformation_profile_name": "string: top-level key for this aws_health_lake_data_transformation_profile in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_health_lake_data_transformation_profile_impl(ctx):
+    item_name = ctx.attr.aws_health_lake_data_transformation_profile_name or ctx.label.name
+    payload = {
+        "KmsKeyId": ctx.attr.KmsKeyId,
+        "ProfileDescription": ctx.attr.ProfileDescription,
+        "ProfileName": ctx.attr.ProfileName,
+        "Source": parse_json_or_none(ctx.attr.Source),
+        "SourceFormat": ctx.attr.SourceFormat,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_health_lake_data_transformation_profile.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsHealthLakeDataTransformationProfileInfo(aws_health_lake_data_transformation_profile_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_health_lake_data_transformation_profile = rule(
+    implementation = _cloudformation_aws_health_lake_data_transformation_profile_impl,
+    doc = "Schema-derived rule for one `aws_health_lake_data_transformation_profile` entry.",
+    provides = [CloudformationAwsHealthLakeDataTransformationProfileInfo],
+    attrs = {
+        "aws_health_lake_data_transformation_profile_name": attr.string(
+            doc = "Top-level key for this aws_health_lake_data_transformation_profile in the rendered project. Defaults to the rule name.",
+        ),
+        "KmsKeyId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-healthlake-datatransformationprofile.html#cfn-healthlake-datatransformationprofile-kmskeyid",
+        ),
+        "ProfileDescription": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-healthlake-datatransformationprofile.html#cfn-healthlake-datatransformationprofile-profiledescription",
+        ),
+        "ProfileName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-healthlake-datatransformationprofile.html#cfn-healthlake-datatransformationprofile-profilename",
+        ),
+        "Source": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "SourceFormat": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-healthlake-datatransformationprofile.html#cfn-healthlake-datatransformationprofile-sourceformat",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-healthlake-datatransformationprofile.html#cfn-healthlake-datatransformationprofile-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsHealthLakeFhirdatastoreInfo = provider(
     doc = "A aws_health_lake_fhirdatastore contributed by a target. Shard JSON matches the aws_health_lake_fhirdatastore schema.",
     fields = {
@@ -45665,6 +50260,49 @@ cloudformation_aws_iam_virtual_mfadevice = rule(
     },
 )
 
+CloudformationAwsIdentityStoreAllGroupMembershipsInfo = provider(
+    doc = "A aws_identity_store_all_group_memberships contributed by a target. Shard JSON matches the aws_identity_store_all_group_memberships schema.",
+    fields = {
+        "aws_identity_store_all_group_memberships_name": "string: top-level key for this aws_identity_store_all_group_memberships in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_identity_store_all_group_memberships_impl(ctx):
+    item_name = ctx.attr.aws_identity_store_all_group_memberships_name or ctx.label.name
+    payload = {
+        "GroupId": ctx.attr.GroupId,
+        "IdentityStoreId": ctx.attr.IdentityStoreId,
+        "MemberId": parse_json_or_none(ctx.attr.MemberId),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_identity_store_all_group_memberships.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsIdentityStoreAllGroupMembershipsInfo(aws_identity_store_all_group_memberships_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_identity_store_all_group_memberships = rule(
+    implementation = _cloudformation_aws_identity_store_all_group_memberships_impl,
+    doc = "Schema-derived rule for one `aws_identity_store_all_group_memberships` entry.",
+    provides = [CloudformationAwsIdentityStoreAllGroupMembershipsInfo],
+    attrs = {
+        "aws_identity_store_all_group_memberships_name": attr.string(
+            doc = "Top-level key for this aws_identity_store_all_group_memberships in the rendered project. Defaults to the rule name.",
+        ),
+        "GroupId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-identitystore-allgroupmemberships.html#cfn-identitystore-allgroupmemberships-groupid",
+        ),
+        "IdentityStoreId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-identitystore-allgroupmemberships.html#cfn-identitystore-allgroupmemberships-identitystoreid",
+        ),
+        "MemberId": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
 CloudformationAwsIdentityStoreGroupInfo = provider(
     doc = "A aws_identity_store_group contributed by a target. Shard JSON matches the aws_identity_store_group schema.",
     fields = {
@@ -45747,6 +50385,68 @@ cloudformation_aws_identity_store_group_membership = rule(
         ),
         "MemberId": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsImageBuilderAllImageBuildVersionsInfo = provider(
+    doc = "A aws_image_builder_all_image_build_versions contributed by a target. Shard JSON matches the aws_image_builder_all_image_build_versions schema.",
+    fields = {
+        "aws_image_builder_all_image_build_versions_name": "string: top-level key for this aws_image_builder_all_image_build_versions in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_image_builder_all_image_build_versions_impl(ctx):
+    item_name = ctx.attr.aws_image_builder_all_image_build_versions_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_all_image_build_versions.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsImageBuilderAllImageBuildVersionsInfo(aws_image_builder_all_image_build_versions_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_image_builder_all_image_build_versions = rule(
+    implementation = _cloudformation_aws_image_builder_all_image_build_versions_impl,
+    doc = "Schema-derived rule for one `aws_image_builder_all_image_build_versions` entry.",
+    provides = [CloudformationAwsImageBuilderAllImageBuildVersionsInfo],
+    attrs = {
+        "aws_image_builder_all_image_build_versions_name": attr.string(
+            doc = "Top-level key for this aws_image_builder_all_image_build_versions in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
+CloudformationAwsImageBuilderAllWorkflowBuildVersionsInfo = provider(
+    doc = "A aws_image_builder_all_workflow_build_versions contributed by a target. Shard JSON matches the aws_image_builder_all_workflow_build_versions schema.",
+    fields = {
+        "aws_image_builder_all_workflow_build_versions_name": "string: top-level key for this aws_image_builder_all_workflow_build_versions in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_image_builder_all_workflow_build_versions_impl(ctx):
+    item_name = ctx.attr.aws_image_builder_all_workflow_build_versions_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_all_workflow_build_versions.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsImageBuilderAllWorkflowBuildVersionsInfo(aws_image_builder_all_workflow_build_versions_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_image_builder_all_workflow_build_versions = rule(
+    implementation = _cloudformation_aws_image_builder_all_workflow_build_versions_impl,
+    doc = "Schema-derived rule for one `aws_image_builder_all_workflow_build_versions` entry.",
+    provides = [CloudformationAwsImageBuilderAllWorkflowBuildVersionsInfo],
+    attrs = {
+        "aws_image_builder_all_workflow_build_versions_name": attr.string(
+            doc = "Top-level key for this aws_image_builder_all_workflow_build_versions in the rendered project. Defaults to the rule name.",
         ),
     },
 )
@@ -46061,6 +50761,7 @@ def _cloudformation_aws_image_builder_image_pipeline_impl(ctx):
         "ExecutionRole": ctx.attr.ExecutionRole,
         "ImageRecipeArn": ctx.attr.ImageRecipeArn,
         "ImageScanningConfiguration": parse_json_or_none(ctx.attr.ImageScanningConfiguration),
+        "ImageTags": ctx.attr.ImageTags,
         "ImageTestsConfiguration": parse_json_or_none(ctx.attr.ImageTestsConfiguration),
         "InfrastructureConfigurationArn": ctx.attr.InfrastructureConfigurationArn,
         "LoggingConfiguration": parse_json_or_none(ctx.attr.LoggingConfiguration),
@@ -46107,6 +50808,9 @@ cloudformation_aws_image_builder_image_pipeline = rule(
         "ImageScanningConfiguration": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
+        "ImageTags": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-imagepipeline.html#cfn-imagebuilder-imagepipeline-imagetags",
+        ),
         "ImageTestsConfiguration": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
@@ -46147,6 +50851,7 @@ def _cloudformation_aws_image_builder_image_recipe_impl(ctx):
     payload = {
         "AdditionalInstanceConfiguration": parse_json_or_none(ctx.attr.AdditionalInstanceConfiguration),
         "AmiTags": ctx.attr.AmiTags,
+        "AmiWatermarks": parse_json_or_none(ctx.attr.AmiWatermarks),
         "BlockDeviceMappings": parse_json_or_none(ctx.attr.BlockDeviceMappings),
         "Components": parse_json_or_none(ctx.attr.Components),
         "Description": ctx.attr.Description,
@@ -46177,6 +50882,9 @@ cloudformation_aws_image_builder_image_recipe = rule(
         ),
         "AmiTags": attr.string_dict(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-imagerecipe.html#cfn-imagebuilder-imagerecipe-amitags",
+        ),
+        "AmiWatermarks": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-imagerecipe.html#cfn-imagebuilder-imagerecipe-amiwatermarks (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "BlockDeviceMappings": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-imagerecipe.html#cfn-imagebuilder-imagerecipe-blockdevicemappings (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -46288,6 +50996,41 @@ cloudformation_aws_image_builder_infrastructure_configuration = rule(
         ),
         "TerminateInstanceOnFailure": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-infrastructureconfiguration.html#cfn-imagebuilder-infrastructureconfiguration-terminateinstanceonfailure (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsImageBuilderLifecycleExecutionInfo = provider(
+    doc = "A aws_image_builder_lifecycle_execution contributed by a target. Shard JSON matches the aws_image_builder_lifecycle_execution schema.",
+    fields = {
+        "aws_image_builder_lifecycle_execution_name": "string: top-level key for this aws_image_builder_lifecycle_execution in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_image_builder_lifecycle_execution_impl(ctx):
+    item_name = ctx.attr.aws_image_builder_lifecycle_execution_name or ctx.label.name
+    payload = {
+        "ResourceArn": ctx.attr.ResourceArn,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_lifecycle_execution.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsImageBuilderLifecycleExecutionInfo(aws_image_builder_lifecycle_execution_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_image_builder_lifecycle_execution = rule(
+    implementation = _cloudformation_aws_image_builder_lifecycle_execution_impl,
+    doc = "Schema-derived rule for one `aws_image_builder_lifecycle_execution` entry.",
+    provides = [CloudformationAwsImageBuilderLifecycleExecutionInfo],
+    attrs = {
+        "aws_image_builder_lifecycle_execution_name": attr.string(
+            doc = "Top-level key for this aws_image_builder_lifecycle_execution in the rendered project. Defaults to the rule name.",
+        ),
+        "ResourceArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-lifecycleexecution.html#cfn-imagebuilder-lifecycleexecution-resourcearn",
         ),
     },
 )
@@ -46418,6 +51161,72 @@ cloudformation_aws_image_builder_workflow = rule(
         ),
         "Version": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-workflow.html#cfn-imagebuilder-workflow-version",
+        ),
+    },
+)
+
+CloudformationAwsImageBuilderWorkflowExecutionInfo = provider(
+    doc = "A aws_image_builder_workflow_execution contributed by a target. Shard JSON matches the aws_image_builder_workflow_execution schema.",
+    fields = {
+        "aws_image_builder_workflow_execution_name": "string: top-level key for this aws_image_builder_workflow_execution in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_image_builder_workflow_execution_impl(ctx):
+    item_name = ctx.attr.aws_image_builder_workflow_execution_name or ctx.label.name
+    payload = {
+        "ImageBuildVersionArn": ctx.attr.ImageBuildVersionArn,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_workflow_execution.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsImageBuilderWorkflowExecutionInfo(aws_image_builder_workflow_execution_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_image_builder_workflow_execution = rule(
+    implementation = _cloudformation_aws_image_builder_workflow_execution_impl,
+    doc = "Schema-derived rule for one `aws_image_builder_workflow_execution` entry.",
+    provides = [CloudformationAwsImageBuilderWorkflowExecutionInfo],
+    attrs = {
+        "aws_image_builder_workflow_execution_name": attr.string(
+            doc = "Top-level key for this aws_image_builder_workflow_execution in the rendered project. Defaults to the rule name.",
+        ),
+        "ImageBuildVersionArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-workflowexecution.html#cfn-imagebuilder-workflowexecution-imagebuildversionarn",
+        ),
+    },
+)
+
+CloudformationAwsImageBuilderWorkflowStepExecutionInfo = provider(
+    doc = "A aws_image_builder_workflow_step_execution contributed by a target. Shard JSON matches the aws_image_builder_workflow_step_execution schema.",
+    fields = {
+        "aws_image_builder_workflow_step_execution_name": "string: top-level key for this aws_image_builder_workflow_step_execution in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_image_builder_workflow_step_execution_impl(ctx):
+    item_name = ctx.attr.aws_image_builder_workflow_step_execution_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_image_builder_workflow_step_execution.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsImageBuilderWorkflowStepExecutionInfo(aws_image_builder_workflow_step_execution_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_image_builder_workflow_step_execution = rule(
+    implementation = _cloudformation_aws_image_builder_workflow_step_execution_impl,
+    doc = "Schema-derived rule for one `aws_image_builder_workflow_step_execution` entry.",
+    provides = [CloudformationAwsImageBuilderWorkflowStepExecutionInfo],
+    attrs = {
+        "aws_image_builder_workflow_step_execution_name": attr.string(
+            doc = "Top-level key for this aws_image_builder_workflow_step_execution in the rendered project. Defaults to the rule name.",
         ),
     },
 )
@@ -46700,6 +51509,57 @@ cloudformation_aws_inspector_v2_code_security_scan_configuration = rule(
     },
 )
 
+CloudformationAwsInspectorV2ConnectorInfo = provider(
+    doc = "A aws_inspector_v2_connector contributed by a target. Shard JSON matches the aws_inspector_v2_connector schema.",
+    fields = {
+        "aws_inspector_v2_connector_name": "string: top-level key for this aws_inspector_v2_connector in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_inspector_v2_connector_impl(ctx):
+    item_name = ctx.attr.aws_inspector_v2_connector_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+        "Provider": ctx.attr.Provider,
+        "ProviderConfiguration": parse_json_or_none(ctx.attr.ProviderConfiguration),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_inspector_v2_connector.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsInspectorV2ConnectorInfo(aws_inspector_v2_connector_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_inspector_v2_connector = rule(
+    implementation = _cloudformation_aws_inspector_v2_connector_impl,
+    doc = "Schema-derived rule for one `aws_inspector_v2_connector` entry.",
+    provides = [CloudformationAwsInspectorV2ConnectorInfo],
+    attrs = {
+        "aws_inspector_v2_connector_name": attr.string(
+            doc = "Top-level key for this aws_inspector_v2_connector in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-inspectorv2-connector.html#cfn-inspectorv2-connector-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-inspectorv2-connector.html#cfn-inspectorv2-connector-name",
+        ),
+        "Provider": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-inspectorv2-connector.html#cfn-inspectorv2-connector-provider",
+        ),
+        "ProviderConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-inspectorv2-connector.html#cfn-inspectorv2-connector-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsInspectorV2FilterInfo = provider(
     doc = "A aws_inspector_v2_filter contributed by a target. Shard JSON matches the aws_inspector_v2_filter schema.",
     fields = {
@@ -46768,7 +51628,6 @@ def _cloudformation_aws_interconnect_connection_impl(ctx):
         "Description": ctx.attr.Description,
         "EnvironmentId": ctx.attr.EnvironmentId,
         "RemoteAccount": parse_json_or_none(ctx.attr.RemoteAccount),
-        "RemoteOwnerAccount": ctx.attr.RemoteOwnerAccount,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
     payload = strip_empty(payload)
@@ -46805,11 +51664,39 @@ cloudformation_aws_interconnect_connection = rule(
         "RemoteAccount": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
-        "RemoteOwnerAccount": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-interconnect-connection.html#cfn-interconnect-connection-remoteowneraccount",
-        ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-interconnect-connection.html#cfn-interconnect-connection-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsInternetMonitorInternetEventInfo = provider(
+    doc = "A aws_internet_monitor_internet_event contributed by a target. Shard JSON matches the aws_internet_monitor_internet_event schema.",
+    fields = {
+        "aws_internet_monitor_internet_event_name": "string: top-level key for this aws_internet_monitor_internet_event in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_internet_monitor_internet_event_impl(ctx):
+    item_name = ctx.attr.aws_internet_monitor_internet_event_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_internet_monitor_internet_event.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsInternetMonitorInternetEventInfo(aws_internet_monitor_internet_event_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_internet_monitor_internet_event = rule(
+    implementation = _cloudformation_aws_internet_monitor_internet_event_impl,
+    doc = "Schema-derived rule for one `aws_internet_monitor_internet_event` entry.",
+    provides = [CloudformationAwsInternetMonitorInternetEventInfo],
+    attrs = {
+        "aws_internet_monitor_internet_event_name": attr.string(
+            doc = "Top-level key for this aws_internet_monitor_internet_event in the rendered project. Defaults to the rule name.",
         ),
     },
 )
@@ -47636,6 +52523,136 @@ cloudformation_aws_io_t_fleet_metric = rule(
         ),
         "Unit": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-fleetmetric.html#cfn-iot-fleetmetric-unit",
+        ),
+    },
+)
+
+CloudformationAwsIoTIndexInfo = provider(
+    doc = "A aws_io_t_index contributed by a target. Shard JSON matches the aws_io_t_index schema.",
+    fields = {
+        "aws_io_t_index_name": "string: top-level key for this aws_io_t_index in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_io_t_index_impl(ctx):
+    item_name = ctx.attr.aws_io_t_index_name or ctx.label.name
+    payload = {
+        "IndexName": ctx.attr.IndexName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_index.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsIoTIndexInfo(aws_io_t_index_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_io_t_index = rule(
+    implementation = _cloudformation_aws_io_t_index_impl,
+    doc = "Schema-derived rule for one `aws_io_t_index` entry.",
+    provides = [CloudformationAwsIoTIndexInfo],
+    attrs = {
+        "aws_io_t_index_name": attr.string(
+            doc = "Top-level key for this aws_io_t_index in the rendered project. Defaults to the rule name.",
+        ),
+        "IndexName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-index.html#cfn-iot-index-indexname",
+        ),
+    },
+)
+
+CloudformationAwsIoTJobInfo = provider(
+    doc = "A aws_io_t_job contributed by a target. Shard JSON matches the aws_io_t_job schema.",
+    fields = {
+        "aws_io_t_job_name": "string: top-level key for this aws_io_t_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_io_t_job_impl(ctx):
+    item_name = ctx.attr.aws_io_t_job_name or ctx.label.name
+    payload = {
+        "AbortConfig": parse_json_or_none(ctx.attr.AbortConfig),
+        "Description": ctx.attr.Description,
+        "DestinationPackageVersions": parse_json_or_none(ctx.attr.DestinationPackageVersions),
+        "Document": ctx.attr.Document,
+        "DocumentParameters": ctx.attr.DocumentParameters,
+        "DocumentSource": ctx.attr.DocumentSource,
+        "JobExecutionsRetryConfig": parse_json_or_none(ctx.attr.JobExecutionsRetryConfig),
+        "JobExecutionsRolloutConfig": parse_json_or_none(ctx.attr.JobExecutionsRolloutConfig),
+        "JobId": ctx.attr.JobId,
+        "JobTemplateArn": ctx.attr.JobTemplateArn,
+        "PresignedUrlConfig": parse_json_or_none(ctx.attr.PresignedUrlConfig),
+        "SchedulingConfig": parse_json_or_none(ctx.attr.SchedulingConfig),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "TargetSelection": ctx.attr.TargetSelection,
+        "Targets": parse_json_or_none(ctx.attr.Targets),
+        "TimeoutConfig": parse_json_or_none(ctx.attr.TimeoutConfig),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_t_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsIoTJobInfo(aws_io_t_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_io_t_job = rule(
+    implementation = _cloudformation_aws_io_t_job_impl,
+    doc = "Schema-derived rule for one `aws_io_t_job` entry.",
+    provides = [CloudformationAwsIoTJobInfo],
+    attrs = {
+        "aws_io_t_job_name": attr.string(
+            doc = "Top-level key for this aws_io_t_job in the rendered project. Defaults to the rule name.",
+        ),
+        "AbortConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-job.html#cfn-iot-job-description",
+        ),
+        "DestinationPackageVersions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-job.html#cfn-iot-job-destinationpackageversions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Document": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-job.html#cfn-iot-job-document",
+        ),
+        "DocumentParameters": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-job.html#cfn-iot-job-documentparameters",
+        ),
+        "DocumentSource": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-job.html#cfn-iot-job-documentsource",
+        ),
+        "JobExecutionsRetryConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "JobExecutionsRolloutConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "JobId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-job.html#cfn-iot-job-jobid",
+        ),
+        "JobTemplateArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-job.html#cfn-iot-job-jobtemplatearn",
+        ),
+        "PresignedUrlConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "SchedulingConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-job.html#cfn-iot-job-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TargetSelection": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-job.html#cfn-iot-job-targetselection",
+        ),
+        "Targets": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-job.html#cfn-iot-job-targets (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TimeoutConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
     },
 )
@@ -48781,6 +53798,53 @@ cloudformation_aws_io_tcore_device_advisor_suite_definition = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotcoredeviceadvisor-suitedefinition.html#cfn-iotcoredeviceadvisor-suitedefinition-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsIoTdeviceAdvisorSuiteRunInfo = provider(
+    doc = "A aws_io_tdevice_advisor_suite_run contributed by a target. Shard JSON matches the aws_io_tdevice_advisor_suite_run schema.",
+    fields = {
+        "aws_io_tdevice_advisor_suite_run_name": "string: top-level key for this aws_io_tdevice_advisor_suite_run in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_io_tdevice_advisor_suite_run_impl(ctx):
+    item_name = ctx.attr.aws_io_tdevice_advisor_suite_run_name or ctx.label.name
+    payload = {
+        "SuiteDefinitionId": ctx.attr.SuiteDefinitionId,
+        "SuiteDefinitionVersion": ctx.attr.SuiteDefinitionVersion,
+        "SuiteRunConfiguration": parse_json_or_none(ctx.attr.SuiteRunConfiguration),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_tdevice_advisor_suite_run.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsIoTdeviceAdvisorSuiteRunInfo(aws_io_tdevice_advisor_suite_run_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_io_tdevice_advisor_suite_run = rule(
+    implementation = _cloudformation_aws_io_tdevice_advisor_suite_run_impl,
+    doc = "Schema-derived rule for one `aws_io_tdevice_advisor_suite_run` entry.",
+    provides = [CloudformationAwsIoTdeviceAdvisorSuiteRunInfo],
+    attrs = {
+        "aws_io_tdevice_advisor_suite_run_name": attr.string(
+            doc = "Top-level key for this aws_io_tdevice_advisor_suite_run in the rendered project. Defaults to the rule name.",
+        ),
+        "SuiteDefinitionId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotdeviceadvisor-suiterun.html#cfn-iotdeviceadvisor-suiterun-suitedefinitionid",
+        ),
+        "SuiteDefinitionVersion": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotdeviceadvisor-suiterun.html#cfn-iotdeviceadvisor-suiterun-suitedefinitionversion",
+        ),
+        "SuiteRunConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotdeviceadvisor-suiterun.html#cfn-iotdeviceadvisor-suiterun-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -50063,6 +55127,53 @@ cloudformation_aws_io_ttwin_maker_entity = rule(
     },
 )
 
+CloudformationAwsIoTtwinMakerMetadataTransferJobInfo = provider(
+    doc = "A aws_io_ttwin_maker_metadata_transfer_job contributed by a target. Shard JSON matches the aws_io_ttwin_maker_metadata_transfer_job schema.",
+    fields = {
+        "aws_io_ttwin_maker_metadata_transfer_job_name": "string: top-level key for this aws_io_ttwin_maker_metadata_transfer_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_io_ttwin_maker_metadata_transfer_job_impl(ctx):
+    item_name = ctx.attr.aws_io_ttwin_maker_metadata_transfer_job_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "Destination": parse_json_or_none(ctx.attr.Destination),
+        "MetadataTransferJobId": ctx.attr.MetadataTransferJobId,
+        "Sources": parse_json_or_none(ctx.attr.Sources),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_io_ttwin_maker_metadata_transfer_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsIoTtwinMakerMetadataTransferJobInfo(aws_io_ttwin_maker_metadata_transfer_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_io_ttwin_maker_metadata_transfer_job = rule(
+    implementation = _cloudformation_aws_io_ttwin_maker_metadata_transfer_job_impl,
+    doc = "Schema-derived rule for one `aws_io_ttwin_maker_metadata_transfer_job` entry.",
+    provides = [CloudformationAwsIoTtwinMakerMetadataTransferJobInfo],
+    attrs = {
+        "aws_io_ttwin_maker_metadata_transfer_job_name": attr.string(
+            doc = "Top-level key for this aws_io_ttwin_maker_metadata_transfer_job in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iottwinmaker-metadatatransferjob.html#cfn-iottwinmaker-metadatatransferjob-description",
+        ),
+        "Destination": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "MetadataTransferJobId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iottwinmaker-metadatatransferjob.html#cfn-iottwinmaker-metadatatransferjob-metadatatransferjobid",
+        ),
+        "Sources": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iottwinmaker-metadatatransferjob.html#cfn-iottwinmaker-metadatatransferjob-sources (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsIoTtwinMakerSceneInfo = provider(
     doc = "A aws_io_ttwin_maker_scene contributed by a target. Shard JSON matches the aws_io_ttwin_maker_scene schema.",
     fields = {
@@ -50896,6 +56007,53 @@ cloudformation_aws_ivs_channel = rule(
     },
 )
 
+CloudformationAwsIvsCompositionInfo = provider(
+    doc = "A aws_ivs_composition contributed by a target. Shard JSON matches the aws_ivs_composition schema.",
+    fields = {
+        "aws_ivs_composition_name": "string: top-level key for this aws_ivs_composition in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_ivs_composition_impl(ctx):
+    item_name = ctx.attr.aws_ivs_composition_name or ctx.label.name
+    payload = {
+        "Destinations": parse_json_or_none(ctx.attr.Destinations),
+        "Layout": parse_json_or_none(ctx.attr.Layout),
+        "StageArn": ctx.attr.StageArn,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_ivs_composition.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsIvsCompositionInfo(aws_ivs_composition_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_ivs_composition = rule(
+    implementation = _cloudformation_aws_ivs_composition_impl,
+    doc = "Schema-derived rule for one `aws_ivs_composition` entry.",
+    provides = [CloudformationAwsIvsCompositionInfo],
+    attrs = {
+        "aws_ivs_composition_name": attr.string(
+            doc = "Top-level key for this aws_ivs_composition in the rendered project. Defaults to the rule name.",
+        ),
+        "Destinations": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-composition.html#cfn-ivs-composition-destinations (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Layout": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "StageArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-composition.html#cfn-ivs-composition-stagearn",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-composition.html#cfn-ivs-composition-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsIvsEncoderConfigurationInfo = provider(
     doc = "A aws_ivs_encoder_configuration contributed by a target. Shard JSON matches the aws_ivs_encoder_configuration schema.",
     fields = {
@@ -51492,6 +56650,37 @@ cloudformation_aws_kafka_connect_connector = rule(
         ),
         "WorkerConfiguration": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsKafkaConnectConnectorOperationInfo = provider(
+    doc = "A aws_kafka_connect_connector_operation contributed by a target. Shard JSON matches the aws_kafka_connect_connector_operation schema.",
+    fields = {
+        "aws_kafka_connect_connector_operation_name": "string: top-level key for this aws_kafka_connect_connector_operation in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_kafka_connect_connector_operation_impl(ctx):
+    item_name = ctx.attr.aws_kafka_connect_connector_operation_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_kafka_connect_connector_operation.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsKafkaConnectConnectorOperationInfo(aws_kafka_connect_connector_operation_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_kafka_connect_connector_operation = rule(
+    implementation = _cloudformation_aws_kafka_connect_connector_operation_impl,
+    doc = "Schema-derived rule for one `aws_kafka_connect_connector_operation` entry.",
+    provides = [CloudformationAwsKafkaConnectConnectorOperationInfo],
+    attrs = {
+        "aws_kafka_connect_connector_operation_name": attr.string(
+            doc = "Top-level key for this aws_kafka_connect_connector_operation in the rendered project. Defaults to the rule name.",
         ),
     },
 )
@@ -53122,7 +58311,9 @@ def _cloudformation_aws_lambda_capacity_provider_impl(ctx):
         "InstanceRequirements": parse_json_or_none(ctx.attr.InstanceRequirements),
         "KmsKeyArn": ctx.attr.KmsKeyArn,
         "PermissionsConfig": parse_json_or_none(ctx.attr.PermissionsConfig),
+        "PropagateTags": parse_json_or_none(ctx.attr.PropagateTags),
         "Tags": parse_json_or_none(ctx.attr.Tags),
+        "TelemetryConfig": parse_json_or_none(ctx.attr.TelemetryConfig),
         "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
     }
     payload = strip_empty(payload)
@@ -53156,8 +58347,14 @@ cloudformation_aws_lambda_capacity_provider = rule(
         "PermissionsConfig": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
+        "PropagateTags": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html#cfn-lambda-capacityprovider-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TelemetryConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "VpcConfig": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
@@ -53663,6 +58860,140 @@ cloudformation_aws_lambda_layer_version_permission = rule(
     },
 )
 
+CloudformationAwsLambdaMicrovmImageInfo = provider(
+    doc = "A aws_lambda_microvm_image contributed by a target. Shard JSON matches the aws_lambda_microvm_image schema.",
+    fields = {
+        "aws_lambda_microvm_image_name": "string: top-level key for this aws_lambda_microvm_image in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_lambda_microvm_image_impl(ctx):
+    item_name = ctx.attr.aws_lambda_microvm_image_name or ctx.label.name
+    payload = {
+        "AdditionalOsCapabilities": parse_json_or_none(ctx.attr.AdditionalOsCapabilities),
+        "BaseImageArn": ctx.attr.BaseImageArn,
+        "BaseImageVersion": ctx.attr.BaseImageVersion,
+        "BuildRoleArn": ctx.attr.BuildRoleArn,
+        "CodeArtifact": parse_json_or_none(ctx.attr.CodeArtifact),
+        "CpuConfigurations": parse_json_or_none(ctx.attr.CpuConfigurations),
+        "Description": ctx.attr.Description,
+        "EgressNetworkConnectors": parse_json_or_none(ctx.attr.EgressNetworkConnectors),
+        "EnvironmentVariables": parse_json_or_none(ctx.attr.EnvironmentVariables),
+        "Hooks": parse_json_or_none(ctx.attr.Hooks),
+        "Logging": parse_json_or_none(ctx.attr.Logging),
+        "Name": ctx.attr.Name,
+        "Resources": parse_json_or_none(ctx.attr.Resources),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_lambda_microvm_image.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsLambdaMicrovmImageInfo(aws_lambda_microvm_image_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_lambda_microvm_image = rule(
+    implementation = _cloudformation_aws_lambda_microvm_image_impl,
+    doc = "Schema-derived rule for one `aws_lambda_microvm_image` entry.",
+    provides = [CloudformationAwsLambdaMicrovmImageInfo],
+    attrs = {
+        "aws_lambda_microvm_image_name": attr.string(
+            doc = "Top-level key for this aws_lambda_microvm_image in the rendered project. Defaults to the rule name.",
+        ),
+        "AdditionalOsCapabilities": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-microvmimage.html#cfn-lambda-microvmimage-additionaloscapabilities (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "BaseImageArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-microvmimage.html#cfn-lambda-microvmimage-baseimagearn",
+        ),
+        "BaseImageVersion": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-microvmimage.html#cfn-lambda-microvmimage-baseimageversion",
+        ),
+        "BuildRoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-microvmimage.html#cfn-lambda-microvmimage-buildrolearn",
+        ),
+        "CodeArtifact": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "CpuConfigurations": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-microvmimage.html#cfn-lambda-microvmimage-cpuconfigurations (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-microvmimage.html#cfn-lambda-microvmimage-description",
+        ),
+        "EgressNetworkConnectors": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-microvmimage.html#cfn-lambda-microvmimage-egressnetworkconnectors (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "EnvironmentVariables": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-microvmimage.html#cfn-lambda-microvmimage-environmentvariables (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Hooks": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Logging": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-microvmimage.html#cfn-lambda-microvmimage-name",
+        ),
+        "Resources": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-microvmimage.html#cfn-lambda-microvmimage-resources (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-microvmimage.html#cfn-lambda-microvmimage-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsLambdaNetworkConnectorInfo = provider(
+    doc = "A aws_lambda_network_connector contributed by a target. Shard JSON matches the aws_lambda_network_connector schema.",
+    fields = {
+        "aws_lambda_network_connector_name": "string: top-level key for this aws_lambda_network_connector in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_lambda_network_connector_impl(ctx):
+    item_name = ctx.attr.aws_lambda_network_connector_name or ctx.label.name
+    payload = {
+        "Configuration": parse_json_or_none(ctx.attr.Configuration),
+        "Name": ctx.attr.Name,
+        "OperatorRole": ctx.attr.OperatorRole,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_lambda_network_connector.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsLambdaNetworkConnectorInfo(aws_lambda_network_connector_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_lambda_network_connector = rule(
+    implementation = _cloudformation_aws_lambda_network_connector_impl,
+    doc = "Schema-derived rule for one `aws_lambda_network_connector` entry.",
+    provides = [CloudformationAwsLambdaNetworkConnectorInfo],
+    attrs = {
+        "aws_lambda_network_connector_name": attr.string(
+            doc = "Top-level key for this aws_lambda_network_connector in the rendered project. Defaults to the rule name.",
+        ),
+        "Configuration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-networkconnector.html#cfn-lambda-networkconnector-name",
+        ),
+        "OperatorRole": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-networkconnector.html#cfn-lambda-networkconnector-operatorrole",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-networkconnector.html#cfn-lambda-networkconnector-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsLambdaPermissionInfo = provider(
     doc = "A aws_lambda_permission contributed by a target. Shard JSON matches the aws_lambda_permission schema.",
     fields = {
@@ -53901,7 +59232,9 @@ def _cloudformation_aws_lex_bot_impl(ctx):
         "AutoBuildBotLocales": parse_json_or_none(ctx.attr.AutoBuildBotLocales),
         "BotFileS3Location": parse_json_or_none(ctx.attr.BotFileS3Location),
         "BotLocales": parse_json_or_none(ctx.attr.BotLocales),
+        "BotMembers": parse_json_or_none(ctx.attr.BotMembers),
         "BotTags": parse_json_or_none(ctx.attr.BotTags),
+        "BotType": ctx.attr.BotType,
         "DataPrivacy": parse_json_or_none(ctx.attr.DataPrivacy),
         "Description": ctx.attr.Description,
         "ErrorLogSettings": parse_json_or_none(ctx.attr.ErrorLogSettings),
@@ -53937,8 +59270,14 @@ cloudformation_aws_lex_bot = rule(
         "BotLocales": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lex-bot.html#cfn-lex-bot-botlocales (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
+        "BotMembers": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lex-bot.html#cfn-lex-bot-botmembers (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
         "BotTags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lex-bot.html#cfn-lex-bot-bottags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "BotType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lex-bot.html#cfn-lex-bot-bottype",
         ),
         "DataPrivacy": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
@@ -54249,6 +59588,53 @@ cloudformation_aws_license_manager_license = rule(
         ),
         "Validity": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsLicenseManagerLicenseAssetRuleSetInfo = provider(
+    doc = "A aws_license_manager_license_asset_rule_set contributed by a target. Shard JSON matches the aws_license_manager_license_asset_rule_set schema.",
+    fields = {
+        "aws_license_manager_license_asset_rule_set_name": "string: top-level key for this aws_license_manager_license_asset_rule_set in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_license_manager_license_asset_rule_set_impl(ctx):
+    item_name = ctx.attr.aws_license_manager_license_asset_rule_set_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+        "Rules": parse_json_or_none(ctx.attr.Rules),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_license_manager_license_asset_rule_set.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsLicenseManagerLicenseAssetRuleSetInfo(aws_license_manager_license_asset_rule_set_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_license_manager_license_asset_rule_set = rule(
+    implementation = _cloudformation_aws_license_manager_license_asset_rule_set_impl,
+    doc = "Schema-derived rule for one `aws_license_manager_license_asset_rule_set` entry.",
+    provides = [CloudformationAwsLicenseManagerLicenseAssetRuleSetInfo],
+    attrs = {
+        "aws_license_manager_license_asset_rule_set_name": attr.string(
+            doc = "Top-level key for this aws_license_manager_license_asset_rule_set in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-licensemanager-licenseassetruleset.html#cfn-licensemanager-licenseassetruleset-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-licensemanager-licenseassetruleset.html#cfn-licensemanager-licenseassetruleset-name",
+        ),
+        "Rules": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-licensemanager-licenseassetruleset.html#cfn-licensemanager-licenseassetruleset-rules (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-licensemanager-licenseassetruleset.html#cfn-licensemanager-licenseassetruleset-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -54843,6 +60229,37 @@ cloudformation_aws_lightsail_domain = rule(
     },
 )
 
+CloudformationAwsLightsailExportSnapshotRecordInfo = provider(
+    doc = "A aws_lightsail_export_snapshot_record contributed by a target. Shard JSON matches the aws_lightsail_export_snapshot_record schema.",
+    fields = {
+        "aws_lightsail_export_snapshot_record_name": "string: top-level key for this aws_lightsail_export_snapshot_record in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_lightsail_export_snapshot_record_impl(ctx):
+    item_name = ctx.attr.aws_lightsail_export_snapshot_record_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_lightsail_export_snapshot_record.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsLightsailExportSnapshotRecordInfo(aws_lightsail_export_snapshot_record_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_lightsail_export_snapshot_record = rule(
+    implementation = _cloudformation_aws_lightsail_export_snapshot_record_impl,
+    doc = "Schema-derived rule for one `aws_lightsail_export_snapshot_record` entry.",
+    provides = [CloudformationAwsLightsailExportSnapshotRecordInfo],
+    attrs = {
+        "aws_lightsail_export_snapshot_record_name": attr.string(
+            doc = "Top-level key for this aws_lightsail_export_snapshot_record in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsLightsailInstanceInfo = provider(
     doc = "A aws_lightsail_instance contributed by a target. Shard JSON matches the aws_lightsail_instance schema.",
     fields = {
@@ -55232,6 +60649,65 @@ cloudformation_aws_location_geofence_collection = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-location-geofencecollection.html#cfn-location-geofencecollection-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsLocationJobInfo = provider(
+    doc = "A aws_location_job contributed by a target. Shard JSON matches the aws_location_job schema.",
+    fields = {
+        "aws_location_job_name": "string: top-level key for this aws_location_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_location_job_impl(ctx):
+    item_name = ctx.attr.aws_location_job_name or ctx.label.name
+    payload = {
+        "Action": ctx.attr.Action,
+        "ActionOptions": parse_json_or_none(ctx.attr.ActionOptions),
+        "ExecutionRoleArn": ctx.attr.ExecutionRoleArn,
+        "InputOptions": parse_json_or_none(ctx.attr.InputOptions),
+        "Name": ctx.attr.Name,
+        "OutputOptions": parse_json_or_none(ctx.attr.OutputOptions),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_location_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsLocationJobInfo(aws_location_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_location_job = rule(
+    implementation = _cloudformation_aws_location_job_impl,
+    doc = "Schema-derived rule for one `aws_location_job` entry.",
+    provides = [CloudformationAwsLocationJobInfo],
+    attrs = {
+        "aws_location_job_name": attr.string(
+            doc = "Top-level key for this aws_location_job in the rendered project. Defaults to the rule name.",
+        ),
+        "Action": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-location-job.html#cfn-location-job-action",
+        ),
+        "ActionOptions": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "ExecutionRoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-location-job.html#cfn-location-job-executionrolearn",
+        ),
+        "InputOptions": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-location-job.html#cfn-location-job-name",
+        ),
+        "OutputOptions": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-location-job.html#cfn-location-job-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -55667,6 +61143,7 @@ CloudformationAwsLogsDeliverySourceInfo = provider(
 def _cloudformation_aws_logs_delivery_source_impl(ctx):
     item_name = ctx.attr.aws_logs_delivery_source_name or ctx.label.name
     payload = {
+        "DeliverySourceConfiguration": ctx.attr.DeliverySourceConfiguration,
         "LogType": ctx.attr.LogType,
         "Name": ctx.attr.Name,
         "ResourceArn": ctx.attr.ResourceArn,
@@ -55687,6 +61164,9 @@ cloudformation_aws_logs_delivery_source = rule(
     attrs = {
         "aws_logs_delivery_source_name": attr.string(
             doc = "Top-level key for this aws_logs_delivery_source in the rendered project. Defaults to the rule name.",
+        ),
+        "DeliverySourceConfiguration": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-deliverysource.html#cfn-logs-deliverysource-deliverysourceconfiguration",
         ),
         "LogType": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-deliverysource.html#cfn-logs-deliverysource-logtype",
@@ -56599,6 +62079,73 @@ cloudformation_aws_m2_environment = rule(
     },
 )
 
+CloudformationAwsMacie2ClassificationJobInfo = provider(
+    doc = "A aws_macie2_classification_job contributed by a target. Shard JSON matches the aws_macie2_classification_job schema.",
+    fields = {
+        "aws_macie2_classification_job_name": "string: top-level key for this aws_macie2_classification_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_macie2_classification_job_impl(ctx):
+    item_name = ctx.attr.aws_macie2_classification_job_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "InitialRun": parse_json_or_none(ctx.attr.InitialRun),
+        "JobType": ctx.attr.JobType,
+        "ManagedDataIdentifierSelector": ctx.attr.ManagedDataIdentifierSelector,
+        "Name": ctx.attr.Name,
+        "S3JobDefinition": parse_json_or_none(ctx.attr.S3JobDefinition),
+        "SamplingPercentage": parse_json_or_none(ctx.attr.SamplingPercentage),
+        "ScheduleFrequency": parse_json_or_none(ctx.attr.ScheduleFrequency),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_macie2_classification_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsMacie2ClassificationJobInfo(aws_macie2_classification_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_macie2_classification_job = rule(
+    implementation = _cloudformation_aws_macie2_classification_job_impl,
+    doc = "Schema-derived rule for one `aws_macie2_classification_job` entry.",
+    provides = [CloudformationAwsMacie2ClassificationJobInfo],
+    attrs = {
+        "aws_macie2_classification_job_name": attr.string(
+            doc = "Top-level key for this aws_macie2_classification_job in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-macie2-classificationjob.html#cfn-macie2-classificationjob-description",
+        ),
+        "InitialRun": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-macie2-classificationjob.html#cfn-macie2-classificationjob-initialrun (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "JobType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-macie2-classificationjob.html#cfn-macie2-classificationjob-jobtype",
+        ),
+        "ManagedDataIdentifierSelector": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-macie2-classificationjob.html#cfn-macie2-classificationjob-manageddataidentifierselector",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-macie2-classificationjob.html#cfn-macie2-classificationjob-name",
+        ),
+        "S3JobDefinition": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "SamplingPercentage": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-macie2-classificationjob.html#cfn-macie2-classificationjob-samplingpercentage (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "ScheduleFrequency": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-macie2-classificationjob.html#cfn-macie2-classificationjob-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsMacieAllowListInfo = provider(
     doc = "A aws_macie_allow_list contributed by a target. Shard JSON matches the aws_macie_allow_list schema.",
     fields = {
@@ -57243,6 +62790,7 @@ def _cloudformation_aws_media_connect_flow_output_impl(ctx):
         "MediaStreamOutputConfigurations": parse_json_or_none(ctx.attr.MediaStreamOutputConfigurations),
         "MinLatency": parse_json_or_none(ctx.attr.MinLatency),
         "Name": ctx.attr.Name,
+        "NdiOutputTimecodeSource": ctx.attr.NdiOutputTimecodeSource,
         "NdiProgramName": ctx.attr.NdiProgramName,
         "NdiSpeedHqQuality": parse_json_or_none(ctx.attr.NdiSpeedHqQuality),
         "OutputStatus": ctx.attr.OutputStatus,
@@ -57298,6 +62846,9 @@ cloudformation_aws_media_connect_flow_output = rule(
         ),
         "Name": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-flowoutput.html#cfn-mediaconnect-flowoutput-name",
+        ),
+        "NdiOutputTimecodeSource": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-flowoutput.html#cfn-mediaconnect-flowoutput-ndioutputtimecodesource",
         ),
         "NdiProgramName": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-flowoutput.html#cfn-mediaconnect-flowoutput-ndiprogramname",
@@ -57531,6 +63082,68 @@ cloudformation_aws_media_connect_gateway = rule(
     },
 )
 
+CloudformationAwsMediaConnectOfferingInfo = provider(
+    doc = "A aws_media_connect_offering contributed by a target. Shard JSON matches the aws_media_connect_offering schema.",
+    fields = {
+        "aws_media_connect_offering_name": "string: top-level key for this aws_media_connect_offering in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_media_connect_offering_impl(ctx):
+    item_name = ctx.attr.aws_media_connect_offering_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_offering.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsMediaConnectOfferingInfo(aws_media_connect_offering_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_media_connect_offering = rule(
+    implementation = _cloudformation_aws_media_connect_offering_impl,
+    doc = "Schema-derived rule for one `aws_media_connect_offering` entry.",
+    provides = [CloudformationAwsMediaConnectOfferingInfo],
+    attrs = {
+        "aws_media_connect_offering_name": attr.string(
+            doc = "Top-level key for this aws_media_connect_offering in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
+CloudformationAwsMediaConnectReservationInfo = provider(
+    doc = "A aws_media_connect_reservation contributed by a target. Shard JSON matches the aws_media_connect_reservation schema.",
+    fields = {
+        "aws_media_connect_reservation_name": "string: top-level key for this aws_media_connect_reservation in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_media_connect_reservation_impl(ctx):
+    item_name = ctx.attr.aws_media_connect_reservation_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_connect_reservation.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsMediaConnectReservationInfo(aws_media_connect_reservation_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_media_connect_reservation = rule(
+    implementation = _cloudformation_aws_media_connect_reservation_impl,
+    doc = "Schema-derived rule for one `aws_media_connect_reservation` entry.",
+    provides = [CloudformationAwsMediaConnectReservationInfo],
+    attrs = {
+        "aws_media_connect_reservation_name": attr.string(
+            doc = "Top-level key for this aws_media_connect_reservation in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsMediaConnectRouterInputInfo = provider(
     doc = "A aws_media_connect_router_input contributed by a target. Shard JSON matches the aws_media_connect_router_input schema.",
     fields = {
@@ -57544,6 +63157,7 @@ def _cloudformation_aws_media_connect_router_input_impl(ctx):
     payload = {
         "AvailabilityZone": ctx.attr.AvailabilityZone,
         "Configuration": parse_json_or_none(ctx.attr.Configuration),
+        "ContentQualityAnalysisConfiguration": parse_json_or_none(ctx.attr.ContentQualityAnalysisConfiguration),
         "MaintenanceConfiguration": parse_json_or_none(ctx.attr.MaintenanceConfiguration),
         "MaximumBitrate": parse_json_or_none(ctx.attr.MaximumBitrate),
         "Name": ctx.attr.Name,
@@ -57573,6 +63187,9 @@ cloudformation_aws_media_connect_router_input = rule(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-availabilityzone",
         ),
         "Configuration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "ContentQualityAnalysisConfiguration": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "MaintenanceConfiguration": attr.string(
@@ -58609,6 +64226,92 @@ cloudformation_aws_media_live_network = rule(
     },
 )
 
+CloudformationAwsMediaLiveNodeInfo = provider(
+    doc = "A aws_media_live_node contributed by a target. Shard JSON matches the aws_media_live_node schema.",
+    fields = {
+        "aws_media_live_node_name": "string: top-level key for this aws_media_live_node in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_media_live_node_impl(ctx):
+    item_name = ctx.attr.aws_media_live_node_name or ctx.label.name
+    payload = {
+        "ClusterId": ctx.attr.ClusterId,
+        "Name": ctx.attr.Name,
+        "NodeInterfaceMappings": parse_json_or_none(ctx.attr.NodeInterfaceMappings),
+        "Role": ctx.attr.Role,
+        "SdiSourceMappings": parse_json_or_none(ctx.attr.SdiSourceMappings),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_node.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsMediaLiveNodeInfo(aws_media_live_node_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_media_live_node = rule(
+    implementation = _cloudformation_aws_media_live_node_impl,
+    doc = "Schema-derived rule for one `aws_media_live_node` entry.",
+    provides = [CloudformationAwsMediaLiveNodeInfo],
+    attrs = {
+        "aws_media_live_node_name": attr.string(
+            doc = "Top-level key for this aws_media_live_node in the rendered project. Defaults to the rule name.",
+        ),
+        "ClusterId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-medialive-node.html#cfn-medialive-node-clusterid",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-medialive-node.html#cfn-medialive-node-name",
+        ),
+        "NodeInterfaceMappings": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-medialive-node.html#cfn-medialive-node-nodeinterfacemappings (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Role": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-medialive-node.html#cfn-medialive-node-role",
+        ),
+        "SdiSourceMappings": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-medialive-node.html#cfn-medialive-node-sdisourcemappings (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-medialive-node.html#cfn-medialive-node-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsMediaLiveOfferingInfo = provider(
+    doc = "A aws_media_live_offering contributed by a target. Shard JSON matches the aws_media_live_offering schema.",
+    fields = {
+        "aws_media_live_offering_name": "string: top-level key for this aws_media_live_offering in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_media_live_offering_impl(ctx):
+    item_name = ctx.attr.aws_media_live_offering_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_live_offering.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsMediaLiveOfferingInfo(aws_media_live_offering_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_media_live_offering = rule(
+    implementation = _cloudformation_aws_media_live_offering_impl,
+    doc = "Schema-derived rule for one `aws_media_live_offering` entry.",
+    provides = [CloudformationAwsMediaLiveOfferingInfo],
+    attrs = {
+        "aws_media_live_offering_name": attr.string(
+            doc = "Top-level key for this aws_media_live_offering in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsMediaLiveSdiSourceInfo = provider(
     doc = "A aws_media_live_sdi_source contributed by a target. Shard JSON matches the aws_media_live_sdi_source schema.",
     fields = {
@@ -58829,6 +64532,57 @@ cloudformation_aws_media_package_channel = rule(
     },
 )
 
+CloudformationAwsMediaPackageHarvestJobInfo = provider(
+    doc = "A aws_media_package_harvest_job contributed by a target. Shard JSON matches the aws_media_package_harvest_job schema.",
+    fields = {
+        "aws_media_package_harvest_job_name": "string: top-level key for this aws_media_package_harvest_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_media_package_harvest_job_impl(ctx):
+    item_name = ctx.attr.aws_media_package_harvest_job_name or ctx.label.name
+    payload = {
+        "EndTime": ctx.attr.EndTime,
+        "Id": ctx.attr.Id,
+        "OriginEndpointId": ctx.attr.OriginEndpointId,
+        "S3Destination": parse_json_or_none(ctx.attr.S3Destination),
+        "StartTime": ctx.attr.StartTime,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_package_harvest_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsMediaPackageHarvestJobInfo(aws_media_package_harvest_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_media_package_harvest_job = rule(
+    implementation = _cloudformation_aws_media_package_harvest_job_impl,
+    doc = "Schema-derived rule for one `aws_media_package_harvest_job` entry.",
+    provides = [CloudformationAwsMediaPackageHarvestJobInfo],
+    attrs = {
+        "aws_media_package_harvest_job_name": attr.string(
+            doc = "Top-level key for this aws_media_package_harvest_job in the rendered project. Defaults to the rule name.",
+        ),
+        "EndTime": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-harvestjob.html#cfn-mediapackage-harvestjob-endtime",
+        ),
+        "Id": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-harvestjob.html#cfn-mediapackage-harvestjob-id",
+        ),
+        "OriginEndpointId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-harvestjob.html#cfn-mediapackage-harvestjob-originendpointid",
+        ),
+        "S3Destination": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "StartTime": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackage-harvestjob.html#cfn-mediapackage-harvestjob-starttime",
+        ),
+    },
+)
+
 CloudformationAwsMediaPackageOriginEndpointInfo = provider(
     doc = "A aws_media_package_origin_endpoint contributed by a target. Shard JSON matches the aws_media_package_origin_endpoint schema.",
     fields = {
@@ -59039,6 +64793,7 @@ def _cloudformation_aws_media_package_v2_channel_impl(ctx):
         "InputSwitchConfiguration": parse_json_or_none(ctx.attr.InputSwitchConfiguration),
         "InputType": ctx.attr.InputType,
         "OutputHeaderConfiguration": parse_json_or_none(ctx.attr.OutputHeaderConfiguration),
+        "OutputLockingMode": ctx.attr.OutputLockingMode,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
     payload = strip_empty(payload)
@@ -59074,6 +64829,9 @@ cloudformation_aws_media_package_v2_channel = rule(
         ),
         "OutputHeaderConfiguration": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "OutputLockingMode": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackagev2-channel.html#cfn-mediapackagev2-channel-outputlockingmode",
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackagev2-channel.html#cfn-mediapackagev2-channel-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -59167,6 +64925,73 @@ cloudformation_aws_media_package_v2_channel_policy = rule(
     },
 )
 
+CloudformationAwsMediaPackageV2HarvestJobInfo = provider(
+    doc = "A aws_media_package_v2_harvest_job contributed by a target. Shard JSON matches the aws_media_package_v2_harvest_job schema.",
+    fields = {
+        "aws_media_package_v2_harvest_job_name": "string: top-level key for this aws_media_package_v2_harvest_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_media_package_v2_harvest_job_impl(ctx):
+    item_name = ctx.attr.aws_media_package_v2_harvest_job_name or ctx.label.name
+    payload = {
+        "ChannelGroupName": ctx.attr.ChannelGroupName,
+        "ChannelName": ctx.attr.ChannelName,
+        "Description": ctx.attr.Description,
+        "Destination": parse_json_or_none(ctx.attr.Destination),
+        "HarvestJobName": ctx.attr.HarvestJobName,
+        "HarvestedManifests": parse_json_or_none(ctx.attr.HarvestedManifests),
+        "OriginEndpointName": ctx.attr.OriginEndpointName,
+        "ScheduleConfiguration": parse_json_or_none(ctx.attr.ScheduleConfiguration),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_package_v2_harvest_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsMediaPackageV2HarvestJobInfo(aws_media_package_v2_harvest_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_media_package_v2_harvest_job = rule(
+    implementation = _cloudformation_aws_media_package_v2_harvest_job_impl,
+    doc = "Schema-derived rule for one `aws_media_package_v2_harvest_job` entry.",
+    provides = [CloudformationAwsMediaPackageV2HarvestJobInfo],
+    attrs = {
+        "aws_media_package_v2_harvest_job_name": attr.string(
+            doc = "Top-level key for this aws_media_package_v2_harvest_job in the rendered project. Defaults to the rule name.",
+        ),
+        "ChannelGroupName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackagev2-harvestjob.html#cfn-mediapackagev2-harvestjob-channelgroupname",
+        ),
+        "ChannelName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackagev2-harvestjob.html#cfn-mediapackagev2-harvestjob-channelname",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackagev2-harvestjob.html#cfn-mediapackagev2-harvestjob-description",
+        ),
+        "Destination": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "HarvestJobName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackagev2-harvestjob.html#cfn-mediapackagev2-harvestjob-harvestjobname",
+        ),
+        "HarvestedManifests": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "OriginEndpointName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackagev2-harvestjob.html#cfn-mediapackagev2-harvestjob-originendpointname",
+        ),
+        "ScheduleConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackagev2-harvestjob.html#cfn-mediapackagev2-harvestjob-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsMediaPackageV2OriginEndpointInfo = provider(
     doc = "A aws_media_package_v2_origin_endpoint contributed by a target. Shard JSON matches the aws_media_package_v2_origin_endpoint schema.",
     fields = {
@@ -59191,6 +65016,7 @@ def _cloudformation_aws_media_package_v2_origin_endpoint_impl(ctx):
         "Segment": parse_json_or_none(ctx.attr.Segment),
         "StartoverWindowSeconds": parse_json_or_none(ctx.attr.StartoverWindowSeconds),
         "Tags": parse_json_or_none(ctx.attr.Tags),
+        "UriSeparator": ctx.attr.UriSeparator,
     }
     payload = strip_empty(payload)
     shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_package_v2_origin_endpoint.json")
@@ -59246,6 +65072,9 @@ cloudformation_aws_media_package_v2_origin_endpoint = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackagev2-originendpoint.html#cfn-mediapackagev2-originendpoint-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "UriSeparator": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediapackagev2-originendpoint.html#cfn-mediapackagev2-originendpoint-uriseparator",
         ),
     },
 )
@@ -59466,6 +65295,65 @@ cloudformation_aws_media_tailor_channel_policy = rule(
     },
 )
 
+CloudformationAwsMediaTailorFunctionInfo = provider(
+    doc = "A aws_media_tailor_function contributed by a target. Shard JSON matches the aws_media_tailor_function schema.",
+    fields = {
+        "aws_media_tailor_function_name": "string: top-level key for this aws_media_tailor_function in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_media_tailor_function_impl(ctx):
+    item_name = ctx.attr.aws_media_tailor_function_name or ctx.label.name
+    payload = {
+        "CustomOutputConfiguration": parse_json_or_none(ctx.attr.CustomOutputConfiguration),
+        "Description": ctx.attr.Description,
+        "FunctionId": ctx.attr.FunctionId,
+        "FunctionType": ctx.attr.FunctionType,
+        "HttpRequestConfiguration": parse_json_or_none(ctx.attr.HttpRequestConfiguration),
+        "SequentialExecutorConfiguration": parse_json_or_none(ctx.attr.SequentialExecutorConfiguration),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_media_tailor_function.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsMediaTailorFunctionInfo(aws_media_tailor_function_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_media_tailor_function = rule(
+    implementation = _cloudformation_aws_media_tailor_function_impl,
+    doc = "Schema-derived rule for one `aws_media_tailor_function` entry.",
+    provides = [CloudformationAwsMediaTailorFunctionInfo],
+    attrs = {
+        "aws_media_tailor_function_name": attr.string(
+            doc = "Top-level key for this aws_media_tailor_function in the rendered project. Defaults to the rule name.",
+        ),
+        "CustomOutputConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediatailor-function.html#cfn-mediatailor-function-description",
+        ),
+        "FunctionId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediatailor-function.html#cfn-mediatailor-function-functionid",
+        ),
+        "FunctionType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediatailor-function.html#cfn-mediatailor-function-functiontype",
+        ),
+        "HttpRequestConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "SequentialExecutorConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediatailor-function.html#cfn-mediatailor-function-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsMediaTailorLiveSourceInfo = provider(
     doc = "A aws_media_tailor_live_source contributed by a target. Shard JSON matches the aws_media_tailor_live_source schema.",
     fields = {
@@ -59527,11 +65415,14 @@ def _cloudformation_aws_media_tailor_playback_configuration_impl(ctx):
         "AdConditioningConfiguration": parse_json_or_none(ctx.attr.AdConditioningConfiguration),
         "AdDecisionServerConfiguration": parse_json_or_none(ctx.attr.AdDecisionServerConfiguration),
         "AdDecisionServerUrl": ctx.attr.AdDecisionServerUrl,
+        "AdsPersonalizationConcurrency": parse_json_or_none(ctx.attr.AdsPersonalizationConcurrency),
+        "AdsPersonalizationTimeouts": parse_json_or_none(ctx.attr.AdsPersonalizationTimeouts),
         "AvailSuppression": parse_json_or_none(ctx.attr.AvailSuppression),
         "Bumper": parse_json_or_none(ctx.attr.Bumper),
         "CdnConfiguration": parse_json_or_none(ctx.attr.CdnConfiguration),
         "ConfigurationAliases": parse_json_or_none(ctx.attr.ConfigurationAliases),
         "DashConfiguration": parse_json_or_none(ctx.attr.DashConfiguration),
+        "FunctionMapping": ctx.attr.FunctionMapping,
         "HlsConfiguration": parse_json_or_none(ctx.attr.HlsConfiguration),
         "InsertionMode": ctx.attr.InsertionMode,
         "LivePreRollConfiguration": parse_json_or_none(ctx.attr.LivePreRollConfiguration),
@@ -59569,6 +65460,12 @@ cloudformation_aws_media_tailor_playback_configuration = rule(
         "AdDecisionServerUrl": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediatailor-playbackconfiguration.html#cfn-mediatailor-playbackconfiguration-addecisionserverurl",
         ),
+        "AdsPersonalizationConcurrency": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "AdsPersonalizationTimeouts": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
         "AvailSuppression": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
@@ -59583,6 +65480,9 @@ cloudformation_aws_media_tailor_playback_configuration = rule(
         ),
         "DashConfiguration": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "FunctionMapping": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediatailor-playbackconfiguration.html#cfn-mediatailor-playbackconfiguration-functionmapping",
         ),
         "HlsConfiguration": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
@@ -59718,6 +65618,41 @@ cloudformation_aws_media_tailor_vod_source = rule(
         ),
         "VodSourceName": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediatailor-vodsource.html#cfn-mediatailor-vodsource-vodsourcename",
+        ),
+    },
+)
+
+CloudformationAwsMedicalImagingImageSetInfo = provider(
+    doc = "A aws_medical_imaging_image_set contributed by a target. Shard JSON matches the aws_medical_imaging_image_set schema.",
+    fields = {
+        "aws_medical_imaging_image_set_name": "string: top-level key for this aws_medical_imaging_image_set in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_medical_imaging_image_set_impl(ctx):
+    item_name = ctx.attr.aws_medical_imaging_image_set_name or ctx.label.name
+    payload = {
+        "DatastoreId": ctx.attr.DatastoreId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_medical_imaging_image_set.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsMedicalImagingImageSetInfo(aws_medical_imaging_image_set_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_medical_imaging_image_set = rule(
+    implementation = _cloudformation_aws_medical_imaging_image_set_impl,
+    doc = "Schema-derived rule for one `aws_medical_imaging_image_set` entry.",
+    provides = [CloudformationAwsMedicalImagingImageSetInfo],
+    attrs = {
+        "aws_medical_imaging_image_set_name": attr.string(
+            doc = "Top-level key for this aws_medical_imaging_image_set in the rendered project. Defaults to the rule name.",
+        ),
+        "DatastoreId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-medicalimaging-imageset.html#cfn-medicalimaging-imageset-datastoreid",
         ),
     },
 )
@@ -59983,6 +65918,37 @@ cloudformation_aws_memory_db_multi_region_cluster = rule(
     },
 )
 
+CloudformationAwsMemoryDbMultiRegionParameterGroupInfo = provider(
+    doc = "A aws_memory_db_multi_region_parameter_group contributed by a target. Shard JSON matches the aws_memory_db_multi_region_parameter_group schema.",
+    fields = {
+        "aws_memory_db_multi_region_parameter_group_name": "string: top-level key for this aws_memory_db_multi_region_parameter_group in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_memory_db_multi_region_parameter_group_impl(ctx):
+    item_name = ctx.attr.aws_memory_db_multi_region_parameter_group_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_memory_db_multi_region_parameter_group.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsMemoryDbMultiRegionParameterGroupInfo(aws_memory_db_multi_region_parameter_group_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_memory_db_multi_region_parameter_group = rule(
+    implementation = _cloudformation_aws_memory_db_multi_region_parameter_group_impl,
+    doc = "Schema-derived rule for one `aws_memory_db_multi_region_parameter_group` entry.",
+    provides = [CloudformationAwsMemoryDbMultiRegionParameterGroupInfo],
+    attrs = {
+        "aws_memory_db_multi_region_parameter_group_name": attr.string(
+            doc = "Top-level key for this aws_memory_db_multi_region_parameter_group in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsMemoryDbParameterGroupInfo = provider(
     doc = "A aws_memory_db_parameter_group contributed by a target. Shard JSON matches the aws_memory_db_parameter_group schema.",
     fields = {
@@ -60030,6 +65996,37 @@ cloudformation_aws_memory_db_parameter_group = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-memorydb-parametergroup.html#cfn-memorydb-parametergroup-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsMemoryDbReservedNodeInfo = provider(
+    doc = "A aws_memory_db_reserved_node contributed by a target. Shard JSON matches the aws_memory_db_reserved_node schema.",
+    fields = {
+        "aws_memory_db_reserved_node_name": "string: top-level key for this aws_memory_db_reserved_node in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_memory_db_reserved_node_impl(ctx):
+    item_name = ctx.attr.aws_memory_db_reserved_node_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_memory_db_reserved_node.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsMemoryDbReservedNodeInfo(aws_memory_db_reserved_node_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_memory_db_reserved_node = rule(
+    implementation = _cloudformation_aws_memory_db_reserved_node_impl,
+    doc = "Schema-derived rule for one `aws_memory_db_reserved_node` entry.",
+    provides = [CloudformationAwsMemoryDbReservedNodeInfo],
+    attrs = {
+        "aws_memory_db_reserved_node_name": attr.string(
+            doc = "Top-level key for this aws_memory_db_reserved_node in the rendered project. Defaults to the rule name.",
         ),
     },
 )
@@ -60257,6 +66254,69 @@ cloudformation_aws_msk_batch_scram_secret = rule(
         ),
         "SecretArnList": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-batchscramsecret.html#cfn-msk-batchscramsecret-secretarnlist (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsMskChannelInfo = provider(
+    doc = "A aws_msk_channel contributed by a target. Shard JSON matches the aws_msk_channel schema.",
+    fields = {
+        "aws_msk_channel_name": "string: top-level key for this aws_msk_channel in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_msk_channel_impl(ctx):
+    item_name = ctx.attr.aws_msk_channel_name or ctx.label.name
+    payload = {
+        "ChannelName": ctx.attr.ChannelName,
+        "ClusterArn": ctx.attr.ClusterArn,
+        "EncryptionConfiguration": parse_json_or_none(ctx.attr.EncryptionConfiguration),
+        "IcebergDestinationConfiguration": parse_json_or_none(ctx.attr.IcebergDestinationConfiguration),
+        "LoggingInfo": parse_json_or_none(ctx.attr.LoggingInfo),
+        "S3DestinationConfiguration": parse_json_or_none(ctx.attr.S3DestinationConfiguration),
+        "Tags": ctx.attr.Tags,
+        "TopicConfigurationList": parse_json_or_none(ctx.attr.TopicConfigurationList),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_msk_channel.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsMskChannelInfo(aws_msk_channel_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_msk_channel = rule(
+    implementation = _cloudformation_aws_msk_channel_impl,
+    doc = "Schema-derived rule for one `aws_msk_channel` entry.",
+    provides = [CloudformationAwsMskChannelInfo],
+    attrs = {
+        "aws_msk_channel_name": attr.string(
+            doc = "Top-level key for this aws_msk_channel in the rendered project. Defaults to the rule name.",
+        ),
+        "ChannelName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-channel.html#cfn-msk-channel-channelname",
+        ),
+        "ClusterArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-channel.html#cfn-msk-channel-clusterarn",
+        ),
+        "EncryptionConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "IcebergDestinationConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "LoggingInfo": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "S3DestinationConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-channel.html#cfn-msk-channel-tags",
+        ),
+        "TopicConfigurationList": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-channel.html#cfn-msk-channel-topicconfigurationlist (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -60875,8 +66935,10 @@ def _cloudformation_aws_neptune_dbcluster_impl(ctx):
         "DeletionProtection": parse_json_or_none(ctx.attr.DeletionProtection),
         "EnableCloudwatchLogsExports": parse_json_or_none(ctx.attr.EnableCloudwatchLogsExports),
         "EngineVersion": ctx.attr.EngineVersion,
+        "GlobalClusterIdentifier": ctx.attr.GlobalClusterIdentifier,
         "IamAuthEnabled": parse_json_or_none(ctx.attr.IamAuthEnabled),
         "KmsKeyId": ctx.attr.KmsKeyId,
+        "NetworkType": ctx.attr.NetworkType,
         "PreferredBackupWindow": ctx.attr.PreferredBackupWindow,
         "PreferredMaintenanceWindow": ctx.attr.PreferredMaintenanceWindow,
         "RestoreToTime": ctx.attr.RestoreToTime,
@@ -60941,11 +67003,17 @@ cloudformation_aws_neptune_dbcluster = rule(
         "EngineVersion": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-engineversion",
         ),
+        "GlobalClusterIdentifier": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-globalclusteridentifier",
+        ),
         "IamAuthEnabled": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-iamauthenabled (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "KmsKeyId": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-kmskeyid",
+        ),
+        "NetworkType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-networktype",
         ),
         "PreferredBackupWindow": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-preferredbackupwindow",
@@ -61262,6 +67330,128 @@ cloudformation_aws_neptune_event_subscription = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-eventsubscription.html#cfn-neptune-eventsubscription-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsNeptuneGlobalClusterInfo = provider(
+    doc = "A aws_neptune_global_cluster contributed by a target. Shard JSON matches the aws_neptune_global_cluster schema.",
+    fields = {
+        "aws_neptune_global_cluster_name": "string: top-level key for this aws_neptune_global_cluster in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_neptune_global_cluster_impl(ctx):
+    item_name = ctx.attr.aws_neptune_global_cluster_name or ctx.label.name
+    payload = {
+        "DeletionProtection": parse_json_or_none(ctx.attr.DeletionProtection),
+        "Engine": ctx.attr.Engine,
+        "EngineVersion": ctx.attr.EngineVersion,
+        "GlobalClusterIdentifier": ctx.attr.GlobalClusterIdentifier,
+        "SourceDBClusterIdentifier": ctx.attr.SourceDBClusterIdentifier,
+        "StorageEncrypted": parse_json_or_none(ctx.attr.StorageEncrypted),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_neptune_global_cluster.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsNeptuneGlobalClusterInfo(aws_neptune_global_cluster_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_neptune_global_cluster = rule(
+    implementation = _cloudformation_aws_neptune_global_cluster_impl,
+    doc = "Schema-derived rule for one `aws_neptune_global_cluster` entry.",
+    provides = [CloudformationAwsNeptuneGlobalClusterInfo],
+    attrs = {
+        "aws_neptune_global_cluster_name": attr.string(
+            doc = "Top-level key for this aws_neptune_global_cluster in the rendered project. Defaults to the rule name.",
+        ),
+        "DeletionProtection": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-globalcluster.html#cfn-neptune-globalcluster-deletionprotection (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Engine": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-globalcluster.html#cfn-neptune-globalcluster-engine",
+        ),
+        "EngineVersion": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-globalcluster.html#cfn-neptune-globalcluster-engineversion",
+        ),
+        "GlobalClusterIdentifier": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-globalcluster.html#cfn-neptune-globalcluster-globalclusteridentifier",
+        ),
+        "SourceDBClusterIdentifier": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-globalcluster.html#cfn-neptune-globalcluster-sourcedbclusteridentifier",
+        ),
+        "StorageEncrypted": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-globalcluster.html#cfn-neptune-globalcluster-storageencrypted (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-globalcluster.html#cfn-neptune-globalcluster-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsNeptuneGraphExportTaskInfo = provider(
+    doc = "A aws_neptune_graph_export_task contributed by a target. Shard JSON matches the aws_neptune_graph_export_task schema.",
+    fields = {
+        "aws_neptune_graph_export_task_name": "string: top-level key for this aws_neptune_graph_export_task in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_neptune_graph_export_task_impl(ctx):
+    item_name = ctx.attr.aws_neptune_graph_export_task_name or ctx.label.name
+    payload = {
+        "Destination": ctx.attr.Destination,
+        "ExportFilter": parse_json_or_none(ctx.attr.ExportFilter),
+        "Format": ctx.attr.Format,
+        "GraphIdentifier": ctx.attr.GraphIdentifier,
+        "KmsKeyIdentifier": ctx.attr.KmsKeyIdentifier,
+        "ParquetType": ctx.attr.ParquetType,
+        "RoleArn": ctx.attr.RoleArn,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_neptune_graph_export_task.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsNeptuneGraphExportTaskInfo(aws_neptune_graph_export_task_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_neptune_graph_export_task = rule(
+    implementation = _cloudformation_aws_neptune_graph_export_task_impl,
+    doc = "Schema-derived rule for one `aws_neptune_graph_export_task` entry.",
+    provides = [CloudformationAwsNeptuneGraphExportTaskInfo],
+    attrs = {
+        "aws_neptune_graph_export_task_name": attr.string(
+            doc = "Top-level key for this aws_neptune_graph_export_task in the rendered project. Defaults to the rule name.",
+        ),
+        "Destination": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptunegraph-exporttask.html#cfn-neptunegraph-exporttask-destination",
+        ),
+        "ExportFilter": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Format": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptunegraph-exporttask.html#cfn-neptunegraph-exporttask-format",
+        ),
+        "GraphIdentifier": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptunegraph-exporttask.html#cfn-neptunegraph-exporttask-graphidentifier",
+        ),
+        "KmsKeyIdentifier": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptunegraph-exporttask.html#cfn-neptunegraph-exporttask-kmskeyidentifier",
+        ),
+        "ParquetType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptunegraph-exporttask.html#cfn-neptunegraph-exporttask-parquettype",
+        ),
+        "RoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptunegraph-exporttask.html#cfn-neptunegraph-exporttask-rolearn",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptunegraph-exporttask.html#cfn-neptunegraph-exporttask-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -61749,6 +67939,57 @@ cloudformation_aws_network_firewall_vpc_endpoint_association = rule(
         ),
         "VpcId": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-networkfirewall-vpcendpointassociation.html#cfn-networkfirewall-vpcendpointassociation-vpcid",
+        ),
+    },
+)
+
+CloudformationAwsNetworkFlowMonitorMonitorInfo = provider(
+    doc = "A aws_network_flow_monitor_monitor contributed by a target. Shard JSON matches the aws_network_flow_monitor_monitor schema.",
+    fields = {
+        "aws_network_flow_monitor_monitor_name": "string: top-level key for this aws_network_flow_monitor_monitor in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_network_flow_monitor_monitor_impl(ctx):
+    item_name = ctx.attr.aws_network_flow_monitor_monitor_name or ctx.label.name
+    payload = {
+        "LocalResources": parse_json_or_none(ctx.attr.LocalResources),
+        "MonitorName": ctx.attr.MonitorName,
+        "RemoteResources": parse_json_or_none(ctx.attr.RemoteResources),
+        "ScopeArn": ctx.attr.ScopeArn,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_network_flow_monitor_monitor.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsNetworkFlowMonitorMonitorInfo(aws_network_flow_monitor_monitor_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_network_flow_monitor_monitor = rule(
+    implementation = _cloudformation_aws_network_flow_monitor_monitor_impl,
+    doc = "Schema-derived rule for one `aws_network_flow_monitor_monitor` entry.",
+    provides = [CloudformationAwsNetworkFlowMonitorMonitorInfo],
+    attrs = {
+        "aws_network_flow_monitor_monitor_name": attr.string(
+            doc = "Top-level key for this aws_network_flow_monitor_monitor in the rendered project. Defaults to the rule name.",
+        ),
+        "LocalResources": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-networkflowmonitor-monitor.html#cfn-networkflowmonitor-monitor-localresources (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "MonitorName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-networkflowmonitor-monitor.html#cfn-networkflowmonitor-monitor-monitorname",
+        ),
+        "RemoteResources": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-networkflowmonitor-monitor.html#cfn-networkflowmonitor-monitor-remoteresources (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "ScopeArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-networkflowmonitor-monitor.html#cfn-networkflowmonitor-monitor-scopearn",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-networkflowmonitor-monitor.html#cfn-networkflowmonitor-monitor-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -62980,6 +69221,49 @@ cloudformation_aws_nova_act_workflow_definition = rule(
     },
 )
 
+CloudformationAwsNovaActWorkflowRunInfo = provider(
+    doc = "A aws_nova_act_workflow_run contributed by a target. Shard JSON matches the aws_nova_act_workflow_run schema.",
+    fields = {
+        "aws_nova_act_workflow_run_name": "string: top-level key for this aws_nova_act_workflow_run in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_nova_act_workflow_run_impl(ctx):
+    item_name = ctx.attr.aws_nova_act_workflow_run_name or ctx.label.name
+    payload = {
+        "LogGroupName": ctx.attr.LogGroupName,
+        "ModelId": ctx.attr.ModelId,
+        "WorkflowDefinitionName": ctx.attr.WorkflowDefinitionName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_nova_act_workflow_run.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsNovaActWorkflowRunInfo(aws_nova_act_workflow_run_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_nova_act_workflow_run = rule(
+    implementation = _cloudformation_aws_nova_act_workflow_run_impl,
+    doc = "Schema-derived rule for one `aws_nova_act_workflow_run` entry.",
+    provides = [CloudformationAwsNovaActWorkflowRunInfo],
+    attrs = {
+        "aws_nova_act_workflow_run_name": attr.string(
+            doc = "Top-level key for this aws_nova_act_workflow_run in the rendered project. Defaults to the rule name.",
+        ),
+        "LogGroupName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-novaact-workflowrun.html#cfn-novaact-workflowrun-loggroupname",
+        ),
+        "ModelId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-novaact-workflowrun.html#cfn-novaact-workflowrun-modelid",
+        ),
+        "WorkflowDefinitionName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-novaact-workflowrun.html#cfn-novaact-workflowrun-workflowdefinitionname",
+        ),
+    },
+)
+
 CloudformationAwsOamLinkInfo = provider(
     doc = "A aws_oam_link contributed by a target. Shard JSON matches the aws_oam_link schema.",
     fields = {
@@ -63881,6 +70165,112 @@ cloudformation_aws_omics_configuration = rule(
     },
 )
 
+CloudformationAwsOmicsReadSetInfo = provider(
+    doc = "A aws_omics_read_set contributed by a target. Shard JSON matches the aws_omics_read_set schema.",
+    fields = {
+        "aws_omics_read_set_name": "string: top-level key for this aws_omics_read_set in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_omics_read_set_impl(ctx):
+    item_name = ctx.attr.aws_omics_read_set_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "FileType": ctx.attr.FileType,
+        "Name": ctx.attr.Name,
+        "ReferenceArn": ctx.attr.ReferenceArn,
+        "SampleId": ctx.attr.SampleId,
+        "SequenceStoreId": ctx.attr.SequenceStoreId,
+        "SubjectId": ctx.attr.SubjectId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_read_set.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsOmicsReadSetInfo(aws_omics_read_set_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_omics_read_set = rule(
+    implementation = _cloudformation_aws_omics_read_set_impl,
+    doc = "Schema-derived rule for one `aws_omics_read_set` entry.",
+    provides = [CloudformationAwsOmicsReadSetInfo],
+    attrs = {
+        "aws_omics_read_set_name": attr.string(
+            doc = "Top-level key for this aws_omics_read_set in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-readset.html#cfn-omics-readset-description",
+        ),
+        "FileType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-readset.html#cfn-omics-readset-filetype",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-readset.html#cfn-omics-readset-name",
+        ),
+        "ReferenceArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-readset.html#cfn-omics-readset-referencearn",
+        ),
+        "SampleId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-readset.html#cfn-omics-readset-sampleid",
+        ),
+        "SequenceStoreId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-readset.html#cfn-omics-readset-sequencestoreid",
+        ),
+        "SubjectId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-readset.html#cfn-omics-readset-subjectid",
+        ),
+    },
+)
+
+CloudformationAwsOmicsReferenceInfo = provider(
+    doc = "A aws_omics_reference contributed by a target. Shard JSON matches the aws_omics_reference schema.",
+    fields = {
+        "aws_omics_reference_name": "string: top-level key for this aws_omics_reference in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_omics_reference_impl(ctx):
+    item_name = ctx.attr.aws_omics_reference_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+        "ReferenceStoreId": ctx.attr.ReferenceStoreId,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_reference.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsOmicsReferenceInfo(aws_omics_reference_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_omics_reference = rule(
+    implementation = _cloudformation_aws_omics_reference_impl,
+    doc = "Schema-derived rule for one `aws_omics_reference` entry.",
+    provides = [CloudformationAwsOmicsReferenceInfo],
+    attrs = {
+        "aws_omics_reference_name": attr.string(
+            doc = "Top-level key for this aws_omics_reference in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-reference.html#cfn-omics-reference-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-reference.html#cfn-omics-reference-name",
+        ),
+        "ReferenceStoreId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-reference.html#cfn-omics-reference-referencestoreid",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-reference.html#cfn-omics-reference-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsOmicsReferenceStoreInfo = provider(
     doc = "A aws_omics_reference_store contributed by a target. Shard JSON matches the aws_omics_reference_store schema.",
     fields = {
@@ -63924,6 +70314,101 @@ cloudformation_aws_omics_reference_store = rule(
         ),
         "Tags": attr.string_dict(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-referencestore.html#cfn-omics-referencestore-tags",
+        ),
+    },
+)
+
+CloudformationAwsOmicsRunInfo = provider(
+    doc = "A aws_omics_run contributed by a target. Shard JSON matches the aws_omics_run schema.",
+    fields = {
+        "aws_omics_run_name": "string: top-level key for this aws_omics_run in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_omics_run_impl(ctx):
+    item_name = ctx.attr.aws_omics_run_name or ctx.label.name
+    payload = {
+        "CacheBehavior": ctx.attr.CacheBehavior,
+        "CacheId": ctx.attr.CacheId,
+        "LogLevel": ctx.attr.LogLevel,
+        "Name": ctx.attr.Name,
+        "NetworkingMode": ctx.attr.NetworkingMode,
+        "OutputUri": ctx.attr.OutputUri,
+        "Priority": parse_json_or_none(ctx.attr.Priority),
+        "RetentionMode": ctx.attr.RetentionMode,
+        "RoleArn": ctx.attr.RoleArn,
+        "RunGroupId": ctx.attr.RunGroupId,
+        "StorageCapacity": parse_json_or_none(ctx.attr.StorageCapacity),
+        "StorageType": ctx.attr.StorageType,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "WorkflowId": ctx.attr.WorkflowId,
+        "WorkflowOwnerId": ctx.attr.WorkflowOwnerId,
+        "WorkflowType": ctx.attr.WorkflowType,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_run.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsOmicsRunInfo(aws_omics_run_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_omics_run = rule(
+    implementation = _cloudformation_aws_omics_run_impl,
+    doc = "Schema-derived rule for one `aws_omics_run` entry.",
+    provides = [CloudformationAwsOmicsRunInfo],
+    attrs = {
+        "aws_omics_run_name": attr.string(
+            doc = "Top-level key for this aws_omics_run in the rendered project. Defaults to the rule name.",
+        ),
+        "CacheBehavior": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-cachebehavior",
+        ),
+        "CacheId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-cacheid",
+        ),
+        "LogLevel": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-loglevel",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-name",
+        ),
+        "NetworkingMode": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-networkingmode",
+        ),
+        "OutputUri": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-outputuri",
+        ),
+        "Priority": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-priority (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "RetentionMode": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-retentionmode",
+        ),
+        "RoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-rolearn",
+        ),
+        "RunGroupId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-rungroupid",
+        ),
+        "StorageCapacity": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-storagecapacity (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "StorageType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-storagetype",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "WorkflowId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-workflowid",
+        ),
+        "WorkflowOwnerId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-workflowownerid",
+        ),
+        "WorkflowType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-run.html#cfn-omics-run-workflowtype",
         ),
     },
 )
@@ -64046,6 +70531,41 @@ cloudformation_aws_omics_sequence_store = rule(
         ),
         "Tags": attr.string_dict(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-sequencestore.html#cfn-omics-sequencestore-tags",
+        ),
+    },
+)
+
+CloudformationAwsOmicsTaskInfo = provider(
+    doc = "A aws_omics_task contributed by a target. Shard JSON matches the aws_omics_task schema.",
+    fields = {
+        "aws_omics_task_name": "string: top-level key for this aws_omics_task in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_omics_task_impl(ctx):
+    item_name = ctx.attr.aws_omics_task_name or ctx.label.name
+    payload = {
+        "RunId": ctx.attr.RunId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_omics_task.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsOmicsTaskInfo(aws_omics_task_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_omics_task = rule(
+    implementation = _cloudformation_aws_omics_task_impl,
+    doc = "Schema-derived rule for one `aws_omics_task` entry.",
+    provides = [CloudformationAwsOmicsTaskInfo],
+    attrs = {
+        "aws_omics_task_name": attr.string(
+            doc = "Top-level key for this aws_omics_task in the rendered project. Defaults to the rule name.",
+        ),
+        "RunId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-omics-task.html#cfn-omics-task-runid",
         ),
     },
 )
@@ -64311,6 +70831,53 @@ cloudformation_aws_omics_workflow_version = rule(
     },
 )
 
+CloudformationAwsOpenSearchDataSourceInfo = provider(
+    doc = "A aws_open_search_data_source contributed by a target. Shard JSON matches the aws_open_search_data_source schema.",
+    fields = {
+        "aws_open_search_data_source_name": "string: top-level key for this aws_open_search_data_source in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_open_search_data_source_impl(ctx):
+    item_name = ctx.attr.aws_open_search_data_source_name or ctx.label.name
+    payload = {
+        "DataSourceType": parse_json_or_none(ctx.attr.DataSourceType),
+        "Description": ctx.attr.Description,
+        "DomainName": ctx.attr.DomainName,
+        "Name": ctx.attr.Name,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_open_search_data_source.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsOpenSearchDataSourceInfo(aws_open_search_data_source_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_open_search_data_source = rule(
+    implementation = _cloudformation_aws_open_search_data_source_impl,
+    doc = "Schema-derived rule for one `aws_open_search_data_source` entry.",
+    provides = [CloudformationAwsOpenSearchDataSourceInfo],
+    attrs = {
+        "aws_open_search_data_source_name": attr.string(
+            doc = "Top-level key for this aws_open_search_data_source in the rendered project. Defaults to the rule name.",
+        ),
+        "DataSourceType": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearch-datasource.html#cfn-opensearch-datasource-description",
+        ),
+        "DomainName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearch-datasource.html#cfn-opensearch-datasource-domainname",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearch-datasource.html#cfn-opensearch-datasource-name",
+        ),
+    },
+)
+
 CloudformationAwsOpenSearchServerlessAccessPolicyInfo = provider(
     doc = "A aws_open_search_serverless_access_policy contributed by a target. Shard JSON matches the aws_open_search_serverless_access_policy schema.",
     fields = {
@@ -64370,6 +70937,7 @@ def _cloudformation_aws_open_search_serverless_collection_impl(ctx):
     item_name = ctx.attr.aws_open_search_serverless_collection_name or ctx.label.name
     payload = {
         "CollectionGroupName": ctx.attr.CollectionGroupName,
+        "DeletionProtection": ctx.attr.DeletionProtection,
         "Description": ctx.attr.Description,
         "EncryptionConfig": parse_json_or_none(ctx.attr.EncryptionConfig),
         "Name": ctx.attr.Name,
@@ -64396,6 +70964,9 @@ cloudformation_aws_open_search_serverless_collection = rule(
         ),
         "CollectionGroupName": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-collection.html#cfn-opensearchserverless-collection-collectiongroupname",
+        ),
+        "DeletionProtection": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-collection.html#cfn-opensearchserverless-collection-deletionprotection",
         ),
         "Description": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-collection.html#cfn-opensearchserverless-collection-description",
@@ -64434,6 +71005,7 @@ def _cloudformation_aws_open_search_serverless_collection_group_impl(ctx):
     payload = {
         "CapacityLimits": parse_json_or_none(ctx.attr.CapacityLimits),
         "Description": ctx.attr.Description,
+        "Generation": ctx.attr.Generation,
         "Name": ctx.attr.Name,
         "StandbyReplicas": ctx.attr.StandbyReplicas,
         "Tags": parse_json_or_none(ctx.attr.Tags),
@@ -64460,6 +71032,9 @@ cloudformation_aws_open_search_serverless_collection_group = rule(
         "Description": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-collectiongroup.html#cfn-opensearchserverless-collectiongroup-description",
         ),
+        "Generation": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-collectiongroup.html#cfn-opensearchserverless-collectiongroup-generation",
+        ),
         "Name": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-collectiongroup.html#cfn-opensearchserverless-collectiongroup-name",
         ),
@@ -64468,6 +71043,49 @@ cloudformation_aws_open_search_serverless_collection_group = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-collectiongroup.html#cfn-opensearchserverless-collectiongroup-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsOpenSearchServerlessCollectionIndexInfo = provider(
+    doc = "A aws_open_search_serverless_collection_index contributed by a target. Shard JSON matches the aws_open_search_serverless_collection_index schema.",
+    fields = {
+        "aws_open_search_serverless_collection_index_name": "string: top-level key for this aws_open_search_serverless_collection_index in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_open_search_serverless_collection_index_impl(ctx):
+    item_name = ctx.attr.aws_open_search_serverless_collection_index_name or ctx.label.name
+    payload = {
+        "Id": ctx.attr.Id,
+        "IndexName": ctx.attr.IndexName,
+        "IndexSchema": ctx.attr.IndexSchema,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_open_search_serverless_collection_index.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsOpenSearchServerlessCollectionIndexInfo(aws_open_search_serverless_collection_index_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_open_search_serverless_collection_index = rule(
+    implementation = _cloudformation_aws_open_search_serverless_collection_index_impl,
+    doc = "Schema-derived rule for one `aws_open_search_serverless_collection_index` entry.",
+    provides = [CloudformationAwsOpenSearchServerlessCollectionIndexInfo],
+    attrs = {
+        "aws_open_search_serverless_collection_index_name": attr.string(
+            doc = "Top-level key for this aws_open_search_serverless_collection_index in the rendered project. Defaults to the rule name.",
+        ),
+        "Id": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-collectionindex.html#cfn-opensearchserverless-collectionindex-id",
+        ),
+        "IndexName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-collectionindex.html#cfn-opensearchserverless-collectionindex-indexname",
+        ),
+        "IndexSchema": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-collectionindex.html#cfn-opensearchserverless-collectionindex-indexschema",
         ),
     },
 )
@@ -64789,6 +71407,7 @@ def _cloudformation_aws_open_search_service_domain_impl(ctx):
         "AccessPolicies": parse_json_or_none(ctx.attr.AccessPolicies),
         "AdvancedOptions": ctx.attr.AdvancedOptions,
         "AdvancedSecurityOptions": parse_json_or_none(ctx.attr.AdvancedSecurityOptions),
+        "AutomatedSnapshotPauseOptions": parse_json_or_none(ctx.attr.AutomatedSnapshotPauseOptions),
         "ClusterConfig": parse_json_or_none(ctx.attr.ClusterConfig),
         "CognitoOptions": parse_json_or_none(ctx.attr.CognitoOptions),
         "DeploymentStrategyOptions": parse_json_or_none(ctx.attr.DeploymentStrategyOptions),
@@ -64796,6 +71415,7 @@ def _cloudformation_aws_open_search_service_domain_impl(ctx):
         "DomainName": ctx.attr.DomainName,
         "EBSOptions": parse_json_or_none(ctx.attr.EBSOptions),
         "EncryptionAtRestOptions": parse_json_or_none(ctx.attr.EncryptionAtRestOptions),
+        "EngineMode": ctx.attr.EngineMode,
         "EngineVersion": ctx.attr.EngineVersion,
         "IPAddressType": ctx.attr.IPAddressType,
         "IdentityCenterOptions": parse_json_or_none(ctx.attr.IdentityCenterOptions),
@@ -64806,6 +71426,7 @@ def _cloudformation_aws_open_search_service_domain_impl(ctx):
         "SnapshotOptions": parse_json_or_none(ctx.attr.SnapshotOptions),
         "SoftwareUpdateOptions": parse_json_or_none(ctx.attr.SoftwareUpdateOptions),
         "Tags": parse_json_or_none(ctx.attr.Tags),
+        "UseCase": ctx.attr.UseCase,
         "VPCOptions": parse_json_or_none(ctx.attr.VPCOptions),
     }
     payload = strip_empty(payload)
@@ -64836,6 +71457,9 @@ cloudformation_aws_open_search_service_domain = rule(
         "AdvancedSecurityOptions": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
+        "AutomatedSnapshotPauseOptions": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
         "ClusterConfig": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
@@ -64856,6 +71480,9 @@ cloudformation_aws_open_search_service_domain = rule(
         ),
         "EncryptionAtRestOptions": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "EngineMode": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchservice-domain.html#cfn-opensearchservice-domain-enginemode",
         ),
         "EngineVersion": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchservice-domain.html#cfn-opensearchservice-domain-engineversion",
@@ -64886,6 +71513,9 @@ cloudformation_aws_open_search_service_domain = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchservice-domain.html#cfn-opensearchservice-domain-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "UseCase": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchservice-domain.html#cfn-opensearchservice-domain-usecase",
         ),
         "VPCOptions": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
@@ -65756,6 +72386,100 @@ cloudformation_aws_osis_pipeline = rule(
     },
 )
 
+CloudformationAwsOsisPipelineBlueprintInfo = provider(
+    doc = "A aws_osis_pipeline_blueprint contributed by a target. Shard JSON matches the aws_osis_pipeline_blueprint schema.",
+    fields = {
+        "aws_osis_pipeline_blueprint_name": "string: top-level key for this aws_osis_pipeline_blueprint in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_osis_pipeline_blueprint_impl(ctx):
+    item_name = ctx.attr.aws_osis_pipeline_blueprint_name or ctx.label.name
+    payload = {
+        "BlueprintName": ctx.attr.BlueprintName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_osis_pipeline_blueprint.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsOsisPipelineBlueprintInfo(aws_osis_pipeline_blueprint_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_osis_pipeline_blueprint = rule(
+    implementation = _cloudformation_aws_osis_pipeline_blueprint_impl,
+    doc = "Schema-derived rule for one `aws_osis_pipeline_blueprint` entry.",
+    provides = [CloudformationAwsOsisPipelineBlueprintInfo],
+    attrs = {
+        "aws_osis_pipeline_blueprint_name": attr.string(
+            doc = "Top-level key for this aws_osis_pipeline_blueprint in the rendered project. Defaults to the rule name.",
+        ),
+        "BlueprintName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-osis-pipelineblueprint.html#cfn-osis-pipelineblueprint-blueprintname",
+        ),
+    },
+)
+
+CloudformationAwsOutpostsSiteInfo = provider(
+    doc = "A aws_outposts_site contributed by a target. Shard JSON matches the aws_outposts_site schema.",
+    fields = {
+        "aws_outposts_site_name": "string: top-level key for this aws_outposts_site in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_outposts_site_impl(ctx):
+    item_name = ctx.attr.aws_outposts_site_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+        "Notes": ctx.attr.Notes,
+        "OperatingAddress": parse_json_or_none(ctx.attr.OperatingAddress),
+        "RackPhysicalProperties": parse_json_or_none(ctx.attr.RackPhysicalProperties),
+        "ShippingAddress": parse_json_or_none(ctx.attr.ShippingAddress),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_outposts_site.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsOutpostsSiteInfo(aws_outposts_site_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_outposts_site = rule(
+    implementation = _cloudformation_aws_outposts_site_impl,
+    doc = "Schema-derived rule for one `aws_outposts_site` entry.",
+    provides = [CloudformationAwsOutpostsSiteInfo],
+    attrs = {
+        "aws_outposts_site_name": attr.string(
+            doc = "Top-level key for this aws_outposts_site in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-outposts-site.html#cfn-outposts-site-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-outposts-site.html#cfn-outposts-site-name",
+        ),
+        "Notes": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-outposts-site.html#cfn-outposts-site-notes",
+        ),
+        "OperatingAddress": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "RackPhysicalProperties": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "ShippingAddress": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-outposts-site.html#cfn-outposts-site-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsPanoramaApplicationInstanceInfo = provider(
     doc = "A aws_panorama_application_instance contributed by a target. Shard JSON matches the aws_panorama_application_instance schema.",
     fields = {
@@ -65917,6 +72641,80 @@ cloudformation_aws_panorama_package_version = rule(
     },
 )
 
+CloudformationAwsPartnerCentralConnectionPreferencesInfo = provider(
+    doc = "A aws_partner_central_connection_preferences contributed by a target. Shard JSON matches the aws_partner_central_connection_preferences schema.",
+    fields = {
+        "aws_partner_central_connection_preferences_name": "string: top-level key for this aws_partner_central_connection_preferences in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_partner_central_connection_preferences_impl(ctx):
+    item_name = ctx.attr.aws_partner_central_connection_preferences_name or ctx.label.name
+    payload = {
+        "Catalog": ctx.attr.Catalog,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_partner_central_connection_preferences.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsPartnerCentralConnectionPreferencesInfo(aws_partner_central_connection_preferences_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_partner_central_connection_preferences = rule(
+    implementation = _cloudformation_aws_partner_central_connection_preferences_impl,
+    doc = "Schema-derived rule for one `aws_partner_central_connection_preferences` entry.",
+    provides = [CloudformationAwsPartnerCentralConnectionPreferencesInfo],
+    attrs = {
+        "aws_partner_central_connection_preferences_name": attr.string(
+            doc = "Top-level key for this aws_partner_central_connection_preferences in the rendered project. Defaults to the rule name.",
+        ),
+        "Catalog": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-partnercentral-connectionpreferences.html#cfn-partnercentral-connectionpreferences-catalog",
+        ),
+    },
+)
+
+CloudformationAwsPartnerCentralPartnerInfo = provider(
+    doc = "A aws_partner_central_partner contributed by a target. Shard JSON matches the aws_partner_central_partner schema.",
+    fields = {
+        "aws_partner_central_partner_name": "string: top-level key for this aws_partner_central_partner in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_partner_central_partner_impl(ctx):
+    item_name = ctx.attr.aws_partner_central_partner_name or ctx.label.name
+    payload = {
+        "Catalog": ctx.attr.Catalog,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_partner_central_partner.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsPartnerCentralPartnerInfo(aws_partner_central_partner_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_partner_central_partner = rule(
+    implementation = _cloudformation_aws_partner_central_partner_impl,
+    doc = "Schema-derived rule for one `aws_partner_central_partner` entry.",
+    provides = [CloudformationAwsPartnerCentralPartnerInfo],
+    attrs = {
+        "aws_partner_central_partner_name": attr.string(
+            doc = "Top-level key for this aws_partner_central_partner in the rendered project. Defaults to the rule name.",
+        ),
+        "Catalog": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-partnercentral-partner.html#cfn-partnercentral-partner-catalog",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-partnercentral-partner.html#cfn-partnercentral-partner-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsPaymentCryptographyAliasInfo = provider(
     doc = "A aws_payment_cryptography_alias contributed by a target. Shard JSON matches the aws_payment_cryptography_alias schema.",
     fields = {
@@ -65972,6 +72770,7 @@ def _cloudformation_aws_payment_cryptography_key_impl(ctx):
         "Exportable": parse_json_or_none(ctx.attr.Exportable),
         "KeyAttributes": parse_json_or_none(ctx.attr.KeyAttributes),
         "KeyCheckValueAlgorithm": ctx.attr.KeyCheckValueAlgorithm,
+        "Policy": ctx.attr.Policy,
         "ReplicationRegions": parse_json_or_none(ctx.attr.ReplicationRegions),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
@@ -66005,6 +72804,9 @@ cloudformation_aws_payment_cryptography_key = rule(
         ),
         "KeyCheckValueAlgorithm": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-paymentcryptography-key.html#cfn-paymentcryptography-key-keycheckvaluealgorithm",
+        ),
+        "Policy": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-paymentcryptography-key.html#cfn-paymentcryptography-key-policy",
         ),
         "ReplicationRegions": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-paymentcryptography-key.html#cfn-paymentcryptography-key-replicationregions (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -66396,6 +73198,7 @@ def _cloudformation_aws_pcs_compute_node_group_impl(ctx):
         "IamInstanceProfileArn": ctx.attr.IamInstanceProfileArn,
         "InstanceConfigs": parse_json_or_none(ctx.attr.InstanceConfigs),
         "Name": ctx.attr.Name,
+        "NodeLifecycleActions": parse_json_or_none(ctx.attr.NodeLifecycleActions),
         "PurchaseOption": ctx.attr.PurchaseOption,
         "ScalingConfiguration": parse_json_or_none(ctx.attr.ScalingConfiguration),
         "SlurmConfiguration": parse_json_or_none(ctx.attr.SlurmConfiguration),
@@ -66436,6 +73239,9 @@ cloudformation_aws_pcs_compute_node_group = rule(
         ),
         "Name": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-computenodegroup.html#cfn-pcs-computenodegroup-name",
+        ),
+        "NodeLifecycleActions": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "PurchaseOption": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-computenodegroup.html#cfn-pcs-computenodegroup-purchaseoption",
@@ -66505,6 +73311,112 @@ cloudformation_aws_pcs_queue = rule(
         ),
         "Tags": attr.string_dict(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-queue.html#cfn-pcs-queue-tags",
+        ),
+    },
+)
+
+CloudformationAwsPersonalizeBatchSegmentJobInfo = provider(
+    doc = "A aws_personalize_batch_segment_job contributed by a target. Shard JSON matches the aws_personalize_batch_segment_job schema.",
+    fields = {
+        "aws_personalize_batch_segment_job_name": "string: top-level key for this aws_personalize_batch_segment_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_personalize_batch_segment_job_impl(ctx):
+    item_name = ctx.attr.aws_personalize_batch_segment_job_name or ctx.label.name
+    payload = {
+        "JobInput": parse_json_or_none(ctx.attr.JobInput),
+        "JobName": ctx.attr.JobName,
+        "JobOutput": parse_json_or_none(ctx.attr.JobOutput),
+        "NumResults": parse_json_or_none(ctx.attr.NumResults),
+        "RoleArn": ctx.attr.RoleArn,
+        "SolutionVersionArn": ctx.attr.SolutionVersionArn,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_personalize_batch_segment_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsPersonalizeBatchSegmentJobInfo(aws_personalize_batch_segment_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_personalize_batch_segment_job = rule(
+    implementation = _cloudformation_aws_personalize_batch_segment_job_impl,
+    doc = "Schema-derived rule for one `aws_personalize_batch_segment_job` entry.",
+    provides = [CloudformationAwsPersonalizeBatchSegmentJobInfo],
+    attrs = {
+        "aws_personalize_batch_segment_job_name": attr.string(
+            doc = "Top-level key for this aws_personalize_batch_segment_job in the rendered project. Defaults to the rule name.",
+        ),
+        "JobInput": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "JobName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-batchsegmentjob.html#cfn-personalize-batchsegmentjob-jobname",
+        ),
+        "JobOutput": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "NumResults": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-batchsegmentjob.html#cfn-personalize-batchsegmentjob-numresults (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "RoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-batchsegmentjob.html#cfn-personalize-batchsegmentjob-rolearn",
+        ),
+        "SolutionVersionArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-batchsegmentjob.html#cfn-personalize-batchsegmentjob-solutionversionarn",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-batchsegmentjob.html#cfn-personalize-batchsegmentjob-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsPersonalizeDataDeletionJobInfo = provider(
+    doc = "A aws_personalize_data_deletion_job contributed by a target. Shard JSON matches the aws_personalize_data_deletion_job schema.",
+    fields = {
+        "aws_personalize_data_deletion_job_name": "string: top-level key for this aws_personalize_data_deletion_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_personalize_data_deletion_job_impl(ctx):
+    item_name = ctx.attr.aws_personalize_data_deletion_job_name or ctx.label.name
+    payload = {
+        "DataSource": parse_json_or_none(ctx.attr.DataSource),
+        "DatasetGroupArn": ctx.attr.DatasetGroupArn,
+        "JobName": ctx.attr.JobName,
+        "RoleArn": ctx.attr.RoleArn,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_personalize_data_deletion_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsPersonalizeDataDeletionJobInfo(aws_personalize_data_deletion_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_personalize_data_deletion_job = rule(
+    implementation = _cloudformation_aws_personalize_data_deletion_job_impl,
+    doc = "Schema-derived rule for one `aws_personalize_data_deletion_job` entry.",
+    provides = [CloudformationAwsPersonalizeDataDeletionJobInfo],
+    attrs = {
+        "aws_personalize_data_deletion_job_name": attr.string(
+            doc = "Top-level key for this aws_personalize_data_deletion_job in the rendered project. Defaults to the rule name.",
+        ),
+        "DataSource": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "DatasetGroupArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-datadeletionjob.html#cfn-personalize-datadeletionjob-datasetgrouparn",
+        ),
+        "JobName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-datadeletionjob.html#cfn-personalize-datadeletionjob-jobname",
+        ),
+        "RoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-datadeletionjob.html#cfn-personalize-datadeletionjob-rolearn",
         ),
     },
 )
@@ -66603,6 +73515,84 @@ cloudformation_aws_personalize_dataset_group = rule(
         ),
         "RoleArn": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-datasetgroup.html#cfn-personalize-datasetgroup-rolearn",
+        ),
+    },
+)
+
+CloudformationAwsPersonalizeEventTrackerInfo = provider(
+    doc = "A aws_personalize_event_tracker contributed by a target. Shard JSON matches the aws_personalize_event_tracker schema.",
+    fields = {
+        "aws_personalize_event_tracker_name": "string: top-level key for this aws_personalize_event_tracker in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_personalize_event_tracker_impl(ctx):
+    item_name = ctx.attr.aws_personalize_event_tracker_name or ctx.label.name
+    payload = {
+        "DatasetGroupArn": ctx.attr.DatasetGroupArn,
+        "Name": ctx.attr.Name,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_personalize_event_tracker.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsPersonalizeEventTrackerInfo(aws_personalize_event_tracker_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_personalize_event_tracker = rule(
+    implementation = _cloudformation_aws_personalize_event_tracker_impl,
+    doc = "Schema-derived rule for one `aws_personalize_event_tracker` entry.",
+    provides = [CloudformationAwsPersonalizeEventTrackerInfo],
+    attrs = {
+        "aws_personalize_event_tracker_name": attr.string(
+            doc = "Top-level key for this aws_personalize_event_tracker in the rendered project. Defaults to the rule name.",
+        ),
+        "DatasetGroupArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-eventtracker.html#cfn-personalize-eventtracker-datasetgrouparn",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-eventtracker.html#cfn-personalize-eventtracker-name",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-eventtracker.html#cfn-personalize-eventtracker-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsPersonalizeRecipeInfo = provider(
+    doc = "A aws_personalize_recipe contributed by a target. Shard JSON matches the aws_personalize_recipe schema.",
+    fields = {
+        "aws_personalize_recipe_name": "string: top-level key for this aws_personalize_recipe in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_personalize_recipe_impl(ctx):
+    item_name = ctx.attr.aws_personalize_recipe_name or ctx.label.name
+    payload = {
+        "Name": ctx.attr.Name,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_personalize_recipe.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsPersonalizeRecipeInfo(aws_personalize_recipe_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_personalize_recipe = rule(
+    implementation = _cloudformation_aws_personalize_recipe_impl,
+    doc = "Schema-derived rule for one `aws_personalize_recipe` entry.",
+    provides = [CloudformationAwsPersonalizeRecipeInfo],
+    attrs = {
+        "aws_personalize_recipe_name": attr.string(
+            doc = "Top-level key for this aws_personalize_recipe in the rendered project. Defaults to the rule name.",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-personalize-recipe.html#cfn-personalize-recipe-name",
         ),
     },
 )
@@ -68923,6 +75913,85 @@ cloudformation_aws_quick_sight_action_connector = rule(
     },
 )
 
+CloudformationAwsQuickSightAgentInfo = provider(
+    doc = "A aws_quick_sight_agent contributed by a target. Shard JSON matches the aws_quick_sight_agent schema.",
+    fields = {
+        "aws_quick_sight_agent_name": "string: top-level key for this aws_quick_sight_agent in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_quick_sight_agent_impl(ctx):
+    item_name = ctx.attr.aws_quick_sight_agent_name or ctx.label.name
+    payload = {
+        "ActionConnectors": parse_json_or_none(ctx.attr.ActionConnectors),
+        "AgentId": ctx.attr.AgentId,
+        "AgentLifecycle": ctx.attr.AgentLifecycle,
+        "AwsAccountId": ctx.attr.AwsAccountId,
+        "CustomPromptInput": parse_json_or_none(ctx.attr.CustomPromptInput),
+        "Description": ctx.attr.Description,
+        "IconId": ctx.attr.IconId,
+        "Name": ctx.attr.Name,
+        "Spaces": parse_json_or_none(ctx.attr.Spaces),
+        "StarterPrompts": parse_json_or_none(ctx.attr.StarterPrompts),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "WelcomeMessage": ctx.attr.WelcomeMessage,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_agent.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsQuickSightAgentInfo(aws_quick_sight_agent_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_quick_sight_agent = rule(
+    implementation = _cloudformation_aws_quick_sight_agent_impl,
+    doc = "Schema-derived rule for one `aws_quick_sight_agent` entry.",
+    provides = [CloudformationAwsQuickSightAgentInfo],
+    attrs = {
+        "aws_quick_sight_agent_name": attr.string(
+            doc = "Top-level key for this aws_quick_sight_agent in the rendered project. Defaults to the rule name.",
+        ),
+        "ActionConnectors": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-agent.html#cfn-quicksight-agent-actionconnectors (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "AgentId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-agent.html#cfn-quicksight-agent-agentid",
+        ),
+        "AgentLifecycle": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-agent.html#cfn-quicksight-agent-agentlifecycle",
+        ),
+        "AwsAccountId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-agent.html#cfn-quicksight-agent-awsaccountid",
+        ),
+        "CustomPromptInput": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-agent.html#cfn-quicksight-agent-description",
+        ),
+        "IconId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-agent.html#cfn-quicksight-agent-iconid",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-agent.html#cfn-quicksight-agent-name",
+        ),
+        "Spaces": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-agent.html#cfn-quicksight-agent-spaces (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "StarterPrompts": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-agent.html#cfn-quicksight-agent-starterprompts (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-agent.html#cfn-quicksight-agent-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "WelcomeMessage": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-agent.html#cfn-quicksight-agent-welcomemessage",
+        ),
+    },
+)
+
 CloudformationAwsQuickSightAnalysisInfo = provider(
     doc = "A aws_quick_sight_analysis contributed by a target. Shard JSON matches the aws_quick_sight_analysis schema.",
     fields = {
@@ -69005,6 +76074,183 @@ cloudformation_aws_quick_sight_analysis = rule(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-analysis.html#cfn-quicksight-analysis-themearn",
         ),
         "ValidationStrategy": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsQuickSightApprovalPolicyInfo = provider(
+    doc = "A aws_quick_sight_approval_policy contributed by a target. Shard JSON matches the aws_quick_sight_approval_policy schema.",
+    fields = {
+        "aws_quick_sight_approval_policy_name": "string: top-level key for this aws_quick_sight_approval_policy in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_quick_sight_approval_policy_impl(ctx):
+    item_name = ctx.attr.aws_quick_sight_approval_policy_name or ctx.label.name
+    payload = {
+        "Actions": parse_json_or_none(ctx.attr.Actions),
+        "ApplicableTo": parse_json_or_none(ctx.attr.ApplicableTo),
+        "ApprovalGroups": parse_json_or_none(ctx.attr.ApprovalGroups),
+        "AssetTypes": parse_json_or_none(ctx.attr.AssetTypes),
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+        "PolicyId": ctx.attr.PolicyId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_approval_policy.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsQuickSightApprovalPolicyInfo(aws_quick_sight_approval_policy_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_quick_sight_approval_policy = rule(
+    implementation = _cloudformation_aws_quick_sight_approval_policy_impl,
+    doc = "Schema-derived rule for one `aws_quick_sight_approval_policy` entry.",
+    provides = [CloudformationAwsQuickSightApprovalPolicyInfo],
+    attrs = {
+        "aws_quick_sight_approval_policy_name": attr.string(
+            doc = "Top-level key for this aws_quick_sight_approval_policy in the rendered project. Defaults to the rule name.",
+        ),
+        "Actions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-approvalpolicy.html#cfn-quicksight-approvalpolicy-actions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "ApplicableTo": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "ApprovalGroups": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-approvalpolicy.html#cfn-quicksight-approvalpolicy-approvalgroups (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "AssetTypes": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-approvalpolicy.html#cfn-quicksight-approvalpolicy-assettypes (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-approvalpolicy.html#cfn-quicksight-approvalpolicy-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-approvalpolicy.html#cfn-quicksight-approvalpolicy-name",
+        ),
+        "PolicyId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-approvalpolicy.html#cfn-quicksight-approvalpolicy-policyid",
+        ),
+    },
+)
+
+CloudformationAwsQuickSightAssetBundleExportJobInfo = provider(
+    doc = "A aws_quick_sight_asset_bundle_export_job contributed by a target. Shard JSON matches the aws_quick_sight_asset_bundle_export_job schema.",
+    fields = {
+        "aws_quick_sight_asset_bundle_export_job_name": "string: top-level key for this aws_quick_sight_asset_bundle_export_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_quick_sight_asset_bundle_export_job_impl(ctx):
+    item_name = ctx.attr.aws_quick_sight_asset_bundle_export_job_name or ctx.label.name
+    payload = {
+        "AssetBundleExportJobId": ctx.attr.AssetBundleExportJobId,
+        "AwsAccountId": ctx.attr.AwsAccountId,
+        "ExportFormat": ctx.attr.ExportFormat,
+        "IncludeAllDependencies": parse_json_or_none(ctx.attr.IncludeAllDependencies),
+        "IncludeFolderMembers": ctx.attr.IncludeFolderMembers,
+        "IncludeFolderMemberships": parse_json_or_none(ctx.attr.IncludeFolderMemberships),
+        "IncludePermissions": parse_json_or_none(ctx.attr.IncludePermissions),
+        "IncludeTags": parse_json_or_none(ctx.attr.IncludeTags),
+        "ResourceArns": parse_json_or_none(ctx.attr.ResourceArns),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_asset_bundle_export_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsQuickSightAssetBundleExportJobInfo(aws_quick_sight_asset_bundle_export_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_quick_sight_asset_bundle_export_job = rule(
+    implementation = _cloudformation_aws_quick_sight_asset_bundle_export_job_impl,
+    doc = "Schema-derived rule for one `aws_quick_sight_asset_bundle_export_job` entry.",
+    provides = [CloudformationAwsQuickSightAssetBundleExportJobInfo],
+    attrs = {
+        "aws_quick_sight_asset_bundle_export_job_name": attr.string(
+            doc = "Top-level key for this aws_quick_sight_asset_bundle_export_job in the rendered project. Defaults to the rule name.",
+        ),
+        "AssetBundleExportJobId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-assetbundleexportjob.html#cfn-quicksight-assetbundleexportjob-assetbundleexportjobid",
+        ),
+        "AwsAccountId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-assetbundleexportjob.html#cfn-quicksight-assetbundleexportjob-awsaccountid",
+        ),
+        "ExportFormat": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-assetbundleexportjob.html#cfn-quicksight-assetbundleexportjob-exportformat",
+        ),
+        "IncludeAllDependencies": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-assetbundleexportjob.html#cfn-quicksight-assetbundleexportjob-includealldependencies (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "IncludeFolderMembers": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-assetbundleexportjob.html#cfn-quicksight-assetbundleexportjob-includefoldermembers",
+        ),
+        "IncludeFolderMemberships": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-assetbundleexportjob.html#cfn-quicksight-assetbundleexportjob-includefoldermemberships (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "IncludePermissions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-assetbundleexportjob.html#cfn-quicksight-assetbundleexportjob-includepermissions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "IncludeTags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-assetbundleexportjob.html#cfn-quicksight-assetbundleexportjob-includetags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "ResourceArns": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-assetbundleexportjob.html#cfn-quicksight-assetbundleexportjob-resourcearns (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsQuickSightAssetBundleImportJobInfo = provider(
+    doc = "A aws_quick_sight_asset_bundle_import_job contributed by a target. Shard JSON matches the aws_quick_sight_asset_bundle_import_job schema.",
+    fields = {
+        "aws_quick_sight_asset_bundle_import_job_name": "string: top-level key for this aws_quick_sight_asset_bundle_import_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_quick_sight_asset_bundle_import_job_impl(ctx):
+    item_name = ctx.attr.aws_quick_sight_asset_bundle_import_job_name or ctx.label.name
+    payload = {
+        "AssetBundleImportJobId": ctx.attr.AssetBundleImportJobId,
+        "AssetBundleImportSource": parse_json_or_none(ctx.attr.AssetBundleImportSource),
+        "AwsAccountId": ctx.attr.AwsAccountId,
+        "FailureAction": ctx.attr.FailureAction,
+        "OverrideValidationStrategy": parse_json_or_none(ctx.attr.OverrideValidationStrategy),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_asset_bundle_import_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsQuickSightAssetBundleImportJobInfo(aws_quick_sight_asset_bundle_import_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_quick_sight_asset_bundle_import_job = rule(
+    implementation = _cloudformation_aws_quick_sight_asset_bundle_import_job_impl,
+    doc = "Schema-derived rule for one `aws_quick_sight_asset_bundle_import_job` entry.",
+    provides = [CloudformationAwsQuickSightAssetBundleImportJobInfo],
+    attrs = {
+        "aws_quick_sight_asset_bundle_import_job_name": attr.string(
+            doc = "Top-level key for this aws_quick_sight_asset_bundle_import_job in the rendered project. Defaults to the rule name.",
+        ),
+        "AssetBundleImportJobId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-assetbundleimportjob.html#cfn-quicksight-assetbundleimportjob-assetbundleimportjobid",
+        ),
+        "AssetBundleImportSource": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "AwsAccountId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-assetbundleimportjob.html#cfn-quicksight-assetbundleimportjob-awsaccountid",
+        ),
+        "FailureAction": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-assetbundleimportjob.html#cfn-quicksight-assetbundleimportjob-failureaction",
+        ),
+        "OverrideValidationStrategy": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
     },
@@ -69338,6 +76584,120 @@ cloudformation_aws_quick_sight_data_source = rule(
     },
 )
 
+CloudformationAwsQuickSightDlpsettingInfo = provider(
+    doc = "A aws_quick_sight_dlpsetting contributed by a target. Shard JSON matches the aws_quick_sight_dlpsetting schema.",
+    fields = {
+        "aws_quick_sight_dlpsetting_name": "string: top-level key for this aws_quick_sight_dlpsetting in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_quick_sight_dlpsetting_impl(ctx):
+    item_name = ctx.attr.aws_quick_sight_dlpsetting_name or ctx.label.name
+    payload = {
+        "AwsAccountId": ctx.attr.AwsAccountId,
+        "DlpSettingId": ctx.attr.DlpSettingId,
+        "Enabled": parse_json_or_none(ctx.attr.Enabled),
+        "Name": ctx.attr.Name,
+        "ProviderConfig": parse_json_or_none(ctx.attr.ProviderConfig),
+        "ProviderOutageAction": ctx.attr.ProviderOutageAction,
+        "ProviderType": ctx.attr.ProviderType,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_dlpsetting.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsQuickSightDlpsettingInfo(aws_quick_sight_dlpsetting_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_quick_sight_dlpsetting = rule(
+    implementation = _cloudformation_aws_quick_sight_dlpsetting_impl,
+    doc = "Schema-derived rule for one `aws_quick_sight_dlpsetting` entry.",
+    provides = [CloudformationAwsQuickSightDlpsettingInfo],
+    attrs = {
+        "aws_quick_sight_dlpsetting_name": attr.string(
+            doc = "Top-level key for this aws_quick_sight_dlpsetting in the rendered project. Defaults to the rule name.",
+        ),
+        "AwsAccountId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-dlpsetting.html#cfn-quicksight-dlpsetting-awsaccountid",
+        ),
+        "DlpSettingId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-dlpsetting.html#cfn-quicksight-dlpsetting-dlpsettingid",
+        ),
+        "Enabled": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-dlpsetting.html#cfn-quicksight-dlpsetting-enabled (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-dlpsetting.html#cfn-quicksight-dlpsetting-name",
+        ),
+        "ProviderConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "ProviderOutageAction": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-dlpsetting.html#cfn-quicksight-dlpsetting-provideroutageaction",
+        ),
+        "ProviderType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-dlpsetting.html#cfn-quicksight-dlpsetting-providertype",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-dlpsetting.html#cfn-quicksight-dlpsetting-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsQuickSightFlowInfo = provider(
+    doc = "A aws_quick_sight_flow contributed by a target. Shard JSON matches the aws_quick_sight_flow schema.",
+    fields = {
+        "aws_quick_sight_flow_name": "string: top-level key for this aws_quick_sight_flow in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_quick_sight_flow_impl(ctx):
+    item_name = ctx.attr.aws_quick_sight_flow_name or ctx.label.name
+    payload = {
+        "AwsAccountId": ctx.attr.AwsAccountId,
+        "Description": ctx.attr.Description,
+        "FlowDefinition": parse_json_or_none(ctx.attr.FlowDefinition),
+        "Name": ctx.attr.Name,
+        "Permissions": parse_json_or_none(ctx.attr.Permissions),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_flow.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsQuickSightFlowInfo(aws_quick_sight_flow_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_quick_sight_flow = rule(
+    implementation = _cloudformation_aws_quick_sight_flow_impl,
+    doc = "Schema-derived rule for one `aws_quick_sight_flow` entry.",
+    provides = [CloudformationAwsQuickSightFlowInfo],
+    attrs = {
+        "aws_quick_sight_flow_name": attr.string(
+            doc = "Top-level key for this aws_quick_sight_flow in the rendered project. Defaults to the rule name.",
+        ),
+        "AwsAccountId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-flow.html#cfn-quicksight-flow-awsaccountid",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-flow.html#cfn-quicksight-flow-description",
+        ),
+        "FlowDefinition": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-flow.html#cfn-quicksight-flow-flowdefinition (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-flow.html#cfn-quicksight-flow-name",
+        ),
+        "Permissions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-flow.html#cfn-quicksight-flow-permissions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsQuickSightFolderInfo = provider(
     doc = "A aws_quick_sight_folder contributed by a target. Shard JSON matches the aws_quick_sight_folder schema.",
     fields = {
@@ -69401,6 +76761,160 @@ cloudformation_aws_quick_sight_folder = rule(
     },
 )
 
+CloudformationAwsQuickSightKnowledgeBaseInfo = provider(
+    doc = "A aws_quick_sight_knowledge_base contributed by a target. Shard JSON matches the aws_quick_sight_knowledge_base schema.",
+    fields = {
+        "aws_quick_sight_knowledge_base_name": "string: top-level key for this aws_quick_sight_knowledge_base in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_quick_sight_knowledge_base_impl(ctx):
+    item_name = ctx.attr.aws_quick_sight_knowledge_base_name or ctx.label.name
+    payload = {
+        "AccessControlConfiguration": parse_json_or_none(ctx.attr.AccessControlConfiguration),
+        "AwsAccountId": ctx.attr.AwsAccountId,
+        "DataSourceArn": ctx.attr.DataSourceArn,
+        "Description": ctx.attr.Description,
+        "IsEmailNotificationOptedForIngestionFailures": parse_json_or_none(ctx.attr.IsEmailNotificationOptedForIngestionFailures),
+        "KnowledgeBaseConfiguration": parse_json_or_none(ctx.attr.KnowledgeBaseConfiguration),
+        "KnowledgeBaseId": ctx.attr.KnowledgeBaseId,
+        "MediaExtractionConfiguration": parse_json_or_none(ctx.attr.MediaExtractionConfiguration),
+        "Name": ctx.attr.Name,
+        "Permissions": parse_json_or_none(ctx.attr.Permissions),
+        "PrimaryOwnerArn": ctx.attr.PrimaryOwnerArn,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_knowledge_base.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsQuickSightKnowledgeBaseInfo(aws_quick_sight_knowledge_base_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_quick_sight_knowledge_base = rule(
+    implementation = _cloudformation_aws_quick_sight_knowledge_base_impl,
+    doc = "Schema-derived rule for one `aws_quick_sight_knowledge_base` entry.",
+    provides = [CloudformationAwsQuickSightKnowledgeBaseInfo],
+    attrs = {
+        "aws_quick_sight_knowledge_base_name": attr.string(
+            doc = "Top-level key for this aws_quick_sight_knowledge_base in the rendered project. Defaults to the rule name.",
+        ),
+        "AccessControlConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "AwsAccountId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-knowledgebase.html#cfn-quicksight-knowledgebase-awsaccountid",
+        ),
+        "DataSourceArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-knowledgebase.html#cfn-quicksight-knowledgebase-datasourcearn",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-knowledgebase.html#cfn-quicksight-knowledgebase-description",
+        ),
+        "IsEmailNotificationOptedForIngestionFailures": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-knowledgebase.html#cfn-quicksight-knowledgebase-isemailnotificationoptedforingestionfailures (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "KnowledgeBaseConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "KnowledgeBaseId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-knowledgebase.html#cfn-quicksight-knowledgebase-knowledgebaseid",
+        ),
+        "MediaExtractionConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-knowledgebase.html#cfn-quicksight-knowledgebase-name",
+        ),
+        "Permissions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-knowledgebase.html#cfn-quicksight-knowledgebase-permissions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "PrimaryOwnerArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-knowledgebase.html#cfn-quicksight-knowledgebase-primaryownerarn",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-knowledgebase.html#cfn-quicksight-knowledgebase-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsQuickSightOauthClientApplicationInfo = provider(
+    doc = "A aws_quick_sight_oauth_client_application contributed by a target. Shard JSON matches the aws_quick_sight_oauth_client_application schema.",
+    fields = {
+        "aws_quick_sight_oauth_client_application_name": "string: top-level key for this aws_quick_sight_oauth_client_application in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_quick_sight_oauth_client_application_impl(ctx):
+    item_name = ctx.attr.aws_quick_sight_oauth_client_application_name or ctx.label.name
+    payload = {
+        "ClientId": ctx.attr.ClientId,
+        "ClientSecret": ctx.attr.ClientSecret,
+        "DataSourceType": ctx.attr.DataSourceType,
+        "IdentityProviderVpcConnectionProperties": parse_json_or_none(ctx.attr.IdentityProviderVpcConnectionProperties),
+        "Name": ctx.attr.Name,
+        "OAuthAuthorizationEndpointUrl": ctx.attr.OAuthAuthorizationEndpointUrl,
+        "OAuthClientApplicationId": ctx.attr.OAuthClientApplicationId,
+        "OAuthClientAuthenticationType": ctx.attr.OAuthClientAuthenticationType,
+        "OAuthScopes": ctx.attr.OAuthScopes,
+        "OAuthTokenEndpointUrl": ctx.attr.OAuthTokenEndpointUrl,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_oauth_client_application.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsQuickSightOauthClientApplicationInfo(aws_quick_sight_oauth_client_application_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_quick_sight_oauth_client_application = rule(
+    implementation = _cloudformation_aws_quick_sight_oauth_client_application_impl,
+    doc = "Schema-derived rule for one `aws_quick_sight_oauth_client_application` entry.",
+    provides = [CloudformationAwsQuickSightOauthClientApplicationInfo],
+    attrs = {
+        "aws_quick_sight_oauth_client_application_name": attr.string(
+            doc = "Top-level key for this aws_quick_sight_oauth_client_application in the rendered project. Defaults to the rule name.",
+        ),
+        "ClientId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-oauthclientapplication.html#cfn-quicksight-oauthclientapplication-clientid",
+        ),
+        "ClientSecret": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-oauthclientapplication.html#cfn-quicksight-oauthclientapplication-clientsecret",
+        ),
+        "DataSourceType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-oauthclientapplication.html#cfn-quicksight-oauthclientapplication-datasourcetype",
+        ),
+        "IdentityProviderVpcConnectionProperties": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-oauthclientapplication.html#cfn-quicksight-oauthclientapplication-name",
+        ),
+        "OAuthAuthorizationEndpointUrl": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-oauthclientapplication.html#cfn-quicksight-oauthclientapplication-oauthauthorizationendpointurl",
+        ),
+        "OAuthClientApplicationId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-oauthclientapplication.html#cfn-quicksight-oauthclientapplication-oauthclientapplicationid",
+        ),
+        "OAuthClientAuthenticationType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-oauthclientapplication.html#cfn-quicksight-oauthclientapplication-oauthclientauthenticationtype",
+        ),
+        "OAuthScopes": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-oauthclientapplication.html#cfn-quicksight-oauthclientapplication-oauthscopes",
+        ),
+        "OAuthTokenEndpointUrl": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-oauthclientapplication.html#cfn-quicksight-oauthclientapplication-oauthtokenendpointurl",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-oauthclientapplication.html#cfn-quicksight-oauthclientapplication-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsQuickSightRefreshScheduleInfo = provider(
     doc = "A aws_quick_sight_refresh_schedule contributed by a target. Shard JSON matches the aws_quick_sight_refresh_schedule schema.",
     fields = {
@@ -69440,6 +76954,65 @@ cloudformation_aws_quick_sight_refresh_schedule = rule(
         ),
         "Schedule": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsQuickSightSpaceInfo = provider(
+    doc = "A aws_quick_sight_space contributed by a target. Shard JSON matches the aws_quick_sight_space schema.",
+    fields = {
+        "aws_quick_sight_space_name": "string: top-level key for this aws_quick_sight_space in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_quick_sight_space_impl(ctx):
+    item_name = ctx.attr.aws_quick_sight_space_name or ctx.label.name
+    payload = {
+        "AwsAccountId": ctx.attr.AwsAccountId,
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+        "Permissions": parse_json_or_none(ctx.attr.Permissions),
+        "Resources": parse_json_or_none(ctx.attr.Resources),
+        "SpaceId": ctx.attr.SpaceId,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_space.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsQuickSightSpaceInfo(aws_quick_sight_space_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_quick_sight_space = rule(
+    implementation = _cloudformation_aws_quick_sight_space_impl,
+    doc = "Schema-derived rule for one `aws_quick_sight_space` entry.",
+    provides = [CloudformationAwsQuickSightSpaceInfo],
+    attrs = {
+        "aws_quick_sight_space_name": attr.string(
+            doc = "Top-level key for this aws_quick_sight_space in the rendered project. Defaults to the rule name.",
+        ),
+        "AwsAccountId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-space.html#cfn-quicksight-space-awsaccountid",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-space.html#cfn-quicksight-space-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-space.html#cfn-quicksight-space-name",
+        ),
+        "Permissions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-space.html#cfn-quicksight-space-permissions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Resources": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-space.html#cfn-quicksight-space-resources (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "SpaceId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-space.html#cfn-quicksight-space-spaceid",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-space.html#cfn-quicksight-space-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -69645,6 +77218,77 @@ cloudformation_aws_quick_sight_topic = rule(
     },
 )
 
+CloudformationAwsQuickSightTopicV2Info = provider(
+    doc = "A aws_quick_sight_topic_v2 contributed by a target. Shard JSON matches the aws_quick_sight_topic_v2 schema.",
+    fields = {
+        "aws_quick_sight_topic_v2_name": "string: top-level key for this aws_quick_sight_topic_v2 in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_quick_sight_topic_v2_impl(ctx):
+    item_name = ctx.attr.aws_quick_sight_topic_v2_name or ctx.label.name
+    payload = {
+        "AwsAccountId": ctx.attr.AwsAccountId,
+        "CustomInstructions": parse_json_or_none(ctx.attr.CustomInstructions),
+        "DataSetRelations": parse_json_or_none(ctx.attr.DataSetRelations),
+        "DataSets": parse_json_or_none(ctx.attr.DataSets),
+        "Description": ctx.attr.Description,
+        "FolderArns": parse_json_or_none(ctx.attr.FolderArns),
+        "Name": ctx.attr.Name,
+        "Permissions": parse_json_or_none(ctx.attr.Permissions),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "TopicId": ctx.attr.TopicId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_quick_sight_topic_v2.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsQuickSightTopicV2Info(aws_quick_sight_topic_v2_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_quick_sight_topic_v2 = rule(
+    implementation = _cloudformation_aws_quick_sight_topic_v2_impl,
+    doc = "Schema-derived rule for one `aws_quick_sight_topic_v2` entry.",
+    provides = [CloudformationAwsQuickSightTopicV2Info],
+    attrs = {
+        "aws_quick_sight_topic_v2_name": attr.string(
+            doc = "Top-level key for this aws_quick_sight_topic_v2 in the rendered project. Defaults to the rule name.",
+        ),
+        "AwsAccountId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-topicv2.html#cfn-quicksight-topicv2-awsaccountid",
+        ),
+        "CustomInstructions": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "DataSetRelations": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-topicv2.html#cfn-quicksight-topicv2-datasetrelations (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "DataSets": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-topicv2.html#cfn-quicksight-topicv2-datasets (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-topicv2.html#cfn-quicksight-topicv2-description",
+        ),
+        "FolderArns": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-topicv2.html#cfn-quicksight-topicv2-folderarns (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-topicv2.html#cfn-quicksight-topicv2-name",
+        ),
+        "Permissions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-topicv2.html#cfn-quicksight-topicv2-permissions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-topicv2.html#cfn-quicksight-topicv2-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TopicId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-quicksight-topicv2.html#cfn-quicksight-topicv2-topicid",
+        ),
+    },
+)
+
 CloudformationAwsQuickSightVpcconnectionInfo = provider(
     doc = "A aws_quick_sight_vpcconnection contributed by a target. Shard JSON matches the aws_quick_sight_vpcconnection schema.",
     fields = {
@@ -69775,6 +77419,7 @@ def _cloudformation_aws_ram_resource_share_impl(ctx):
         "PermissionArns": parse_json_or_none(ctx.attr.PermissionArns),
         "Principals": parse_json_or_none(ctx.attr.Principals),
         "ResourceArns": parse_json_or_none(ctx.attr.ResourceArns),
+        "ResourceShareConfiguration": parse_json_or_none(ctx.attr.ResourceShareConfiguration),
         "Sources": parse_json_or_none(ctx.attr.Sources),
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
@@ -69808,6 +77453,9 @@ cloudformation_aws_ram_resource_share = rule(
         ),
         "ResourceArns": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ram-resourceshare.html#cfn-ram-resourceshare-resourcearns (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "ResourceShareConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "Sources": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ram-resourceshare.html#cfn-ram-resourceshare-sources (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -71333,6 +78981,41 @@ cloudformation_aws_rds_option_group = rule(
     },
 )
 
+CloudformationAwsRdsReservedDbinstanceInfo = provider(
+    doc = "A aws_rds_reserved_dbinstance contributed by a target. Shard JSON matches the aws_rds_reserved_dbinstance schema.",
+    fields = {
+        "aws_rds_reserved_dbinstance_name": "string: top-level key for this aws_rds_reserved_dbinstance in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_rds_reserved_dbinstance_impl(ctx):
+    item_name = ctx.attr.aws_rds_reserved_dbinstance_name or ctx.label.name
+    payload = {
+        "DBInstanceCount": parse_json_or_none(ctx.attr.DBInstanceCount),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_rds_reserved_dbinstance.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsRdsReservedDbinstanceInfo(aws_rds_reserved_dbinstance_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_rds_reserved_dbinstance = rule(
+    implementation = _cloudformation_aws_rds_reserved_dbinstance_impl,
+    doc = "Schema-derived rule for one `aws_rds_reserved_dbinstance` entry.",
+    provides = [CloudformationAwsRdsReservedDbinstanceInfo],
+    attrs = {
+        "aws_rds_reserved_dbinstance_name": attr.string(
+            doc = "Top-level key for this aws_rds_reserved_dbinstance in the rendered project. Defaults to the rule name.",
+        ),
+        "DBInstanceCount": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-reserveddbinstance.html#cfn-rds-reserveddbinstance-dbinstancecount (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsRedshiftClusterInfo = provider(
     doc = "A aws_redshift_cluster contributed by a target. Shard JSON matches the aws_redshift_cluster schema.",
     fields = {
@@ -71752,6 +79435,37 @@ cloudformation_aws_redshift_cluster_subnet_group = rule(
     },
 )
 
+CloudformationAwsRedshiftDataShareInfo = provider(
+    doc = "A aws_redshift_data_share contributed by a target. Shard JSON matches the aws_redshift_data_share schema.",
+    fields = {
+        "aws_redshift_data_share_name": "string: top-level key for this aws_redshift_data_share in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_redshift_data_share_impl(ctx):
+    item_name = ctx.attr.aws_redshift_data_share_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_data_share.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsRedshiftDataShareInfo(aws_redshift_data_share_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_redshift_data_share = rule(
+    implementation = _cloudformation_aws_redshift_data_share_impl,
+    doc = "Schema-derived rule for one `aws_redshift_data_share` entry.",
+    provides = [CloudformationAwsRedshiftDataShareInfo],
+    attrs = {
+        "aws_redshift_data_share_name": attr.string(
+            doc = "Top-level key for this aws_redshift_data_share in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsRedshiftEndpointAccessInfo = provider(
     doc = "A aws_redshift_endpoint_access contributed by a target. Shard JSON matches the aws_redshift_endpoint_access schema.",
     fields = {
@@ -72126,6 +79840,41 @@ cloudformation_aws_redshift_serverless_namespace = rule(
     },
 )
 
+CloudformationAwsRedshiftServerlessRecoveryPointInfo = provider(
+    doc = "A aws_redshift_serverless_recovery_point contributed by a target. Shard JSON matches the aws_redshift_serverless_recovery_point schema.",
+    fields = {
+        "aws_redshift_serverless_recovery_point_name": "string: top-level key for this aws_redshift_serverless_recovery_point in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_redshift_serverless_recovery_point_impl(ctx):
+    item_name = ctx.attr.aws_redshift_serverless_recovery_point_name or ctx.label.name
+    payload = {
+        "NamespaceName": ctx.attr.NamespaceName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_serverless_recovery_point.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsRedshiftServerlessRecoveryPointInfo(aws_redshift_serverless_recovery_point_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_redshift_serverless_recovery_point = rule(
+    implementation = _cloudformation_aws_redshift_serverless_recovery_point_impl,
+    doc = "Schema-derived rule for one `aws_redshift_serverless_recovery_point` entry.",
+    provides = [CloudformationAwsRedshiftServerlessRecoveryPointInfo],
+    attrs = {
+        "aws_redshift_serverless_recovery_point_name": attr.string(
+            doc = "Top-level key for this aws_redshift_serverless_recovery_point in the rendered project. Defaults to the rule name.",
+        ),
+        "NamespaceName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshiftserverless-recoverypoint.html#cfn-redshiftserverless-recoverypoint-namespacename",
+        ),
+    },
+)
+
 CloudformationAwsRedshiftServerlessSnapshotInfo = provider(
     doc = "A aws_redshift_serverless_snapshot contributed by a target. Shard JSON matches the aws_redshift_serverless_snapshot schema.",
     fields = {
@@ -72272,6 +80021,53 @@ cloudformation_aws_redshift_serverless_workgroup = rule(
         ),
         "WorkgroupName": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshiftserverless-workgroup.html#cfn-redshiftserverless-workgroup-workgroupname",
+        ),
+    },
+)
+
+CloudformationAwsRedshiftSnapshotScheduleInfo = provider(
+    doc = "A aws_redshift_snapshot_schedule contributed by a target. Shard JSON matches the aws_redshift_snapshot_schedule schema.",
+    fields = {
+        "aws_redshift_snapshot_schedule_name": "string: top-level key for this aws_redshift_snapshot_schedule in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_redshift_snapshot_schedule_impl(ctx):
+    item_name = ctx.attr.aws_redshift_snapshot_schedule_name or ctx.label.name
+    payload = {
+        "ScheduleDefinitions": parse_json_or_none(ctx.attr.ScheduleDefinitions),
+        "ScheduleDescription": ctx.attr.ScheduleDescription,
+        "ScheduleIdentifier": ctx.attr.ScheduleIdentifier,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_redshift_snapshot_schedule.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsRedshiftSnapshotScheduleInfo(aws_redshift_snapshot_schedule_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_redshift_snapshot_schedule = rule(
+    implementation = _cloudformation_aws_redshift_snapshot_schedule_impl,
+    doc = "Schema-derived rule for one `aws_redshift_snapshot_schedule` entry.",
+    provides = [CloudformationAwsRedshiftSnapshotScheduleInfo],
+    attrs = {
+        "aws_redshift_snapshot_schedule_name": attr.string(
+            doc = "Top-level key for this aws_redshift_snapshot_schedule in the rendered project. Defaults to the rule name.",
+        ),
+        "ScheduleDefinitions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-snapshotschedule.html#cfn-redshift-snapshotschedule-scheduledefinitions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "ScheduleDescription": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-snapshotschedule.html#cfn-redshift-snapshotschedule-scheduledescription",
+        ),
+        "ScheduleIdentifier": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-snapshotschedule.html#cfn-redshift-snapshotschedule-scheduleidentifier",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-snapshotschedule.html#cfn-redshift-snapshotschedule-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -72543,6 +80339,49 @@ cloudformation_aws_rekognition_collection = rule(
     },
 )
 
+CloudformationAwsRekognitionDatasetInfo = provider(
+    doc = "A aws_rekognition_dataset contributed by a target. Shard JSON matches the aws_rekognition_dataset schema.",
+    fields = {
+        "aws_rekognition_dataset_name": "string: top-level key for this aws_rekognition_dataset in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_rekognition_dataset_impl(ctx):
+    item_name = ctx.attr.aws_rekognition_dataset_name or ctx.label.name
+    payload = {
+        "DatasetType": ctx.attr.DatasetType,
+        "ProjectArn": ctx.attr.ProjectArn,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_rekognition_dataset.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsRekognitionDatasetInfo(aws_rekognition_dataset_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_rekognition_dataset = rule(
+    implementation = _cloudformation_aws_rekognition_dataset_impl,
+    doc = "Schema-derived rule for one `aws_rekognition_dataset` entry.",
+    provides = [CloudformationAwsRekognitionDatasetInfo],
+    attrs = {
+        "aws_rekognition_dataset_name": attr.string(
+            doc = "Top-level key for this aws_rekognition_dataset in the rendered project. Defaults to the rule name.",
+        ),
+        "DatasetType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rekognition-dataset.html#cfn-rekognition-dataset-datasettype",
+        ),
+        "ProjectArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rekognition-dataset.html#cfn-rekognition-dataset-projectarn",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rekognition-dataset.html#cfn-rekognition-dataset-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsRekognitionProjectInfo = provider(
     doc = "A aws_rekognition_project contributed by a target. Shard JSON matches the aws_rekognition_project schema.",
     fields = {
@@ -72783,6 +80622,293 @@ cloudformation_aws_resilience_hub_resiliency_policy = rule(
         ),
         "Tier": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehub-resiliencypolicy.html#cfn-resiliencehub-resiliencypolicy-tier",
+        ),
+    },
+)
+
+CloudformationAwsResilienceHubV2PolicyInfo = provider(
+    doc = "A aws_resilience_hub_v2_policy contributed by a target. Shard JSON matches the aws_resilience_hub_v2_policy schema.",
+    fields = {
+        "aws_resilience_hub_v2_policy_name": "string: top-level key for this aws_resilience_hub_v2_policy in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_resilience_hub_v2_policy_impl(ctx):
+    item_name = ctx.attr.aws_resilience_hub_v2_policy_name or ctx.label.name
+    payload = {
+        "AvailabilitySlo": parse_json_or_none(ctx.attr.AvailabilitySlo),
+        "DataRecovery": parse_json_or_none(ctx.attr.DataRecovery),
+        "Description": ctx.attr.Description,
+        "KmsKeyId": ctx.attr.KmsKeyId,
+        "MultiAz": parse_json_or_none(ctx.attr.MultiAz),
+        "MultiRegion": parse_json_or_none(ctx.attr.MultiRegion),
+        "Name": ctx.attr.Name,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_resilience_hub_v2_policy.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsResilienceHubV2PolicyInfo(aws_resilience_hub_v2_policy_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_resilience_hub_v2_policy = rule(
+    implementation = _cloudformation_aws_resilience_hub_v2_policy_impl,
+    doc = "Schema-derived rule for one `aws_resilience_hub_v2_policy` entry.",
+    provides = [CloudformationAwsResilienceHubV2PolicyInfo],
+    attrs = {
+        "aws_resilience_hub_v2_policy_name": attr.string(
+            doc = "Top-level key for this aws_resilience_hub_v2_policy in the rendered project. Defaults to the rule name.",
+        ),
+        "AvailabilitySlo": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "DataRecovery": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-policy.html#cfn-resiliencehubv2-policy-description",
+        ),
+        "KmsKeyId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-policy.html#cfn-resiliencehubv2-policy-kmskeyid",
+        ),
+        "MultiAz": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "MultiRegion": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-policy.html#cfn-resiliencehubv2-policy-name",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-policy.html#cfn-resiliencehubv2-policy-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsResilienceHubV2ServiceInfo = provider(
+    doc = "A aws_resilience_hub_v2_service contributed by a target. Shard JSON matches the aws_resilience_hub_v2_service schema.",
+    fields = {
+        "aws_resilience_hub_v2_service_name": "string: top-level key for this aws_resilience_hub_v2_service in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_resilience_hub_v2_service_impl(ctx):
+    item_name = ctx.attr.aws_resilience_hub_v2_service_name or ctx.label.name
+    payload = {
+        "Assertions": parse_json_or_none(ctx.attr.Assertions),
+        "AssociatedSystems": parse_json_or_none(ctx.attr.AssociatedSystems),
+        "DependencyDiscovery": ctx.attr.DependencyDiscovery,
+        "Description": ctx.attr.Description,
+        "InputSources": parse_json_or_none(ctx.attr.InputSources),
+        "KmsKeyId": ctx.attr.KmsKeyId,
+        "Name": ctx.attr.Name,
+        "PermissionModel": parse_json_or_none(ctx.attr.PermissionModel),
+        "PolicyArn": ctx.attr.PolicyArn,
+        "Regions": parse_json_or_none(ctx.attr.Regions),
+        "ReportConfiguration": parse_json_or_none(ctx.attr.ReportConfiguration),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_resilience_hub_v2_service.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsResilienceHubV2ServiceInfo(aws_resilience_hub_v2_service_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_resilience_hub_v2_service = rule(
+    implementation = _cloudformation_aws_resilience_hub_v2_service_impl,
+    doc = "Schema-derived rule for one `aws_resilience_hub_v2_service` entry.",
+    provides = [CloudformationAwsResilienceHubV2ServiceInfo],
+    attrs = {
+        "aws_resilience_hub_v2_service_name": attr.string(
+            doc = "Top-level key for this aws_resilience_hub_v2_service in the rendered project. Defaults to the rule name.",
+        ),
+        "Assertions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-service.html#cfn-resiliencehubv2-service-assertions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "AssociatedSystems": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-service.html#cfn-resiliencehubv2-service-associatedsystems (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "DependencyDiscovery": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-service.html#cfn-resiliencehubv2-service-dependencydiscovery",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-service.html#cfn-resiliencehubv2-service-description",
+        ),
+        "InputSources": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-service.html#cfn-resiliencehubv2-service-inputsources (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "KmsKeyId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-service.html#cfn-resiliencehubv2-service-kmskeyid",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-service.html#cfn-resiliencehubv2-service-name",
+        ),
+        "PermissionModel": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "PolicyArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-service.html#cfn-resiliencehubv2-service-policyarn",
+        ),
+        "Regions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-service.html#cfn-resiliencehubv2-service-regions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "ReportConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-service.html#cfn-resiliencehubv2-service-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsResilienceHubV2ServiceFunctionInfo = provider(
+    doc = "A aws_resilience_hub_v2_service_function contributed by a target. Shard JSON matches the aws_resilience_hub_v2_service_function schema.",
+    fields = {
+        "aws_resilience_hub_v2_service_function_name": "string: top-level key for this aws_resilience_hub_v2_service_function in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_resilience_hub_v2_service_function_impl(ctx):
+    item_name = ctx.attr.aws_resilience_hub_v2_service_function_name or ctx.label.name
+    payload = {
+        "Criticality": ctx.attr.Criticality,
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+        "ServiceArn": ctx.attr.ServiceArn,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_resilience_hub_v2_service_function.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsResilienceHubV2ServiceFunctionInfo(aws_resilience_hub_v2_service_function_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_resilience_hub_v2_service_function = rule(
+    implementation = _cloudformation_aws_resilience_hub_v2_service_function_impl,
+    doc = "Schema-derived rule for one `aws_resilience_hub_v2_service_function` entry.",
+    provides = [CloudformationAwsResilienceHubV2ServiceFunctionInfo],
+    attrs = {
+        "aws_resilience_hub_v2_service_function_name": attr.string(
+            doc = "Top-level key for this aws_resilience_hub_v2_service_function in the rendered project. Defaults to the rule name.",
+        ),
+        "Criticality": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-servicefunction.html#cfn-resiliencehubv2-servicefunction-criticality",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-servicefunction.html#cfn-resiliencehubv2-servicefunction-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-servicefunction.html#cfn-resiliencehubv2-servicefunction-name",
+        ),
+        "ServiceArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-servicefunction.html#cfn-resiliencehubv2-servicefunction-servicearn",
+        ),
+    },
+)
+
+CloudformationAwsResilienceHubV2SystemInfo = provider(
+    doc = "A aws_resilience_hub_v2_system contributed by a target. Shard JSON matches the aws_resilience_hub_v2_system schema.",
+    fields = {
+        "aws_resilience_hub_v2_system_name": "string: top-level key for this aws_resilience_hub_v2_system in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_resilience_hub_v2_system_impl(ctx):
+    item_name = ctx.attr.aws_resilience_hub_v2_system_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "KmsKeyId": ctx.attr.KmsKeyId,
+        "Name": ctx.attr.Name,
+        "SharingEnabled": parse_json_or_none(ctx.attr.SharingEnabled),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_resilience_hub_v2_system.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsResilienceHubV2SystemInfo(aws_resilience_hub_v2_system_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_resilience_hub_v2_system = rule(
+    implementation = _cloudformation_aws_resilience_hub_v2_system_impl,
+    doc = "Schema-derived rule for one `aws_resilience_hub_v2_system` entry.",
+    provides = [CloudformationAwsResilienceHubV2SystemInfo],
+    attrs = {
+        "aws_resilience_hub_v2_system_name": attr.string(
+            doc = "Top-level key for this aws_resilience_hub_v2_system in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-system.html#cfn-resiliencehubv2-system-description",
+        ),
+        "KmsKeyId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-system.html#cfn-resiliencehubv2-system-kmskeyid",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-system.html#cfn-resiliencehubv2-system-name",
+        ),
+        "SharingEnabled": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-system.html#cfn-resiliencehubv2-system-sharingenabled (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-system.html#cfn-resiliencehubv2-system-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsResilienceHubV2UserJourneyInfo = provider(
+    doc = "A aws_resilience_hub_v2_user_journey contributed by a target. Shard JSON matches the aws_resilience_hub_v2_user_journey schema.",
+    fields = {
+        "aws_resilience_hub_v2_user_journey_name": "string: top-level key for this aws_resilience_hub_v2_user_journey in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_resilience_hub_v2_user_journey_impl(ctx):
+    item_name = ctx.attr.aws_resilience_hub_v2_user_journey_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+        "PolicyArn": ctx.attr.PolicyArn,
+        "SystemIdentifier": ctx.attr.SystemIdentifier,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_resilience_hub_v2_user_journey.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsResilienceHubV2UserJourneyInfo(aws_resilience_hub_v2_user_journey_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_resilience_hub_v2_user_journey = rule(
+    implementation = _cloudformation_aws_resilience_hub_v2_user_journey_impl,
+    doc = "Schema-derived rule for one `aws_resilience_hub_v2_user_journey` entry.",
+    provides = [CloudformationAwsResilienceHubV2UserJourneyInfo],
+    attrs = {
+        "aws_resilience_hub_v2_user_journey_name": attr.string(
+            doc = "Top-level key for this aws_resilience_hub_v2_user_journey in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-userjourney.html#cfn-resiliencehubv2-userjourney-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-userjourney.html#cfn-resiliencehubv2-userjourney-name",
+        ),
+        "PolicyArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-userjourney.html#cfn-resiliencehubv2-userjourney-policyarn",
+        ),
+        "SystemIdentifier": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-resiliencehubv2-userjourney.html#cfn-resiliencehubv2-userjourney-systemidentifier",
         ),
     },
 )
@@ -74752,6 +82878,45 @@ cloudformation_aws_route53_recovery_readiness_resource_set = rule(
     },
 )
 
+CloudformationAwsRoute53ResolverFirewallConfigInfo = provider(
+    doc = "A aws_route53_resolver_firewall_config contributed by a target. Shard JSON matches the aws_route53_resolver_firewall_config schema.",
+    fields = {
+        "aws_route53_resolver_firewall_config_name": "string: top-level key for this aws_route53_resolver_firewall_config in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_route53_resolver_firewall_config_impl(ctx):
+    item_name = ctx.attr.aws_route53_resolver_firewall_config_name or ctx.label.name
+    payload = {
+        "FirewallFailOpen": ctx.attr.FirewallFailOpen,
+        "ResourceId": ctx.attr.ResourceId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_route53_resolver_firewall_config.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsRoute53ResolverFirewallConfigInfo(aws_route53_resolver_firewall_config_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_route53_resolver_firewall_config = rule(
+    implementation = _cloudformation_aws_route53_resolver_firewall_config_impl,
+    doc = "Schema-derived rule for one `aws_route53_resolver_firewall_config` entry.",
+    provides = [CloudformationAwsRoute53ResolverFirewallConfigInfo],
+    attrs = {
+        "aws_route53_resolver_firewall_config_name": attr.string(
+            doc = "Top-level key for this aws_route53_resolver_firewall_config in the rendered project. Defaults to the rule name.",
+        ),
+        "FirewallFailOpen": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53resolver-firewallconfig.html#cfn-route53resolver-firewallconfig-firewallfailopen",
+        ),
+        "ResourceId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53resolver-firewallconfig.html#cfn-route53resolver-firewallconfig-resourceid",
+        ),
+    },
+)
+
 CloudformationAwsRoute53ResolverFirewallDomainListInfo = provider(
     doc = "A aws_route53_resolver_firewall_domain_list contributed by a target. Shard JSON matches the aws_route53_resolver_firewall_domain_list schema.",
     fields = {
@@ -75395,6 +83560,57 @@ cloudformation_aws_rtbfabric_link = rule(
     },
 )
 
+CloudformationAwsRtbfabricLinkRoutingRuleInfo = provider(
+    doc = "A aws_rtbfabric_link_routing_rule contributed by a target. Shard JSON matches the aws_rtbfabric_link_routing_rule schema.",
+    fields = {
+        "aws_rtbfabric_link_routing_rule_name": "string: top-level key for this aws_rtbfabric_link_routing_rule in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_rtbfabric_link_routing_rule_impl(ctx):
+    item_name = ctx.attr.aws_rtbfabric_link_routing_rule_name or ctx.label.name
+    payload = {
+        "Conditions": parse_json_or_none(ctx.attr.Conditions),
+        "GatewayId": ctx.attr.GatewayId,
+        "LinkId": ctx.attr.LinkId,
+        "Priority": parse_json_or_none(ctx.attr.Priority),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_rtbfabric_link_routing_rule.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsRtbfabricLinkRoutingRuleInfo(aws_rtbfabric_link_routing_rule_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_rtbfabric_link_routing_rule = rule(
+    implementation = _cloudformation_aws_rtbfabric_link_routing_rule_impl,
+    doc = "Schema-derived rule for one `aws_rtbfabric_link_routing_rule` entry.",
+    provides = [CloudformationAwsRtbfabricLinkRoutingRuleInfo],
+    attrs = {
+        "aws_rtbfabric_link_routing_rule_name": attr.string(
+            doc = "Top-level key for this aws_rtbfabric_link_routing_rule in the rendered project. Defaults to the rule name.",
+        ),
+        "Conditions": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "GatewayId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-linkroutingrule.html#cfn-rtbfabric-linkroutingrule-gatewayid",
+        ),
+        "LinkId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-linkroutingrule.html#cfn-rtbfabric-linkroutingrule-linkid",
+        ),
+        "Priority": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-linkroutingrule.html#cfn-rtbfabric-linkroutingrule-priority (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-linkroutingrule.html#cfn-rtbfabric-linkroutingrule-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsRtbfabricOutboundExternalLinkInfo = provider(
     doc = "A aws_rtbfabric_outbound_external_link contributed by a target. Shard JSON matches the aws_rtbfabric_outbound_external_link schema.",
     fields = {
@@ -75508,8 +83724,11 @@ CloudformationAwsRtbfabricResponderGatewayInfo = provider(
 def _cloudformation_aws_rtbfabric_responder_gateway_impl(ctx):
     item_name = ctx.attr.aws_rtbfabric_responder_gateway_name or ctx.label.name
     payload = {
+        "AcmCertificateArn": ctx.attr.AcmCertificateArn,
         "Description": ctx.attr.Description,
         "DomainName": ctx.attr.DomainName,
+        "GatewayType": ctx.attr.GatewayType,
+        "ListenerConfig": parse_json_or_none(ctx.attr.ListenerConfig),
         "ManagedEndpointConfiguration": parse_json_or_none(ctx.attr.ManagedEndpointConfiguration),
         "Port": parse_json_or_none(ctx.attr.Port),
         "Protocol": ctx.attr.Protocol,
@@ -75535,11 +83754,20 @@ cloudformation_aws_rtbfabric_responder_gateway = rule(
         "aws_rtbfabric_responder_gateway_name": attr.string(
             doc = "Top-level key for this aws_rtbfabric_responder_gateway in the rendered project. Defaults to the rule name.",
         ),
+        "AcmCertificateArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-acmcertificatearn",
+        ),
         "Description": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-description",
         ),
         "DomainName": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-domainname",
+        ),
+        "GatewayType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-gatewaytype",
+        ),
+        "ListenerConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "ManagedEndpointConfiguration": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
@@ -77212,6 +85440,124 @@ cloudformation_aws_s3_vectors_vector_bucket_policy = rule(
     },
 )
 
+CloudformationAwsSageMakerActionInfo = provider(
+    doc = "A aws_sage_maker_action contributed by a target. Shard JSON matches the aws_sage_maker_action schema.",
+    fields = {
+        "aws_sage_maker_action_name": "string: top-level key for this aws_sage_maker_action in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_action_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_action_name or ctx.label.name
+    payload = {
+        "ActionName": ctx.attr.ActionName,
+        "ActionType": ctx.attr.ActionType,
+        "Description": ctx.attr.Description,
+        "MetadataProperties": parse_json_or_none(ctx.attr.MetadataProperties),
+        "Properties": ctx.attr.Properties,
+        "Source": parse_json_or_none(ctx.attr.Source),
+        "Status": ctx.attr.Status,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_action.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerActionInfo(aws_sage_maker_action_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_action = rule(
+    implementation = _cloudformation_aws_sage_maker_action_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_action` entry.",
+    provides = [CloudformationAwsSageMakerActionInfo],
+    attrs = {
+        "aws_sage_maker_action_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_action in the rendered project. Defaults to the rule name.",
+        ),
+        "ActionName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-action.html#cfn-sagemaker-action-actionname",
+        ),
+        "ActionType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-action.html#cfn-sagemaker-action-actiontype",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-action.html#cfn-sagemaker-action-description",
+        ),
+        "MetadataProperties": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Properties": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-action.html#cfn-sagemaker-action-properties",
+        ),
+        "Source": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Status": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-action.html#cfn-sagemaker-action-status",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-action.html#cfn-sagemaker-action-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsSageMakerAlgorithmInfo = provider(
+    doc = "A aws_sage_maker_algorithm contributed by a target. Shard JSON matches the aws_sage_maker_algorithm schema.",
+    fields = {
+        "aws_sage_maker_algorithm_name": "string: top-level key for this aws_sage_maker_algorithm in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_algorithm_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_algorithm_name or ctx.label.name
+    payload = {
+        "AlgorithmDescription": ctx.attr.AlgorithmDescription,
+        "AlgorithmName": ctx.attr.AlgorithmName,
+        "CertifyForMarketplace": parse_json_or_none(ctx.attr.CertifyForMarketplace),
+        "InferenceSpecification": parse_json_or_none(ctx.attr.InferenceSpecification),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "TrainingSpecification": parse_json_or_none(ctx.attr.TrainingSpecification),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_algorithm.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerAlgorithmInfo(aws_sage_maker_algorithm_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_algorithm = rule(
+    implementation = _cloudformation_aws_sage_maker_algorithm_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_algorithm` entry.",
+    provides = [CloudformationAwsSageMakerAlgorithmInfo],
+    attrs = {
+        "aws_sage_maker_algorithm_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_algorithm in the rendered project. Defaults to the rule name.",
+        ),
+        "AlgorithmDescription": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-algorithm.html#cfn-sagemaker-algorithm-algorithmdescription",
+        ),
+        "AlgorithmName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-algorithm.html#cfn-sagemaker-algorithm-algorithmname",
+        ),
+        "CertifyForMarketplace": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-algorithm.html#cfn-sagemaker-algorithm-certifyformarketplace (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "InferenceSpecification": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-algorithm.html#cfn-sagemaker-algorithm-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TrainingSpecification": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
 CloudformationAwsSageMakerAppInfo = provider(
     doc = "A aws_sage_maker_app contributed by a target. Shard JSON matches the aws_sage_maker_app schema.",
     fields = {
@@ -77322,6 +85668,124 @@ cloudformation_aws_sage_maker_app_image_config = rule(
     },
 )
 
+CloudformationAwsSageMakerArtifactInfo = provider(
+    doc = "A aws_sage_maker_artifact contributed by a target. Shard JSON matches the aws_sage_maker_artifact schema.",
+    fields = {
+        "aws_sage_maker_artifact_name": "string: top-level key for this aws_sage_maker_artifact in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_artifact_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_artifact_name or ctx.label.name
+    payload = {
+        "ArtifactName": ctx.attr.ArtifactName,
+        "ArtifactType": ctx.attr.ArtifactType,
+        "MetadataProperties": parse_json_or_none(ctx.attr.MetadataProperties),
+        "Properties": ctx.attr.Properties,
+        "Source": parse_json_or_none(ctx.attr.Source),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_artifact.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerArtifactInfo(aws_sage_maker_artifact_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_artifact = rule(
+    implementation = _cloudformation_aws_sage_maker_artifact_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_artifact` entry.",
+    provides = [CloudformationAwsSageMakerArtifactInfo],
+    attrs = {
+        "aws_sage_maker_artifact_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_artifact in the rendered project. Defaults to the rule name.",
+        ),
+        "ArtifactName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-artifact.html#cfn-sagemaker-artifact-artifactname",
+        ),
+        "ArtifactType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-artifact.html#cfn-sagemaker-artifact-artifacttype",
+        ),
+        "MetadataProperties": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Properties": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-artifact.html#cfn-sagemaker-artifact-properties",
+        ),
+        "Source": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-artifact.html#cfn-sagemaker-artifact-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsSageMakerAutoMljobInfo = provider(
+    doc = "A aws_sage_maker_auto_mljob contributed by a target. Shard JSON matches the aws_sage_maker_auto_mljob schema.",
+    fields = {
+        "aws_sage_maker_auto_mljob_name": "string: top-level key for this aws_sage_maker_auto_mljob in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_auto_mljob_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_auto_mljob_name or ctx.label.name
+    payload = {
+        "AutoMLJobConfig": parse_json_or_none(ctx.attr.AutoMLJobConfig),
+        "AutoMLJobObjective": parse_json_or_none(ctx.attr.AutoMLJobObjective),
+        "GenerateCandidateDefinitionsOnly": parse_json_or_none(ctx.attr.GenerateCandidateDefinitionsOnly),
+        "InputDataConfig": parse_json_or_none(ctx.attr.InputDataConfig),
+        "OutputDataConfig": parse_json_or_none(ctx.attr.OutputDataConfig),
+        "ProblemType": ctx.attr.ProblemType,
+        "RoleArn": ctx.attr.RoleArn,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_auto_mljob.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerAutoMljobInfo(aws_sage_maker_auto_mljob_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_auto_mljob = rule(
+    implementation = _cloudformation_aws_sage_maker_auto_mljob_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_auto_mljob` entry.",
+    provides = [CloudformationAwsSageMakerAutoMljobInfo],
+    attrs = {
+        "aws_sage_maker_auto_mljob_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_auto_mljob in the rendered project. Defaults to the rule name.",
+        ),
+        "AutoMLJobConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "AutoMLJobObjective": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "GenerateCandidateDefinitionsOnly": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-automljob.html#cfn-sagemaker-automljob-generatecandidatedefinitionsonly (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "InputDataConfig": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-automljob.html#cfn-sagemaker-automljob-inputdataconfig (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "OutputDataConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "ProblemType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-automljob.html#cfn-sagemaker-automljob-problemtype",
+        ),
+        "RoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-automljob.html#cfn-sagemaker-automljob-rolearn",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-automljob.html#cfn-sagemaker-automljob-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsSageMakerClusterInfo = provider(
     doc = "A aws_sage_maker_cluster contributed by a target. Shard JSON matches the aws_sage_maker_cluster schema.",
     fields = {
@@ -77341,6 +85805,7 @@ def _cloudformation_aws_sage_maker_cluster_impl(ctx):
         "NodeRecovery": ctx.attr.NodeRecovery,
         "Orchestrator": parse_json_or_none(ctx.attr.Orchestrator),
         "RestrictedInstanceGroups": parse_json_or_none(ctx.attr.RestrictedInstanceGroups),
+        "RestrictedInstanceGroupsConfig": parse_json_or_none(ctx.attr.RestrictedInstanceGroupsConfig),
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "TieredStorageConfig": parse_json_or_none(ctx.attr.TieredStorageConfig),
         "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
@@ -77384,6 +85849,9 @@ cloudformation_aws_sage_maker_cluster = rule(
         ),
         "RestrictedInstanceGroups": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-cluster.html#cfn-sagemaker-cluster-restrictedinstancegroups (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "RestrictedInstanceGroupsConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-cluster.html#cfn-sagemaker-cluster-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -77436,6 +85904,61 @@ cloudformation_aws_sage_maker_code_repository = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-coderepository.html#cfn-sagemaker-coderepository-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsSageMakerContextInfo = provider(
+    doc = "A aws_sage_maker_context contributed by a target. Shard JSON matches the aws_sage_maker_context schema.",
+    fields = {
+        "aws_sage_maker_context_name": "string: top-level key for this aws_sage_maker_context in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_context_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_context_name or ctx.label.name
+    payload = {
+        "ContextName": ctx.attr.ContextName,
+        "ContextType": ctx.attr.ContextType,
+        "Description": ctx.attr.Description,
+        "Properties": ctx.attr.Properties,
+        "Source": parse_json_or_none(ctx.attr.Source),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_context.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerContextInfo(aws_sage_maker_context_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_context = rule(
+    implementation = _cloudformation_aws_sage_maker_context_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_context` entry.",
+    provides = [CloudformationAwsSageMakerContextInfo],
+    attrs = {
+        "aws_sage_maker_context_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_context in the rendered project. Defaults to the rule name.",
+        ),
+        "ContextName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-context.html#cfn-sagemaker-context-contextname",
+        ),
+        "ContextType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-context.html#cfn-sagemaker-context-contexttype",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-context.html#cfn-sagemaker-context-description",
+        ),
+        "Properties": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-context.html#cfn-sagemaker-context-properties",
+        ),
+        "Source": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-context.html#cfn-sagemaker-context-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -77627,6 +86150,7 @@ def _cloudformation_aws_sage_maker_domain_impl(ctx):
         "DefaultUserSettings": parse_json_or_none(ctx.attr.DefaultUserSettings),
         "DomainName": ctx.attr.DomainName,
         "DomainSettings": parse_json_or_none(ctx.attr.DomainSettings),
+        "HomeEfsFileSystemCreation": ctx.attr.HomeEfsFileSystemCreation,
         "KmsKeyId": ctx.attr.KmsKeyId,
         "SubnetIds": parse_json_or_none(ctx.attr.SubnetIds),
         "TagPropagation": ctx.attr.TagPropagation,
@@ -77670,6 +86194,9 @@ cloudformation_aws_sage_maker_domain = rule(
         "DomainSettings": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
+        "HomeEfsFileSystemCreation": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-domain.html#cfn-sagemaker-domain-homeefsfilesystemcreation",
+        ),
         "KmsKeyId": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-domain.html#cfn-sagemaker-domain-kmskeyid",
         ),
@@ -77701,7 +86228,6 @@ def _cloudformation_aws_sage_maker_endpoint_impl(ctx):
     payload = {
         "DeploymentConfig": parse_json_or_none(ctx.attr.DeploymentConfig),
         "EndpointConfigName": ctx.attr.EndpointConfigName,
-        "EndpointName": ctx.attr.EndpointName,
         "ExcludeRetainedVariantProperties": parse_json_or_none(ctx.attr.ExcludeRetainedVariantProperties),
         "RetainAllVariantProperties": parse_json_or_none(ctx.attr.RetainAllVariantProperties),
         "RetainDeploymentConfig": parse_json_or_none(ctx.attr.RetainDeploymentConfig),
@@ -77728,9 +86254,6 @@ cloudformation_aws_sage_maker_endpoint = rule(
         ),
         "EndpointConfigName": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-endpoint.html#cfn-sagemaker-endpoint-endpointconfigname",
-        ),
-        "EndpointName": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-endpoint.html#cfn-sagemaker-endpoint-endpointname",
         ),
         "ExcludeRetainedVariantProperties": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-endpoint.html#cfn-sagemaker-endpoint-excluderetainedvariantproperties (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -77822,6 +86345,53 @@ cloudformation_aws_sage_maker_endpoint_config = rule(
     },
 )
 
+CloudformationAwsSageMakerExperimentInfo = provider(
+    doc = "A aws_sage_maker_experiment contributed by a target. Shard JSON matches the aws_sage_maker_experiment schema.",
+    fields = {
+        "aws_sage_maker_experiment_name": "string: top-level key for this aws_sage_maker_experiment in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_experiment_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_experiment_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "DisplayName": ctx.attr.DisplayName,
+        "ExperimentName": ctx.attr.ExperimentName,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_experiment.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerExperimentInfo(aws_sage_maker_experiment_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_experiment = rule(
+    implementation = _cloudformation_aws_sage_maker_experiment_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_experiment` entry.",
+    provides = [CloudformationAwsSageMakerExperimentInfo],
+    attrs = {
+        "aws_sage_maker_experiment_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_experiment in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-experiment.html#cfn-sagemaker-experiment-description",
+        ),
+        "DisplayName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-experiment.html#cfn-sagemaker-experiment-displayname",
+        ),
+        "ExperimentName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-experiment.html#cfn-sagemaker-experiment-experimentname",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-experiment.html#cfn-sagemaker-experiment-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsSageMakerFeatureGroupInfo = provider(
     doc = "A aws_sage_maker_feature_group contributed by a target. Shard JSON matches the aws_sage_maker_feature_group schema.",
     fields = {
@@ -77888,6 +86458,104 @@ cloudformation_aws_sage_maker_feature_group = rule(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-featuregroup.html#cfn-sagemaker-featuregroup-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "ThroughputConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsSageMakerHubInfo = provider(
+    doc = "A aws_sage_maker_hub contributed by a target. Shard JSON matches the aws_sage_maker_hub schema.",
+    fields = {
+        "aws_sage_maker_hub_name": "string: top-level key for this aws_sage_maker_hub in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_hub_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_hub_name or ctx.label.name
+    payload = {
+        "HubDescription": ctx.attr.HubDescription,
+        "HubDisplayName": ctx.attr.HubDisplayName,
+        "HubName": ctx.attr.HubName,
+        "HubSearchKeywords": parse_json_or_none(ctx.attr.HubSearchKeywords),
+        "S3StorageConfig": parse_json_or_none(ctx.attr.S3StorageConfig),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_hub.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerHubInfo(aws_sage_maker_hub_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_hub = rule(
+    implementation = _cloudformation_aws_sage_maker_hub_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_hub` entry.",
+    provides = [CloudformationAwsSageMakerHubInfo],
+    attrs = {
+        "aws_sage_maker_hub_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_hub in the rendered project. Defaults to the rule name.",
+        ),
+        "HubDescription": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-hub.html#cfn-sagemaker-hub-hubdescription",
+        ),
+        "HubDisplayName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-hub.html#cfn-sagemaker-hub-hubdisplayname",
+        ),
+        "HubName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-hub.html#cfn-sagemaker-hub-hubname",
+        ),
+        "HubSearchKeywords": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-hub.html#cfn-sagemaker-hub-hubsearchkeywords (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "S3StorageConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-hub.html#cfn-sagemaker-hub-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsSageMakerHumanTaskUiInfo = provider(
+    doc = "A aws_sage_maker_human_task_ui contributed by a target. Shard JSON matches the aws_sage_maker_human_task_ui schema.",
+    fields = {
+        "aws_sage_maker_human_task_ui_name": "string: top-level key for this aws_sage_maker_human_task_ui in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_human_task_ui_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_human_task_ui_name or ctx.label.name
+    payload = {
+        "HumanTaskUiName": ctx.attr.HumanTaskUiName,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "UiTemplate": parse_json_or_none(ctx.attr.UiTemplate),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_human_task_ui.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerHumanTaskUiInfo(aws_sage_maker_human_task_ui_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_human_task_ui = rule(
+    implementation = _cloudformation_aws_sage_maker_human_task_ui_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_human_task_ui` entry.",
+    provides = [CloudformationAwsSageMakerHumanTaskUiInfo],
+    attrs = {
+        "aws_sage_maker_human_task_ui_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_human_task_ui in the rendered project. Defaults to the rule name.",
+        ),
+        "HumanTaskUiName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-humantaskui.html#cfn-sagemaker-humantaskui-humantaskuiname",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-humantaskui.html#cfn-sagemaker-humantaskui-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "UiTemplate": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
     },
@@ -78165,6 +86833,61 @@ cloudformation_aws_sage_maker_inference_experiment = rule(
     },
 )
 
+CloudformationAwsSageMakerMlflowAppInfo = provider(
+    doc = "A aws_sage_maker_mlflow_app contributed by a target. Shard JSON matches the aws_sage_maker_mlflow_app schema.",
+    fields = {
+        "aws_sage_maker_mlflow_app_name": "string: top-level key for this aws_sage_maker_mlflow_app in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_mlflow_app_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_mlflow_app_name or ctx.label.name
+    payload = {
+        "ArtifactStoreUri": ctx.attr.ArtifactStoreUri,
+        "ModelRegistrationMode": ctx.attr.ModelRegistrationMode,
+        "Name": ctx.attr.Name,
+        "RoleArn": ctx.attr.RoleArn,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "WeeklyMaintenanceWindowStart": ctx.attr.WeeklyMaintenanceWindowStart,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_mlflow_app.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerMlflowAppInfo(aws_sage_maker_mlflow_app_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_mlflow_app = rule(
+    implementation = _cloudformation_aws_sage_maker_mlflow_app_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_mlflow_app` entry.",
+    provides = [CloudformationAwsSageMakerMlflowAppInfo],
+    attrs = {
+        "aws_sage_maker_mlflow_app_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_mlflow_app in the rendered project. Defaults to the rule name.",
+        ),
+        "ArtifactStoreUri": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-mlflowapp.html#cfn-sagemaker-mlflowapp-artifactstoreuri",
+        ),
+        "ModelRegistrationMode": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-mlflowapp.html#cfn-sagemaker-mlflowapp-modelregistrationmode",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-mlflowapp.html#cfn-sagemaker-mlflowapp-name",
+        ),
+        "RoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-mlflowapp.html#cfn-sagemaker-mlflowapp-rolearn",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-mlflowapp.html#cfn-sagemaker-mlflowapp-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "WeeklyMaintenanceWindowStart": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-mlflowapp.html#cfn-sagemaker-mlflowapp-weeklymaintenancewindowstart",
+        ),
+    },
+)
+
 CloudformationAwsSageMakerMlflowTrackingServerInfo = provider(
     doc = "A aws_sage_maker_mlflow_tracking_server contributed by a target. Shard JSON matches the aws_sage_maker_mlflow_tracking_server schema.",
     fields = {
@@ -78421,6 +87144,53 @@ cloudformation_aws_sage_maker_model_card = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-modelcard.html#cfn-sagemaker-modelcard-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsSageMakerModelCardExportJobInfo = provider(
+    doc = "A aws_sage_maker_model_card_export_job contributed by a target. Shard JSON matches the aws_sage_maker_model_card_export_job schema.",
+    fields = {
+        "aws_sage_maker_model_card_export_job_name": "string: top-level key for this aws_sage_maker_model_card_export_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_model_card_export_job_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_model_card_export_job_name or ctx.label.name
+    payload = {
+        "ModelCardExportJobName": ctx.attr.ModelCardExportJobName,
+        "ModelCardName": ctx.attr.ModelCardName,
+        "ModelCardVersion": parse_json_or_none(ctx.attr.ModelCardVersion),
+        "OutputConfig": parse_json_or_none(ctx.attr.OutputConfig),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_model_card_export_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerModelCardExportJobInfo(aws_sage_maker_model_card_export_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_model_card_export_job = rule(
+    implementation = _cloudformation_aws_sage_maker_model_card_export_job_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_model_card_export_job` entry.",
+    provides = [CloudformationAwsSageMakerModelCardExportJobInfo],
+    attrs = {
+        "aws_sage_maker_model_card_export_job_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_model_card_export_job in the rendered project. Defaults to the rule name.",
+        ),
+        "ModelCardExportJobName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-modelcardexportjob.html#cfn-sagemaker-modelcardexportjob-modelcardexportjobname",
+        ),
+        "ModelCardName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-modelcardexportjob.html#cfn-sagemaker-modelcardexportjob-modelcardname",
+        ),
+        "ModelCardVersion": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-modelcardexportjob.html#cfn-sagemaker-modelcardexportjob-modelcardversion (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "OutputConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
     },
 )
@@ -78816,6 +87586,53 @@ cloudformation_aws_sage_maker_monitoring_schedule = rule(
     },
 )
 
+CloudformationAwsSageMakerMonitoringScheduleAlertInfo = provider(
+    doc = "A aws_sage_maker_monitoring_schedule_alert contributed by a target. Shard JSON matches the aws_sage_maker_monitoring_schedule_alert schema.",
+    fields = {
+        "aws_sage_maker_monitoring_schedule_alert_name": "string: top-level key for this aws_sage_maker_monitoring_schedule_alert in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_monitoring_schedule_alert_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_monitoring_schedule_alert_name or ctx.label.name
+    payload = {
+        "DatapointsToAlert": parse_json_or_none(ctx.attr.DatapointsToAlert),
+        "EvaluationPeriod": parse_json_or_none(ctx.attr.EvaluationPeriod),
+        "MonitoringAlertName": ctx.attr.MonitoringAlertName,
+        "MonitoringScheduleName": ctx.attr.MonitoringScheduleName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_monitoring_schedule_alert.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerMonitoringScheduleAlertInfo(aws_sage_maker_monitoring_schedule_alert_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_monitoring_schedule_alert = rule(
+    implementation = _cloudformation_aws_sage_maker_monitoring_schedule_alert_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_monitoring_schedule_alert` entry.",
+    provides = [CloudformationAwsSageMakerMonitoringScheduleAlertInfo],
+    attrs = {
+        "aws_sage_maker_monitoring_schedule_alert_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_monitoring_schedule_alert in the rendered project. Defaults to the rule name.",
+        ),
+        "DatapointsToAlert": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-monitoringschedulealert.html#cfn-sagemaker-monitoringschedulealert-datapointstoalert (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "EvaluationPeriod": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-monitoringschedulealert.html#cfn-sagemaker-monitoringschedulealert-evaluationperiod (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "MonitoringAlertName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-monitoringschedulealert.html#cfn-sagemaker-monitoringschedulealert-monitoringalertname",
+        ),
+        "MonitoringScheduleName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-monitoringschedulealert.html#cfn-sagemaker-monitoringschedulealert-monitoringschedulename",
+        ),
+    },
+)
+
 CloudformationAwsSageMakerNotebookInstanceInfo = provider(
     doc = "A aws_sage_maker_notebook_instance contributed by a target. Shard JSON matches the aws_sage_maker_notebook_instance schema.",
     fields = {
@@ -79092,6 +87909,37 @@ cloudformation_aws_sage_maker_pipeline = rule(
     },
 )
 
+CloudformationAwsSageMakerPipelineExecutionInfo = provider(
+    doc = "A aws_sage_maker_pipeline_execution contributed by a target. Shard JSON matches the aws_sage_maker_pipeline_execution schema.",
+    fields = {
+        "aws_sage_maker_pipeline_execution_name": "string: top-level key for this aws_sage_maker_pipeline_execution in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_pipeline_execution_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_pipeline_execution_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_pipeline_execution.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerPipelineExecutionInfo(aws_sage_maker_pipeline_execution_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_pipeline_execution = rule(
+    implementation = _cloudformation_aws_sage_maker_pipeline_execution_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_pipeline_execution` entry.",
+    provides = [CloudformationAwsSageMakerPipelineExecutionInfo],
+    attrs = {
+        "aws_sage_maker_pipeline_execution_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_pipeline_execution in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsSageMakerProcessingJobInfo = provider(
     doc = "A aws_sage_maker_processing_job contributed by a target. Shard JSON matches the aws_sage_maker_processing_job schema.",
     fields = {
@@ -79328,6 +88176,279 @@ cloudformation_aws_sage_maker_studio_lifecycle_config = rule(
     },
 )
 
+CloudformationAwsSageMakerTrainingJobInfo = provider(
+    doc = "A aws_sage_maker_training_job contributed by a target. Shard JSON matches the aws_sage_maker_training_job schema.",
+    fields = {
+        "aws_sage_maker_training_job_name": "string: top-level key for this aws_sage_maker_training_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_training_job_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_training_job_name or ctx.label.name
+    payload = {
+        "AlgorithmSpecification": parse_json_or_none(ctx.attr.AlgorithmSpecification),
+        "CheckpointConfig": parse_json_or_none(ctx.attr.CheckpointConfig),
+        "DebugHookConfig": parse_json_or_none(ctx.attr.DebugHookConfig),
+        "DebugRuleConfigurations": parse_json_or_none(ctx.attr.DebugRuleConfigurations),
+        "EnableInterContainerTrafficEncryption": parse_json_or_none(ctx.attr.EnableInterContainerTrafficEncryption),
+        "EnableManagedSpotTraining": parse_json_or_none(ctx.attr.EnableManagedSpotTraining),
+        "EnableNetworkIsolation": parse_json_or_none(ctx.attr.EnableNetworkIsolation),
+        "Environment": ctx.attr.Environment,
+        "ExperimentConfig": parse_json_or_none(ctx.attr.ExperimentConfig),
+        "HyperParameters": ctx.attr.HyperParameters,
+        "InfraCheckConfig": parse_json_or_none(ctx.attr.InfraCheckConfig),
+        "InputDataConfig": parse_json_or_none(ctx.attr.InputDataConfig),
+        "OutputDataConfig": parse_json_or_none(ctx.attr.OutputDataConfig),
+        "ProfilerConfig": parse_json_or_none(ctx.attr.ProfilerConfig),
+        "ProfilerRuleConfigurations": parse_json_or_none(ctx.attr.ProfilerRuleConfigurations),
+        "RemoteDebugConfig": parse_json_or_none(ctx.attr.RemoteDebugConfig),
+        "ResourceConfig": parse_json_or_none(ctx.attr.ResourceConfig),
+        "RetryStrategy": parse_json_or_none(ctx.attr.RetryStrategy),
+        "RoleArn": ctx.attr.RoleArn,
+        "StoppingCondition": parse_json_or_none(ctx.attr.StoppingCondition),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "TensorBoardOutputConfig": parse_json_or_none(ctx.attr.TensorBoardOutputConfig),
+        "TrainingJobName": ctx.attr.TrainingJobName,
+        "VpcConfig": parse_json_or_none(ctx.attr.VpcConfig),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_training_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerTrainingJobInfo(aws_sage_maker_training_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_training_job = rule(
+    implementation = _cloudformation_aws_sage_maker_training_job_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_training_job` entry.",
+    provides = [CloudformationAwsSageMakerTrainingJobInfo],
+    attrs = {
+        "aws_sage_maker_training_job_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_training_job in the rendered project. Defaults to the rule name.",
+        ),
+        "AlgorithmSpecification": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "CheckpointConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "DebugHookConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "DebugRuleConfigurations": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trainingjob.html#cfn-sagemaker-trainingjob-debugruleconfigurations (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "EnableInterContainerTrafficEncryption": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trainingjob.html#cfn-sagemaker-trainingjob-enableintercontainertrafficencryption (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "EnableManagedSpotTraining": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trainingjob.html#cfn-sagemaker-trainingjob-enablemanagedspottraining (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "EnableNetworkIsolation": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trainingjob.html#cfn-sagemaker-trainingjob-enablenetworkisolation (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Environment": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trainingjob.html#cfn-sagemaker-trainingjob-environment",
+        ),
+        "ExperimentConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "HyperParameters": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trainingjob.html#cfn-sagemaker-trainingjob-hyperparameters",
+        ),
+        "InfraCheckConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "InputDataConfig": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trainingjob.html#cfn-sagemaker-trainingjob-inputdataconfig (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "OutputDataConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "ProfilerConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "ProfilerRuleConfigurations": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trainingjob.html#cfn-sagemaker-trainingjob-profilerruleconfigurations (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "RemoteDebugConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "ResourceConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "RetryStrategy": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "RoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trainingjob.html#cfn-sagemaker-trainingjob-rolearn",
+        ),
+        "StoppingCondition": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trainingjob.html#cfn-sagemaker-trainingjob-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TensorBoardOutputConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "TrainingJobName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trainingjob.html#cfn-sagemaker-trainingjob-trainingjobname",
+        ),
+        "VpcConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsSageMakerTransformJobInfo = provider(
+    doc = "A aws_sage_maker_transform_job contributed by a target. Shard JSON matches the aws_sage_maker_transform_job schema.",
+    fields = {
+        "aws_sage_maker_transform_job_name": "string: top-level key for this aws_sage_maker_transform_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_transform_job_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_transform_job_name or ctx.label.name
+    payload = {
+        "BatchStrategy": ctx.attr.BatchStrategy,
+        "DataCaptureConfig": parse_json_or_none(ctx.attr.DataCaptureConfig),
+        "DataProcessing": parse_json_or_none(ctx.attr.DataProcessing),
+        "Environment": ctx.attr.Environment,
+        "ExperimentConfig": parse_json_or_none(ctx.attr.ExperimentConfig),
+        "MaxConcurrentTransforms": parse_json_or_none(ctx.attr.MaxConcurrentTransforms),
+        "MaxPayloadInMB": parse_json_or_none(ctx.attr.MaxPayloadInMB),
+        "ModelClientConfig": parse_json_or_none(ctx.attr.ModelClientConfig),
+        "ModelName": ctx.attr.ModelName,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "TransformInput": parse_json_or_none(ctx.attr.TransformInput),
+        "TransformOutput": parse_json_or_none(ctx.attr.TransformOutput),
+        "TransformResources": parse_json_or_none(ctx.attr.TransformResources),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_transform_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerTransformJobInfo(aws_sage_maker_transform_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_transform_job = rule(
+    implementation = _cloudformation_aws_sage_maker_transform_job_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_transform_job` entry.",
+    provides = [CloudformationAwsSageMakerTransformJobInfo],
+    attrs = {
+        "aws_sage_maker_transform_job_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_transform_job in the rendered project. Defaults to the rule name.",
+        ),
+        "BatchStrategy": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-transformjob.html#cfn-sagemaker-transformjob-batchstrategy",
+        ),
+        "DataCaptureConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "DataProcessing": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Environment": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-transformjob.html#cfn-sagemaker-transformjob-environment",
+        ),
+        "ExperimentConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "MaxConcurrentTransforms": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-transformjob.html#cfn-sagemaker-transformjob-maxconcurrenttransforms (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "MaxPayloadInMB": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-transformjob.html#cfn-sagemaker-transformjob-maxpayloadinmb (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "ModelClientConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "ModelName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-transformjob.html#cfn-sagemaker-transformjob-modelname",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-transformjob.html#cfn-sagemaker-transformjob-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TransformInput": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "TransformOutput": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "TransformResources": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsSageMakerTrialComponentInfo = provider(
+    doc = "A aws_sage_maker_trial_component contributed by a target. Shard JSON matches the aws_sage_maker_trial_component schema.",
+    fields = {
+        "aws_sage_maker_trial_component_name": "string: top-level key for this aws_sage_maker_trial_component in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_trial_component_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_trial_component_name or ctx.label.name
+    payload = {
+        "DisplayName": ctx.attr.DisplayName,
+        "InputArtifacts": parse_json_or_none(ctx.attr.InputArtifacts),
+        "MetadataProperties": parse_json_or_none(ctx.attr.MetadataProperties),
+        "OutputArtifacts": parse_json_or_none(ctx.attr.OutputArtifacts),
+        "Parameters": parse_json_or_none(ctx.attr.Parameters),
+        "Status": parse_json_or_none(ctx.attr.Status),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "TrialComponentName": ctx.attr.TrialComponentName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_trial_component.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerTrialComponentInfo(aws_sage_maker_trial_component_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_trial_component = rule(
+    implementation = _cloudformation_aws_sage_maker_trial_component_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_trial_component` entry.",
+    provides = [CloudformationAwsSageMakerTrialComponentInfo],
+    attrs = {
+        "aws_sage_maker_trial_component_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_trial_component in the rendered project. Defaults to the rule name.",
+        ),
+        "DisplayName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trialcomponent.html#cfn-sagemaker-trialcomponent-displayname",
+        ),
+        "InputArtifacts": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trialcomponent.html#cfn-sagemaker-trialcomponent-inputartifacts (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "MetadataProperties": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "OutputArtifacts": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trialcomponent.html#cfn-sagemaker-trialcomponent-outputartifacts (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Parameters": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trialcomponent.html#cfn-sagemaker-trialcomponent-parameters (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Status": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trialcomponent.html#cfn-sagemaker-trialcomponent-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TrialComponentName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-trialcomponent.html#cfn-sagemaker-trialcomponent-trialcomponentname",
+        ),
+    },
+)
+
 CloudformationAwsSageMakerUserProfileInfo = provider(
     doc = "A aws_sage_maker_user_profile contributed by a target. Shard JSON matches the aws_sage_maker_user_profile schema.",
     fields = {
@@ -79378,6 +88499,65 @@ cloudformation_aws_sage_maker_user_profile = rule(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-userprofile.html#cfn-sagemaker-userprofile-userprofilename",
         ),
         "UserSettings": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsSageMakerWorkforceInfo = provider(
+    doc = "A aws_sage_maker_workforce contributed by a target. Shard JSON matches the aws_sage_maker_workforce schema.",
+    fields = {
+        "aws_sage_maker_workforce_name": "string: top-level key for this aws_sage_maker_workforce in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sage_maker_workforce_impl(ctx):
+    item_name = ctx.attr.aws_sage_maker_workforce_name or ctx.label.name
+    payload = {
+        "CognitoConfig": parse_json_or_none(ctx.attr.CognitoConfig),
+        "IpAddressType": ctx.attr.IpAddressType,
+        "OidcConfig": parse_json_or_none(ctx.attr.OidcConfig),
+        "SourceIpConfig": parse_json_or_none(ctx.attr.SourceIpConfig),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "WorkforceName": ctx.attr.WorkforceName,
+        "WorkforceVpcConfig": parse_json_or_none(ctx.attr.WorkforceVpcConfig),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sage_maker_workforce.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSageMakerWorkforceInfo(aws_sage_maker_workforce_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sage_maker_workforce = rule(
+    implementation = _cloudformation_aws_sage_maker_workforce_impl,
+    doc = "Schema-derived rule for one `aws_sage_maker_workforce` entry.",
+    provides = [CloudformationAwsSageMakerWorkforceInfo],
+    attrs = {
+        "aws_sage_maker_workforce_name": attr.string(
+            doc = "Top-level key for this aws_sage_maker_workforce in the rendered project. Defaults to the rule name.",
+        ),
+        "CognitoConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "IpAddressType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-workforce.html#cfn-sagemaker-workforce-ipaddresstype",
+        ),
+        "OidcConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "SourceIpConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-workforce.html#cfn-sagemaker-workforce-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "WorkforceName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-workforce.html#cfn-sagemaker-workforce-workforcename",
+        ),
+        "WorkforceVpcConfig": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
     },
@@ -79434,6 +88614,37 @@ cloudformation_aws_sage_maker_workteam = rule(
         ),
         "WorkteamName": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-workteam.html#cfn-sagemaker-workteam-workteamname",
+        ),
+    },
+)
+
+CloudformationAwsSavingsPlansSavingsPlanInfo = provider(
+    doc = "A aws_savings_plans_savings_plan contributed by a target. Shard JSON matches the aws_savings_plans_savings_plan schema.",
+    fields = {
+        "aws_savings_plans_savings_plan_name": "string: top-level key for this aws_savings_plans_savings_plan in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_savings_plans_savings_plan_impl(ctx):
+    item_name = ctx.attr.aws_savings_plans_savings_plan_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_savings_plans_savings_plan.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSavingsPlansSavingsPlanInfo(aws_savings_plans_savings_plan_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_savings_plans_savings_plan = rule(
+    implementation = _cloudformation_aws_savings_plans_savings_plan_impl,
+    doc = "Schema-derived rule for one `aws_savings_plans_savings_plan` entry.",
+    provides = [CloudformationAwsSavingsPlansSavingsPlanInfo],
+    attrs = {
+        "aws_savings_plans_savings_plan_name": attr.string(
+            doc = "Top-level key for this aws_savings_plans_savings_plan in the rendered project. Defaults to the rule name.",
         ),
     },
 )
@@ -79548,6 +88759,112 @@ cloudformation_aws_scheduler_schedule_group = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-scheduler-schedulegroup.html#cfn-scheduler-schedulegroup-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsScnDatasetInfo = provider(
+    doc = "A aws_scn_dataset contributed by a target. Shard JSON matches the aws_scn_dataset schema.",
+    fields = {
+        "aws_scn_dataset_name": "string: top-level key for this aws_scn_dataset in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_scn_dataset_impl(ctx):
+    item_name = ctx.attr.aws_scn_dataset_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "InstanceId": ctx.attr.InstanceId,
+        "Name": ctx.attr.Name,
+        "Namespace": ctx.attr.Namespace,
+        "PartitionSpec": parse_json_or_none(ctx.attr.PartitionSpec),
+        "Schema": parse_json_or_none(ctx.attr.Schema),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_scn_dataset.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsScnDatasetInfo(aws_scn_dataset_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_scn_dataset = rule(
+    implementation = _cloudformation_aws_scn_dataset_impl,
+    doc = "Schema-derived rule for one `aws_scn_dataset` entry.",
+    provides = [CloudformationAwsScnDatasetInfo],
+    attrs = {
+        "aws_scn_dataset_name": attr.string(
+            doc = "Top-level key for this aws_scn_dataset in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-scn-dataset.html#cfn-scn-dataset-description",
+        ),
+        "InstanceId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-scn-dataset.html#cfn-scn-dataset-instanceid",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-scn-dataset.html#cfn-scn-dataset-name",
+        ),
+        "Namespace": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-scn-dataset.html#cfn-scn-dataset-namespace",
+        ),
+        "PartitionSpec": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Schema": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-scn-dataset.html#cfn-scn-dataset-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsScnNamespaceInfo = provider(
+    doc = "A aws_scn_namespace contributed by a target. Shard JSON matches the aws_scn_namespace schema.",
+    fields = {
+        "aws_scn_namespace_name": "string: top-level key for this aws_scn_namespace in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_scn_namespace_impl(ctx):
+    item_name = ctx.attr.aws_scn_namespace_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "InstanceId": ctx.attr.InstanceId,
+        "Name": ctx.attr.Name,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_scn_namespace.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsScnNamespaceInfo(aws_scn_namespace_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_scn_namespace = rule(
+    implementation = _cloudformation_aws_scn_namespace_impl,
+    doc = "Schema-derived rule for one `aws_scn_namespace` entry.",
+    provides = [CloudformationAwsScnNamespaceInfo],
+    attrs = {
+        "aws_scn_namespace_name": attr.string(
+            doc = "Top-level key for this aws_scn_namespace in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-scn-namespace.html#cfn-scn-namespace-description",
+        ),
+        "InstanceId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-scn-namespace.html#cfn-scn-namespace-instanceid",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-scn-namespace.html#cfn-scn-namespace-name",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-scn-namespace.html#cfn-scn-namespace-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -79905,6 +89222,53 @@ cloudformation_aws_security_agent_application = rule(
     },
 )
 
+CloudformationAwsSecurityAgentArtifactInfo = provider(
+    doc = "A aws_security_agent_artifact contributed by a target. Shard JSON matches the aws_security_agent_artifact schema.",
+    fields = {
+        "aws_security_agent_artifact_name": "string: top-level key for this aws_security_agent_artifact in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_security_agent_artifact_impl(ctx):
+    item_name = ctx.attr.aws_security_agent_artifact_name or ctx.label.name
+    payload = {
+        "AgentSpaceId": ctx.attr.AgentSpaceId,
+        "ArtifactContent": ctx.attr.ArtifactContent,
+        "ArtifactType": ctx.attr.ArtifactType,
+        "FileName": ctx.attr.FileName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_agent_artifact.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSecurityAgentArtifactInfo(aws_security_agent_artifact_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_security_agent_artifact = rule(
+    implementation = _cloudformation_aws_security_agent_artifact_impl,
+    doc = "Schema-derived rule for one `aws_security_agent_artifact` entry.",
+    provides = [CloudformationAwsSecurityAgentArtifactInfo],
+    attrs = {
+        "aws_security_agent_artifact_name": attr.string(
+            doc = "Top-level key for this aws_security_agent_artifact in the rendered project. Defaults to the rule name.",
+        ),
+        "AgentSpaceId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityagent-artifact.html#cfn-securityagent-artifact-agentspaceid",
+        ),
+        "ArtifactContent": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityagent-artifact.html#cfn-securityagent-artifact-artifactcontent",
+        ),
+        "ArtifactType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityagent-artifact.html#cfn-securityagent-artifact-artifacttype",
+        ),
+        "FileName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityagent-artifact.html#cfn-securityagent-artifact-filename",
+        ),
+    },
+)
+
 CloudformationAwsSecurityAgentPentestInfo = provider(
     doc = "A aws_security_agent_pentest contributed by a target. Shard JSON matches the aws_security_agent_pentest schema.",
     fields = {
@@ -79918,7 +89282,9 @@ def _cloudformation_aws_security_agent_pentest_impl(ctx):
     payload = {
         "AgentSpaceId": ctx.attr.AgentSpaceId,
         "Assets": parse_json_or_none(ctx.attr.Assets),
+        "CleanUpStrategy": ctx.attr.CleanUpStrategy,
         "CodeRemediationStrategy": ctx.attr.CodeRemediationStrategy,
+        "DisableManagedSkills": parse_json_or_none(ctx.attr.DisableManagedSkills),
         "ExcludeRiskTypes": parse_json_or_none(ctx.attr.ExcludeRiskTypes),
         "LogConfig": parse_json_or_none(ctx.attr.LogConfig),
         "NetworkTrafficConfig": parse_json_or_none(ctx.attr.NetworkTrafficConfig),
@@ -79948,8 +89314,14 @@ cloudformation_aws_security_agent_pentest = rule(
         "Assets": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
+        "CleanUpStrategy": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityagent-pentest.html#cfn-securityagent-pentest-cleanupstrategy",
+        ),
         "CodeRemediationStrategy": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityagent-pentest.html#cfn-securityagent-pentest-coderemediationstrategy",
+        ),
+        "DisableManagedSkills": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityagent-pentest.html#cfn-securityagent-pentest-disablemanagedskills (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "ExcludeRiskTypes": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityagent-pentest.html#cfn-securityagent-pentest-excluderisktypes (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -79968,6 +89340,96 @@ cloudformation_aws_security_agent_pentest = rule(
         ),
         "VpcConfig": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsSecurityAgentPentestTaskInfo = provider(
+    doc = "A aws_security_agent_pentest_task contributed by a target. Shard JSON matches the aws_security_agent_pentest_task schema.",
+    fields = {
+        "aws_security_agent_pentest_task_name": "string: top-level key for this aws_security_agent_pentest_task in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_security_agent_pentest_task_impl(ctx):
+    item_name = ctx.attr.aws_security_agent_pentest_task_name or ctx.label.name
+    payload = {
+        "AgentSpaceId": ctx.attr.AgentSpaceId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_agent_pentest_task.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSecurityAgentPentestTaskInfo(aws_security_agent_pentest_task_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_security_agent_pentest_task = rule(
+    implementation = _cloudformation_aws_security_agent_pentest_task_impl,
+    doc = "Schema-derived rule for one `aws_security_agent_pentest_task` entry.",
+    provides = [CloudformationAwsSecurityAgentPentestTaskInfo],
+    attrs = {
+        "aws_security_agent_pentest_task_name": attr.string(
+            doc = "Top-level key for this aws_security_agent_pentest_task in the rendered project. Defaults to the rule name.",
+        ),
+        "AgentSpaceId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityagent-pentesttask.html#cfn-securityagent-pentesttask-agentspaceid",
+        ),
+    },
+)
+
+CloudformationAwsSecurityAgentSecurityRequirementPackInfo = provider(
+    doc = "A aws_security_agent_security_requirement_pack contributed by a target. Shard JSON matches the aws_security_agent_security_requirement_pack schema.",
+    fields = {
+        "aws_security_agent_security_requirement_pack_name": "string: top-level key for this aws_security_agent_security_requirement_pack in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_security_agent_security_requirement_pack_impl(ctx):
+    item_name = ctx.attr.aws_security_agent_security_requirement_pack_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "KmsKeyId": ctx.attr.KmsKeyId,
+        "Name": ctx.attr.Name,
+        "SecurityRequirements": parse_json_or_none(ctx.attr.SecurityRequirements),
+        "Status": ctx.attr.Status,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_agent_security_requirement_pack.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSecurityAgentSecurityRequirementPackInfo(aws_security_agent_security_requirement_pack_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_security_agent_security_requirement_pack = rule(
+    implementation = _cloudformation_aws_security_agent_security_requirement_pack_impl,
+    doc = "Schema-derived rule for one `aws_security_agent_security_requirement_pack` entry.",
+    provides = [CloudformationAwsSecurityAgentSecurityRequirementPackInfo],
+    attrs = {
+        "aws_security_agent_security_requirement_pack_name": attr.string(
+            doc = "Top-level key for this aws_security_agent_security_requirement_pack in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityagent-securityrequirementpack.html#cfn-securityagent-securityrequirementpack-description",
+        ),
+        "KmsKeyId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityagent-securityrequirementpack.html#cfn-securityagent-securityrequirementpack-kmskeyid",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityagent-securityrequirementpack.html#cfn-securityagent-securityrequirementpack-name",
+        ),
+        "SecurityRequirements": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityagent-securityrequirementpack.html#cfn-securityagent-securityrequirementpack-securityrequirements (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Status": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityagent-securityrequirementpack.html#cfn-securityagent-securityrequirementpack-status",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityagent-securityrequirementpack.html#cfn-securityagent-securityrequirementpack-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -80223,6 +89685,53 @@ cloudformation_aws_security_hub_configuration_policy = rule(
         ),
         "Tags": attr.string_dict(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-configurationpolicy.html#cfn-securityhub-configurationpolicy-tags",
+        ),
+    },
+)
+
+CloudformationAwsSecurityHubConnectorInfo = provider(
+    doc = "A aws_security_hub_connector contributed by a target. Shard JSON matches the aws_security_hub_connector schema.",
+    fields = {
+        "aws_security_hub_connector_name": "string: top-level key for this aws_security_hub_connector in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_security_hub_connector_impl(ctx):
+    item_name = ctx.attr.aws_security_hub_connector_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
+        "Provider": parse_json_or_none(ctx.attr.Provider),
+        "Tags": ctx.attr.Tags,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_security_hub_connector.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSecurityHubConnectorInfo(aws_security_hub_connector_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_security_hub_connector = rule(
+    implementation = _cloudformation_aws_security_hub_connector_impl,
+    doc = "Schema-derived rule for one `aws_security_hub_connector` entry.",
+    provides = [CloudformationAwsSecurityHubConnectorInfo],
+    attrs = {
+        "aws_security_hub_connector_name": attr.string(
+            doc = "Top-level key for this aws_security_hub_connector in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-connector.html#cfn-securityhub-connector-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-connector.html#cfn-securityhub-connector-name",
+        ),
+        "Provider": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-connector.html#cfn-securityhub-connector-tags",
         ),
     },
 )
@@ -80876,6 +90385,81 @@ cloudformation_aws_security_lake_subscriber_notification = rule(
         ),
         "SubscriberArn": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securitylake-subscribernotification.html#cfn-securitylake-subscribernotification-subscriberarn",
+        ),
+    },
+)
+
+CloudformationAwsServerlessRepoApplicationInfo = provider(
+    doc = "A aws_serverless_repo_application contributed by a target. Shard JSON matches the aws_serverless_repo_application schema.",
+    fields = {
+        "aws_serverless_repo_application_name": "string: top-level key for this aws_serverless_repo_application in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_serverless_repo_application_impl(ctx):
+    item_name = ctx.attr.aws_serverless_repo_application_name or ctx.label.name
+    payload = {
+        "Author": ctx.attr.Author,
+        "Description": ctx.attr.Description,
+        "HomePageUrl": ctx.attr.HomePageUrl,
+        "Labels": parse_json_or_none(ctx.attr.Labels),
+        "LicenseBody": ctx.attr.LicenseBody,
+        "Name": ctx.attr.Name,
+        "ReadmeBody": ctx.attr.ReadmeBody,
+        "SemanticVersion": ctx.attr.SemanticVersion,
+        "SourceCodeUrl": ctx.attr.SourceCodeUrl,
+        "SpdxLicenseId": ctx.attr.SpdxLicenseId,
+        "TemplateBody": ctx.attr.TemplateBody,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_serverless_repo_application.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsServerlessRepoApplicationInfo(aws_serverless_repo_application_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_serverless_repo_application = rule(
+    implementation = _cloudformation_aws_serverless_repo_application_impl,
+    doc = "Schema-derived rule for one `aws_serverless_repo_application` entry.",
+    provides = [CloudformationAwsServerlessRepoApplicationInfo],
+    attrs = {
+        "aws_serverless_repo_application_name": attr.string(
+            doc = "Top-level key for this aws_serverless_repo_application in the rendered project. Defaults to the rule name.",
+        ),
+        "Author": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-serverlessrepo-application.html#cfn-serverlessrepo-application-author",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-serverlessrepo-application.html#cfn-serverlessrepo-application-description",
+        ),
+        "HomePageUrl": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-serverlessrepo-application.html#cfn-serverlessrepo-application-homepageurl",
+        ),
+        "Labels": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-serverlessrepo-application.html#cfn-serverlessrepo-application-labels (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "LicenseBody": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-serverlessrepo-application.html#cfn-serverlessrepo-application-licensebody",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-serverlessrepo-application.html#cfn-serverlessrepo-application-name",
+        ),
+        "ReadmeBody": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-serverlessrepo-application.html#cfn-serverlessrepo-application-readmebody",
+        ),
+        "SemanticVersion": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-serverlessrepo-application.html#cfn-serverlessrepo-application-semanticversion",
+        ),
+        "SourceCodeUrl": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-serverlessrepo-application.html#cfn-serverlessrepo-application-sourcecodeurl",
+        ),
+        "SpdxLicenseId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-serverlessrepo-application.html#cfn-serverlessrepo-application-spdxlicenseid",
+        ),
+        "TemplateBody": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-serverlessrepo-application.html#cfn-serverlessrepo-application-templatebody",
         ),
     },
 )
@@ -82097,7 +91681,7 @@ def _cloudformation_aws_service_discovery_service_impl(ctx):
         "HealthCheckCustomConfig": parse_json_or_none(ctx.attr.HealthCheckCustomConfig),
         "Name": ctx.attr.Name,
         "NamespaceId": ctx.attr.NamespaceId,
-        "ServiceAttributes": parse_json_or_none(ctx.attr.ServiceAttributes),
+        "ServiceAttributes": ctx.attr.ServiceAttributes,
         "Tags": parse_json_or_none(ctx.attr.Tags),
         "Type": ctx.attr.Type,
     }
@@ -82135,8 +91719,8 @@ cloudformation_aws_service_discovery_service = rule(
         "NamespaceId": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicediscovery-service.html#cfn-servicediscovery-service-namespaceid",
         ),
-        "ServiceAttributes": attr.string(
-            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicediscovery-service.html#cfn-servicediscovery-service-serviceattributes (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        "ServiceAttributes": attr.string_dict(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicediscovery-service.html#cfn-servicediscovery-service-serviceattributes",
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicediscovery-service.html#cfn-servicediscovery-service-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -83349,6 +92933,41 @@ cloudformation_aws_signer_profile_permission = rule(
     },
 )
 
+CloudformationAwsSignerSigningJobInfo = provider(
+    doc = "A aws_signer_signing_job contributed by a target. Shard JSON matches the aws_signer_signing_job schema.",
+    fields = {
+        "aws_signer_signing_job_name": "string: top-level key for this aws_signer_signing_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_signer_signing_job_impl(ctx):
+    item_name = ctx.attr.aws_signer_signing_job_name or ctx.label.name
+    payload = {
+        "ProfileName": ctx.attr.ProfileName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_signer_signing_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSignerSigningJobInfo(aws_signer_signing_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_signer_signing_job = rule(
+    implementation = _cloudformation_aws_signer_signing_job_impl,
+    doc = "Schema-derived rule for one `aws_signer_signing_job` entry.",
+    provides = [CloudformationAwsSignerSigningJobInfo],
+    attrs = {
+        "aws_signer_signing_job_name": attr.string(
+            doc = "Top-level key for this aws_signer_signing_job in the rendered project. Defaults to the rule name.",
+        ),
+        "ProfileName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-signer-signingjob.html#cfn-signer-signingjob-profilename",
+        ),
+    },
+)
+
 CloudformationAwsSignerSigningProfileInfo = provider(
     doc = "A aws_signer_signing_profile contributed by a target. Shard JSON matches the aws_signer_signing_profile schema.",
     fields = {
@@ -83714,6 +93333,45 @@ cloudformation_aws_smsvoice_protect_configuration = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-protectconfiguration.html#cfn-smsvoice-protectconfiguration-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsSmsvoiceRegistrationInfo = provider(
+    doc = "A aws_smsvoice_registration contributed by a target. Shard JSON matches the aws_smsvoice_registration schema.",
+    fields = {
+        "aws_smsvoice_registration_name": "string: top-level key for this aws_smsvoice_registration in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_smsvoice_registration_impl(ctx):
+    item_name = ctx.attr.aws_smsvoice_registration_name or ctx.label.name
+    payload = {
+        "RegistrationType": ctx.attr.RegistrationType,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_smsvoice_registration.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSmsvoiceRegistrationInfo(aws_smsvoice_registration_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_smsvoice_registration = rule(
+    implementation = _cloudformation_aws_smsvoice_registration_impl,
+    doc = "Schema-derived rule for one `aws_smsvoice_registration` entry.",
+    provides = [CloudformationAwsSmsvoiceRegistrationInfo],
+    attrs = {
+        "aws_smsvoice_registration_name": attr.string(
+            doc = "Top-level key for this aws_smsvoice_registration in the rendered project. Defaults to the rule name.",
+        ),
+        "RegistrationType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-registration.html#cfn-smsvoice-registration-registrationtype",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-smsvoice-registration.html#cfn-smsvoice-registration-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -84225,6 +93883,7 @@ def _cloudformation_aws_ssm_association_impl(ctx):
     item_name = ctx.attr.aws_ssm_association_name or ctx.label.name
     payload = {
         "ApplyOnlyAtCronInterval": parse_json_or_none(ctx.attr.ApplyOnlyAtCronInterval),
+        "AssociationDispatchAssumeRole": ctx.attr.AssociationDispatchAssumeRole,
         "AssociationName": ctx.attr.AssociationName,
         "AutomationTargetParameterName": ctx.attr.AutomationTargetParameterName,
         "CalendarNames": parse_json_or_none(ctx.attr.CalendarNames),
@@ -84239,6 +93898,7 @@ def _cloudformation_aws_ssm_association_impl(ctx):
         "ScheduleExpression": ctx.attr.ScheduleExpression,
         "ScheduleOffset": parse_json_or_none(ctx.attr.ScheduleOffset),
         "SyncCompliance": ctx.attr.SyncCompliance,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
         "Targets": parse_json_or_none(ctx.attr.Targets),
         "WaitForSuccessTimeoutSeconds": parse_json_or_none(ctx.attr.WaitForSuccessTimeoutSeconds),
     }
@@ -84260,6 +93920,9 @@ cloudformation_aws_ssm_association = rule(
         ),
         "ApplyOnlyAtCronInterval": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-association.html#cfn-ssm-association-applyonlyatcroninterval (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "AssociationDispatchAssumeRole": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-association.html#cfn-ssm-association-associationdispatchassumerole",
         ),
         "AssociationName": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-association.html#cfn-ssm-association-associationname",
@@ -84303,11 +93966,108 @@ cloudformation_aws_ssm_association = rule(
         "SyncCompliance": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-association.html#cfn-ssm-association-synccompliance",
         ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-association.html#cfn-ssm-association-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
         "Targets": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-association.html#cfn-ssm-association-targets (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "WaitForSuccessTimeoutSeconds": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-association.html#cfn-ssm-association-waitforsuccesstimeoutseconds (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsSsmAutomationExecutionInfo = provider(
+    doc = "A aws_ssm_automation_execution contributed by a target. Shard JSON matches the aws_ssm_automation_execution schema.",
+    fields = {
+        "aws_ssm_automation_execution_name": "string: top-level key for this aws_ssm_automation_execution in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_ssm_automation_execution_impl(ctx):
+    item_name = ctx.attr.aws_ssm_automation_execution_name or ctx.label.name
+    payload = {
+        "DocumentName": ctx.attr.DocumentName,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_automation_execution.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSsmAutomationExecutionInfo(aws_ssm_automation_execution_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_ssm_automation_execution = rule(
+    implementation = _cloudformation_aws_ssm_automation_execution_impl,
+    doc = "Schema-derived rule for one `aws_ssm_automation_execution` entry.",
+    provides = [CloudformationAwsSsmAutomationExecutionInfo],
+    attrs = {
+        "aws_ssm_automation_execution_name": attr.string(
+            doc = "Top-level key for this aws_ssm_automation_execution in the rendered project. Defaults to the rule name.",
+        ),
+        "DocumentName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-automationexecution.html#cfn-ssm-automationexecution-documentname",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-automationexecution.html#cfn-ssm-automationexecution-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsSsmCloudConnectorInfo = provider(
+    doc = "A aws_ssm_cloud_connector contributed by a target. Shard JSON matches the aws_ssm_cloud_connector schema.",
+    fields = {
+        "aws_ssm_cloud_connector_name": "string: top-level key for this aws_ssm_cloud_connector in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_ssm_cloud_connector_impl(ctx):
+    item_name = ctx.attr.aws_ssm_cloud_connector_name or ctx.label.name
+    payload = {
+        "ConfigConnectorArn": ctx.attr.ConfigConnectorArn,
+        "Configuration": parse_json_or_none(ctx.attr.Configuration),
+        "Description": ctx.attr.Description,
+        "DisplayName": ctx.attr.DisplayName,
+        "RoleArn": ctx.attr.RoleArn,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_cloud_connector.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSsmCloudConnectorInfo(aws_ssm_cloud_connector_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_ssm_cloud_connector = rule(
+    implementation = _cloudformation_aws_ssm_cloud_connector_impl,
+    doc = "Schema-derived rule for one `aws_ssm_cloud_connector` entry.",
+    provides = [CloudformationAwsSsmCloudConnectorInfo],
+    attrs = {
+        "aws_ssm_cloud_connector_name": attr.string(
+            doc = "Top-level key for this aws_ssm_cloud_connector in the rendered project. Defaults to the rule name.",
+        ),
+        "ConfigConnectorArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-cloudconnector.html#cfn-ssm-cloudconnector-configconnectorarn",
+        ),
+        "Configuration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-cloudconnector.html#cfn-ssm-cloudconnector-description",
+        ),
+        "DisplayName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-cloudconnector.html#cfn-ssm-cloudconnector-displayname",
+        ),
+        "RoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-cloudconnector.html#cfn-ssm-cloudconnector-rolearn",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-cloudconnector.html#cfn-ssm-cloudconnector-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -84600,6 +94360,100 @@ cloudformation_aws_ssm_maintenance_window_task = rule(
     },
 )
 
+CloudformationAwsSsmManagedInstanceInfo = provider(
+    doc = "A aws_ssm_managed_instance contributed by a target. Shard JSON matches the aws_ssm_managed_instance schema.",
+    fields = {
+        "aws_ssm_managed_instance_name": "string: top-level key for this aws_ssm_managed_instance in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_ssm_managed_instance_impl(ctx):
+    item_name = ctx.attr.aws_ssm_managed_instance_name or ctx.label.name
+    payload = {
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_managed_instance.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSsmManagedInstanceInfo(aws_ssm_managed_instance_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_ssm_managed_instance = rule(
+    implementation = _cloudformation_aws_ssm_managed_instance_impl,
+    doc = "Schema-derived rule for one `aws_ssm_managed_instance` entry.",
+    provides = [CloudformationAwsSsmManagedInstanceInfo],
+    attrs = {
+        "aws_ssm_managed_instance_name": attr.string(
+            doc = "Top-level key for this aws_ssm_managed_instance in the rendered project. Defaults to the rule name.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-managedinstance.html#cfn-ssm-managedinstance-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsSsmOpsItemInfo = provider(
+    doc = "A aws_ssm_ops_item contributed by a target. Shard JSON matches the aws_ssm_ops_item schema.",
+    fields = {
+        "aws_ssm_ops_item_name": "string: top-level key for this aws_ssm_ops_item in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_ssm_ops_item_impl(ctx):
+    item_name = ctx.attr.aws_ssm_ops_item_name or ctx.label.name
+    payload = {
+        "Category": ctx.attr.Category,
+        "Description": ctx.attr.Description,
+        "Priority": parse_json_or_none(ctx.attr.Priority),
+        "Severity": ctx.attr.Severity,
+        "Source": ctx.attr.Source,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "Title": ctx.attr.Title,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_ops_item.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSsmOpsItemInfo(aws_ssm_ops_item_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_ssm_ops_item = rule(
+    implementation = _cloudformation_aws_ssm_ops_item_impl,
+    doc = "Schema-derived rule for one `aws_ssm_ops_item` entry.",
+    provides = [CloudformationAwsSsmOpsItemInfo],
+    attrs = {
+        "aws_ssm_ops_item_name": attr.string(
+            doc = "Top-level key for this aws_ssm_ops_item in the rendered project. Defaults to the rule name.",
+        ),
+        "Category": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-opsitem.html#cfn-ssm-opsitem-category",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-opsitem.html#cfn-ssm-opsitem-description",
+        ),
+        "Priority": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-opsitem.html#cfn-ssm-opsitem-priority (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Severity": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-opsitem.html#cfn-ssm-opsitem-severity",
+        ),
+        "Source": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-opsitem.html#cfn-ssm-opsitem-source",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-opsitem.html#cfn-ssm-opsitem-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Title": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-opsitem.html#cfn-ssm-opsitem-title",
+        ),
+    },
+)
+
 CloudformationAwsSsmParameterInfo = provider(
     doc = "A aws_ssm_parameter contributed by a target. Shard JSON matches the aws_ssm_parameter schema.",
     fields = {
@@ -84860,6 +94714,84 @@ cloudformation_aws_ssm_resource_policy = rule(
         ),
         "ResourceArn": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-resourcepolicy.html#cfn-ssm-resourcepolicy-resourcearn",
+        ),
+    },
+)
+
+CloudformationAwsSsmServiceSettingInfo = provider(
+    doc = "A aws_ssm_service_setting contributed by a target. Shard JSON matches the aws_ssm_service_setting schema.",
+    fields = {
+        "aws_ssm_service_setting_name": "string: top-level key for this aws_ssm_service_setting in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_ssm_service_setting_impl(ctx):
+    item_name = ctx.attr.aws_ssm_service_setting_name or ctx.label.name
+    payload = {
+        "SettingId": ctx.attr.SettingId,
+        "SettingValue": ctx.attr.SettingValue,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_service_setting.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSsmServiceSettingInfo(aws_ssm_service_setting_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_ssm_service_setting = rule(
+    implementation = _cloudformation_aws_ssm_service_setting_impl,
+    doc = "Schema-derived rule for one `aws_ssm_service_setting` entry.",
+    provides = [CloudformationAwsSsmServiceSettingInfo],
+    attrs = {
+        "aws_ssm_service_setting_name": attr.string(
+            doc = "Top-level key for this aws_ssm_service_setting in the rendered project. Defaults to the rule name.",
+        ),
+        "SettingId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-servicesetting.html#cfn-ssm-servicesetting-settingid",
+        ),
+        "SettingValue": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-servicesetting.html#cfn-ssm-servicesetting-settingvalue",
+        ),
+    },
+)
+
+CloudformationAwsSsmSessionInfo = provider(
+    doc = "A aws_ssm_session contributed by a target. Shard JSON matches the aws_ssm_session schema.",
+    fields = {
+        "aws_ssm_session_name": "string: top-level key for this aws_ssm_session in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_ssm_session_impl(ctx):
+    item_name = ctx.attr.aws_ssm_session_name or ctx.label.name
+    payload = {
+        "Reason": ctx.attr.Reason,
+        "Target": ctx.attr.Target,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_ssm_session.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSsmSessionInfo(aws_ssm_session_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_ssm_session = rule(
+    implementation = _cloudformation_aws_ssm_session_impl,
+    doc = "Schema-derived rule for one `aws_ssm_session` entry.",
+    provides = [CloudformationAwsSsmSessionInfo],
+    attrs = {
+        "aws_ssm_session_name": attr.string(
+            doc = "Top-level key for this aws_ssm_session in the rendered project. Defaults to the rule name.",
+        ),
+        "Reason": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-session.html#cfn-ssm-session-reason",
+        ),
+        "Target": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-session.html#cfn-ssm-session-target",
         ),
     },
 )
@@ -85401,6 +95333,37 @@ cloudformation_aws_sso_application_assignment = rule(
     },
 )
 
+CloudformationAwsSsoApplicationProviderInfo = provider(
+    doc = "A aws_sso_application_provider contributed by a target. Shard JSON matches the aws_sso_application_provider schema.",
+    fields = {
+        "aws_sso_application_provider_name": "string: top-level key for this aws_sso_application_provider in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_sso_application_provider_impl(ctx):
+    item_name = ctx.attr.aws_sso_application_provider_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_sso_application_provider.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsSsoApplicationProviderInfo(aws_sso_application_provider_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_sso_application_provider = rule(
+    implementation = _cloudformation_aws_sso_application_provider_impl,
+    doc = "Schema-derived rule for one `aws_sso_application_provider` entry.",
+    provides = [CloudformationAwsSsoApplicationProviderInfo],
+    attrs = {
+        "aws_sso_application_provider_name": attr.string(
+            doc = "Top-level key for this aws_sso_application_provider in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsSsoAssignmentInfo = provider(
     doc = "A aws_sso_assignment contributed by a target. Shard JSON matches the aws_sso_assignment schema.",
     fields = {
@@ -85605,6 +95568,49 @@ cloudformation_aws_sso_permission_set = rule(
     },
 )
 
+CloudformationAwsStatesExecutionInfo = provider(
+    doc = "A aws_states_execution contributed by a target. Shard JSON matches the aws_states_execution schema.",
+    fields = {
+        "aws_states_execution_name": "string: top-level key for this aws_states_execution in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_states_execution_impl(ctx):
+    item_name = ctx.attr.aws_states_execution_name or ctx.label.name
+    payload = {
+        "Input": ctx.attr.Input,
+        "Name": ctx.attr.Name,
+        "StateMachineArn": ctx.attr.StateMachineArn,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_states_execution.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsStatesExecutionInfo(aws_states_execution_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_states_execution = rule(
+    implementation = _cloudformation_aws_states_execution_impl,
+    doc = "Schema-derived rule for one `aws_states_execution` entry.",
+    provides = [CloudformationAwsStatesExecutionInfo],
+    attrs = {
+        "aws_states_execution_name": attr.string(
+            doc = "Top-level key for this aws_states_execution in the rendered project. Defaults to the rule name.",
+        ),
+        "Input": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-states-execution.html#cfn-states-execution-input",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-states-execution.html#cfn-states-execution-name",
+        ),
+        "StateMachineArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-states-execution.html#cfn-states-execution-statemachinearn",
+        ),
+    },
+)
+
 CloudformationAwsStepFunctionsActivityInfo = provider(
     doc = "A aws_step_functions_activity contributed by a target. Shard JSON matches the aws_step_functions_activity schema.",
     fields = {
@@ -85644,6 +95650,41 @@ cloudformation_aws_step_functions_activity = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-stepfunctions-activity.html#cfn-stepfunctions-activity-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsStepFunctionsMapRunInfo = provider(
+    doc = "A aws_step_functions_map_run contributed by a target. Shard JSON matches the aws_step_functions_map_run schema.",
+    fields = {
+        "aws_step_functions_map_run_name": "string: top-level key for this aws_step_functions_map_run in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_step_functions_map_run_impl(ctx):
+    item_name = ctx.attr.aws_step_functions_map_run_name or ctx.label.name
+    payload = {
+        "ExecutionArn": ctx.attr.ExecutionArn,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_step_functions_map_run.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsStepFunctionsMapRunInfo(aws_step_functions_map_run_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_step_functions_map_run = rule(
+    implementation = _cloudformation_aws_step_functions_map_run_impl,
+    doc = "Schema-derived rule for one `aws_step_functions_map_run` entry.",
+    provides = [CloudformationAwsStepFunctionsMapRunInfo],
+    attrs = {
+        "aws_step_functions_map_run_name": attr.string(
+            doc = "Top-level key for this aws_step_functions_map_run in the rendered project. Defaults to the rule name.",
+        ),
+        "ExecutionArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-stepfunctions-maprun.html#cfn-stepfunctions-maprun-executionarn",
         ),
     },
 )
@@ -85817,6 +95858,57 @@ cloudformation_aws_step_functions_state_machine_version = rule(
     },
 )
 
+CloudformationAwsStorageGatewayTapePoolInfo = provider(
+    doc = "A aws_storage_gateway_tape_pool contributed by a target. Shard JSON matches the aws_storage_gateway_tape_pool schema.",
+    fields = {
+        "aws_storage_gateway_tape_pool_name": "string: top-level key for this aws_storage_gateway_tape_pool in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_storage_gateway_tape_pool_impl(ctx):
+    item_name = ctx.attr.aws_storage_gateway_tape_pool_name or ctx.label.name
+    payload = {
+        "PoolName": ctx.attr.PoolName,
+        "RetentionLockTimeInDays": parse_json_or_none(ctx.attr.RetentionLockTimeInDays),
+        "RetentionLockType": ctx.attr.RetentionLockType,
+        "StorageClass": ctx.attr.StorageClass,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_storage_gateway_tape_pool.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsStorageGatewayTapePoolInfo(aws_storage_gateway_tape_pool_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_storage_gateway_tape_pool = rule(
+    implementation = _cloudformation_aws_storage_gateway_tape_pool_impl,
+    doc = "Schema-derived rule for one `aws_storage_gateway_tape_pool` entry.",
+    provides = [CloudformationAwsStorageGatewayTapePoolInfo],
+    attrs = {
+        "aws_storage_gateway_tape_pool_name": attr.string(
+            doc = "Top-level key for this aws_storage_gateway_tape_pool in the rendered project. Defaults to the rule name.",
+        ),
+        "PoolName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-storagegateway-tapepool.html#cfn-storagegateway-tapepool-poolname",
+        ),
+        "RetentionLockTimeInDays": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-storagegateway-tapepool.html#cfn-storagegateway-tapepool-retentionlocktimeindays (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "RetentionLockType": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-storagegateway-tapepool.html#cfn-storagegateway-tapepool-retentionlocktype",
+        ),
+        "StorageClass": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-storagegateway-tapepool.html#cfn-storagegateway-tapepool-storageclass",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-storagegateway-tapepool.html#cfn-storagegateway-tapepool-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsSupportAppAccountAliasInfo = provider(
     doc = "A aws_support_app_account_alias contributed by a target. Shard JSON matches the aws_support_app_account_alias schema.",
     fields = {
@@ -85972,8 +96064,10 @@ def _cloudformation_aws_synthetics_canary_impl(ctx):
         "DryRunAndUpdate": parse_json_or_none(ctx.attr.DryRunAndUpdate),
         "ExecutionRoleArn": ctx.attr.ExecutionRoleArn,
         "FailureRetentionPeriod": parse_json_or_none(ctx.attr.FailureRetentionPeriod),
+        "KmsKeyArn": ctx.attr.KmsKeyArn,
         "Name": ctx.attr.Name,
         "ProvisionedResourceCleanup": ctx.attr.ProvisionedResourceCleanup,
+        "Replicas": parse_json_or_none(ctx.attr.Replicas),
         "ResourcesToReplicateTags": parse_json_or_none(ctx.attr.ResourcesToReplicateTags),
         "RunConfig": parse_json_or_none(ctx.attr.RunConfig),
         "RuntimeVersion": ctx.attr.RuntimeVersion,
@@ -86021,11 +96115,17 @@ cloudformation_aws_synthetics_canary = rule(
         "FailureRetentionPeriod": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-failureretentionperiod (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
+        "KmsKeyArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-kmskeyarn",
+        ),
         "Name": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-name",
         ),
         "ProvisionedResourceCleanup": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-provisionedresourcecleanup",
+        ),
+        "Replicas": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-replicas (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "ResourcesToReplicateTags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-synthetics-canary.html#cfn-synthetics-canary-resourcestoreplicatetags (JSON-encoded; the Rust shard reader parses this verbatim.)",
@@ -86167,6 +96267,41 @@ cloudformation_aws_systems_manager_sap_application = rule(
     },
 )
 
+CloudformationAwsThinClientSoftwareSetInfo = provider(
+    doc = "A aws_thin_client_software_set contributed by a target. Shard JSON matches the aws_thin_client_software_set schema.",
+    fields = {
+        "aws_thin_client_software_set_name": "string: top-level key for this aws_thin_client_software_set in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_thin_client_software_set_impl(ctx):
+    item_name = ctx.attr.aws_thin_client_software_set_name or ctx.label.name
+    payload = {
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_thin_client_software_set.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsThinClientSoftwareSetInfo(aws_thin_client_software_set_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_thin_client_software_set = rule(
+    implementation = _cloudformation_aws_thin_client_software_set_impl,
+    doc = "Schema-derived rule for one `aws_thin_client_software_set` entry.",
+    provides = [CloudformationAwsThinClientSoftwareSetInfo],
+    attrs = {
+        "aws_thin_client_software_set_name": attr.string(
+            doc = "Top-level key for this aws_thin_client_software_set in the rendered project. Defaults to the rule name.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-thinclient-softwareset.html#cfn-thinclient-softwareset-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
 CloudformationAwsTimestreamDatabaseInfo = provider(
     doc = "A aws_timestream_database contributed by a target. Shard JSON matches the aws_timestream_database schema.",
     fields = {
@@ -86229,6 +96364,7 @@ def _cloudformation_aws_timestream_influx_dbcluster_impl(ctx):
         "DeploymentType": ctx.attr.DeploymentType,
         "FailoverMode": ctx.attr.FailoverMode,
         "LogDeliveryConfiguration": parse_json_or_none(ctx.attr.LogDeliveryConfiguration),
+        "MaintenanceSchedule": parse_json_or_none(ctx.attr.MaintenanceSchedule),
         "Name": ctx.attr.Name,
         "NetworkType": ctx.attr.NetworkType,
         "Organization": ctx.attr.Organization,
@@ -86278,6 +96414,9 @@ cloudformation_aws_timestream_influx_dbcluster = rule(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-timestream-influxdbcluster.html#cfn-timestream-influxdbcluster-failovermode",
         ),
         "LogDeliveryConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "MaintenanceSchedule": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "Name": attr.string(
@@ -86331,6 +96470,7 @@ def _cloudformation_aws_timestream_influx_dbinstance_impl(ctx):
         "DbStorageType": ctx.attr.DbStorageType,
         "DeploymentType": ctx.attr.DeploymentType,
         "LogDeliveryConfiguration": parse_json_or_none(ctx.attr.LogDeliveryConfiguration),
+        "MaintenanceSchedule": parse_json_or_none(ctx.attr.MaintenanceSchedule),
         "Name": ctx.attr.Name,
         "NetworkType": ctx.attr.NetworkType,
         "Organization": ctx.attr.Organization,
@@ -86377,6 +96517,9 @@ cloudformation_aws_timestream_influx_dbinstance = rule(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-timestream-influxdbinstance.html#cfn-timestream-influxdbinstance-deploymenttype",
         ),
         "LogDeliveryConfiguration": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "MaintenanceSchedule": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "Name": attr.string(
@@ -86534,6 +96677,183 @@ cloudformation_aws_timestream_table = rule(
         ),
         "Tags": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-timestream-table.html#cfn-timestream-table-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsTranscribeMedicalScribeJobInfo = provider(
+    doc = "A aws_transcribe_medical_scribe_job contributed by a target. Shard JSON matches the aws_transcribe_medical_scribe_job schema.",
+    fields = {
+        "aws_transcribe_medical_scribe_job_name": "string: top-level key for this aws_transcribe_medical_scribe_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_transcribe_medical_scribe_job_impl(ctx):
+    item_name = ctx.attr.aws_transcribe_medical_scribe_job_name or ctx.label.name
+    payload = {
+        "ChannelDefinitions": parse_json_or_none(ctx.attr.ChannelDefinitions),
+        "DataAccessRoleArn": ctx.attr.DataAccessRoleArn,
+        "Media": parse_json_or_none(ctx.attr.Media),
+        "MedicalScribeJobName": ctx.attr.MedicalScribeJobName,
+        "Settings": parse_json_or_none(ctx.attr.Settings),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_transcribe_medical_scribe_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsTranscribeMedicalScribeJobInfo(aws_transcribe_medical_scribe_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_transcribe_medical_scribe_job = rule(
+    implementation = _cloudformation_aws_transcribe_medical_scribe_job_impl,
+    doc = "Schema-derived rule for one `aws_transcribe_medical_scribe_job` entry.",
+    provides = [CloudformationAwsTranscribeMedicalScribeJobInfo],
+    attrs = {
+        "aws_transcribe_medical_scribe_job_name": attr.string(
+            doc = "Top-level key for this aws_transcribe_medical_scribe_job in the rendered project. Defaults to the rule name.",
+        ),
+        "ChannelDefinitions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-medicalscribejob.html#cfn-transcribe-medicalscribejob-channeldefinitions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "DataAccessRoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-medicalscribejob.html#cfn-transcribe-medicalscribejob-dataaccessrolearn",
+        ),
+        "Media": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "MedicalScribeJobName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-medicalscribejob.html#cfn-transcribe-medicalscribejob-medicalscribejobname",
+        ),
+        "Settings": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-medicalscribejob.html#cfn-transcribe-medicalscribejob-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsTranscribeMedicalTranscriptionJobInfo = provider(
+    doc = "A aws_transcribe_medical_transcription_job contributed by a target. Shard JSON matches the aws_transcribe_medical_transcription_job schema.",
+    fields = {
+        "aws_transcribe_medical_transcription_job_name": "string: top-level key for this aws_transcribe_medical_transcription_job in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_transcribe_medical_transcription_job_impl(ctx):
+    item_name = ctx.attr.aws_transcribe_medical_transcription_job_name or ctx.label.name
+    payload = {
+        "LanguageCode": ctx.attr.LanguageCode,
+        "Media": parse_json_or_none(ctx.attr.Media),
+        "MediaFormat": ctx.attr.MediaFormat,
+        "MediaSampleRateHertz": parse_json_or_none(ctx.attr.MediaSampleRateHertz),
+        "MedicalTranscriptionJobName": ctx.attr.MedicalTranscriptionJobName,
+        "Settings": parse_json_or_none(ctx.attr.Settings),
+        "Specialty": ctx.attr.Specialty,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "Type": ctx.attr.Type,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_transcribe_medical_transcription_job.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsTranscribeMedicalTranscriptionJobInfo(aws_transcribe_medical_transcription_job_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_transcribe_medical_transcription_job = rule(
+    implementation = _cloudformation_aws_transcribe_medical_transcription_job_impl,
+    doc = "Schema-derived rule for one `aws_transcribe_medical_transcription_job` entry.",
+    provides = [CloudformationAwsTranscribeMedicalTranscriptionJobInfo],
+    attrs = {
+        "aws_transcribe_medical_transcription_job_name": attr.string(
+            doc = "Top-level key for this aws_transcribe_medical_transcription_job in the rendered project. Defaults to the rule name.",
+        ),
+        "LanguageCode": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-medicaltranscriptionjob.html#cfn-transcribe-medicaltranscriptionjob-languagecode",
+        ),
+        "Media": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "MediaFormat": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-medicaltranscriptionjob.html#cfn-transcribe-medicaltranscriptionjob-mediaformat",
+        ),
+        "MediaSampleRateHertz": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-medicaltranscriptionjob.html#cfn-transcribe-medicaltranscriptionjob-mediasampleratehertz (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "MedicalTranscriptionJobName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-medicaltranscriptionjob.html#cfn-transcribe-medicaltranscriptionjob-medicaltranscriptionjobname",
+        ),
+        "Settings": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Specialty": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-medicaltranscriptionjob.html#cfn-transcribe-medicaltranscriptionjob-specialty",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-medicaltranscriptionjob.html#cfn-transcribe-medicaltranscriptionjob-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Type": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-medicaltranscriptionjob.html#cfn-transcribe-medicaltranscriptionjob-type",
+        ),
+    },
+)
+
+CloudformationAwsTranscribeVocabularyFilterInfo = provider(
+    doc = "A aws_transcribe_vocabulary_filter contributed by a target. Shard JSON matches the aws_transcribe_vocabulary_filter schema.",
+    fields = {
+        "aws_transcribe_vocabulary_filter_name": "string: top-level key for this aws_transcribe_vocabulary_filter in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_transcribe_vocabulary_filter_impl(ctx):
+    item_name = ctx.attr.aws_transcribe_vocabulary_filter_name or ctx.label.name
+    payload = {
+        "DataAccessRoleArn": ctx.attr.DataAccessRoleArn,
+        "LanguageCode": ctx.attr.LanguageCode,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "VocabularyFilterFileUri": ctx.attr.VocabularyFilterFileUri,
+        "VocabularyFilterName": ctx.attr.VocabularyFilterName,
+        "Words": parse_json_or_none(ctx.attr.Words),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_transcribe_vocabulary_filter.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsTranscribeVocabularyFilterInfo(aws_transcribe_vocabulary_filter_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_transcribe_vocabulary_filter = rule(
+    implementation = _cloudformation_aws_transcribe_vocabulary_filter_impl,
+    doc = "Schema-derived rule for one `aws_transcribe_vocabulary_filter` entry.",
+    provides = [CloudformationAwsTranscribeVocabularyFilterInfo],
+    attrs = {
+        "aws_transcribe_vocabulary_filter_name": attr.string(
+            doc = "Top-level key for this aws_transcribe_vocabulary_filter in the rendered project. Defaults to the rule name.",
+        ),
+        "DataAccessRoleArn": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-vocabularyfilter.html#cfn-transcribe-vocabularyfilter-dataaccessrolearn",
+        ),
+        "LanguageCode": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-vocabularyfilter.html#cfn-transcribe-vocabularyfilter-languagecode",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-vocabularyfilter.html#cfn-transcribe-vocabularyfilter-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "VocabularyFilterFileUri": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-vocabularyfilter.html#cfn-transcribe-vocabularyfilter-vocabularyfilterfileuri",
+        ),
+        "VocabularyFilterName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-vocabularyfilter.html#cfn-transcribe-vocabularyfilter-vocabularyfiltername",
+        ),
+        "Words": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transcribe-vocabularyfilter.html#cfn-transcribe-vocabularyfilter-words (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -86743,6 +97063,53 @@ cloudformation_aws_transfer_connector = rule(
         ),
         "Url": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-connector.html#cfn-transfer-connector-url",
+        ),
+    },
+)
+
+CloudformationAwsTransferHostKeyInfo = provider(
+    doc = "A aws_transfer_host_key contributed by a target. Shard JSON matches the aws_transfer_host_key schema.",
+    fields = {
+        "aws_transfer_host_key_name": "string: top-level key for this aws_transfer_host_key in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_transfer_host_key_impl(ctx):
+    item_name = ctx.attr.aws_transfer_host_key_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "HostKeyBody": ctx.attr.HostKeyBody,
+        "ServerId": ctx.attr.ServerId,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_transfer_host_key.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsTransferHostKeyInfo(aws_transfer_host_key_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_transfer_host_key = rule(
+    implementation = _cloudformation_aws_transfer_host_key_impl,
+    doc = "Schema-derived rule for one `aws_transfer_host_key` entry.",
+    provides = [CloudformationAwsTransferHostKeyInfo],
+    attrs = {
+        "aws_transfer_host_key_name": attr.string(
+            doc = "Top-level key for this aws_transfer_host_key in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-hostkey.html#cfn-transfer-hostkey-description",
+        ),
+        "HostKeyBody": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-hostkey.html#cfn-transfer-hostkey-hostkeybody",
+        ),
+        "ServerId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-hostkey.html#cfn-transfer-hostkey-serverid",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-hostkey.html#cfn-transfer-hostkey-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )
@@ -87070,6 +97437,76 @@ cloudformation_aws_transfer_workflow = rule(
     },
 )
 
+CloudformationAwsUserNotificationsManagedNotificationConfigurationInfo = provider(
+    doc = "A aws_user_notifications_managed_notification_configuration contributed by a target. Shard JSON matches the aws_user_notifications_managed_notification_configuration schema.",
+    fields = {
+        "aws_user_notifications_managed_notification_configuration_name": "string: top-level key for this aws_user_notifications_managed_notification_configuration in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_user_notifications_managed_notification_configuration_impl(ctx):
+    item_name = ctx.attr.aws_user_notifications_managed_notification_configuration_name or ctx.label.name
+    payload = {
+        "Category": ctx.attr.Category,
+        "SubCategory": ctx.attr.SubCategory,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_user_notifications_managed_notification_configuration.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsUserNotificationsManagedNotificationConfigurationInfo(aws_user_notifications_managed_notification_configuration_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_user_notifications_managed_notification_configuration = rule(
+    implementation = _cloudformation_aws_user_notifications_managed_notification_configuration_impl,
+    doc = "Schema-derived rule for one `aws_user_notifications_managed_notification_configuration` entry.",
+    provides = [CloudformationAwsUserNotificationsManagedNotificationConfigurationInfo],
+    attrs = {
+        "aws_user_notifications_managed_notification_configuration_name": attr.string(
+            doc = "Top-level key for this aws_user_notifications_managed_notification_configuration in the rendered project. Defaults to the rule name.",
+        ),
+        "Category": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-usernotifications-managednotificationconfiguration.html#cfn-usernotifications-managednotificationconfiguration-category",
+        ),
+        "SubCategory": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-usernotifications-managednotificationconfiguration.html#cfn-usernotifications-managednotificationconfiguration-subcategory",
+        ),
+    },
+)
+
+CloudformationAwsUserNotificationsNotificationEventInfo = provider(
+    doc = "A aws_user_notifications_notification_event contributed by a target. Shard JSON matches the aws_user_notifications_notification_event schema.",
+    fields = {
+        "aws_user_notifications_notification_event_name": "string: top-level key for this aws_user_notifications_notification_event in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_user_notifications_notification_event_impl(ctx):
+    item_name = ctx.attr.aws_user_notifications_notification_event_name or ctx.label.name
+    payload = {
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_user_notifications_notification_event.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsUserNotificationsNotificationEventInfo(aws_user_notifications_notification_event_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_user_notifications_notification_event = rule(
+    implementation = _cloudformation_aws_user_notifications_notification_event_impl,
+    doc = "Schema-derived rule for one `aws_user_notifications_notification_event` entry.",
+    provides = [CloudformationAwsUserNotificationsNotificationEventInfo],
+    attrs = {
+        "aws_user_notifications_notification_event_name": attr.string(
+            doc = "Top-level key for this aws_user_notifications_notification_event in the rendered project. Defaults to the rule name.",
+        ),
+    },
+)
+
 CloudformationAwsUxcAccountCustomizationInfo = provider(
     doc = "A aws_uxc_account_customization contributed by a target. Shard JSON matches the aws_uxc_account_customization schema.",
     fields = {
@@ -87168,6 +97605,7 @@ def _cloudformation_aws_verified_permissions_policy_impl(ctx):
     item_name = ctx.attr.aws_verified_permissions_policy_name or ctx.label.name
     payload = {
         "Definition": parse_json_or_none(ctx.attr.Definition),
+        "Name": ctx.attr.Name,
         "PolicyStoreId": ctx.attr.PolicyStoreId,
     }
     payload = strip_empty(payload)
@@ -87188,6 +97626,9 @@ cloudformation_aws_verified_permissions_policy = rule(
         ),
         "Definition": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-verifiedpermissions-policy.html#cfn-verifiedpermissions-policy-name",
         ),
         "PolicyStoreId": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-verifiedpermissions-policy.html#cfn-verifiedpermissions-policy-policystoreid",
@@ -87250,6 +97691,45 @@ cloudformation_aws_verified_permissions_policy_store = rule(
     },
 )
 
+CloudformationAwsVerifiedPermissionsPolicyStoreAliasInfo = provider(
+    doc = "A aws_verified_permissions_policy_store_alias contributed by a target. Shard JSON matches the aws_verified_permissions_policy_store_alias schema.",
+    fields = {
+        "aws_verified_permissions_policy_store_alias_name": "string: top-level key for this aws_verified_permissions_policy_store_alias in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_verified_permissions_policy_store_alias_impl(ctx):
+    item_name = ctx.attr.aws_verified_permissions_policy_store_alias_name or ctx.label.name
+    payload = {
+        "AliasName": ctx.attr.AliasName,
+        "PolicyStoreId": ctx.attr.PolicyStoreId,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_verified_permissions_policy_store_alias.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsVerifiedPermissionsPolicyStoreAliasInfo(aws_verified_permissions_policy_store_alias_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_verified_permissions_policy_store_alias = rule(
+    implementation = _cloudformation_aws_verified_permissions_policy_store_alias_impl,
+    doc = "Schema-derived rule for one `aws_verified_permissions_policy_store_alias` entry.",
+    provides = [CloudformationAwsVerifiedPermissionsPolicyStoreAliasInfo],
+    attrs = {
+        "aws_verified_permissions_policy_store_alias_name": attr.string(
+            doc = "Top-level key for this aws_verified_permissions_policy_store_alias in the rendered project. Defaults to the rule name.",
+        ),
+        "AliasName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-verifiedpermissions-policystorealias.html#cfn-verifiedpermissions-policystorealias-aliasname",
+        ),
+        "PolicyStoreId": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-verifiedpermissions-policystorealias.html#cfn-verifiedpermissions-policystorealias-policystoreid",
+        ),
+    },
+)
+
 CloudformationAwsVerifiedPermissionsPolicyTemplateInfo = provider(
     doc = "A aws_verified_permissions_policy_template contributed by a target. Shard JSON matches the aws_verified_permissions_policy_template schema.",
     fields = {
@@ -87262,6 +97742,7 @@ def _cloudformation_aws_verified_permissions_policy_template_impl(ctx):
     item_name = ctx.attr.aws_verified_permissions_policy_template_name or ctx.label.name
     payload = {
         "Description": ctx.attr.Description,
+        "Name": ctx.attr.Name,
         "PolicyStoreId": ctx.attr.PolicyStoreId,
         "Statement": ctx.attr.Statement,
     }
@@ -87283,6 +97764,9 @@ cloudformation_aws_verified_permissions_policy_template = rule(
         ),
         "Description": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-verifiedpermissions-policytemplate.html#cfn-verifiedpermissions-policytemplate-description",
+        ),
+        "Name": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-verifiedpermissions-policytemplate.html#cfn-verifiedpermissions-policytemplate-name",
         ),
         "PolicyStoreId": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-verifiedpermissions-policytemplate.html#cfn-verifiedpermissions-policytemplate-policystoreid",
@@ -87779,6 +98263,7 @@ def _cloudformation_aws_vpc_lattice_service_impl(ctx):
         "CertificateArn": ctx.attr.CertificateArn,
         "CustomDomainName": ctx.attr.CustomDomainName,
         "DnsEntry": parse_json_or_none(ctx.attr.DnsEntry),
+        "IdleTimeoutSeconds": parse_json_or_none(ctx.attr.IdleTimeoutSeconds),
         "Name": ctx.attr.Name,
         "Tags": parse_json_or_none(ctx.attr.Tags),
     }
@@ -87809,6 +98294,9 @@ cloudformation_aws_vpc_lattice_service = rule(
         ),
         "DnsEntry": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+        "IdleTimeoutSeconds": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-service.html#cfn-vpclattice-service-idletimeoutseconds (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
         "Name": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-service.html#cfn-vpclattice-service-name",
@@ -88973,6 +99461,7 @@ def _cloudformation_aws_wafv2_rule_group_impl(ctx):
         "ConsumedLabels": parse_json_or_none(ctx.attr.ConsumedLabels),
         "CustomResponseBodies": parse_json_or_none(ctx.attr.CustomResponseBodies),
         "Description": ctx.attr.Description,
+        "MonetizationConfig": parse_json_or_none(ctx.attr.MonetizationConfig),
         "Name": ctx.attr.Name,
         "Rules": parse_json_or_none(ctx.attr.Rules),
         "Scope": ctx.attr.Scope,
@@ -89009,6 +99498,9 @@ cloudformation_aws_wafv2_rule_group = rule(
         ),
         "Description": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wafv2-rulegroup.html#cfn-wafv2-rulegroup-description",
+        ),
+        "MonetizationConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "Name": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wafv2-rulegroup.html#cfn-wafv2-rulegroup-name",
@@ -89047,6 +99539,7 @@ def _cloudformation_aws_wafv2_web_acl_impl(ctx):
         "DataProtectionConfig": parse_json_or_none(ctx.attr.DataProtectionConfig),
         "DefaultAction": parse_json_or_none(ctx.attr.DefaultAction),
         "Description": ctx.attr.Description,
+        "MonetizationConfig": parse_json_or_none(ctx.attr.MonetizationConfig),
         "Name": ctx.attr.Name,
         "OnSourceDDoSProtectionConfig": parse_json_or_none(ctx.attr.OnSourceDDoSProtectionConfig),
         "Rules": parse_json_or_none(ctx.attr.Rules),
@@ -89094,6 +99587,9 @@ cloudformation_aws_wafv2_web_acl = rule(
         ),
         "Description": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wafv2-webacl.html#cfn-wafv2-webacl-description",
+        ),
+        "MonetizationConfig": attr.string(
+            doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
         ),
         "Name": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wafv2-webacl.html#cfn-wafv2-webacl-name",
@@ -89154,6 +99650,186 @@ cloudformation_aws_wafv2_web_aclassociation = rule(
         ),
         "WebACLArn": attr.string(
             doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wafv2-webaclassociation.html#cfn-wafv2-webaclassociation-webaclarn",
+        ),
+    },
+)
+
+CloudformationAwsWellArchitectedLensInfo = provider(
+    doc = "A aws_well_architected_lens contributed by a target. Shard JSON matches the aws_well_architected_lens schema.",
+    fields = {
+        "aws_well_architected_lens_name": "string: top-level key for this aws_well_architected_lens in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_well_architected_lens_impl(ctx):
+    item_name = ctx.attr.aws_well_architected_lens_name or ctx.label.name
+    payload = {
+        "JSONString": ctx.attr.JSONString,
+        "LensVersion": ctx.attr.LensVersion,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_well_architected_lens.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsWellArchitectedLensInfo(aws_well_architected_lens_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_well_architected_lens = rule(
+    implementation = _cloudformation_aws_well_architected_lens_impl,
+    doc = "Schema-derived rule for one `aws_well_architected_lens` entry.",
+    provides = [CloudformationAwsWellArchitectedLensInfo],
+    attrs = {
+        "aws_well_architected_lens_name": attr.string(
+            doc = "Top-level key for this aws_well_architected_lens in the rendered project. Defaults to the rule name.",
+        ),
+        "JSONString": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wellarchitected-lens.html#cfn-wellarchitected-lens-jsonstring",
+        ),
+        "LensVersion": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wellarchitected-lens.html#cfn-wellarchitected-lens-lensversion",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wellarchitected-lens.html#cfn-wellarchitected-lens-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsWellArchitectedProfileInfo = provider(
+    doc = "A aws_well_architected_profile contributed by a target. Shard JSON matches the aws_well_architected_profile schema.",
+    fields = {
+        "aws_well_architected_profile_name": "string: top-level key for this aws_well_architected_profile in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_well_architected_profile_impl(ctx):
+    item_name = ctx.attr.aws_well_architected_profile_name or ctx.label.name
+    payload = {
+        "ProfileDescription": ctx.attr.ProfileDescription,
+        "ProfileName": ctx.attr.ProfileName,
+        "ProfileQuestions": parse_json_or_none(ctx.attr.ProfileQuestions),
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_well_architected_profile.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsWellArchitectedProfileInfo(aws_well_architected_profile_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_well_architected_profile = rule(
+    implementation = _cloudformation_aws_well_architected_profile_impl,
+    doc = "Schema-derived rule for one `aws_well_architected_profile` entry.",
+    provides = [CloudformationAwsWellArchitectedProfileInfo],
+    attrs = {
+        "aws_well_architected_profile_name": attr.string(
+            doc = "Top-level key for this aws_well_architected_profile in the rendered project. Defaults to the rule name.",
+        ),
+        "ProfileDescription": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wellarchitected-profile.html#cfn-wellarchitected-profile-profiledescription",
+        ),
+        "ProfileName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wellarchitected-profile.html#cfn-wellarchitected-profile-profilename",
+        ),
+        "ProfileQuestions": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wellarchitected-profile.html#cfn-wellarchitected-profile-profilequestions (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wellarchitected-profile.html#cfn-wellarchitected-profile-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+    },
+)
+
+CloudformationAwsWellArchitectedReviewTemplateInfo = provider(
+    doc = "A aws_well_architected_review_template contributed by a target. Shard JSON matches the aws_well_architected_review_template schema.",
+    fields = {
+        "aws_well_architected_review_template_name": "string: top-level key for this aws_well_architected_review_template in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_well_architected_review_template_impl(ctx):
+    item_name = ctx.attr.aws_well_architected_review_template_name or ctx.label.name
+    payload = {
+        "Description": ctx.attr.Description,
+        "Lenses": parse_json_or_none(ctx.attr.Lenses),
+        "Notes": ctx.attr.Notes,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "TemplateName": ctx.attr.TemplateName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_well_architected_review_template.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsWellArchitectedReviewTemplateInfo(aws_well_architected_review_template_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_well_architected_review_template = rule(
+    implementation = _cloudformation_aws_well_architected_review_template_impl,
+    doc = "Schema-derived rule for one `aws_well_architected_review_template` entry.",
+    provides = [CloudformationAwsWellArchitectedReviewTemplateInfo],
+    attrs = {
+        "aws_well_architected_review_template_name": attr.string(
+            doc = "Top-level key for this aws_well_architected_review_template in the rendered project. Defaults to the rule name.",
+        ),
+        "Description": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wellarchitected-reviewtemplate.html#cfn-wellarchitected-reviewtemplate-description",
+        ),
+        "Lenses": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wellarchitected-reviewtemplate.html#cfn-wellarchitected-reviewtemplate-lenses (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "Notes": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wellarchitected-reviewtemplate.html#cfn-wellarchitected-reviewtemplate-notes",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wellarchitected-reviewtemplate.html#cfn-wellarchitected-reviewtemplate-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "TemplateName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wellarchitected-reviewtemplate.html#cfn-wellarchitected-reviewtemplate-templatename",
+        ),
+    },
+)
+
+CloudformationAwsWickrNetworkInfo = provider(
+    doc = "A aws_wickr_network contributed by a target. Shard JSON matches the aws_wickr_network schema.",
+    fields = {
+        "aws_wickr_network_name": "string: top-level key for this aws_wickr_network in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_wickr_network_impl(ctx):
+    item_name = ctx.attr.aws_wickr_network_name or ctx.label.name
+    payload = {
+        "AccessLevel": ctx.attr.AccessLevel,
+        "NetworkName": ctx.attr.NetworkName,
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_wickr_network.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsWickrNetworkInfo(aws_wickr_network_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_wickr_network = rule(
+    implementation = _cloudformation_aws_wickr_network_impl,
+    doc = "Schema-derived rule for one `aws_wickr_network` entry.",
+    provides = [CloudformationAwsWickrNetworkInfo],
+    attrs = {
+        "aws_wickr_network_name": attr.string(
+            doc = "Top-level key for this aws_wickr_network in the rendered project. Defaults to the rule name.",
+        ),
+        "AccessLevel": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wickr-network.html#cfn-wickr-network-accesslevel",
+        ),
+        "NetworkName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wickr-network.html#cfn-wickr-network-networkname",
         ),
     },
 )
@@ -90577,6 +101253,53 @@ cloudformation_aws_work_spaces_workspace = rule(
         ),
         "WorkspaceProperties": attr.string(
             doc = "JSON-encoded value. The shard reader deserialises the parsed JSON straight into the typed schema model.",
+        ),
+    },
+)
+
+CloudformationAwsWorkSpacesWorkspaceIpGroupInfo = provider(
+    doc = "A aws_work_spaces_workspace_ip_group contributed by a target. Shard JSON matches the aws_work_spaces_workspace_ip_group schema.",
+    fields = {
+        "aws_work_spaces_workspace_ip_group_name": "string: top-level key for this aws_work_spaces_workspace_ip_group in the rendered project.",
+        "json": "File: the JSON shard.",
+    },
+)
+
+def _cloudformation_aws_work_spaces_workspace_ip_group_impl(ctx):
+    item_name = ctx.attr.aws_work_spaces_workspace_ip_group_name or ctx.label.name
+    payload = {
+        "GroupDesc": ctx.attr.GroupDesc,
+        "GroupName": ctx.attr.GroupName,
+        "Tags": parse_json_or_none(ctx.attr.Tags),
+        "UserRules": parse_json_or_none(ctx.attr.UserRules),
+    }
+    payload = strip_empty(payload)
+    shard = ctx.actions.declare_file(ctx.label.name + ".aws_work_spaces_workspace_ip_group.json")
+    ctx.actions.write(shard, json.encode(payload))
+    return [
+        DefaultInfo(files = depset([shard])),
+        CloudformationAwsWorkSpacesWorkspaceIpGroupInfo(aws_work_spaces_workspace_ip_group_name = item_name, json = shard),
+    ]
+
+cloudformation_aws_work_spaces_workspace_ip_group = rule(
+    implementation = _cloudformation_aws_work_spaces_workspace_ip_group_impl,
+    doc = "Schema-derived rule for one `aws_work_spaces_workspace_ip_group` entry.",
+    provides = [CloudformationAwsWorkSpacesWorkspaceIpGroupInfo],
+    attrs = {
+        "aws_work_spaces_workspace_ip_group_name": attr.string(
+            doc = "Top-level key for this aws_work_spaces_workspace_ip_group in the rendered project. Defaults to the rule name.",
+        ),
+        "GroupDesc": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspaceipgroup.html#cfn-workspaces-workspaceipgroup-groupdesc",
+        ),
+        "GroupName": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspaceipgroup.html#cfn-workspaces-workspaceipgroup-groupname",
+        ),
+        "Tags": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspaceipgroup.html#cfn-workspaces-workspaceipgroup-tags (JSON-encoded; the Rust shard reader parses this verbatim.)",
+        ),
+        "UserRules": attr.string(
+            doc = "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspaceipgroup.html#cfn-workspaces-workspaceipgroup-userrules (JSON-encoded; the Rust shard reader parses this verbatim.)",
         ),
     },
 )

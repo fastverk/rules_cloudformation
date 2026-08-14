@@ -56,8 +56,8 @@ bzl_library(
     deps = [
         ":cfn_types_bzl",
         ":intrinsics_bzl",
-        ":parameter_bzl",
         ":output_bzl",
+        ":parameter_bzl",
     ],
 )
 
@@ -77,9 +77,9 @@ bzl_library(
 
 cfn_assemble(
     name = "assembled_all",
-    spec = "@cfn_resource_spec//file:CloudFormationResourceSpecification.json",
     group_name = "all",
     includes = ["AWS::.*"],
+    spec = "@cfn_resource_spec//file:CloudFormationResourceSpecification.json",
 )
 
 # Layer the AWS-endpoint schemas' rich descriptions on top of the
@@ -90,13 +90,12 @@ cfn_overlay_descriptions(
     name = "assembled_all_overlaid",
     assembled = ":assembled_all",
     endpoints = [
-        "@cfn_endpoint_aws_s3_bucket//file:aws-s3-bucket.json",
+        "//cloudformation/private/vendor:aws-s3-bucket.json",
     ],
 )
 
 jsonschema_starlark_codegen(
     name = "defs_gen",
-    schema = ":assembled_all_overlaid",
     extra_args = [
         "--kinds-pointer-base=#/definitions",
         "--kinds-pointer-suffix=/properties/Properties",
@@ -111,6 +110,7 @@ jsonschema_starlark_codegen(
         "--rule-name-template=cloudformation_{snake}",
         "--provider-name-template=Cloudformation{camel}Info",
     ],
+    schema = ":assembled_all_overlaid",
 )
 
 # Snake-id → CFN-Type map (kind_id like `aws_s3_bucket` →
@@ -130,8 +130,17 @@ genrule(
 
 # ---- diff_test gates -------------------------------------------------------
 
-diff_test(name = "defs_up_to_date", file1 = "defs.bzl", file2 = ":defs_gen")
-diff_test(name = "cfn_types_up_to_date", file1 = "cfn_types.bzl", file2 = ":cfn_types_gen")
+diff_test(
+    name = "defs_up_to_date",
+    file1 = "defs.bzl",
+    file2 = ":defs_gen",
+)
+
+diff_test(
+    name = "cfn_types_up_to_date",
+    file1 = "cfn_types.bzl",
+    file2 = ":cfn_types_gen",
+)
 
 # `bazel run //cloudformation:update` regenerates defs.bzl + cfn_types.bzl.
 write_source_files(

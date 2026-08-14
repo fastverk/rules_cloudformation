@@ -1,3 +1,5 @@
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+load("@rules_cloudformation//cloudformation:condition.bzl", "cloudformation_condition")
 load(
     "@rules_cloudformation//cloudformation:defs.bzl",
     "cloudformation_aws_ec2_instance",
@@ -12,10 +14,18 @@ load(
     "cloudformation_aws_s3_bucket_policy",
 )
 load(
+    "@rules_cloudformation//cloudformation:deploy.bzl",
+    "cloudformation_down",
+    "cloudformation_up",
+)
+load(
     "@rules_cloudformation//cloudformation:intrinsics.bzl",
     "cloudformation_aws_cloudformation_init",
     "cloudformation_aws_cloudformation_interface",
 )
+load("@rules_cloudformation//cloudformation:mapping.bzl", "cloudformation_mapping")
+load("@rules_cloudformation//cloudformation:output.bzl", "cloudformation_output")
+load("@rules_cloudformation//cloudformation:parameter.bzl", "cloudformation_parameter")
 load(
     "@rules_cloudformation//cloudformation:stack.bzl",
     "cfn_equals",
@@ -26,16 +36,6 @@ load(
     "cfn_ref",
     "cloudformation_stack",
 )
-load("@rules_cloudformation//cloudformation:output.bzl", "cloudformation_output")
-load("@rules_cloudformation//cloudformation:parameter.bzl", "cloudformation_parameter")
-load("@rules_cloudformation//cloudformation:condition.bzl", "cloudformation_condition")
-load("@rules_cloudformation//cloudformation:mapping.bzl", "cloudformation_mapping")
-load(
-    "@rules_cloudformation//cloudformation:deploy.bzl",
-    "cloudformation_down",
-    "cloudformation_up",
-)
-load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -46,12 +46,12 @@ package(default_visibility = ["//visibility:public"])
 # rule would pick up.
 cloudformation_aws_s3_bucket(
     name = "smoke_bucket",
+    BucketName = "smoke-bucket",
+    VersioningConfiguration = '{"Status": "Enabled"}',
     # Per-kind item-name attr. v0.3 namespaces this with the full
     # AWS_Service_Resource id (was `bucket_name` in v0.2 when kinds
     # were hand-enumerated with a short tag).
     aws_s3_bucket_name = "smoke-bucket",
-    BucketName = "smoke-bucket",
-    VersioningConfiguration = '{"Status": "Enabled"}',
 )
 
 # Lock down the shard's bytes so a regression in the schema codegen
@@ -68,7 +68,6 @@ diff_test(
 # the Resource Spec).
 cloudformation_aws_cloudformation_init(
     name = "smoke_init",
-    target_resource_name = "WebServer",
     config_sets = '{"default": ["install", "config"]}',
     configs = json.encode({
         "install": {
@@ -83,6 +82,7 @@ cloudformation_aws_cloudformation_init(
             },
         },
     }),
+    target_resource_name = "WebServer",
 )
 
 diff_test(
@@ -98,7 +98,10 @@ cloudformation_aws_cloudformation_interface(
     parameter_groups = json.encode([
         {
             "Label": {"default": "Network"},
-            "Parameters": ["VpcId", "SubnetIds"],
+            "Parameters": [
+                "VpcId",
+                "SubnetIds",
+            ],
         },
     ]),
     parameter_labels = '{"VpcId": {"default": "Which VPC?"}}',
@@ -116,24 +119,24 @@ diff_test(
 
 cloudformation_aws_s3_bucket(
     name = "SmokeBucket",
-    aws_s3_bucket_name = "smoke-bucket",
     BucketName = "smoke-bucket",
+    aws_s3_bucket_name = "smoke-bucket",
 )
 
 cloudformation_aws_ec2_instance(
     name = "WebServer",
-    aws_ec2_instance_name = "web-server",
     ImageId = "ami-0abcdef1234567890",
     InstanceType = "t3.micro",
+    aws_ec2_instance_name = "web-server",
 )
 
 cloudformation_aws_cloudformation_init(
     name = "WebServerInit",
-    target_resource_name = "WebServer",
     config_sets = '{"default": ["install"]}',
     configs = json.encode({
         "install": {"packages": {"yum": {"httpd": []}}},
     }),
+    target_resource_name = "WebServer",
 )
 
 cloudformation_aws_cloudformation_interface(
@@ -163,14 +166,14 @@ cloudformation_aws_s3_bucket_policy(
 cloudformation_stack(
     name = "smoke_stack",
     description = "Smoke stack: one bucket + bucket policy with refs + one EC2 with cfn-init metadata + a parameter-group block.",
+    intrinsics = [
+        ":WebServerInit",
+        ":StackInterface",
+    ],
     resources = [
         ":SmokeBucket",
         ":SmokeBucketPolicy",
         ":WebServer",
-    ],
-    intrinsics = [
-        ":WebServerInit",
-        ":StackInterface",
     ],
 )
 
@@ -187,16 +190,16 @@ diff_test(
 
 cloudformation_up(
     name = "smoke_stack_up",
+    capabilities = ["CAPABILITY_IAM"],
+    region = "us-east-1",
     stack = ":smoke_stack",
     stack_name = "rules-cloudformation-smoke",
-    region = "us-east-1",
-    capabilities = ["CAPABILITY_IAM"],
 )
 
 cloudformation_down(
     name = "smoke_stack_down",
-    stack_name = "rules-cloudformation-smoke",
     region = "us-east-1",
+    stack_name = "rules-cloudformation-smoke",
 )
 
 # In-place update of an already-deployed stack (no template). Flips just the
@@ -205,11 +208,11 @@ cloudformation_down(
 # image tag on a stack whose template another repo owns.
 cloudformation_up(
     name = "image_update_up",
-    use_previous_template = True,
-    stack_name = "rules-cloudformation-smoke",
-    region = "us-east-1",
     capabilities = ["CAPABILITY_NAMED_IAM"],
     parameter_overrides = {"ContainerImage": "example.dkr.ecr.us-east-1.amazonaws.com/app:abc1234"},
+    region = "us-east-1",
+    stack_name = "rules-cloudformation-smoke",
+    use_previous_template = True,
 )
 
 # Golden test: normalize the generated launcher to just its template-mode flag
@@ -237,8 +240,8 @@ diff_test(
 
 cloudformation_parameter(
     name = "Environment",
-    Type = "String",
     Default = "development",
+    Type = "String",
 )
 
 cloudformation_mapping(
@@ -251,27 +254,38 @@ cloudformation_mapping(
 
 cloudformation_condition(
     name = "IsProd",
-    expression = json.encode(cfn_equals(cfn_ref("Environment"), "production")),
+    expression = json.encode(cfn_equals(
+        cfn_ref("Environment"),
+        "production",
+    )),
 )
 
 cloudformation_aws_s3_bucket(
     name = "EnvBucket",
-    aws_s3_bucket_name = "env-bucket",
     # FindInMap reads the per-environment domain; Fn::If picks versioning by env.
-    BucketName = cfn_find_in_map("EnvConfig", cfn_ref("Environment"), "RootDomain"),
-    VersioningConfiguration = json.encode(
-        cfn_if("IsProd", {"Status": "Enabled"}, {"Status": "Suspended"}),
+    BucketName = cfn_find_in_map(
+        "EnvConfig",
+        cfn_ref("Environment"),
+        "RootDomain",
     ),
+    VersioningConfiguration = json.encode(
+        cfn_if(
+            "IsProd",
+            {"Status": "Enabled"},
+            {"Status": "Suspended"},
+        ),
+    ),
+    aws_s3_bucket_name = "env-bucket",
 )
 
 cloudformation_stack(
     name = "conditioned_stack",
-    description = "Conditions + Mappings: a per-env bucket gated by IsProd.",
-    parameters = [":Environment"],
-    mappings = [":EnvConfig"],
     conditions = [":IsProd"],
-    resources = [":EnvBucket"],
+    description = "Conditions + Mappings: a per-env bucket gated by IsProd.",
+    mappings = [":EnvConfig"],
+    parameters = [":Environment"],
     resource_conditions = {"EnvBucket": "IsProd"},
+    resources = [":EnvBucket"],
 )
 
 diff_test(
@@ -291,8 +305,8 @@ diff_test(
 # byte-stable template rather than a deploy that happened to work.
 cloudformation_aws_ec2_vpc(
     name = "SmokeVpc",
-    aws_ec2_vpc_name = "SmokeVpc",
     CidrBlock = "10.9.0.0/16",
+    aws_ec2_vpc_name = "SmokeVpc",
 )
 
 cloudformation_aws_ec2_internet_gateway(
@@ -302,37 +316,37 @@ cloudformation_aws_ec2_internet_gateway(
 
 cloudformation_aws_ec2_vpcgateway_attachment(
     name = "SmokeIgwAttachment",
-    aws_ec2_vpcgateway_attachment_name = "SmokeIgwAttachment",
     InternetGatewayId = cfn_ref("SmokeIgw"),
     VpcId = cfn_ref("SmokeVpc"),
+    aws_ec2_vpcgateway_attachment_name = "SmokeIgwAttachment",
 )
 
 cloudformation_aws_ec2_route_table(
     name = "SmokeRt",
-    aws_ec2_route_table_name = "SmokeRt",
     VpcId = cfn_ref("SmokeVpc"),
+    aws_ec2_route_table_name = "SmokeRt",
 )
 
 cloudformation_aws_ec2_route(
     name = "SmokeDefaultRoute",
-    aws_ec2_route_name = "SmokeDefaultRoute",
     DestinationCidrBlock = "0.0.0.0/0",
     GatewayId = cfn_ref("SmokeIgw"),
     RouteTableId = cfn_ref("SmokeRt"),
+    aws_ec2_route_name = "SmokeDefaultRoute",
 )
 
 cloudformation_stack(
     name = "depends_on_stack",
     description = "DependsOn: an IGW route ordered after the gateway attachment.",
+    # One dependency renders as a bare string; several as a sorted list.
+    resource_depends_on = {"SmokeDefaultRoute": "SmokeIgwAttachment"},
     resources = [
-        ":SmokeVpc",
+        ":SmokeDefaultRoute",
         ":SmokeIgw",
         ":SmokeIgwAttachment",
         ":SmokeRt",
-        ":SmokeDefaultRoute",
+        ":SmokeVpc",
     ],
-    # One dependency renders as a bare string; several as a sorted list.
-    resource_depends_on = {"SmokeDefaultRoute": "SmokeIgwAttachment"},
 )
 
 diff_test(
@@ -360,8 +374,8 @@ diff_test(
 
 cloudformation_parameter(
     name = "JoinEnvironment",
-    Type = "String",
     Default = "development",
+    Type = "String",
 )
 
 cloudformation_mapping(
@@ -374,20 +388,27 @@ cloudformation_mapping(
 
 cloudformation_aws_route53_hosted_zone(
     name = "JoinZone",
-    aws_route53_hosted_zone_name = "JoinZone",
     Name = "smoke.example.com",
+    aws_route53_hosted_zone_name = "JoinZone",
 )
 
 cloudformation_aws_s3_bucket(
     name = "JoinBucket",
-    aws_s3_bucket_name = "JoinBucket",
     # Form 1: a list whose members are a Ref, a literal, and a FindInMap that
     # is itself a nested sentinel.
-    BucketName = cfn_join("-", [
-        cfn_ref("JoinEnvironment"),
-        "smoke",
-        cfn_find_in_map("JoinEnvConfig", cfn_ref("JoinEnvironment"), "RootDomain"),
-    ]),
+    BucketName = cfn_join(
+        "-",
+        [
+            cfn_ref("JoinEnvironment"),
+            "smoke",
+            cfn_find_in_map(
+                "JoinEnvConfig",
+                cfn_ref("JoinEnvironment"),
+                "RootDomain",
+            ),
+        ],
+    ),
+    aws_s3_bucket_name = "JoinBucket",
 )
 
 # Form 2. The whole point: `cfn_getatt(...)` passed as a bare sentinel, not as
@@ -395,29 +416,38 @@ cloudformation_aws_s3_bucket(
 # list, and fail exactly as the unjoined GetAtt does.
 cloudformation_output(
     name = "JoinZoneNameServers",
-    Value = cfn_join(",", cfn_getatt("JoinZone", "NameServers")),
     Description = "Nameservers to delegate to from the parent zone.",
+    Value = cfn_join(
+        ",",
+        cfn_getatt("JoinZone", "NameServers"),
+    ),
 )
 
 # Form 1 with an empty delimiter — a literal prefix glued to a Ref.
 cloudformation_output(
     name = "JoinBucketArn",
-    Value = cfn_join("", ["arn:aws:s3:::", cfn_ref("JoinBucket")]),
     Description = "Bucket ARN assembled from a literal prefix and a Ref.",
+    Value = cfn_join(
+        "",
+        [
+            "arn:aws:s3:::",
+            cfn_ref("JoinBucket"),
+        ],
+    ),
 )
 
 cloudformation_stack(
     name = "join_stack",
     description = "Fn::Join: a list-valued GetAtt in an Output, plus list-form joins with nested sentinels.",
-    parameters = [":JoinEnvironment"],
     mappings = [":JoinEnvConfig"],
-    resources = [
-        ":JoinBucket",
-        ":JoinZone",
-    ],
     outputs = [
         ":JoinBucketArn",
         ":JoinZoneNameServers",
+    ],
+    parameters = [":JoinEnvironment"],
+    resources = [
+        ":JoinBucket",
+        ":JoinZone",
     ],
 )
 
@@ -442,28 +472,28 @@ diff_test(
 #      Measured on a live stack in this estate: 0 of 14 ECR repositories had one.
 cloudformation_aws_ecr_repository(
     name = "SmokeKeptRepo",
-    aws_ecr_repository_name = "SmokeKeptRepo",
     RepositoryName = "smoke/kept",
+    aws_ecr_repository_name = "SmokeKeptRepo",
 )
 
 cloudformation_aws_ecr_repository(
     name = "SmokeDefaultRepo",
-    aws_ecr_repository_name = "SmokeDefaultRepo",
     RepositoryName = "smoke/default",
+    aws_ecr_repository_name = "SmokeDefaultRepo",
 )
 
 cloudformation_stack(
     name = "retention_stack",
     description = "DeletionPolicy/UpdateReplacePolicy render beside Properties, and only where asked.",
-    resources = [
-        ":SmokeKeptRepo",
-        ":SmokeDefaultRepo",
-    ],
     # ⚠ SmokeDefaultRepo is deliberately absent from both dicts. Unset must mean ABSENT
     # from the rendered resource — matching CFN's own default (Delete) rather than this
     # rule's opinion — so existing stacks that do not opt in render byte-identically.
     resource_deletion_policies = {"SmokeKeptRepo": "Retain"},
     resource_update_replace_policies = {"SmokeKeptRepo": "Retain"},
+    resources = [
+        ":SmokeDefaultRepo",
+        ":SmokeKeptRepo",
+    ],
 )
 
 diff_test(

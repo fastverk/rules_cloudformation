@@ -42,6 +42,7 @@ def _cloudformation_aws_cloudformation_init_impl(ctx):
     target_name = ctx.attr.target_resource_name or ctx.label.name
     config_sets = parse_json_or_none(ctx.attr.config_sets) or {}
     configs = parse_json_or_none(ctx.attr.configs) or {}
+
     # AWS::CloudFormation::Init payload layout: `configSets` (a map
     # of config-set-name → ordered list of config-block names)
     # sits alongside the named config blocks themselves at the same
