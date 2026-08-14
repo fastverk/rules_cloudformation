@@ -1,0 +1,20 @@
+"""Vendored AWS schemas — committed rather than fetched.
+
+⛔ These are here because their upstream URLs are UNVERSIONED. A `sha256` pinned
+against an unversioned URL is a checksum on a moving target: it does not protect
+the build, it breaks it on the publisher's schedule. See
+//cloudformation/private:extensions.bzl for the measurement that established this.
+
+Refresh deliberately, never automatically:
+
+    curl -fsSL https://schema.cloudformation.us-east-1.amazonaws.com/aws-s3-bucket.json \
+      -o cloudformation/private/vendor/aws-s3-bucket.json
+    bazel run //cloudformation:update   # regenerates defs.bzl + cfn_types.bzl
+
+and commit the regenerated files in the SAME change — the diff_test gates in
+//cloudformation compare against them.
+"""
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(["aws-s3-bucket.json"])

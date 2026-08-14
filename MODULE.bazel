@@ -62,7 +62,6 @@ cfn_sources = use_extension(
 use_repo(
     cfn_sources,
     "cfn_resource_spec",
-    "cfn_endpoint_aws_s3_bucket",
 )
 
 # rules_python drives the docstring-overlay Python script

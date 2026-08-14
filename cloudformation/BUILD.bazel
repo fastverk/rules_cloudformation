@@ -90,7 +90,7 @@ cfn_overlay_descriptions(
     name = "assembled_all_overlaid",
     assembled = ":assembled_all",
     endpoints = [
-        "@cfn_endpoint_aws_s3_bucket//file:aws-s3-bucket.json",
+        "//cloudformation/private/vendor:aws-s3-bucket.json",
     ],
 )
 
