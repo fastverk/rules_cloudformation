@@ -78,7 +78,7 @@ _RESOURCE_SPEC_SHA256 = "b39a61685b44cd03bbd27fe76c737bd405eb15645c7b30b4fd77abb
 #
 # To refresh: re-download into vendor/, then `bazel run //cloudformation:update`
 # and commit the regenerated files in the same change.
-_VENDORED_ENDPOINT_SCHEMAS = ["aws-s3-bucket.json"]
+# Vendored: cloudformation/private/vendor/aws-s3-bucket.json
 
 def _impl(_mctx):
     http_file(
@@ -90,6 +90,5 @@ def _impl(_mctx):
     # The endpoint schemas are vendored under //cloudformation/private/vendor, so
     # this extension declares no repository for them at all. Consumers take the
     # in-repo label directly; see cloudformation/BUILD.bazel.
-    _ = _VENDORED_ENDPOINT_SCHEMAS  # buildifier: keep the list referenced
 
 cfn_sources_extension = module_extension(implementation = _impl)

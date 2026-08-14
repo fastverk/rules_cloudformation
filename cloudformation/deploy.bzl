@@ -95,6 +95,7 @@ def _format_capabilities(capabilities):
 def _format_parameter_overrides(parameter_overrides):
     if not parameter_overrides:
         return ""
+
     # CFN takes `Key=Value` pairs. We don't shell-quote values
     # because aws-cli's argv parser does its own splitting; users
     # who need spaces or special chars should pass them via

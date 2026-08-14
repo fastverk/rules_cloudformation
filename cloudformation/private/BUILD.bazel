@@ -56,28 +56,28 @@ py_binary(
 java_binary(
     name = "assembler",
     srcs = glob(["assembler_src/**/*.java"]),
-    main_class = "aws.cfn.codegen.json.Main",
     # Upstream source is from 2018-era — its style trips errorprone's
     # DoubleBraceInitialization (and similar) checks. We don't own
     # the source, so opt out of errorprone entirely for this binary.
     javacopts = [
         "-XepDisableAllChecks",
     ],
+    main_class = "aws.cfn.codegen.json.Main",
+    resource_strip_prefix = "cloudformation/private/assembler_resources",
     resources = [
         "assembler_resources/Intrinsics.json",
         "assembler_resources/Schema.template",
         "assembler_resources/config.yml",
     ],
-    resource_strip_prefix = "cloudformation/private/assembler_resources",
     deps = [
-        "@cfn_assembler_maven//:org_apache_logging_log4j_log4j_core",
-        "@cfn_assembler_maven//:org_apache_logging_log4j_log4j_api",
-        "@cfn_assembler_maven//:com_fasterxml_jackson_core_jackson_databind",
-        "@cfn_assembler_maven//:com_fasterxml_jackson_core_jackson_core",
+        "@cfn_assembler_maven//:args4j_args4j",
         "@cfn_assembler_maven//:com_fasterxml_jackson_core_jackson_annotations",
+        "@cfn_assembler_maven//:com_fasterxml_jackson_core_jackson_core",
+        "@cfn_assembler_maven//:com_fasterxml_jackson_core_jackson_databind",
         "@cfn_assembler_maven//:com_fasterxml_jackson_dataformat_jackson_dataformat_yaml",
         "@cfn_assembler_maven//:com_github_spullara_mustache_java_compiler",
-        "@cfn_assembler_maven//:args4j_args4j",
         "@cfn_assembler_maven//:com_google_guava_guava",
+        "@cfn_assembler_maven//:org_apache_logging_log4j_log4j_api",
+        "@cfn_assembler_maven//:org_apache_logging_log4j_log4j_core",
     ],
 )
