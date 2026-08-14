@@ -482,6 +482,37 @@ cloudformation_aws_ecr_repository(
     aws_ecr_repository_name = "SmokeDefaultRepo",
 )
 
+# ⛔ THE REGRESSION TEST FOR #2: a top-level property explicitly set to `false` must
+# RENDER, not vanish. It vanished until rules_jsonschema 0.4.0, because the generated
+# impl ran the payload through `strip_empty`, which dropped `False` alongside `None`.
+#
+# That is not cosmetic. When the schema's own default is truthy the omission means the
+# OPPOSITE of what was written and it fails OPEN —
+# `AWS::EKS::Cluster.ResourcesVpcConfig.EndpointPublicAccess` defaults **true**, so
+# "private endpoint only" is exactly this shape. ECR's `EmptyOnDelete` is the case that
+# was measured; it is used here because it is cheap, not because it is the dangerous one.
+#
+# ⚠ Asserted through the RENDERED TEMPLATE (the golden below), not by reading the
+# Starlark. Reading the Starlark is precisely what the bug defeated.
+cloudformation_aws_ecr_repository(
+    name = "SmokeFalseRepo",
+    EmptyOnDelete = "false",
+    RepositoryName = "smoke/false",
+    aws_ecr_repository_name = "SmokeFalseRepo",
+)
+
+cloudformation_stack(
+    name = "falsy_stack",
+    description = "A top-level property set to false renders as false, not as absent.",
+    resources = [":SmokeFalseRepo"],
+)
+
+diff_test(
+    name = "falsy_stack_template_stable",
+    file1 = "expected_falsy_stack.json",
+    file2 = ":falsy_stack",
+)
+
 cloudformation_stack(
     name = "retention_stack",
     description = "DeletionPolicy/UpdateReplacePolicy render beside Properties, and only where asked.",
